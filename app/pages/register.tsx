@@ -1,19 +1,38 @@
-import React from 'react';
-import AuthForm from '../components/elements/form/AuthForm';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../store/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser, registerStart } from '../store/auth/authRegisterSlice';
+import { isLogin } from '../store/auth/authLogoutSlice'
+import { useRouter } from 'next/router';
+import AuthRegister from '../components/elements/form/AuthRegisterForm';
+import { RootState } from '../redux/reducers/rootReducer';
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const handleLogin = (formData: { login_id: string, password: string }) => {
-    dispatch(loginUser(formData) as any); // Update the parameter type of `loginUser` to match the `formData` type
+
+  const isLoading = useSelector((state: RootState) => state.authRegister.loading);
+
+  const handleLogin = async (formData: { login_id: string, password: string, confirmPassword:string }) => {
+    try {
+      console.log(formData);
+      dispatch(registerStart());
+      await dispatch(registerUser(formData) as any);
+      await dispatch(isLogin());
+      router.push('/dashboard'); // ログイン後にトップページに遷移
+      
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div>
-      <h1>Login Page</h1>
-      <AuthForm onSubmit={handleLogin} />
+      <h1>Register Page</h1>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <AuthRegister onSubmit={handleLogin} />
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction, Reducer } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { loginApi } from '../../services/api';
-import { Dispatch, Action } from 'redux';
+import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 
@@ -40,13 +40,15 @@ const authSlice = createSlice({
   },
 });
 
-
+// Action Creators
 export const { loginStart, loginSuccess, loginFailure } = authSlice.actions;
 
 // Reducer の型定義
 export const authReducer = authSlice.reducer;
 
 export default authReducer;
+
+
 
 
 // ThunkActionの型パラメータ：
@@ -62,5 +64,8 @@ export const loginUser = (formData: { login_id: string, password: string }): Thu
     dispatch(loginFailure(error.message));
   }
 };
+
+
+
 
 

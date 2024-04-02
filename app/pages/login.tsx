@@ -1,17 +1,23 @@
-import React from 'react';
-import AuthForm from '../components/elements/form/AuthForm'
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../store/auth/authSlice';
+import AuthForm from '../components/elements/form/AuthLoginForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, loginStart } from '../store/auth/authLoginSlice';
+import { isLogin } from '../store/auth/authLogoutSlice'
 import { useRouter } from 'next/router';
+import { RootState } from '../redux/reducers/rootReducer';
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const isLoading = useSelector((state: RootState) => state.auth.loading);
+
   const handleLogin = async (formData: { login_id: string, password: string }) => {
     try {
-      await dispatch(loginUser(formData) as any); // Add 'as any' to bypass type checking
-      router.push('/dashboard');
+      dispatch(loginStart());
+      await dispatch(loginUser(formData) as any);
+      await dispatch(isLogin());
+      router.push('/dashboard'); // ログイン後にトップページに遷移
+      
     } catch (error) {
       console.error(error);
     }
@@ -20,8 +26,11 @@ const LoginPage: React.FC = () => {
   return (
     <div>
       <h1>Login Page</h1>
-      
-      <AuthForm onSubmit={handleLogin} /> 
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <AuthForm onSubmit={handleLogin} />
+      )}
     </div>
   );
 };
