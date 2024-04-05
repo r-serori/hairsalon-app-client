@@ -1,32 +1,38 @@
 // LogoutButton.js
 
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { isLogout,logoutUser } from '../../../store/auth/authLogoutSlice';
-import { useRouter } from 'next/router';
-import { RootState } from '../../../redux/reducers/rootReducer'
+import React from "react";
+import { useDispatch } from "react-redux";
+import { isLogout, logoutUser } from "../../../store/auth/authLogoutSlice";
+import { useRouter } from "next/router";
+import { RootState } from "../../../redux/reducers/rootReducer";
 
-function LogoutButton() {
+function LogoutButton({ className }) {
   const dispatch = useDispatch();
   const router = useRouter();
 
-
-  // ログアウト処理 
+  // ログアウト処理
   const handleLogout = async () => {
     try {
-    // ログアウトアクションをディスパッチ
+      // ログアウトアクションをディスパッチ
       dispatch(isLogout());
-    await dispatch(logoutUser() as any);
-      router.push('/login'); // ログアウト後にログインページに遷移
+      await dispatch(logoutUser() as any);
+      router.push("/login"); // ログアウト後にログインページに遷移
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <button onClick={(e) => { e.preventDefault(); handleLogout(); }}>Logout</button>
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        handleLogout();
+      }}
+      className={className}
+    >
+      Logout
+    </button>
   );
-
 }
 
 export default LogoutButton;

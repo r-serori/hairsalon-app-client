@@ -31,19 +31,26 @@ const authRegisterSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    registerSuccess(state) {
+     registerSuccess(state, action: PayloadAction<{ login_id: string; password: string }>) {
       state.loading = false;
       state.error = null;
+      state.login_id = action.payload.login_id;
+      state.password = action.payload.password;
     },
     registerFailure(state, action: PayloadAction<string>) {
       state.loading = false;
       state.error = action.payload;
-  },
+    },
+      // ログアウト時にログイン情報をクリアするリデューサー
+    clearRegisterInfo(state) {
+      state.login_id = '';
+      state.password = '';
+    },
   },
 });
 
 // Action Creators
-export const { registerStart, registerSuccess, registerFailure } = authRegisterSlice.actions;
+export const { registerStart, registerSuccess, registerFailure,clearRegisterInfo } = authRegisterSlice.actions;
 
 // Reducer の型定義
 export const authRegisterReducer = authRegisterSlice.reducer;
@@ -63,7 +70,7 @@ export const registerUser = (formData: { login_id: string, password: string, con
   try {
     // console.log(formData);
     const response = await registerApi(formData);
-    dispatch(registerSuccess());
+    dispatch(registerSuccess(response));
   } catch (error: any) {
     // console.log(formData);
     console.log(error);

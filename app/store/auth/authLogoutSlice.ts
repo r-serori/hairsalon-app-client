@@ -3,6 +3,8 @@ import { ThunkAction } from 'redux-thunk';
 import { createSlice } from '@reduxjs/toolkit';
 import { Action } from 'redux';
 import { logoutApi } from '../../services/api';
+import { clearLoginInfo } from './authLoginSlice';
+import { clearRegisterInfo } from './authRegisterSlice';
 
 export interface AuthLogoutState {
   // ステートの型
@@ -39,6 +41,9 @@ export const logoutUser = (): ThunkAction<void, AuthLogoutState, unknown, Action
   try {
     const response = await logoutApi();
     dispatch(isLogout());
+    dispatch(clearLoginInfo());
+    dispatch(clearRegisterInfo());
+
   } catch (error) {
     console.error(error);
     

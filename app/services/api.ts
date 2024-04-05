@@ -40,7 +40,9 @@ export const logoutApi = async () => {
   try {
     const response = await axios.post('/logout', null, {
       withCredentials: true, // クッキーを含めるためのオプション
-    });
+    }
+    
+    );
   } catch (error: any) {
     if (error.response) {
       throw new Error(error.response.data.message);
