@@ -2,7 +2,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { createSlice } from '@reduxjs/toolkit';
 import { Action } from 'redux';
-import { logoutApi } from '../../services/api';
+import { logoutApi } from '../../services/auth/api';
 import { clearLoginInfo } from './authLoginSlice';
 import { clearRegisterInfo } from './authRegisterSlice';
 

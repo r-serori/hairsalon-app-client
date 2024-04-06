@@ -1,10 +1,14 @@
 import Link from "next/link";
-import { useState } from "react";
 import ComponentTable from "../../components/elements/table";
 
 const attendances = () => {
   const tHeaderItems = ["名前", "電話番号", "役職", "住所"];
-  const nodesItems = ["name", "phone_number", "position", "address"];
+  const nodesProps = [
+    { text: "name" },
+    { number: "phone_number" },
+    { text: "position" },
+    { text: "address" },
+  ];
 
   const nodes = [
     {
@@ -43,7 +47,7 @@ const attendances = () => {
       </div>
       <ComponentTable
         nodes={nodes}
-        nodesItems={nodesItems}
+        nodesProps={nodesProps}
         tHeaderItems={tHeaderItems}
       />
     </div>

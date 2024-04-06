@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loginApi } from '../../services/api';
+import { loginApi } from '../../services/auth/api';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 

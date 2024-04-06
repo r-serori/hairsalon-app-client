@@ -1,4 +1,4 @@
-import AuthForm from "../components/elements/form/AuthLoginForm";
+import AuthForm from "../components/elements/form/auth/AuthLoginForm";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, loginStart } from "../store/auth/authLoginSlice";
 import { isLogin } from "../store/auth/authLogoutSlice";

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser, registerStart } from "../store/auth/authRegisterSlice";
 import { isLogin } from "../store/auth/authLogoutSlice";
 import { useRouter } from "next/router";
-import AuthRegister from "../components/elements/form/AuthRegisterForm";
+import AuthRegisterForm from "../components/elements/form/auth/AuthRegisterForm";
 import { RootState } from "../redux/reducers/rootReducer";
 
 const LoginPage: React.FC = () => {
@@ -31,7 +31,11 @@ const LoginPage: React.FC = () => {
 
   return (
     <div>
-      {isLoading ? <p>Loading...</p> : <AuthRegister onSubmit={handleLogin} />}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <AuthRegisterForm onSubmit={handleLogin} />
+      )}
     </div>
   );
 };
