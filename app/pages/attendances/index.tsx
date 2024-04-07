@@ -2,7 +2,17 @@ import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 
 const attendances = () => {
-  const tHeaderItems = ["名前", "電話番号", "役職", "住所"];
+  const DeleteButton = {};
+
+  const attendanceTimes = {
+    component: (node) => (
+      <Link href="/attendances/[id]/time-management?id=1" className="btn">
+        時間管理
+      </Link>
+    ),
+  };
+
+  const tHeaderItems = ["名前", "電話番号", "役職", "住所", "操作", "時間管理"];
   const nodesProps = [
     { text: "name" },
     { number: "phone_number" },
@@ -30,7 +40,6 @@ const attendances = () => {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 ">
-      <h1 className="text-3xl font-bold mb-4">勤怠管理</h1>
       <div className="flex space-x-4 mb-4">
         <Link href="/attendances/create" className="btn">
           新規作成
@@ -38,17 +47,12 @@ const attendances = () => {
         <Link href="/attendances/[id]?id=1" className="btn">
           詳細
         </Link>
-        <Link href="/attendances/[id]/edit?id=1" className="btn">
-          編集
-        </Link>
-        <Link href="/attendances/[id]/delete?id=1" className="btn">
-          削除
-        </Link>
       </div>
       <ComponentTable
         nodes={nodes}
         nodesProps={nodesProps}
         tHeaderItems={tHeaderItems}
+        link="/attendances"
       />
     </div>
   );

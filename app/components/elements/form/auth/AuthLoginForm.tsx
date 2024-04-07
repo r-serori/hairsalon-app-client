@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AuthInput from "../../input/AuthInput";
+import BasicTextField from "../../input/BasicTextField";
 
 interface AuthFormProps {
   onSubmit: (formData: { login_id: string; password: string }) => void;
@@ -16,14 +16,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="...">
-      <AuthInput
+      <BasicTextField
         type="text"
         placeholder="Login ID"
         value={login_id}
         onChange={(e) => setLogin_id(e.target.value)}
       />
 
-      <AuthInput
+      <BasicTextField
         type="password"
         placeholder="Password"
         value={password}

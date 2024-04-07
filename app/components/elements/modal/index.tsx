@@ -50,7 +50,7 @@ export default function BasicModal({ type, openModal }) {
           <form action="">
             <div className="mt-8 border-t  border-gray-300 py-4 flex">
               <input
-                type={type}
+                type={type} // typeに応じた入力タイプを設定
                 placeholder={`Enter ${type}`}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
               />

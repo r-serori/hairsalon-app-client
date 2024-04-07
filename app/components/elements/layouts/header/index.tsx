@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import LogoutButton from "../../button/logoutButton";
+import LogoutButton from "../../button/LogoutButton";
 
 const navigation = [
   { name: "一覧画面", href: "/dashboard", current: false },
@@ -171,11 +171,7 @@ export default function Header() {
         </Disclosure>
 
         <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-left">
-              一覧画面
-            </h2>
-          </div>
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8"></div>
         </header>
       </div>
     </>

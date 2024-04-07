@@ -22,15 +22,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/attendances/create": [
+    "/attendance_times/[attendance_id]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/attendances/create.js"
+      "static/chunks/pages/attendance_times/[attendance_id].js"
     ],
-    "/register": [
+    "/attendances": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/register.js"
+      "static/chunks/pages/attendances.js"
     ]
   },
   "ampFirstPages": []

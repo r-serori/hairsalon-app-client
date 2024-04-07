@@ -7,6 +7,7 @@ import {
 import { RootState } from "../../../redux/reducers/rootReducer";
 import AttendanceForm from "../../../components/elements/form/attendance/AttendanceForm";
 import { useRouter } from "next/router";
+import BackAgainButton from "../../../components/elements/button/BackAgainButton";
 
 const attendanceCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const attendanceCreate: React.FC = () => {
   };
   return (
     <div>
-      <h1>Create Attendance</h1>
+      <BackAgainButton link={"/attendances"} />
       {isLoading ? (
         <p>Loading...</p>
       ) : (

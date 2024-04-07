@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AuthInput from "../../input/AuthInput";
+import BasicTextField from "../../input/BasicTextField";
 
 interface AuthRegisterFormProps {
   onSubmit: (formData: {
@@ -33,21 +33,21 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({ onSubmit }) => {
           </h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <AuthInput
+          <BasicTextField
             type="text"
             placeholder="Login ID"
             value={login_id}
             onChange={(e) => setLogin_id(e.target.value)}
           />
 
-          <AuthInput
+          <BasicTextField
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <AuthInput
+          <BasicTextField
             type="password"
             placeholder="確認用Password"
             value={confirmPassword}

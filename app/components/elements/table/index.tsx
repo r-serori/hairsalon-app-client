@@ -14,8 +14,10 @@ import { useSearchLogic } from "./search";
 import { usePaginationLogic } from "./pagenation";
 import BasicModal from "../modal";
 import { useTheme } from "@table-library/react-table-library/theme";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-const ComponentTable = ({ nodes, nodesProps, tHeaderItems }) => {
+const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
   const { search, handleSearch } = useSearchLogic();
   const { pagination, handlePageChange } = usePaginationLogic();
 
@@ -62,6 +64,12 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems }) => {
   `,
   });
 
+  const router = useRouter();
+
+  const handleTimeManagement = (id) => {
+    router.push(`/attendance_times/${id}`);
+  };
+
   return (
     <div className="px-4 py-8 overflow-auto sm:overflow-hidden">
       <div className=" mb-4 ">
@@ -80,7 +88,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems }) => {
 
       <Table
         data={paginatedData}
-        className="rounded-xl"
+        className="rounded-xl border border-gray-300 shadow-md w-full"
         theme={theme}
         layout={{ custom: true, horizontalScroll: true }}
       >
@@ -91,8 +99,8 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems }) => {
                 {tHeaderItems.map((tHeaderItem) => (
                   <HeaderCell
                     key={tHeaderItem}
-                    className="bg-blue-200 text-blue-700  "
-                    style={{ padding: "16px 24px" }}
+                    className="bg-blue-200 text-blue-700 text-center text-xl"
+                    style={{ padding: "16px" }}
                   >
                     {tHeaderItem}
                   </HeaderCell>
@@ -109,9 +117,8 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems }) => {
                     return (
                       <Cell
                         key={propValue}
-                        className="bg-gray-100 text-gray-900 text-3xl "
+                        className="bg-gray-100 text-gray-900 text-3xl text-center "
                         style={{
-                          padding: "16px 24px",
                           cursor: "pointer",
                           overflow: "auto",
                         }}
@@ -123,6 +130,42 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems }) => {
                       </Cell>
                     );
                   })}
+
+                  <Cell
+                    className="bg-gray-100 text-gray-900 text-3xl"
+                    style={{
+                      padding: "16px",
+                      cursor: "pointer",
+                      overflow: "auto",
+                    }}
+                  >
+                    <div className="text-center mx-auto ">
+                      <Link href={`${link}/delete/${item.id}`}>
+                        <button className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2">
+                          削除
+                        </button>
+                      </Link>
+                    </div>
+                  </Cell>
+                  {tHeaderItems.includes("時間管理") && (
+                    <Cell
+                      className="bg-gray-100 text-gray-900 text-3xl"
+                      style={{
+                        padding: "16px",
+                        cursor: "pointer",
+                        overflow: "auto",
+                      }}
+                    >
+                      <div className="text-center mx-auto">
+                        <button
+                          onClick={() => handleTimeManagement(item.id)}
+                          className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2"
+                        >
+                          時間管理
+                        </button>
+                      </div>
+                    </Cell>
+                  )}
                 </Row>
               ))}
             </Body>
