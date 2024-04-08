@@ -2,7 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/attendances/create": "pages/attendances/create.js",
-  "/attendance_times/[attendance_id]": "pages/attendance_times/[attendance_id].js",
-  "/attendances": "pages/attendances.js"
+  "/hairstyles": "pages/hairstyles.js",
+  "/customers": "pages/customers.js"
 }

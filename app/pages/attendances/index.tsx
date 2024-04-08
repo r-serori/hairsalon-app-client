@@ -2,17 +2,7 @@ import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 
 const attendances = () => {
-  const DeleteButton = {};
-
-  const attendanceTimes = {
-    component: (node) => (
-      <Link href="/attendances/[id]/time-management?id=1" className="btn">
-        時間管理
-      </Link>
-    ),
-  };
-
-  const tHeaderItems = ["名前", "電話番号", "役職", "住所", "操作", "時間管理"];
+  const tHeaderItems = ["名前", "電話番号", "役職", "住所", "削除", "時間管理"];
   const nodesProps = [
     { text: "name" },
     { number: "phone_number" },

@@ -1,6 +1,23 @@
 import Link from "next/link";
+import ComponentTable from "../../components/elements/table";
 
 const merchandises = () => {
+  const tHeaderItems = ["物販名", "価格", "編集", "削除"];
+
+  const nodesProps = [{ text: "merchandise_name" }, { number: "price" }];
+
+  const nodes = [
+    {
+      id: 1,
+      merchandise_name: "ワックス",
+      price: 1500,
+    },
+    {
+      id: 2,
+      merchandise_name: "化粧水",
+      price: 1200,
+    },
+  ];
   return (
     <div>
       <h1>merchandises</h1>
@@ -18,6 +35,13 @@ const merchandises = () => {
 
       <Link href="/merchandises/[id]/search?id=merchandise">検索</Link>
       <br />
+
+      <ComponentTable
+        nodes={nodes}
+        nodesProps={nodesProps}
+        tHeaderItems={tHeaderItems}
+        link="/merchandises"
+      />
     </div>
   );
 };

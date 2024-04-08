@@ -21,9 +21,17 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
   const { search, handleSearch } = useSearchLogic();
   const { pagination, handlePageChange } = usePaginationLogic();
 
+  // nodesPropの０番目を検索対象とする
   const data = {
     nodes: nodes.filter((item) =>
-      item.name.toLowerCase().includes(search.toLowerCase())
+      nodesProps.some((nodesProp) => {
+        const propName = Object.keys(nodesProp)[0];
+        const propValue = item[nodesProp[propName]];
+        return (
+          propValue &&
+          propValue.toString().toLowerCase().includes(search.toLowerCase())
+        );
+      })
     ),
   };
 
@@ -71,7 +79,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
   };
 
   return (
-    <div className="px-4 py-8 overflow-auto sm:overflow-hidden">
+    <div className="px-4 py-8 ">
       <div className=" mb-4 ">
         <label htmlFor="search" className="block mb-2 ">
           検索↓:
@@ -86,93 +94,121 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
         />
       </div>
 
-      <Table
-        data={paginatedData}
-        className="rounded-xl border border-gray-300 shadow-md w-full"
-        theme={theme}
-        layout={{ custom: true, horizontalScroll: true }}
-      >
-        {(tableList) => (
-          <>
-            <Header>
-              <HeaderRow>
-                {tHeaderItems.map((tHeaderItem) => (
-                  <HeaderCell
-                    key={tHeaderItem}
-                    className="bg-blue-200 text-blue-700 text-center text-xl"
-                    style={{ padding: "16px" }}
-                  >
-                    {tHeaderItem}
-                  </HeaderCell>
-                ))}
-              </HeaderRow>
-            </Header>
+      <div className="w-auto overflow-x-scroll">
+        <Table
+          data={paginatedData}
+          className="rounded-xl border border-gray-300 shadow-md w-full"
+          theme={theme}
+          layout={{ custom: true, horizontalScroll: true }}
+        >
+          {(tableList) => (
+            <>
+              <Header>
+                <HeaderRow>
+                  {tHeaderItems.map((tHeaderItem) => (
+                    <HeaderCell
+                      key={tHeaderItem}
+                      className="bg-blue-200 text-blue-700 text-center text-xl "
+                      style={{
+                        padding: "16px",
+                        whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                      }}
+                    >
+                      {tHeaderItem}
+                    </HeaderCell>
+                  ))}
+                </HeaderRow>
+              </Header>
 
-            <Body>
-              {tableList.map((item) => (
-                <Row key={item.id} item={item} className="">
-                  {nodesProps.map((nodesProp) => {
-                    const propName = Object.keys(nodesProp)[0]; // プロパティ名を取得
-                    const propValue = item[nodesProp[propName]]; // 対応する値を取得
-                    return (
+              <Body>
+                {tableList.map((item) => (
+                  <Row key={item.id} item={item} className="">
+                    {nodesProps.map((nodesProp) => {
+                      const propName = Object.keys(nodesProp)[0]; // プロパティ名を取得
+                      const propValue = item[nodesProp[propName]]; // 対応する値を取得
+                      return (
+                        <Cell
+                          key={propValue}
+                          className="bg-gray-100 text-gray-900 text-3xl text-center "
+                          style={{
+                            cursor: "pointer",
+                            padding: "16px",
+                            whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                          }}
+                        >
+                          <BasicModal
+                            type={propName} // プロパティ名をtypeとして渡す
+                            openModal={propValue} // 対応する値をopenModalとして渡す
+                          />
+                        </Cell>
+                      );
+                    })}
+                    {/* tHeaderItemsに"編集"が含まれていたら作成 */}
+                    {tHeaderItems.includes("編集") && (
                       <Cell
-                        key={propValue}
-                        className="bg-gray-100 text-gray-900 text-3xl text-center "
+                        className="bg-gray-100 text-gray-900 text-3xl "
                         style={{
+                          padding: "16px",
+                          cursor: "pointer",
+                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                        }}
+                      >
+                        <div className="text-center mx-auto overflow-auto">
+                          <Link href={`${link}/edit/${item.id}`}>
+                            <button className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2">
+                              編集
+                            </button>
+                          </Link>
+                        </div>
+                      </Cell>
+                    )}
+                    {/* tHeaderItemsに"削除"が含まれていたら作成 */}
+                    {tHeaderItems.includes("削除") && (
+                      <Cell
+                        className="bg-gray-100 text-gray-900 text-3xl"
+                        style={{
+                          padding: "16px",
+                          cursor: "pointer",
+                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                        }}
+                      >
+                        <div className="text-center mx-auto ">
+                          <Link href={`${link}/delete/${item.id}`}>
+                            <button className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2">
+                              削除
+                            </button>
+                          </Link>
+                        </div>
+                      </Cell>
+                    )}
+
+                    {/* tHeaderItemsに"時間管理"が含まれていたら作成 */}
+                    {tHeaderItems.includes("時間管理") && (
+                      <Cell
+                        className="bg-gray-100 text-gray-900 text-3xl"
+                        style={{
+                          padding: "16px",
                           cursor: "pointer",
                           overflow: "auto",
                         }}
                       >
-                        <BasicModal
-                          type={propName} // プロパティ名をtypeとして渡す
-                          openModal={propValue} // 対応する値をopenModalとして渡す
-                        />
+                        <div className="text-center mx-auto">
+                          <button
+                            onClick={() => handleTimeManagement(item.id)}
+                            className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                          >
+                            時間管理
+                          </button>
+                        </div>
                       </Cell>
-                    );
-                  })}
-
-                  <Cell
-                    className="bg-gray-100 text-gray-900 text-3xl"
-                    style={{
-                      padding: "16px",
-                      cursor: "pointer",
-                      overflow: "auto",
-                    }}
-                  >
-                    <div className="text-center mx-auto ">
-                      <Link href={`${link}/delete/${item.id}`}>
-                        <button className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2">
-                          削除
-                        </button>
-                      </Link>
-                    </div>
-                  </Cell>
-                  {tHeaderItems.includes("時間管理") && (
-                    <Cell
-                      className="bg-gray-100 text-gray-900 text-3xl"
-                      style={{
-                        padding: "16px",
-                        cursor: "pointer",
-                        overflow: "auto",
-                      }}
-                    >
-                      <div className="text-center mx-auto">
-                        <button
-                          onClick={() => handleTimeManagement(item.id)}
-                          className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2"
-                        >
-                          時間管理
-                        </button>
-                      </div>
-                    </Cell>
-                  )}
-                </Row>
-              ))}
-            </Body>
-          </>
-        )}
-      </Table>
-
+                    )}
+                  </Row>
+                ))}
+              </Body>
+            </>
+          )}
+        </Table>
+      </div>
       <div className="flex justify-between items-center mt-8  ">
         <div>
           <span className="text-gray-700">全件数: {pageInfo.total}</span>

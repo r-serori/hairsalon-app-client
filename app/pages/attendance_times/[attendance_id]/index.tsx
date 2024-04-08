@@ -1,10 +1,47 @@
 import Link from "next/link";
+import ComponentTable from "../../../components/elements/table";
 
 const attendanceTimes = () => {
+  const tHeaderItems = [
+    "日付",
+    "出勤時間",
+    "退勤時間",
+    "休憩",
+    "更新日",
+    "編集",
+    "削除",
+  ];
+  const nodesProps = [
+    { date: "date" },
+    { time: "start_time" },
+    { time: "end_time" },
+    { number: "break_time" },
+    { date: "updated_at" },
+  ];
+
+  const nodes = [
+    {
+      id: 1,
+      date: "2024-01-01",
+      start_time: "00:11:22",
+      end_time: "22:33:44",
+      break_time: "1",
+      updated_at: "2024-01-01",
+    },
+    {
+      id: 2,
+      date: "2022-01-02",
+      start_time: "00:11:22",
+      end_time: "22:33:44",
+      break_time: "1",
+      updated_at: "2022-01-02",
+    },
+
+    // 他の行データもここに追加する
+  ];
+
   return (
     <div>
-      <h1>Attendance Times</h1>
-
       <Link href="/attendance_times/create">新規作成</Link>
       <br />
 
@@ -27,6 +64,14 @@ const attendanceTimes = () => {
       <Link href="/attendance_times/[attendance_id]?attendance_id=1">
         全体へ戻る
       </Link>
+
+      <br />
+      <ComponentTable
+        nodes={nodes}
+        nodesProps={nodesProps}
+        tHeaderItems={tHeaderItems}
+        link="/attendance_times"
+      />
     </div>
   );
 };

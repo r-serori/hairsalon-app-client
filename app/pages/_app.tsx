@@ -10,7 +10,7 @@ import Header from "../components/elements/layouts/header";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <div className="min-h-screen overflow-auto">
+      <div className="min-h-screen overflow-x-auto">
         <Header></Header>
         <Component {...pageProps} />
       </div>
