@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 
 interface AuthFormProps {
-  onSubmit: (formData: { login_id: string; password: string }) => void;
+  onSubmit: (formData: {
+    login_id: string;
+    password: string;
+    created_at: Date;
+    updated_at: Date;
+  }) => void;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ onSubmit }) => {
@@ -11,7 +16,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({ login_id, password });
+    onSubmit({
+      login_id: login_id,
+      password: password,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
   };
 
   return (

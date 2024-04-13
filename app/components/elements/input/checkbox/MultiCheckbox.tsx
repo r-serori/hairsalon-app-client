@@ -4,32 +4,38 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { get } from "http";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-  {
-    title: "The Lord of the Rings: The Return of the King",
-    year: 2003,
-  },
-];
+export default function MultiCheckbox({ options }) {
+  const getOptionLabel = (option) => {
+    // 渡されたoptionsによって適切な名前を返す
+    if (options === "courses") {
+      return option.course_name;
+    } else if (options === "options") {
+      return option.option_name;
+    } else if (options === "merchandises") {
+      return option.merchandise_name;
+    } else if (options === "hairstyles") {
+      return option.hairstyle_name;
+    } else if (options === "attendances") {
+      return option.attendance_name;
+    } else if (options === "stock_category_id") {
+      return option.category;
+    } else {
+      return ""; // エラー処理やデフォルト値など、必要に応じて適切な処理を追加
+    }
+  };
 
-export default function MultiCheckbox() {
   return (
     <Autocomplete
       multiple
       id="checkboxes-tags-demo"
-      options={top100Films}
+      options={options}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.title}
+      getOptionLabel={getOptionLabel}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -38,7 +44,7 @@ export default function MultiCheckbox() {
             style={{ marginRight: 8 }}
             checked={selected}
           />
-          {option.title}
+          {getOptionLabel(option)}
         </li>
       )}
       style={{ width: 500 }}

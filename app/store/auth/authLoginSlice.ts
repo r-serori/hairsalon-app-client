@@ -1,21 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { loginApi } from '../../services/auth/api';
-import { Action } from 'redux';
-import { ThunkAction } from 'redux-thunk';
+import { AppThunk } from '../../redux/store';
 
 
 export interface AuthState {
   // ステートの型
+  id: number;
   login_id: string;
   password: string;
+  created_at: Date;
+  updated_at: Date;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
   // 初期状態
+  id: 0,
   login_id: '',
   password: '',
+  created_at: new Date(),
+  updated_at: new Date(),
   loading: false,
   error: null,
 };
@@ -63,7 +68,11 @@ export default authReducer;
 // S: Reduxのステートの型
 // E: 非同期アクションがディスパッチするアクションの型（この場合は任意のアクションなのでAction）
 // A: 非同期アクションがディスパッチするアクションの型（この場合は任意のアクションなのでAction）
-export const loginUser = (formData: { login_id: string, password: string }): ThunkAction<void, AuthState, unknown, Action<string>> => async (dispatch) => {
+export const loginUser = (formData: {
+  login_id: string, password: string,
+  created_at: Date,
+  updated_at: Date,
+ }): AppThunk => async (dispatch) => {
   try {
     const response = await loginApi(formData);
 

@@ -110,7 +110,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                       key={tHeaderItem}
                       className="bg-blue-200 text-blue-700 text-center text-xl "
                       style={{
-                        padding: "16px",
+                        padding: "8px",
                         whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                       }}
                     >
@@ -132,7 +132,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                           className="bg-gray-100 text-gray-900 text-3xl text-center "
                           style={{
                             cursor: "pointer",
-                            padding: "16px",
+                            padding: "8px",
                             whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                           }}
                         >
@@ -148,7 +148,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                       <Cell
                         className="bg-gray-100 text-gray-900 text-3xl "
                         style={{
-                          padding: "16px",
+                          padding: "8px",
                           cursor: "pointer",
                           whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                         }}
@@ -167,7 +167,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                       <Cell
                         className="bg-gray-100 text-gray-900 text-3xl"
                         style={{
-                          padding: "16px",
+                          padding: "8px",
                           cursor: "pointer",
                           whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                         }}
@@ -187,7 +187,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                       <Cell
                         className="bg-gray-100 text-gray-900 text-3xl"
                         style={{
-                          padding: "16px",
+                          padding: "8px",
                           cursor: "pointer",
                           overflow: "auto",
                         }}

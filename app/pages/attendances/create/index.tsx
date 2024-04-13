@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createAttendance,
   setLoading,
-} from "../../../store/attendance/attendanceSlice";
+} from "../../../store/attendances/attendanceSlice";
 import { RootState } from "../../../redux/reducers/rootReducer";
-import AttendanceForm from "../../../components/elements/form/attendance/AttendanceForm";
+import AttendanceForm from "../../../components/elements/form/attendances/AttendanceForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/BackAgainButton";
 

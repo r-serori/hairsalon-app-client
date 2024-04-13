@@ -1,10 +1,9 @@
 // authSlice.js
-import { ThunkAction } from 'redux-thunk';
 import { createSlice } from '@reduxjs/toolkit';
-import { Action } from 'redux';
 import { logoutApi } from '../../services/auth/api';
 import { clearLoginInfo } from './authLoginSlice';
 import { clearRegisterInfo } from './authRegisterSlice';
+import { AppThunk } from '../../redux/store';
 
 export interface AuthLogoutState {
   // ステートの型
@@ -37,7 +36,7 @@ export const authLogoutReducer = authLogoutSlice.reducer;
 export default authLogoutReducer;
 
 
-export const logoutUser = (): ThunkAction<void, AuthLogoutState, unknown, Action<string>> => async (dispatch) => {
+export const logoutUser = (): AppThunk=> async (dispatch) => {
   try {
     const response = await logoutApi();
     dispatch(isLogout());
