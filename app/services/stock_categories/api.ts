@@ -1,28 +1,54 @@
 import { sendRequest } from "../requestApi";
 
 export const stockCategoryApi = {
-  create: async (formData: {
-    category: string;
-
-  }) => {
-    return await sendRequest("/stock_categories", "POST", formData);
+  createStockCategory: async (formData: { category: string }) => {
+    try {
+      return await sendRequest("POST", "/stock_categories", formData);
+    } catch (error) {
+      throw new Error(`Error creating stock category: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/stock_categories", "GET");
+  fetchAllStockCategories: async () => {
+    try {
+      return await sendRequest("GET", "/stock_categories");
+    } catch (error) {
+      throw new Error(`Error fetching all stock categories: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/stock_categories/${id}`, "GET");
+  fetchStockCategoryById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/stock_categories/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error fetching stock category with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  update: async (id: number, formData: {
-    category: string;
-  }) => {
-    return await sendRequest(`/stock_categories/${id}`, "PUT", formData);
+  updateStockCategory: async (
+    id: number,
+    formData: {
+      category: string;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/stock_categories/${id}`, formData);
+    } catch (error) {
+      throw new Error(
+        `Error updating stock category with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/stock_categories/${id}`, "DELETE");
+  deleteStockCategory: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/stock_categories/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error deleting stock category with ID ${id}: ${error.message}`
+      );
+    }
   },
 };

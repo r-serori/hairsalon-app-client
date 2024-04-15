@@ -1,29 +1,60 @@
 import { sendRequest } from "../requestApi";
 
 export const monthlySaleApi = {
-  create: async (formData: {
-    date: string;
+  createMonthlySales: async (formData: {
+    year: number;
+    month: number;
     monthly_sales: number;
   }) => {
-    return await sendRequest("/monthly_sales", "POST", formData);
+    try {
+      return await sendRequest("POST", "/monthly_sales", formData);
+    } catch (error) {
+      throw new Error(`Error creating monthly sales: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/monthly_sales", "GET");
+  fetchAllMonthlySales: async () => {
+    try {
+      return await sendRequest("GET", "/monthly_sales");
+    } catch (error) {
+      throw new Error(`Error fetching all monthly sales: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/monthly_sales/${id}`, "GET");
+  fetchMonthlySalesById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/monthly_sales/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error fetching monthly sales with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  update: async (id: number, formData: {
-    date: string;
-    monthly_sales: number;
-  }) => {
-    return await sendRequest(`/monthly_sales/${id}`, "PUT", formData);
+  updateMonthlySales: async (
+    id: number,
+    formData: {
+      year: number;
+      month: number;
+      monthly_sales: number;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/monthly_sales/${id}`, formData);
+    } catch (error) {
+      throw new Error(
+        `Error updating monthly sales with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/monthly_sales/${id}`, "DELETE");
+  deleteMonthlySales: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/monthly_sales/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error deleting monthly sales with ID ${id}: ${error.message}`
+      );
+    }
   },
 };

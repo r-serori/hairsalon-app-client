@@ -12,8 +12,8 @@ interface CustomerFormProps {
     phone_number: string;
     remarks: string;
     new_customer: boolean;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -35,23 +35,23 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit }) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const getCourses = await sendRequest<any>("/courses", "GET");
+        const getCourses = await sendRequest<any>("GET", "/courses");
         console.log(getCourses);
         setCourses(getCourses);
 
-        const getOptions = await sendRequest<any>("/options", "GET");
+        const getOptions = await sendRequest<any>("GET", "/options");
         console.log(getOptions);
         setOptions(getOptions);
 
-        const getMerchandises = await sendRequest<any>("/merchandises", "GET");
+        const getMerchandises = await sendRequest<any>("GET", "/merchandises");
         console.log(getMerchandises);
         setMerchandises(getMerchandises);
 
-        const getHairstyles = await sendRequest<any>("/hairstyles", "GET");
+        const getHairstyles = await sendRequest<any>("GET", "/hairstyles");
         console.log(getHairstyles);
         setHairstyles(getHairstyles);
 
-        const getAttendances = await sendRequest<any>("/attendances", "GET");
+        const getAttendances = await sendRequest<any>("GET", "/attendances");
         console.log(getAttendances);
         setAttendances(getAttendances);
       } catch (error) {
@@ -69,8 +69,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit }) => {
       phone_number: phone_number,
       remarks: remarks,
       new_customer: new_customer,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });

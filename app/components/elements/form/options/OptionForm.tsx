@@ -9,8 +9,8 @@ interface optionFormProps {
     id: number;
     option_name: string;
     price: number;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -27,8 +27,8 @@ const optionForm: React.FC<optionFormProps> = ({ onSubmit }) => {
       id: id,
       option_name: option_name,
       price: price,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });

@@ -10,8 +10,6 @@ interface AttendanceFormProps {
     position: string;
     phone_number: string;
     address: string;
-    created_at: Date;
-    updated_at: Date;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -20,7 +18,7 @@ interface AttendanceFormProps {
 const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSubmit }) => {
   const [id, setId] = useState(0);
   const [attendance_name, setAttendanceName] = useState("");
-  const [position, setPosition] = useState("");
+  const [position, setPosition] = useState("オーナー");
   const [phone_number, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
 
@@ -32,11 +30,13 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSubmit }) => {
       position: position,
       phone_number: phone_number,
       address: address,
-      created_at: new Date(),
-      updated_at: new Date(),
       loading: false,
       error: null,
     });
+  };
+
+  const handleChange = (newValue) => {
+    setPosition(newValue);
   };
 
   return (
@@ -70,7 +70,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSubmit }) => {
           <SingleCheckBox
             label={"役職"}
             value={position}
-            onChange={(e) => setPosition(e.target.value)}
+            onChange={handleChange}
           />
 
           <BasicTextField

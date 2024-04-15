@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { sendRequest } from "../../services/requestApi";
 import { AppThunk } from "../../redux/store";
+import { hairstyleApi } from "../../services/hairstyles/api";
 
 export interface HairstyleState {
   // ステートの型
   id: number;
   hairstyle_name: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -16,8 +16,8 @@ const initialState: HairstyleState = {
   // 初期状態
   id: 0,
   hairstyle_name: "",
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
@@ -38,7 +38,7 @@ const hairstyleSlice = createSlice({
   },
 });
 
-export const { setHairstyleName,setLoading, setError } =
+export const { setHairstyleName, setLoading, setError } =
   hairstyleSlice.actions;
 
 export const hairstyleReducer = hairstyleSlice.reducer;
@@ -47,17 +47,11 @@ export default hairstyleReducer;
 
 // Action Creators
 export const createHairstyle =
-  (formData: {
-    id: number;
-    hairstyle_name: string;
-    created_at: Date;
-    updated_at: Date;
-  }): AppThunk =>
+  (formData: { id: number; hairstyle_name: string }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/hairstyles", "POST", formData);
-      dispatch(setLoading(false));
+      const response = await hairstyleApi.createHairstyle(formData);
       console.log(response);
       return response;
     } catch (error) {

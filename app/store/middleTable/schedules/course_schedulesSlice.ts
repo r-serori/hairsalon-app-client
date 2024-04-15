@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../../redux/store";
-import { sendRequest } from "../../../services/requestApi";
+import { courseScheduleApi } from "../../../services/middleTable/schedules/course_schedulesApi";
 
 export interface Course_schedulesState {
   // ステートの型
   courses_id: number;
   schedules_id: number;
-  created_at: Date;
-  updated_at: Date;
   loading: boolean;
   error: string | null;
 }
@@ -16,8 +14,6 @@ const initialState: Course_schedulesState = {
   // 初期状態
   courses_id: 0,
   schedules_id: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
   loading: false,
   error: null,
 };
@@ -26,7 +22,6 @@ const course_schedulesSlice = createSlice({
   name: "course_schedules",
   initialState,
   reducers: {
-
     setCourse_id: (state, action: PayloadAction<number>) => {
       state.courses_id = action.payload;
     },
@@ -42,7 +37,6 @@ const course_schedulesSlice = createSlice({
   },
 });
 
-
 export const { setCourse_id, setSchedule_id, setLoading, setError } =
   course_schedulesSlice.actions;
 
@@ -50,19 +44,13 @@ export const course_schedulesReducer = course_schedulesSlice.reducer;
 
 export default course_schedulesReducer;
 
-
 // Action Creators
 export const createCourse_schedules =
-  (formData: {
-    courses_id: number;
-    schedules_id: number;
-    created_at: Date;
-    updated_at: Date;
-  }): AppThunk =>
+  (formData: { courses_id: number; schedules_id: number }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/course_schedules", "POST", formData);
+      const response = await courseScheduleApi.createCourseSchedule(formData);
       dispatch(setLoading(false));
       console.log(response);
       return response;

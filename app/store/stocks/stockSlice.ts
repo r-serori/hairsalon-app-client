@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../redux/store";
-import { sendRequest } from "../../services/requestApi";
+import { stockApi } from "../../services/stocks/api";
 
 export interface StockState {
   // ステートの型
@@ -9,10 +9,10 @@ export interface StockState {
   product_price: number;
   quantity: number;
   remarks: string;
-  supplier: string;//仕入れ先
-  stock_category_id: number;//在庫カテゴリー、外部キー
-  created_at: Date;
-  updated_at: Date;
+  supplier: string; //仕入れ先
+  stock_category_id: number; //在庫カテゴリー、外部キー
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -26,8 +26,8 @@ const initialState: StockState = {
   remarks: "",
   supplier: "",
   stock_category_id: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
@@ -84,17 +84,15 @@ export const createStock =
     id: number;
     product_name: string;
     product_price: number;
-    quantity: number;
+    quantity: string;
     remarks: string;
     supplier: string;
     stock_category_id: number;
-    created_at: Date;
-    updated_at: Date;
   }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/stocks", "POST", formData);
+      const response = await stockApi.createStock(formData);
       dispatch(setLoading(false));
       console.log(response);
       return response;

@@ -1,15 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { courseApi } from "../../services/courses/api";
 import { AppThunk } from "../../redux/store";
-import { sendRequest } from "../../services/requestApi";
 
 export interface CourseState {
   // ステートの型
   id: number;
   course_name: string;
   price: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -19,13 +18,11 @@ const initialState: CourseState = {
   id: 0,
   course_name: "",
   price: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
-
-
 
 const courseSlice = createSlice({
   name: "course",
@@ -55,19 +52,13 @@ export default courseReducer;
 
 // Action Creators
 export const createCourse =
-  (formData: {
-    id: number;
-    course_name: string;
-    price: number;
-    created_at: Date;
-    updated_at: Date;
-  }): AppThunk =>
+  (formData: { id: number; course_name: string; price: number }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response =  await sendRequest("/courses", "POST", formData);
+      const response = await courseApi.createCourse(formData);
       dispatch(setLoading(false));
-      console.log(response);
+      console.log("Course created", response);
       return response;
     } catch (error) {
       dispatch(setError(error.toString()));

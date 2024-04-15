@@ -8,8 +8,8 @@ interface StockFormProps {
   onSubmit: (formData: {
     id: number;
     category: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -24,8 +24,8 @@ const stockForm: React.FC<StockFormProps> = ({ onSubmit }) => {
     onSubmit({
       id: id,
       category: category,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });

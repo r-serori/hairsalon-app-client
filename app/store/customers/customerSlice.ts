@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from '../../redux/store';
-import { sendRequest } from '../../services/requestApi';
-
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk } from "../../redux/store";
+import { customerApi } from "../../services/customers/api";
 
 export interface CustomerState {
   // ステートの型
@@ -10,27 +9,27 @@ export interface CustomerState {
   phone_number: string;
   remarks: string;
   new_customer: boolean;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: CustomerState = {
   // 初期状態
-id: 0,
-  customer_name: '',
-  phone_number: '',
-  remarks: '',
+  id: 0,
+  customer_name: "",
+  phone_number: "",
+  remarks: "",
   new_customer: false,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
 
 const customerSlice = createSlice({
-  name: 'customer',
+  name: "customer",
   initialState,
   reducers: {
     setCustomerName: (state, action: PayloadAction<string>) => {
@@ -54,33 +53,37 @@ const customerSlice = createSlice({
   },
 });
 
-
-export const { setCustomerName, setPhoneNumber, setRemarks, setNewCustomer, setLoading, setError } = customerSlice.actions;
-
+export const {
+  setCustomerName,
+  setPhoneNumber,
+  setRemarks,
+  setNewCustomer,
+  setLoading,
+  setError,
+} = customerSlice.actions;
 
 export const customerReducer = customerSlice.reducer;
 
 export default customerReducer;
 
-
 // Action Creators
-export const createCustomer = (formData: {
-  id: number,
-  customer_name: string,
-  phone_number: string,
-  remarks: string,
-  new_customer: boolean,
-  address: string,
-  created_at: Date,
-  updated_at: Date,
-}): AppThunk => async (dispatch) => {
-  try {
-    dispatch(setLoading(true));
-    const response = await sendRequest('/customers', 'POST', formData);
-    dispatch(setLoading(false));
-    console.log(response);
-    return response;
-  } catch (error) {
-    dispatch(setError(error.toString()));
-  }
-}
+export const createCustomer =
+  (formData: {
+    id: number;
+    customer_name: string;
+    phone_number: string;
+    remarks: string;
+    new_customer: boolean;
+    address: string;
+  }): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await customerApi.createCustomer(formData);
+      dispatch(setLoading(false));
+      console.log(response);
+      return response;
+    } catch (error) {
+      dispatch(setError(error.toString()));
+    }
+  };

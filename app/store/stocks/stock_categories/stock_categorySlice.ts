@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../../redux/store";
-import { sendRequest } from "../../../services/requestApi";
-
+import { stockCategoryApi } from "../../../services/stock_categories/api";
 export interface Stock_categoryState {
   // ステートの型
   id: number;
   category: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -16,8 +15,8 @@ const initialState: Stock_categoryState = {
   // 初期状態
   id: 0,
   category: "",
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
@@ -38,10 +37,10 @@ const stock_categorySlice = createSlice({
   },
 });
 
+export const { setCategory, setLoading, setError } =
+  stock_categorySlice.actions;
 
-export const { setCategory, setLoading, setError } = stock_categorySlice.actions;
-
- const stock_categoryReducer = stock_categorySlice.reducer;
+const stock_categoryReducer = stock_categorySlice.reducer;
 
 export default stock_categoryReducer;
 
@@ -50,13 +49,13 @@ export const createStock_category =
   (formData: {
     id: number;
     category: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
   }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/stock_categories", "POST", formData);
+      const response = await stockCategoryApi.createStockCategory(formData);
       dispatch(setLoading(false));
       console.log(response);
       return response;

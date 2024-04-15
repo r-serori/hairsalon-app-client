@@ -5,8 +5,8 @@ interface AuthFormProps {
   onSubmit: (formData: {
     login_id: string;
     password: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
   }) => void;
 }
 
@@ -19,8 +19,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSubmit }) => {
     onSubmit({
       login_id: login_id,
       password: password,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
     });
   };
 

@@ -1,29 +1,58 @@
 import { sendRequest } from "../requestApi";
 
 export const yearlySaleApi = {
-  create: async (formData: {
-    date: string;
-    year_sales: number;
+  createYearlySales: async (formData: {
+    year: number;
+    yearly_sales: number;
   }) => {
-    return await sendRequest("/yearly_sales", "POST", formData);
+    try {
+      return await sendRequest("POST", "/yearly_sales", formData);
+    } catch (error) {
+      throw new Error(`Error creating yearly sales: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/yearly_sales", "GET");
+  fetchAllYearlySales: async () => {
+    try {
+      return await sendRequest("GET", "/yearly_sales");
+    } catch (error) {
+      throw new Error(`Error fetching all yearly sales: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/yearly_sales/${id}`, "GET");
+  fetchYearlySalesById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/yearly_sales/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error fetching yearly sales with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  update: async (id: number, formData: {
-    date: string;
-    year_sales: number;
-  }) => {
-    return await sendRequest(`/yearly_sales/${id}`, "PUT", formData);
+  updateYearlySales: async (
+    id: number,
+    formData: {
+      year: number;
+      yearly_sales: number;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/yearly_sales/${id}`, formData);
+    } catch (error) {
+      throw new Error(
+        `Error updating yearly sales with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/yearly_sales/${id}`, "DELETE");
+  deleteYearlySales: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/yearly_sales/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error deleting yearly sales with ID ${id}: ${error.message}`
+      );
+    }
   },
 };

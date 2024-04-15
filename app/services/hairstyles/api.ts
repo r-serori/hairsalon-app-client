@@ -1,27 +1,54 @@
 import { sendRequest } from "../requestApi";
 
-export const hairstylesApi = {
-  create: async (formData: {
-    hairstyle_name: string;
-  }) => {
-    return await sendRequest("/hairstyles", "POST", formData);
+export const hairstyleApi = {
+  createHairstyle: async (formData: { hairstyle_name: string }) => {
+    try {
+      return await sendRequest("POST", "/hairstyles", formData);
+    } catch (error) {
+      throw new Error(`Error creating hairstyle: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/hairstyles", "GET");
+  fetchAllHairstyles: async () => {
+    try {
+      return await sendRequest("GET", "/hairstyles");
+    } catch (error) {
+      throw new Error(`Error fetching all hairstyles: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/hairstyles/${id}`, "GET");
+  fetchHairstyleById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/hairstyles/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error fetching hairstyle with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  update: async (id: number, formData: {
-    hairstyle_name: string;
-  }) => {
-    return await sendRequest(`/hairstyles/${id}`, "PUT", formData);
+  updateHairstyle: async (
+    id: number,
+    formData: {
+      hairstyle_name: string;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/hairstyles/${id}`, formData);
+    } catch (error) {
+      throw new Error(
+        `Error updating hairstyle with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/hairstyles/${id}`, "DELETE");
+  deleteHairstyle: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/hairstyles/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error deleting hairstyle with ID ${id}: ${error.message}`
+      );
+    }
   },
 };

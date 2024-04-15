@@ -1,32 +1,41 @@
 import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAttendance } from "../../store/attendances/attendanceSlice";
+import { RootState } from "../../redux/store";
 
-const attendances = () => {
-  const tHeaderItems = ["名前", "電話番号", "役職", "住所", "削除", "時間管理"];
+const Attendances = () => {
+  const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.attendance.loading);
+
+  const attendances = useSelector(
+    (state: RootState) => state.attendance.attendances
+  );
+  console.log(attendances);
+
+  useEffect(() => {
+    dispatch(getAttendance() as any);
+  }, [dispatch]);
+
+  const tHeaderItems = [
+    "名前",
+    "電話番号",
+    "役職",
+    "住所",
+    "編集",
+    "削除",
+    "時間管理",
+  ];
   const nodesProps = [
-    { text: "name" },
+    { text: "attendance_name" },
     { number: "phone_number" },
     { text: "position" },
     { text: "address" },
   ];
 
-  const nodes = [
-    {
-      id: 1,
-      name: "田中太郎",
-      phone_number: "00011112222",
-      position: "オーナー",
-      address: "東京都港区2-2-22 208",
-    },
-    {
-      id: 2,
-      name: "田中次郎",
-      phone_number: "00011113333",
-      position: "社員",
-      address: "東京都港区2-2-22 206",
-    },
-    // 他の行データもここに追加する
-  ];
+  // nodesにattendancesをマップして処理
+  const nodes = attendances;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 ">
@@ -38,14 +47,18 @@ const attendances = () => {
           詳細
         </Link>
       </div>
-      <ComponentTable
-        nodes={nodes}
-        nodesProps={nodesProps}
-        tHeaderItems={tHeaderItems}
-        link="/attendances"
-      />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ComponentTable
+          nodes={nodes}
+          nodesProps={nodesProps}
+          tHeaderItems={tHeaderItems}
+          link="/attendances"
+        />
+      )}
     </div>
   );
 };
 
-export default attendances;
+export default Attendances;

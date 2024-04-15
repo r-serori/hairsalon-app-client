@@ -3,19 +3,19 @@ import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
-import { sendRequest } from "../../../../services/requestApi";
+import { stockCategoryApi } from "../../../../services/stock_categories/api";
 
 interface StockFormProps {
   onSubmit: (formData: {
     id: number;
     product_name: string;
     product_price: number;
-    quantity: number;
     remark: string;
+    quantity: string;
     supplier: string; //仕入れ先
     stock_category_id: number; //在庫かてゴリーID、外部キー
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -25,7 +25,7 @@ const stockForm: React.FC<StockFormProps> = ({ onSubmit }) => {
   const [id, setId] = useState(0);
   const [product_name, setProductName] = useState("");
   const [product_price, setProductPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState("");
   const [remark, setRemark] = useState("");
   const [supplier, setSupplier] = useState("");
   const [stock_category_id, setStockCategoryId] = useState(0);
@@ -33,10 +33,8 @@ const stockForm: React.FC<StockFormProps> = ({ onSubmit }) => {
   useEffect(() => {
     const fetchStockCategories = async () => {
       try {
-        const getStockCategories = await sendRequest<any>(
-          "/stock_categories",
-          "GET"
-        );
+        const getStockCategories: any =
+          await stockCategoryApi.fetchAllStockCategories();
         console.log(getStockCategories);
         setStockCategoryId(getStockCategories);
       } catch (error) {
@@ -56,8 +54,8 @@ const stockForm: React.FC<StockFormProps> = ({ onSubmit }) => {
       remark: remark,
       supplier: supplier,
       stock_category_id: stock_category_id,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });

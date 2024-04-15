@@ -8,8 +8,8 @@ interface HairstyleFormProps {
   onSubmit: (formData: {
     id: number;
     hairstyle_name: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -24,8 +24,8 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({ onSubmit }) => {
     onSubmit({
       id: id,
       hairstyle_name: hairstyle_name,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });

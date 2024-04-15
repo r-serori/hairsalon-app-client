@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../../redux/store";
-import { sendRequest } from "../../../services/requestApi";
+import { courseCustomerApi } from "../../../services/middleTable/customers/course_customersApi";
 
 export interface Course_customersState {
   // ステートの型
   courses_id: number;
-  schedules_id: number;
-  created_at: Date;
-  updated_at: Date;
+  customers_id: number;
   loading: boolean;
   error: string | null;
 }
@@ -15,9 +13,7 @@ export interface Course_customersState {
 const initialState: Course_customersState = {
   // 初期状態
   courses_id: 0,
-  schedules_id: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  customers_id: 0,
   loading: false,
   error: null,
 };
@@ -26,12 +22,11 @@ const course_customersSlice = createSlice({
   name: "course_customers",
   initialState,
   reducers: {
-
     setCourse_id: (state, action: PayloadAction<number>) => {
       state.courses_id = action.payload;
     },
-    setSchedule_id: (state, action: PayloadAction<number>) => {
-      state.schedules_id = action.payload;
+    setCustomer_id: (state, action: PayloadAction<number>) => {
+      state.customers_id = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -42,27 +37,20 @@ const course_customersSlice = createSlice({
   },
 });
 
-
-export const { setCourse_id, setSchedule_id, setLoading, setError } =
+export const { setCourse_id, setCustomer_id, setLoading, setError } =
   course_customersSlice.actions;
 
 export const course_customersReducer = course_customersSlice.reducer;
 
 export default course_customersReducer;
 
-
 // Action Creators
 export const createCourse_customers =
-  (formData: {
-    courses_id: number;
-    schedules_id: number;
-    created_at: Date;
-    updated_at: Date;
-  }): AppThunk =>
+  (formData: { courses_id: number; customers_id: number }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/course_customers", "POST", formData);
+      const response = await courseCustomerApi.createCourseCustomer(formData);
       dispatch(setLoading(false));
       console.log(response);
       return response;

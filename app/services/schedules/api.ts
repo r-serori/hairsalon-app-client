@@ -1,33 +1,63 @@
 import { sendRequest } from "../requestApi";
 
 export const schedulesApi = {
-  create: async (formData: {
-    date: Date;
-    start_time: Date;
-    end_time: Date;
-    customer_id: number;
-  }) => {
-    return await sendRequest("/schedules", "POST", formData);
-  },
-
-  fetchAll: async () => {
-    return await sendRequest("/schedules", "GET");
-  },
-
-  fetchById: async (id: number) => {
-    return await sendRequest(`/schedules/${id}`, "GET");
-  },
-
-  update: async (id: number, formData: {
-    date: Date;
-    start_time: Date;
+  createSchedule: async (formData: {
+    date: string;
+    start_time: string;
     end_time: string;
-    customer_id: number;
+    price: number;
+    customers_id: number;
   }) => {
-    return await sendRequest(`/schedules/${id}`, "PUT", formData);
+    try {
+      return await sendRequest("POST", "/schedules", formData);
+    } catch (error) {
+      throw new Error(`Error creating schedule: ${error.message}`);
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/schedules/${id}`, "DELETE");
+  fetchAllSchedules: async () => {
+    try {
+      return await sendRequest("GET", "/schedules");
+    } catch (error) {
+      throw new Error(`Error fetching all schedules: ${error.message}`);
+    }
+  },
+
+  fetchScheduleById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/schedules/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error fetching schedule with ID ${id}: ${error.message}`
+      );
+    }
+  },
+
+  updateSchedule: async (
+    id: number,
+    formData: {
+      date: Date;
+      start_time: Date;
+      end_time: Date;
+      customer_id: number;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/schedules/${id}`, formData);
+    } catch (error) {
+      throw new Error(
+        `Error updating schedule with ID ${id}: ${error.message}`
+      );
+    }
+  },
+
+  deleteSchedule: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/schedules/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error deleting schedule with ID ${id}: ${error.message}`
+      );
+    }
   },
 };

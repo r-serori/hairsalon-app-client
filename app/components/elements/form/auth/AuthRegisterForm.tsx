@@ -5,8 +5,8 @@ interface AuthRegisterFormProps {
   onSubmit: (formData: {
     login_id: string;
     password: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     confirmPassword: string;
   }) => void;
 }
@@ -27,8 +27,8 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({ onSubmit }) => {
       login_id: login_id,
       password: password,
       confirmPassword: confirmPassword,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
     });
   };
 

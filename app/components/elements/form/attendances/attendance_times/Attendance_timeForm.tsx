@@ -5,13 +5,13 @@ import PrimaryButton from "../../../button/PrimaryButton";
 interface ScheduleFormProps {
   onSubmit: (formData: {
     id: number;
-    date: Date;
-    start_time: Date;
-    end_time: Date;
-    break_time: Date;
+    date: string;
+    start_time: string;
+    end_time: string;
+    break_time: string;
     attendance_id: number;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -19,10 +19,10 @@ interface ScheduleFormProps {
 
 const ScheduleForm: React.FC<ScheduleFormProps> = ({ onSubmit }) => {
   const [id, setId] = useState(0);
-  const [date, setDateName] = useState(new Date());
-  const [start_time, setStartTime] = useState(new Date());
-  const [end_time, setEndTime] = useState(new Date());
-  const [break_time, setBreakTime] = useState(new Date());
+  const [date, setDateName] = useState("");
+  const [start_time, setStartTime] = useState("");
+  const [end_time, setEndTime] = useState("");
+  const [break_time, setBreakTime] = useState("");
   const [attendance_id, setAttendanceId] = useState(0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,8 +34,8 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ onSubmit }) => {
       end_time: end_time,
       break_time: break_time,
       attendance_id: attendance_id,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });

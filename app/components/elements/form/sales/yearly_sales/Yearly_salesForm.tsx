@@ -7,10 +7,10 @@ import MultiCheckbox from "../../../input/checkbox/MultiCheckbox";
 interface Yearly_salesFormProps {
   onSubmit: (formData: {
     id: number;
-    date: Date;
-    yearly_sales: string;
-    created_at: Date;
-    updated_at: Date;
+    year: number;
+    yearly_sales: number;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -18,16 +18,17 @@ interface Yearly_salesFormProps {
 
 const yearly_salesForm: React.FC<Yearly_salesFormProps> = ({ onSubmit }) => {
   const [id, setId] = useState(0);
-  const [yearly_sales, setYearly_sales] = useState("");
+  const [year, setYear] = useState(0);
+  const [yearly_sales, setYearly_sales] = useState(0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit({
       id: id,
-      date: new Date(),
+      year: year,
       yearly_sales: yearly_sales,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });
@@ -46,6 +47,13 @@ const yearly_salesForm: React.FC<Yearly_salesFormProps> = ({ onSubmit }) => {
             type="hidden"
             value={id}
             onChange={(e) => setId(parseInt(e.target.value))}
+          />
+
+          <BasicTextField
+            type="number"
+            placeholder="年"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
           />
 
           <BasicTextField

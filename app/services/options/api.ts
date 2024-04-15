@@ -1,36 +1,53 @@
 import { sendRequest } from "../requestApi";
 
 export const optionApi = {
-  create: async (formData: {
+  createOption: async (formData: {
     id: number;
     option_name: string;
     price: number;
-    created_at: Date;
-    updated_at: Date;
-
   }) => {
-    return await sendRequest("/options", "POST", formData);
+    try {
+      return await sendRequest("POST", "/options", formData);
+    } catch (error) {
+      throw new Error(`Error creating option: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/options", "GET");
+  fetchAllOptions: async () => {
+    try {
+      return await sendRequest("GET", "/options");
+    } catch (error) {
+      throw new Error(`Error fetching all options: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/options/${id}`, "GET");
+  fetchOptionById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/options/${id}`);
+    } catch (error) {
+      throw new Error(`Error fetching option with ID ${id}: ${error.message}`);
+    }
   },
 
-  update: async (id: number, formData: {
-    id: number;
-    option_name: string;
-    price: number;
-    created_at: Date;
-    updated_at: Date;
-  }) => {
-    return await sendRequest(`/options/${id}`, "PUT", formData);
+  updateOption: async (
+    id: number,
+    formData: {
+      option_name: string;
+      price: number;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/options/${id}`, formData);
+    } catch (error) {
+      throw new Error(`Error updating option with ID ${id}: ${error.message}`);
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/options/${id}`, "DELETE");
+  deleteOption: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/options/${id}`);
+    } catch (error) {
+      throw new Error(`Error deleting option with ID ${id}: ${error.message}`);
+    }
   },
 };

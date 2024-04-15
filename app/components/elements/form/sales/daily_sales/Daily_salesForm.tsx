@@ -7,10 +7,10 @@ import MultiCheckbox from "../../../input/checkbox/MultiCheckbox";
 interface Daily_salesFormProps {
   onSubmit: (formData: {
     id: number;
-    date: Date;
+    date: string;
     daily_sales: number;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     loading: boolean;
     error: string | null;
   }) => void;
@@ -18,17 +18,17 @@ interface Daily_salesFormProps {
 
 const daily_salesForm: React.FC<Daily_salesFormProps> = ({ onSubmit }) => {
   const [id, setId] = useState(0);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState("");
   const [daily_sales, setDaily_sales] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit({
       id: id,
-      date: new Date(),
+      date: "",
       daily_sales: parseInt(daily_sales),
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: "",
+      updated_at: "",
       loading: false,
       error: null,
     });

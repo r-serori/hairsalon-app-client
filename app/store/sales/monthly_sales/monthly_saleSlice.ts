@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../../redux/store";
-import { sendRequest } from "../../../services/requestApi";
-
+import { monthlySaleApi } from "../../../services/monthly_sales/api";
 export interface Monthly_salesState {
   // ステートの型
   id: number;
-  date: Date;
+  year: number;
+  month: number;
   monthly_sales: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -16,10 +16,11 @@ export interface Monthly_salesState {
 const initialState: Monthly_salesState = {
   // 初期状態
   id: 0,
-date: new Date(),
+  year: 0,
+  month: 0,
   monthly_sales: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
@@ -28,8 +29,11 @@ const monthly_salesSlice = createSlice({
   name: "monthly_sales",
   initialState,
   reducers: {
-    setDate: (state, action: PayloadAction<Date>) => {
-      state.date = action.payload;
+    setYear: (state, action: PayloadAction<number>) => {
+      state.year = action.payload;
+    },
+    setMonth: (state, action: PayloadAction<number>) => {
+      state.month = action.payload;
     },
     setMonthly_sales: (state, action: PayloadAction<number>) => {
       state.monthly_sales = action.payload;
@@ -43,7 +47,7 @@ const monthly_salesSlice = createSlice({
   },
 });
 
-export const { setDate, setMonthly_sales, setLoading, setError } =
+export const { setYear, setMonth, setMonthly_sales, setLoading, setError } =
   monthly_salesSlice.actions;
 export const monthly_salesReducer = monthly_salesSlice.reducer;
 
@@ -53,15 +57,14 @@ export default monthly_salesReducer;
 export const createMonthly_sales =
   (formData: {
     id: number;
-    date: Date;
+    year: number;
+    month: number;
     monthly_sales: number;
-    created_at: Date;
-    updated_at: Date;
   }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/monthly_sales", "POST", formData);
+      const response = await monthlySaleApi.createMonthlySales(formData);
       dispatch(setLoading(false));
       console.log(response);
       return response;

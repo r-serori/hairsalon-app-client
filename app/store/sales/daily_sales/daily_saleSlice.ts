@@ -1,14 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../../redux/store";
-import { sendRequest } from "../../../services/requestApi";
-
+import { dailySaleApi } from "../../../services/daily_sales/api";
 export interface Daily_salesState {
   // ステートの型
   id: number;
-  date: Date;
+  date: string;
   daily_sales: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -16,10 +15,10 @@ export interface Daily_salesState {
 const initialState: Daily_salesState = {
   // 初期状態
   id: 0,
-  date: new Date(),
+  date: new Date().toISOString(),
   daily_sales: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
@@ -28,7 +27,7 @@ const daily_salesSlice = createSlice({
   name: "daily_sales",
   initialState,
   reducers: {
-    setDate: (state, action: PayloadAction<Date>) => {
+    setDate: (state, action: PayloadAction<string>) => {
       state.date = action.payload;
     },
     setDaily_sales: (state, action: PayloadAction<number>) => {
@@ -45,25 +44,18 @@ const daily_salesSlice = createSlice({
 
 export const { setDate, setDaily_sales, setLoading, setError } =
   daily_salesSlice.actions;
-  
+
 export const daily_salesReducer = daily_salesSlice.reducer;
 
 export default daily_salesReducer;
 
 // Action Creators
 export const createDaily_sales =
-  (formData: {
-    id: number;
-    date: Date;
-    daily_sales: number;
-    created_at: Date;
-    updated_at: Date;
-  }): AppThunk =>
+  (formData: { date: string; daily_sales: number }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/daily_sales", "POST", formData);
-      dispatch(setLoading(false));
+      const response = await dailySaleApi.createDailySales(formData);
       console.log(response);
       return response;
     } catch (error) {

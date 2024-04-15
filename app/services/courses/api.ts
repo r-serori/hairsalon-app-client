@@ -1,30 +1,46 @@
 import { sendRequest } from "../requestApi";
 
 export const courseApi = {
-  create: async (formData: {
-    
-    course_name: string;
-    price: number;
-  }) => {
-    return await sendRequest("/courses", "POST", formData);
+  createCourse: async (formData: { course_name: string; price: number }) => {
+    try {
+      return await sendRequest("POST", "/courses", formData);
+    } catch (error) {
+      throw new Error(`Error creating course: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/courses", "GET");
+  fetchAllCourses: async () => {
+    try {
+      return await sendRequest("GET", "/courses");
+    } catch (error) {
+      throw new Error(`Error fetching all courses: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/courses/${id}`, "GET");
+  fetchCourseById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/courses/${id}`);
+    } catch (error) {
+      throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
+    }
   },
 
-  update: async (id: number, formData: {
-    course_name: string;
-    price: number;
-  }) => {
-    return await sendRequest(`/courses/${id}`, "PUT", formData);
+  updateCourse: async (
+    id: number,
+    formData: { course_name: string; price: number }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/courses/${id}`, formData);
+    } catch (error) {
+      throw new Error(`Error updating course with ID ${id}: ${error.message}`);
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/courses/${id}`, "DELETE");
+  deleteCourse: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/courses/${id}`);
+    } catch (error) {
+      throw new Error(`Error deleting course with ID ${id}: ${error.message}`);
+    }
   },
 };

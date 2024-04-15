@@ -1,37 +1,58 @@
 import { sendRequest } from "../requestApi";
 
 export const stockApi = {
-  create: async (formData: {
+  createStock: async (formData: {
     product_name: string;
     product_price: number;
-    quantity: number;
+    quantity: string;
     remarks: string;
     stock_category_id: number;
-
   }) => {
-    return await sendRequest("/stock_categories", "POST", formData);
+    try {
+      return await sendRequest("POST", "/stocks", formData);
+    } catch (error) {
+      throw new Error(`Error creating stock: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/stock_categories", "GET");
+  fetchAllStocks: async () => {
+    try {
+      return await sendRequest("GET", "/stocks");
+    } catch (error) {
+      throw new Error(`Error fetching all stocks: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/stock_categories/${id}`, "GET");
+  fetchStockById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/stocks/${id}`);
+    } catch (error) {
+      throw new Error(`Error fetching stock with ID ${id}: ${error.message}`);
+    }
   },
 
-  update: async (id: number, formData: {
-    product_name: string;
-    product_price: number;
-    quantity: number;
-    remarks: string;
-    stock_category_id: number;
-    
-  }) => {
-    return await sendRequest(`/stock_categories/${id}`, "PUT", formData);
+  updateStock: async (
+    id: number,
+    formData: {
+      product_name: string;
+      product_price: number;
+      quantity: string;
+      remarks: string;
+      stock_category_id: number;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/stocks/${id}`, formData);
+    } catch (error) {
+      throw new Error(`Error updating stock with ID ${id}: ${error.message}`);
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/stock_categories/${id}`, "DELETE");
+  deleteStock: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/stocks/${id}`);
+    } catch (error) {
+      throw new Error(`Error deleting stock with ID ${id}: ${error.message}`);
+    }
   },
 };

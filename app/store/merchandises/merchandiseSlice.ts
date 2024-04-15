@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../redux/store";
-import { sendRequest } from "../../services/requestApi";
+import { merchandiseApi } from "../../services/merchandises/api";
 
 export interface MerchandiseState {
   // ステートの型
   id: number;
   merchandise_name: string;
   price: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -18,8 +18,8 @@ const initialState: MerchandiseState = {
   id: 0,
   merchandise_name: "",
   price: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
@@ -56,13 +56,11 @@ export const createMerchandise =
     id: number;
     merchandise_name: string;
     price: number;
-    created_at: Date;
-    updated_at: Date;
   }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/merchandises", "POST", formData);
+      const response = await merchandiseApi.createMerchandise(formData);
       dispatch(setLoading(false));
       console.log(response);
       return response;

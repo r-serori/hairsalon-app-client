@@ -1,52 +1,65 @@
-import { sendRequest } from '../../requestApi';
+import { sendRequest } from "../../requestApi";
 
 export const attendance_timeApi = {
-  create: async (formData: {
+  createAttendanceTimes: async (formData: {
     id: number;
     date: Date;
     start_time: Date;
     end_time: Date;
     break_time: number;
     attendance_id: number;
-    created_at: Date;
-    updated_at: Date;
   }) => {
-    return await sendRequest('/attendance_times', 'POST', formData);
+    try {
+      return await sendRequest("POST", "/attendance_times", formData);
+    } catch (error) {
+      throw new Error(`Error creating attendance times: ${error.message}`);
+    }
   },
 
-  fetchAll: async (attendance_id: number) => {
-    return await sendRequest(`/attendance_times/${attendance_id}`, 'GET');
+  fetchAllAttendanceTimes: async () => {
+    try {
+      return await sendRequest("GET", "/attendance_times");
+    } catch (error) {
+      throw new Error(`Error fetching all attendance times: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/attendance_times/${id}`, 'GET');
+  fetchAttendanceTimesById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/attendance_times/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error fetching attendance times with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  update: async (id: number, formData: {
-    start_time: string;
-    end_time: string;
-    break_time: string;
-    attendance_id: number;
-  }) => {
-    return await sendRequest(`/attendance_times/${id}`, 'PUT', formData);
+  updateAttendanceTimes: async (
+    id: number,
+    formData: {
+      date: Date;
+      start_time: Date;
+      end_time: Date;
+      break_time: number;
+      attendance_id: number;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/attendance_times/${id}`, formData);
+    } catch (error) {
+      throw new Error(
+        `Error updating attendance times with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/attendance_times/${id}`, 'DELETE');
+  deleteAttendanceTimes: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/attendance_times/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error deleting attendance times with ID ${id}: ${error.message}`
+      );
+    }
   },
-
-search: async (date: Date) => {
-  // 日付情報を文字列に変換
-  const dateString = date.toISOString().split('T')[0]; // ISO 8601形式の文字列に変換し、日付部分のみを取得
-
-  // 日付情報を含むクエリパラメータを生成
-  const queryParams = { date: dateString };
-  const queryString = new URLSearchParams(queryParams).toString();
-
-  // クエリパラメータを使用してGETリクエストを送信し、検索結果を返す
-  return await sendRequest(`/attendance_times/search?${queryString}`, 'GET');
-}
 };
-
-
-

@@ -1,35 +1,64 @@
 import { sendRequest } from "../requestApi";
 
 export const customerApi = {
-  create: async (formData: {
+  createCustomer: async (formData: {
     customer_name: string;
     phone_number: string;
     address: string;
     remarks: string;
     new_customer: boolean;
   }) => {
-    return await sendRequest("/customers", "POST", formData);
+    try {
+      return await sendRequest("POST", "/customers", formData);
+    } catch (error) {
+      throw new Error(`Error creating customer: ${error.message}`);
+    }
   },
 
-  fetchAll: async () => {
-    return await sendRequest("/customers", "GET");
+  fetchAllCustomers: async () => {
+    try {
+      return await sendRequest("GET", "/customers");
+    } catch (error) {
+      throw new Error(`Error fetching all customers: ${error.message}`);
+    }
   },
 
-  fetchById: async (id: number) => {
-    return await sendRequest(`/customers/${id}`, "GET");
+  fetchCustomerById: async (id: number) => {
+    try {
+      return await sendRequest("GET", `/customers/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error fetching customer with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  update: async (id: number, formData: {
-    customer_name: string;
-    phone_number: string;
-    address: string;
-    remarks: string;
-    new_customer: boolean;
-  }) => {
-    return await sendRequest(`/customers/${id}`, "PUT", formData);
+  updateCustomer: async (
+    id: number,
+    formData: {
+      customer_name: string;
+      phone_number: string;
+      address: string;
+      remarks: string;
+      new_customer: boolean;
+    }
+  ) => {
+    try {
+      return await sendRequest("PUT", `/customers/${id}`, formData);
+    } catch (error) {
+      throw new Error(
+        `Error updating customer with ID ${id}: ${error.message}`
+      );
+    }
   },
 
-  delete: async (id: number) => {
-    return await sendRequest(`/customers/${id}`, "DELETE");
+  deleteCustomer: async (id: number) => {
+    try {
+      return await sendRequest("DELETE", `/customers/${id}`);
+    } catch (error) {
+      throw new Error(
+        `Error deleting customer with ID ${id}: ${error.message}`
+      );
+    }
   },
 };

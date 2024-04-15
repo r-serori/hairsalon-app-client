@@ -1,15 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { optionApi } from "../../services/options/api";
 import { AppThunk } from "../../redux/store";
-import { sendRequest } from "../../services/requestApi";
 
 export interface OptionState {
   // ステートの型
   id: number;
   option_name: string;
   price: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   loading: boolean;
   error: string | null;
 }
@@ -19,8 +18,8 @@ const initialState: OptionState = {
   id: 0,
   option_name: "",
   price: 0,
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: "",
+  updated_at: "",
   loading: false,
   error: null,
 };
@@ -53,17 +52,11 @@ export default optionReducer;
 
 // Action Creators
 export const createOption =
-  (formData: {
-    id: number;
-    option_name: string;
-    price: number;
-    created_at: Date;
-    updated_at: Date;
-  }): AppThunk =>
+  (formData: { id: number; option_name: string; price: number }): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await sendRequest("/options", "POST", formData);
+      const response = await optionApi.createOption(formData);
       dispatch(setLoading(false));
       console.log(response);
       return response;
