@@ -17,14 +17,18 @@ export const getAttendance = createAsyncThunk(
 export const createAttendance = createAsyncThunk(
   "attendance/createAttendance",
   async (formData: {
+    id: number;
     attendance_name: string;
     position: string;
     phone_number: string;
     address: string;
+    created_at: string;
+    updated_at: string;
   }) => {
-    const response: any = await attendanceApi.createAttendance(formData);
-    const attendanceData = response.data; // 取得したデータを返す
-    return attendanceData;
+    const attendanceData: any = await attendanceApi.createAttendance(formData);
+    console.log("attendanceCreateDataだよ");
+    console.log(attendanceData.attendances);
+    return attendanceData.attendances;
   }
 );
 
@@ -32,10 +36,10 @@ export const createAttendance = createAsyncThunk(
 export const getAttendanceById = createAsyncThunk(
   "attendance/getAttendanceById",
   async (id: number) => {
-    const response: any = await attendanceApi.fetchAttendanceById(id);
-    const attendanceData = response.data; // 取得したデータを返す
-
-    return attendanceData;
+    const attendanceData: any = await attendanceApi.fetchAttendanceById(id);
+    console.log("attendanceShowDataだよ");
+    console.log(attendanceData.attendances);
+    return attendanceData.attendances;
   }
 );
 
@@ -48,13 +52,17 @@ export const updateAttendance = createAsyncThunk(
     position: string;
     phone_number: string;
     address: string;
+    created_at: string;
+    updated_at: string;
   }) => {
-    const response: any = await attendanceApi.updateAttendance(
-      formData.id,
-      formData
-    );
-    const attendanceData = response.data; // 取得したデータを返す
-    return attendanceData;
+    const { id, ...updateData } = formData; // idを除外する
+    const attendanceData: any = await attendanceApi.updateAttendance(
+      id,
+      updateData
+    ); // 更新データのみを渡す
+    console.log("attendanceUpdateDataだよ");
+    console.log(attendanceData.attendances);
+    return attendanceData.attendances;
   }
 );
 
@@ -62,8 +70,9 @@ export const updateAttendance = createAsyncThunk(
 export const deleteAttendance = createAsyncThunk(
   "attendance/deleteAttendance",
   async (id: number) => {
-    const response: any = await attendanceApi.deleteAttendance(id);
-    const attendanceData = response.data; // 取得したデータを返す
+    const attendanceData: any = await attendanceApi.deleteAttendance(id);
+    console.log("attendanceDeleteDataだよ");
+    console.log(attendanceData);
     return attendanceData;
   }
 );
@@ -82,21 +91,77 @@ export interface AttendanceState {
 export interface RootState {
   // ルートステートの型を定義
   attendances: AttendanceState[]; // 出席情報の配列
-  loading?: boolean;
-  error?: string | null;
+  loading: boolean; // ローディング状態
+  error: string; // エラーメッセージ
 }
-
 const initialState: RootState = {
   // 初期状態
   attendances: [], // 出席情報の配列
-  loading: false,
-  error: null,
+  loading: false, // ローディング状態
+  error: "", // エラーメッセージ
 };
 const attendanceSlice = createSlice({
   name: "attendance",
   initialState,
   reducers: {
     // ここに通常の同期アクションを定義
+
+    updateAttendanceInfo(state, action: PayloadAction<AttendanceState>) {
+      const updatedAttendance = action.payload;
+      const index = state.attendances.findIndex(
+        (attendance) => attendance.id === updatedAttendance.id
+      );
+      if (index !== -1) {
+        state.attendances[index] = updatedAttendance;
+      }
+      return state;
+    },
+
+    updateAttendanceName(state, action: PayloadAction<AttendanceState>) {
+      const updatedAttendance = action.payload;
+      const index = state.attendances.findIndex(
+        (attendance) => attendance.id === updatedAttendance.id
+      );
+      if (index !== -1) {
+        state.attendances[index].attendance_name =
+          updatedAttendance.attendance_name;
+      }
+    },
+
+    updateAttendancePosition(state, action: PayloadAction<AttendanceState>) {
+      const updatedAttendance = action.payload;
+      const index = state.attendances.findIndex(
+        (attendance) => attendance.id === updatedAttendance.id
+      );
+      if (index !== -1) {
+        state.attendances[index].position = updatedAttendance.position;
+      }
+    },
+
+    updateAttendancePhoneNumber(state, action: PayloadAction<AttendanceState>) {
+      const updatedAttendance = action.payload;
+      const index = state.attendances.findIndex(
+        (attendance) => attendance.id === updatedAttendance.id
+      );
+      if (index !== -1) {
+        state.attendances[index].phone_number = updatedAttendance.phone_number;
+      }
+    },
+
+    updateAttendanceAddress(state, action: PayloadAction<AttendanceState>) {
+      const updatedAttendance = action.payload;
+      const index = state.attendances.findIndex(
+        (attendance) => attendance.id === updatedAttendance.id
+      );
+      if (index !== -1) {
+        state.attendances[index].address = updatedAttendance.address;
+      }
+    },
+    deleteAttendanceInfo(state, action: PayloadAction<number>) {
+      state.attendances = state.attendances.filter(
+        (attendance) => attendance.id !== action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     // 非同期アクションの処理を定義
@@ -141,10 +206,20 @@ const attendanceSlice = createSlice({
     });
     builder.addCase(updateAttendance.fulfilled, (state, action) => {
       state.loading = false;
-      state.attendances = state.attendances.map((attendance) =>
-        attendance.id === action.payload.id ? action.payload : attendance
+      // 更新された出席情報をStateに反映する
+      const updatedAttendance = action.payload;
+      const index = state.attendances.findIndex(
+        (attendance) => attendance.id === updatedAttendance.id
       );
+      if (index !== -1) {
+        // 更新された出席情報が既存の出席情報とマッチする場合は、それを更新する
+        state.attendances[index] = updatedAttendance;
+      } else {
+        // マッチする出席情報が見つからない場合は、新しい出席情報を追加する（通常はこのケースは発生しません）
+        state.attendances.push(updatedAttendance);
+      }
     });
+
     builder.addCase(updateAttendance.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
@@ -166,4 +241,15 @@ const attendanceSlice = createSlice({
   },
 });
 
-export default attendanceSlice.reducer;
+export const {
+  updateAttendanceInfo,
+  updateAttendanceName,
+  updateAttendancePosition,
+  updateAttendancePhoneNumber,
+  updateAttendanceAddress,
+  deleteAttendanceInfo,
+} = attendanceSlice.actions;
+
+const attendanceReducer = attendanceSlice.reducer;
+
+export default attendanceReducer;

@@ -1,4 +1,5 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const schedulesApi = {
   createSchedule: async (formData: {
@@ -9,7 +10,8 @@ export const schedulesApi = {
     customers_id: number;
   }) => {
     try {
-      return await sendRequest("POST", "/schedules", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/schedules", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating schedule: ${error.message}`);
     }
@@ -17,7 +19,8 @@ export const schedulesApi = {
 
   fetchAllSchedules: async () => {
     try {
-      return await sendRequest("GET", "/schedules");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/schedules", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all schedules: ${error.message}`);
     }
@@ -25,7 +28,8 @@ export const schedulesApi = {
 
   fetchScheduleById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/schedules/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/schedules/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching schedule with ID ${id}: ${error.message}`
@@ -43,7 +47,13 @@ export const schedulesApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/schedules/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/schedules/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating schedule with ID ${id}: ${error.message}`
@@ -53,7 +63,8 @@ export const schedulesApi = {
 
   deleteSchedule: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/schedules/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/schedules/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error deleting schedule with ID ${id}: ${error.message}`

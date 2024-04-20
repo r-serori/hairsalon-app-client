@@ -1,4 +1,5 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const customerApi = {
   createCustomer: async (formData: {
@@ -9,7 +10,8 @@ export const customerApi = {
     new_customer: boolean;
   }) => {
     try {
-      return await sendRequest("POST", "/customers", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/customers", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating customer: ${error.message}`);
     }
@@ -17,7 +19,8 @@ export const customerApi = {
 
   fetchAllCustomers: async () => {
     try {
-      return await sendRequest("GET", "/customers");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/customers", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all customers: ${error.message}`);
     }
@@ -25,7 +28,8 @@ export const customerApi = {
 
   fetchCustomerById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/customers/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/customers/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching customer with ID ${id}: ${error.message}`
@@ -44,7 +48,13 @@ export const customerApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/customers/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/customers/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating customer with ID ${id}: ${error.message}`
@@ -54,7 +64,8 @@ export const customerApi = {
 
   deleteCustomer: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/customers/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/customers/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error deleting customer with ID ${id}: ${error.message}`

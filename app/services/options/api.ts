@@ -1,13 +1,11 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const optionApi = {
-  createOption: async (formData: {
-    id: number;
-    option_name: string;
-    price: number;
-  }) => {
+  createOption: async (formData: { option_name: string; price: number }) => {
     try {
-      return await sendRequest("POST", "/options", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/options", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating option: ${error.message}`);
     }
@@ -15,7 +13,8 @@ export const optionApi = {
 
   fetchAllOptions: async () => {
     try {
-      return await sendRequest("GET", "/options");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/options", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all options: ${error.message}`);
     }
@@ -23,7 +22,8 @@ export const optionApi = {
 
   fetchOptionById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/options/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/options/${id}`, csrfToken);
     } catch (error) {
       throw new Error(`Error fetching option with ID ${id}: ${error.message}`);
     }
@@ -37,7 +37,13 @@ export const optionApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/options/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/options/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(`Error updating option with ID ${id}: ${error.message}`);
     }
@@ -45,7 +51,8 @@ export const optionApi = {
 
   deleteOption: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/options/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/options/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(`Error deleting option with ID ${id}: ${error.message}`);
     }

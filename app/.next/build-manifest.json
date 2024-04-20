@@ -26,6 +26,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/attendances.js"
+    ],
+    "/attendances/[id]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/attendances/[id].js"
     ]
   },
   "ampFirstPages": []

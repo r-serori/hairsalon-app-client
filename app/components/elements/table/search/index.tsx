@@ -1,11 +1,23 @@
 import { useState } from "react";
 
 export const useSearchLogic = () => {
-  const [search, setSearch] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [searchField, setSearchField] = useState("");
 
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
+  const handleSearchTextChange = (event) => {
+    setSearchText(event.target.value);
   };
 
-  return { search, handleSearch };
+  const handleSearchFieldChange = (event) => {
+    setSearchField(event.target.value);
+  };
+
+  return {
+    searchText,
+    setSearchText,
+    searchField,
+    setSearchField,
+    handleSearchTextChange,
+    handleSearchFieldChange,
+  };
 };

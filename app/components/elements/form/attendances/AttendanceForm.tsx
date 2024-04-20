@@ -2,21 +2,20 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
+import rootReducer from "../../../../redux/reducers/rootReducer";
+import {
+  AttendanceState,
+  RootState,
+} from "../../../../store/attendances/attendanceSlice";
 
 interface AttendanceFormProps {
-  onSubmit: (formData: {
-    id: number;
-    attendance_name: string;
-    position: string;
-    phone_number: string;
-    address: string;
-    loading: boolean;
-    error: string | null;
-  }) => void;
+  // createAttendanceアクションをプロパティとして持つ
+  createAttendance: (formData: AttendanceState) => void;
 }
 
-const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSubmit }) => {
-  const [id, setId] = useState(0);
+const AttendanceForm: React.FC<AttendanceFormProps> = ({
+  createAttendance,
+}) => {
   const [attendance_name, setAttendanceName] = useState("");
   const [position, setPosition] = useState("オーナー");
   const [phone_number, setPhoneNumber] = useState("");
@@ -24,14 +23,14 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({
-      id: id,
+    createAttendance({
+      id: 0,
       attendance_name: attendance_name,
       position: position,
       phone_number: phone_number,
       address: address,
-      loading: false,
-      error: null,
+      created_at: "",
+      updated_at: "",
     });
   };
 
@@ -48,11 +47,6 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({ onSubmit }) => {
           </h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <input
-            type="hidden"
-            value={id}
-            onChange={(e) => setId(parseInt(e.target.value))}
-          />
           <BasicTextField
             type="text"
             placeholder="スタッフ名"

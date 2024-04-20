@@ -1,4 +1,5 @@
 import { sendRequest } from "../../requestApi";
+import getCsrfToken from "../../requestApi";
 
 export const customerScheduleApi = {
   createCustomerSchedule: async (formData: {
@@ -6,7 +7,13 @@ export const customerScheduleApi = {
     schedules_id: number;
   }) => {
     try {
-      return await sendRequest("POST", "/customer_schedules", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        "/customer_schedules",
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(`Error creating customer schedule: ${error.message}`);
     }
@@ -14,7 +21,8 @@ export const customerScheduleApi = {
 
   fetchAllCustomerSchedules: async () => {
     try {
-      return await sendRequest("GET", "/customer_schedules");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/customer_schedules", csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching all customer schedules: ${error.message}`

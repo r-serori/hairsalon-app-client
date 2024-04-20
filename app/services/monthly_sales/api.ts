@@ -1,4 +1,5 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const monthlySaleApi = {
   createMonthlySales: async (formData: {
@@ -7,7 +8,8 @@ export const monthlySaleApi = {
     monthly_sales: number;
   }) => {
     try {
-      return await sendRequest("POST", "/monthly_sales", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/monthly_sales", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating monthly sales: ${error.message}`);
     }
@@ -15,7 +17,8 @@ export const monthlySaleApi = {
 
   fetchAllMonthlySales: async () => {
     try {
-      return await sendRequest("GET", "/monthly_sales");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/monthly_sales", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all monthly sales: ${error.message}`);
     }
@@ -23,7 +26,8 @@ export const monthlySaleApi = {
 
   fetchMonthlySalesById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/monthly_sales/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/monthly_sales/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching monthly sales with ID ${id}: ${error.message}`
@@ -40,7 +44,13 @@ export const monthlySaleApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/monthly_sales/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/monthly_sales/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating monthly sales with ID ${id}: ${error.message}`
@@ -50,7 +60,12 @@ export const monthlySaleApi = {
 
   deleteMonthlySales: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/monthly_sales/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/monthly_sales/${id}/delete`,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error deleting monthly sales with ID ${id}: ${error.message}`

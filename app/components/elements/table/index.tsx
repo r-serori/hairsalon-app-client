@@ -8,41 +8,62 @@ import {
   Row,
   HeaderCell,
   Cell,
-  useCustom,
 } from "@table-library/react-table-library/table";
 import { useSearchLogic } from "./search";
 import { usePaginationLogic } from "./pagenation";
 import BasicModal from "../modal";
 import { useTheme } from "@table-library/react-table-library/theme";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import DeleteMan from "../../DeleteMan/[DeleteMan]/[id]";
 
-const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
-  const { search, handleSearch } = useSearchLogic();
+const ComponentTable = ({
+  nodes,
+  searchItems,
+  nodesProps,
+  tHeaderItems,
+  link,
+}) => {
+  const {
+    searchText,
+    searchField,
+    handleSearchTextChange,
+    handleSearchFieldChange,
+  } = useSearchLogic();
   const { pagination, handlePageChange } = usePaginationLogic();
 
-  // nodesPropの０番目を検索対象とする
+  console.log("nodesだよ");
+  console.log(nodes); // [{id: 1, attendance_name: "田中店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}, {id: 2, attendance_name: "佐藤店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}]
+
+  //dataという新しいオブジェクトを作成
   const data = {
-    nodes: nodes.filter((item) =>
+    nodes: nodes.filter((node) =>
       nodesProps.some((nodesProp) => {
         const propName = Object.keys(nodesProp)[0];
-        const propValue = item[nodesProp[propName]];
-        return (
+        const propValue = node[nodesProp[propName]];
+        const propProp = nodesProp[propName];
+
+        const searchResult =
+          propProp.includes(searchField || "") &&
           propValue &&
-          propValue.toString().toLowerCase().includes(search.toLowerCase())
-        );
+          propValue.includes(searchText);
+
+        console.log("searchResultだよ");
+        console.log(searchResult);
+
+        return searchResult;
       })
     ),
   };
 
-  useCustom("search", data, {
-    state: { search },
-    onChange: onSearchChange,
-  });
+  console.log("searchFieldだよ");
+  console.log(searchField); //名前
 
-  function onSearchChange(action, state) {
-    console.log(action, state);
-  }
+  console.log("searchTextだよ");
+  console.log(searchText); //田中
+
+  console.log("dataだよ");
+  console.log(data); //{nodes: Array(2)}
+  // 検索処理,onChange処理をカスタムフックで定義,searchの値をstateとして持つ
 
   const paginatedData = {
     nodes: data.nodes.slice(
@@ -74,25 +95,54 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
 
   const router = useRouter();
 
+  // const handleItemClick = (node, nodesProps) => {
+  //   setNode(node);
+  //   setNodesProps(nodesProps);
+  // };
+
+  //時間管理画面へ遷移
   const handleTimeManagement = (id) => {
     router.push(`/attendance_times/${id}`);
   };
 
+  //編集画面へ遷移
+  const handleEditManagement = (id, link) => {
+    router.push(`${link}/[id]/edit?id=${id}`);
+  };
+
   return (
     <div className="px-4 py-8 ">
-      <div className=" mb-4 ">
-        <label htmlFor="search" className="block mb-2 ">
-          検索↓:
-        </label>
-        <input
-          id="search"
-          type="text"
-          value={search}
-          onChange={handleSearch}
-          className="px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
-          placeholder="検索..."
-        />
-      </div>
+      <label htmlFor="searchField" className="block mb-2 ">
+        検索対象↓:
+      </label>
+      <select
+        id="searchField"
+        value={searchField}
+        onChange={handleSearchFieldChange}
+        className="px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
+      >
+        <option value="">すべて</option>
+        {searchItems.map((searchItem) => {
+          const searchKey = searchItem.key;
+          const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
+          console.log("searchKeyだよ");
+          console.log(searchKey); //名前
+
+          return (
+            <option key={searchKey} value={searchKey}>
+              {searchValue}
+            </option>
+          );
+        })}
+      </select>
+
+      <input
+        type="text"
+        value={searchText}
+        onChange={handleSearchTextChange} // イベントオブジェクトを明示的に渡す
+        placeholder="検索"
+        className="px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 ml-2"
+      />
 
       <div className="w-auto overflow-x-scroll">
         <Table
@@ -105,6 +155,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
             <>
               <Header>
                 <HeaderRow>
+                  {/* Headerのカラム数を数える */}
                   {tHeaderItems.map((tHeaderItem) => (
                     <HeaderCell
                       key={tHeaderItem}
@@ -121,27 +172,72 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
               </Header>
 
               <Body>
-                {tableList.map((item) => (
-                  <Row key={item.id} item={item} className="">
+                {/* Bodyの横行を数える */}
+                {tableList.map((node) => (
+                  <Row key={node.id} item={node} className="">
+                    {/* Bodeの縦列を数える */}
                     {nodesProps.map((nodesProp) => {
-                      const propName = Object.keys(nodesProp)[0]; // プロパティ名を取得
-                      const propValue = item[nodesProp[propName]]; // 対応する値を取得
-                      return (
-                        <Cell
-                          key={propValue}
-                          className="bg-gray-100 text-gray-900 text-3xl text-center "
-                          style={{
-                            cursor: "pointer",
-                            padding: "8px",
-                            whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                          }}
-                        >
-                          <BasicModal
-                            type={propName} // プロパティ名をtypeとして渡す
-                            openModal={propValue} // 対応する値をopenModalとして渡す
-                          />
-                        </Cell>
-                      );
+                      const propName = Object.keys(nodesProp)[0]; //  Object.keysは()内＝nodesProp　のkeyを取得　[0]は一番上のkeyを取得　mapで一つ一つ取得してるから一番上[0]にあるのは一つだけ
+
+                      const propValue = node[nodesProp[propName]];
+                      //nodesProp[propName]はnodesPropのvalueを取得しているので、nodeのkeyとpropNameが一致しているものを取得している
+
+                      const propProp = nodesProp[propName];
+
+                      if (
+                        propProp === "created_at" ||
+                        propProp === "updated_at"
+                      ) {
+                        const propDate =
+                          new Date(propValue).getFullYear().toString() +
+                          "/" +
+                          (new Date(propValue).getMonth() + 1).toString() +
+                          "/" +
+                          new Date(propValue).getDate().toString() +
+                          " " +
+                          new Date(propValue).getHours().toString() +
+                          ":" +
+                          new Date(propValue).getMinutes().toString();
+                        return (
+                          <Cell
+                            key={propValue}
+                            className="bg-gray-100 text-gray-900 text-3xl text-center "
+                            style={{
+                              cursor: "pointer",
+                              padding: "8px",
+                              whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                            }}
+                          >
+                            <BasicModal
+                              type={propName}
+                              editValue={propDate}
+                              editNode={node}
+                              NodesProp={nodesProp[propName]}
+                              link={link}
+                            />
+                          </Cell>
+                        );
+                      } else {
+                        return (
+                          <Cell
+                            key={propValue}
+                            className="bg-gray-100 text-gray-900 text-3xl text-center "
+                            style={{
+                              cursor: "pointer",
+                              padding: "8px",
+                              whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                            }}
+                          >
+                            <BasicModal
+                              type={propName}
+                              editValue={propValue}
+                              editNode={node}
+                              NodesProp={nodesProp[propName]}
+                              link={link}
+                            />
+                          </Cell>
+                        );
+                      }
                     })}
                     {/* tHeaderItemsに"編集"が含まれていたら作成 */}
                     {tHeaderItems.includes("編集") && (
@@ -154,11 +250,12 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                         }}
                       >
                         <div className="text-center mx-auto overflow-auto">
-                          <Link href={`${link}/edit/${item.id}`}>
-                            <button className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2">
-                              編集
-                            </button>
-                          </Link>
+                          <button
+                            className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2"
+                            onClick={() => handleEditManagement(node.id, link)}
+                          >
+                            編集
+                          </button>
                         </div>
                       </Cell>
                     )}
@@ -173,11 +270,7 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                         }}
                       >
                         <div className="text-center mx-auto ">
-                          <Link href={`${link}/delete/${item.id}`}>
-                            <button className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2">
-                              削除
-                            </button>
-                          </Link>
+                          <DeleteMan id={node.id} link={link} />
                         </div>
                       </Cell>
                     )}
@@ -194,8 +287,8 @@ const ComponentTable = ({ nodes, nodesProps, tHeaderItems, link }) => {
                       >
                         <div className="text-center mx-auto">
                           <button
-                            onClick={() => handleTimeManagement(item.id)}
-                            className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                            onClick={() => handleTimeManagement(node.id)}
+                            className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-3 py-2.5 text-center me-2 mb-2"
                           >
                             時間管理
                           </button>

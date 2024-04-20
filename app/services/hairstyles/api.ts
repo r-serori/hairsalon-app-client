@@ -1,9 +1,11 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const hairstyleApi = {
   createHairstyle: async (formData: { hairstyle_name: string }) => {
     try {
-      return await sendRequest("POST", "/hairstyles", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/hairstyles", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating hairstyle: ${error.message}`);
     }
@@ -11,7 +13,8 @@ export const hairstyleApi = {
 
   fetchAllHairstyles: async () => {
     try {
-      return await sendRequest("GET", "/hairstyles");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/hairstyles", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all hairstyles: ${error.message}`);
     }
@@ -19,7 +22,8 @@ export const hairstyleApi = {
 
   fetchHairstyleById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/hairstyles/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/hairstyles/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching hairstyle with ID ${id}: ${error.message}`
@@ -34,7 +38,13 @@ export const hairstyleApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/hairstyles/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/hairstyles/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating hairstyle with ID ${id}: ${error.message}`
@@ -44,7 +54,8 @@ export const hairstyleApi = {
 
   deleteHairstyle: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/hairstyles/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/hairstyles/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error deleting hairstyle with ID ${id}: ${error.message}`

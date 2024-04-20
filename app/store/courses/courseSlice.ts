@@ -1,6 +1,66 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { courseApi } from "../../services/courses/api";
-import { AppThunk } from "../../redux/store";
+import RootState from "../../redux/reducers/rootReducer";
+
+export const getCourse = createAsyncThunk("course/getCourse", async () => {
+  const courseData: any = await courseApi.fetchAllCourses();
+  console.log("courseDataだよ");
+  console.log(courseData.courses);
+  return courseData.courses;
+});
+
+export const createCourse = createAsyncThunk(
+  "course/createCourse",
+  async (formData: {
+    id: number;
+    course_name: string;
+    price: number;
+    created_at: string;
+    updated_at: string;
+  }) => {
+    const courseData: any = await courseApi.createCourse(formData);
+    console.log("courseCreateDataだよ");
+    console.log(courseData.courses);
+    return courseData.courses;
+  }
+);
+
+export const getCourseById = createAsyncThunk(
+  "course/getCourseById",
+  async (id: number) => {
+    const courseData: any = await courseApi.fetchCourseById(id);
+    console.log("courseShowDataだよ");
+    console.log(courseData.courses);
+    return courseData.courses;
+  }
+);
+
+export const updateCourse = createAsyncThunk(
+  "course/updateCourse",
+  async (formData: {
+    id: number;
+    course_name: string;
+    price: number;
+    created_at: string;
+    updated_at: string;
+  }) => {
+    const { id, ...updateData } = formData;
+    const courseData: any = await courseApi.updateCourse(id, updateData);
+    console.log("courseUpdateDataだよ");
+    console.log(courseData.courses);
+    return courseData.courses;
+  }
+);
+
+export const deleteCourse = createAsyncThunk(
+  "course/deleteCourse",
+  async (id: number) => {
+    const courseData: any = await courseApi.deleteCourse(id);
+    console.log("courseDeleteDataだよ");
+    console.log(courseData.courses);
+    return courseData.courses;
+  }
+);
 
 export interface CourseState {
   // ステートの型
@@ -9,58 +69,135 @@ export interface CourseState {
   price: number;
   created_at: string;
   updated_at: string;
-  loading: boolean;
-  error: string | null;
 }
 
-const initialState: CourseState = {
+export interface RootState {
+  // ルートステートの型を定義
+  course: CourseState[];
+  loading: boolean; // ローディング状態
+  error: string; // エラーメッセージ
+}
+
+const initialState: RootState = {
   // 初期状態
-  id: 0,
-  course_name: "",
-  price: 0,
-  created_at: "",
-  updated_at: "",
-  loading: false,
-  error: null,
+  course: [],
+  loading: false, // ローディング状態
+  error: "", // エラーメッセージ
 };
 
 const courseSlice = createSlice({
   name: "course",
   initialState,
   reducers: {
-    setCourseName: (state, action: PayloadAction<string>) => {
-      state.course_name = action.payload;
+    updateCourseInfo(state, action: PayloadAction<CourseState>) {
+      const updateCourse = action.payload;
+      const index = state.course.findIndex(
+        (course) => course.id === updateCourse.id
+      );
+      if (index !== -1) {
+        state.course[index] = updateCourse;
+      }
+      return state;
     },
-    setPrice: (state, action: PayloadAction<number>) => {
-      state.price = action.payload;
+
+    updateCourseName(state, action: PayloadAction<CourseState>) {
+      const updateCourse = action.payload;
+      const index = state.course.findIndex(
+        (course) => course.id === updateCourse.id
+      );
+      if (index !== -1) {
+        state.course[index].course_name = updateCourse.course_name;
+      }
+      return state;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+
+    updateCoursePrice(state, action: PayloadAction<CourseState>) {
+      const updateCourse = action.payload;
+      const index = state.course.findIndex(
+        (course) => course.id === updateCourse.id
+      );
+      if (index !== -1) {
+        state.course[index].price = updateCourse.price;
+      }
+      return state;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
+
+    deleteCourseInfo(state, action: PayloadAction<number>) {
+      state.course = state.course.filter(
+        (course) => course.id !== action.payload
+      );
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getCourse.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getCourse.fulfilled, (state, action) => {
+      state.loading = false;
+      state.course = action.payload;
+    });
+    builder.addCase(getCourse.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
+
+    builder.addCase(createCourse.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createCourse.fulfilled, (state, action) => {
+      state.loading = false;
+      state.course = action.payload;
+    });
+    builder.addCase(createCourse.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
+
+    builder.addCase(getCourseById.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getCourseById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.course = action.payload;
+    });
+    builder.addCase(getCourseById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
+
+    builder.addCase(updateCourse.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateCourse.fulfilled, (state, action) => {
+      state.loading = false;
+      state.course = action.payload;
+    });
+    builder.addCase(updateCourse.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
+
+    builder.addCase(deleteCourse.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteCourse.fulfilled, (state, action) => {
+      state.loading = false;
+      state.course = action.payload;
+    });
+    builder.addCase(deleteCourse.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
   },
 });
 
-export const { setCourseName, setPrice, setLoading, setError } =
-  courseSlice.actions;
+export const {
+  updateCourseInfo,
+  updateCourseName,
+  updateCoursePrice,
+  deleteCourseInfo,
+} = courseSlice.actions;
 
-export const courseReducer = courseSlice.reducer;
+const courseReducer = courseSlice.reducer;
 
 export default courseReducer;
-
-// Action Creators
-export const createCourse =
-  (formData: { id: number; course_name: string; price: number }): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await courseApi.createCourse(formData);
-      dispatch(setLoading(false));
-      console.log("Course created", response);
-      return response;
-    } catch (error) {
-      dispatch(setError(error.toString()));
-    }
-  };

@@ -1,3 +1,4 @@
+import getCsrfToken from "../requestApi";
 import { sendRequest } from "../requestApi";
 
 export const attendanceApi = {
@@ -8,7 +9,8 @@ export const attendanceApi = {
     address: string;
   }) => {
     try {
-      return await sendRequest("POST", "/attendances", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/attendances", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating attendance: ${error.message}`);
     }
@@ -16,8 +18,9 @@ export const attendanceApi = {
 
   fetchAllAttendances: async () => {
     try {
+      const csrfToken = await getCsrfToken();
       console.log("fetching all attendances");
-      return await sendRequest("GET", "/attendances");
+      return await sendRequest("GET", "/attendances", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all attendances: ${error.message}`);
     }
@@ -25,7 +28,8 @@ export const attendanceApi = {
 
   fetchAttendanceById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/attendances/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/attendances/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching attendance with ID ${id}: ${error.message}`
@@ -43,7 +47,13 @@ export const attendanceApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/attendances/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/attendances/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating attendance with ID ${id}: ${error.message}`
@@ -53,7 +63,8 @@ export const attendanceApi = {
 
   deleteAttendance: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/attendances/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/attendances/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error deleting attendance with ID ${id}: ${error.message}`

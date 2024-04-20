@@ -73,37 +73,6 @@ import yearly_salesReducer, {
 
 // 他のリデューサーをインポートする
 
-export interface RootState {
-  auth: AuthState;
-  authRegister: AuthRegisterState;
-  authLogout: AuthLogoutState;
-  attendance: AttendanceState;
-  attendance_time: Attendance_timeState;
-  course: CourseState;
-  merchandise: MerchandiseState;
-  merchandise_schedules: Merchandise_schedulesState;
-  option_schedules: Option_schedulesState;
-  hairstyle: HairstyleState;
-  customer: CustomerState;
-  schedule: ScheduleState;
-  stock: StockState;
-  option: OptionState;
-  stock_category: Stock_categoryState;
-  daily_sales: Daily_salesState;
-  monthly_sales: Monthly_salesState;
-  yearly_sales: Yearly_salesState;
-  course_customers: Course_customersState;
-  merchandise_customers: Merchandise_customersState;
-  option_customers: Option_customersState;
-  hairstyle_customers: Hairstyle_customersState;
-  customer_attendances: customer_attendancesState;
-  customer_schedules: customer_schedulesState;
-  course_schedules: Course_schedulesState;
-  hairstyle_schedules: Hairstyle_schedulesState;
-
-  // 他の部分状態もここに追加する
-}
-
 // 他のリデューサーをインポートする
 const rootReducer = combineReducers({
   auth: authReducer,

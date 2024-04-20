@@ -12,13 +12,15 @@ export default function SingleCheckBox({ label, value, onChange }) {
   } // 他のラベルがあればここに追加
 
   return (
-    <Autocomplete
-      disablePortal
-      id={label}
-      options={options}
-      value={value}
-      onChange={(event, newValue) => onChange(newValue)} // オプションが選択されたときにonChangeを呼び出す
-      renderInput={(params) => <TextField {...params} label={label} />}
-    />
+    <div className="w-full mt-1 border-gray-300 focus:outline-none focus:border-blue-500">
+      <Autocomplete
+        disablePortal
+        id={label}
+        options={options}
+        value={value}
+        onChange={(event, newValue) => onChange(newValue)} // オプションが選択されたときにonChangeを呼び出す
+        renderInput={(params) => <TextField {...params} label={label} />}
+      />
+    </div>
   );
 }

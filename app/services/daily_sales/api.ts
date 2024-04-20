@@ -1,9 +1,11 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const dailySaleApi = {
   createDailySales: async (formData: { date: string; daily_sales: number }) => {
     try {
-      return await sendRequest("POST", "/daily_sales", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/daily_sales", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating daily sales: ${error.message}`);
     }
@@ -11,7 +13,8 @@ export const dailySaleApi = {
 
   fetchAllDailySales: async () => {
     try {
-      return await sendRequest("GET", "/daily_sales");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/daily_sales", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all daily sales: ${error.message}`);
     }
@@ -19,7 +22,8 @@ export const dailySaleApi = {
 
   fetchDailySalesById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/daily_sales/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/daily_sales/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching daily sales with ID ${id}: ${error.message}`
@@ -35,7 +39,13 @@ export const dailySaleApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/daily_sales/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/daily_sales/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating daily sales with ID ${id}: ${error.message}`
@@ -45,7 +55,8 @@ export const dailySaleApi = {
 
   deleteDailySales: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/daily_sales/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/daily_sales/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error deleting daily sales with ID ${id}: ${error.message}`

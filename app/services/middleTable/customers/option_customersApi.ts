@@ -1,4 +1,5 @@
 import { sendRequest } from "../../requestApi";
+import getCsrfToken from "../../requestApi";
 
 export const optionCustomerApi = {
   createOptionCustomer: async (formData: {
@@ -6,7 +7,13 @@ export const optionCustomerApi = {
     customers_id: number;
   }) => {
     try {
-      return await sendRequest("POST", "/option_customers", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        "/option_customers",
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(`Error creating option customer: ${error.message}`);
     }
@@ -14,7 +21,8 @@ export const optionCustomerApi = {
 
   fetchAllOptionCustomers: async () => {
     try {
-      return await sendRequest("GET", "/option_customers");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/option_customers", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all option customers: ${error.message}`);
     }

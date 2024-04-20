@@ -1,4 +1,5 @@
 import { sendRequest } from "../../requestApi";
+import getCsrfToken from "../../requestApi";
 
 export const merchandiseScheduleApi = {
   createMerchandiseSchedule: async (formData: {
@@ -6,7 +7,13 @@ export const merchandiseScheduleApi = {
     schedules_id: number;
   }) => {
     try {
-      return await sendRequest("POST", "/merchandise_schedules", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        "/merchandise_schedules",
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(`Error creating merchandise schedule: ${error.message}`);
     }
@@ -14,7 +21,8 @@ export const merchandiseScheduleApi = {
 
   fetchAllMerchandiseSchedules: async () => {
     try {
-      return await sendRequest("GET", "/merchandise_schedules");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/merchandise_schedules", csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching all merchandise schedules: ${error.message}`

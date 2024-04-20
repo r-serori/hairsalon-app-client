@@ -18,12 +18,22 @@ const Attendances = () => {
     dispatch(getAttendance() as any);
   }, [dispatch]);
 
+  const searchItems = [
+    { key: "attendance_name", value: "名前" },
+    { key: "phone_number", value: "電話番号" },
+    { key: "position", value: "役職" },
+    { key: "address", value: "住所" },
+    { key: "created_at", value: "作成日" },
+    { key: "updated_at", value: "更新日" },
+  ];
+
   const tHeaderItems = [
     "名前",
     "電話番号",
     "役職",
     "住所",
-    "編集",
+    "作成日",
+    "更新日",
     "削除",
     "時間管理",
   ];
@@ -32,6 +42,8 @@ const Attendances = () => {
     { number: "phone_number" },
     { text: "position" },
     { text: "address" },
+    { date: "created_at" },
+    { date: "updated_at" },
   ];
 
   // nodesにattendancesをマップして処理
@@ -52,6 +64,7 @@ const Attendances = () => {
       ) : (
         <ComponentTable
           nodes={nodes}
+          searchItems={searchItems}
           nodesProps={nodesProps}
           tHeaderItems={tHeaderItems}
           link="/attendances"

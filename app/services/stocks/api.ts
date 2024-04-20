@@ -1,4 +1,5 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const stockApi = {
   createStock: async (formData: {
@@ -9,7 +10,8 @@ export const stockApi = {
     stock_category_id: number;
   }) => {
     try {
-      return await sendRequest("POST", "/stocks", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/stocks", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating stock: ${error.message}`);
     }
@@ -17,7 +19,8 @@ export const stockApi = {
 
   fetchAllStocks: async () => {
     try {
-      return await sendRequest("GET", "/stocks");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/stocks", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all stocks: ${error.message}`);
     }
@@ -25,7 +28,8 @@ export const stockApi = {
 
   fetchStockById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/stocks/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/stocks/${id}`, csrfToken);
     } catch (error) {
       throw new Error(`Error fetching stock with ID ${id}: ${error.message}`);
     }
@@ -42,7 +46,13 @@ export const stockApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/stocks/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/stocks/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(`Error updating stock with ID ${id}: ${error.message}`);
     }
@@ -50,7 +60,8 @@ export const stockApi = {
 
   deleteStock: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/stocks/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/stocks/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(`Error deleting stock with ID ${id}: ${error.message}`);
     }

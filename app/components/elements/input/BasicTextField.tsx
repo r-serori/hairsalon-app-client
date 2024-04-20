@@ -9,6 +9,7 @@ const BasicTextField = ({ placeholder, value, type, onChange }) => {
       sx={{
         "& > :not(style)": { width: "100%" },
       }}
+      className="w-full mt-1 border-gray-300 focus:outline-none focus:border-blue-500"
     >
       <TextField
         id={`${placeholder}-input`} // フィールドごとに一意のIDを設定

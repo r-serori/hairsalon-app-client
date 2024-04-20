@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import ModalForm from "../form/ModalForm";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,15 +17,17 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ type, openModal }) {
+export default function BasicModal({
+  type,
+  editValue,
+  editNode,
+  NodesProp,
+  link,
+}) {
   const [open, setOpen] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const updateButton = (e) => {
-    console.log(e.target.value);
-    handleClose();
-  };
 
   return (
     <div>
@@ -33,7 +36,7 @@ export default function BasicModal({ type, openModal }) {
         className="text-xl text-gray-900 cursor-pointer hover:bg-gray-400 
         hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
       >
-        {openModal}
+        {editValue}
       </Button>
 
       <Modal
@@ -45,27 +48,19 @@ export default function BasicModal({ type, openModal }) {
         <Box sx={style} className="rounded-xl">
           {/* モーダルのタイトル */}
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            『 {openModal} 』 を編集
+            『 {editValue} 』 を編集
           </Typography>
           {/* モーダルの内容 */}
-          <form action="">
-            <div className="mt-8 border-t  border-gray-300 py-4 flex">
-              {openModal}
 
-              <input
-                type={type} // typeに応じた入力タイプを設定
-                placeholder={`Enter ${type}`}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              />
-              <button
-                type="submit"
-                onClick={updateButton}
-                className="ml-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                更新
-              </button>
-            </div>
-          </form>
+          <ModalForm
+            type={type}
+            editValue={editValue}
+            editNode={editNode}
+            NodesProp={NodesProp}
+            link={link}
+            open={open}
+            setOpen={setOpen}
+          />
         </Box>
       </Modal>
     </div>

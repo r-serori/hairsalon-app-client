@@ -1,4 +1,5 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const yearlySaleApi = {
   createYearlySales: async (formData: {
@@ -6,7 +7,8 @@ export const yearlySaleApi = {
     yearly_sales: number;
   }) => {
     try {
-      return await sendRequest("POST", "/yearly_sales", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/yearly_sales", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating yearly sales: ${error.message}`);
     }
@@ -14,7 +16,8 @@ export const yearlySaleApi = {
 
   fetchAllYearlySales: async () => {
     try {
-      return await sendRequest("GET", "/yearly_sales");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/yearly_sales", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all yearly sales: ${error.message}`);
     }
@@ -22,7 +25,8 @@ export const yearlySaleApi = {
 
   fetchYearlySalesById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/yearly_sales/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/yearly_sales/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching yearly sales with ID ${id}: ${error.message}`
@@ -38,7 +42,13 @@ export const yearlySaleApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/yearly_sales/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/yearly_sales/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating yearly sales with ID ${id}: ${error.message}`
@@ -48,7 +58,8 @@ export const yearlySaleApi = {
 
   deleteYearlySales: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/yearly_sales/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/yearly_sales/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error deleting yearly sales with ID ${id}: ${error.message}`

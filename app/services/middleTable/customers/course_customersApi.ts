@@ -1,4 +1,5 @@
 import { sendRequest } from "../../requestApi";
+import getCsrfToken from "../../requestApi";
 
 export const courseCustomerApi = {
   createCourseCustomer: async (formData: {
@@ -6,7 +7,13 @@ export const courseCustomerApi = {
     customers_id: number;
   }) => {
     try {
-      return await sendRequest("POST", "/course_customers", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        "/course_customers",
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(`Error creating course customer: ${error.message}`);
     }
@@ -14,7 +21,8 @@ export const courseCustomerApi = {
 
   fetchAllCourseCustomers: async () => {
     try {
-      return await sendRequest("GET", "/course_customers");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/course_customers", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all course customers: ${error.message}`);
     }

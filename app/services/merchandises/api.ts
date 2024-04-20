@@ -1,4 +1,5 @@
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const merchandiseApi = {
   createMerchandise: async (formData: {
@@ -6,7 +7,8 @@ export const merchandiseApi = {
     price: number;
   }) => {
     try {
-      return await sendRequest("POST", "/merchandises", formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", "/merchandises", formData, csrfToken);
     } catch (error) {
       throw new Error(`Error creating merchandise: ${error.message}`);
     }
@@ -14,7 +16,8 @@ export const merchandiseApi = {
 
   fetchAllMerchandises: async () => {
     try {
-      return await sendRequest("GET", "/merchandises");
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", "/merchandises", csrfToken);
     } catch (error) {
       throw new Error(`Error fetching all merchandises: ${error.message}`);
     }
@@ -22,7 +25,8 @@ export const merchandiseApi = {
 
   fetchMerchandiseById: async (id: number) => {
     try {
-      return await sendRequest("GET", `/merchandises/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("GET", `/merchandises/${id}`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error fetching merchandise with ID ${id}: ${error.message}`
@@ -38,7 +42,13 @@ export const merchandiseApi = {
     }
   ) => {
     try {
-      return await sendRequest("PUT", `/merchandises/${id}`, formData);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/merchandises/${id}/update`,
+        formData,
+        csrfToken
+      );
     } catch (error) {
       throw new Error(
         `Error updating merchandise with ID ${id}: ${error.message}`
@@ -48,7 +58,8 @@ export const merchandiseApi = {
 
   deleteMerchandise: async (id: number) => {
     try {
-      return await sendRequest("DELETE", `/merchandises/${id}`);
+      const csrfToken = await getCsrfToken();
+      return await sendRequest("POST", `/merchandises/${id}/delete`, csrfToken);
     } catch (error) {
       throw new Error(
         `Error deleting merchandise with ID ${id}: ${error.message}`
