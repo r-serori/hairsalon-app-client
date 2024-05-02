@@ -37,10 +37,10 @@ import hairstyle_customersReducer, {
   Hairstyle_customersState,
 } from "../../store/middleTable/customers/hairstyle_customersSlice";
 import customer_attendancesReducer, {
-  customer_attendancesState,
+  Customer_attendancesState,
 } from "../../store/middleTable/customers/customer_attendancesSlice";
 import customer_schedulesReducer, {
-  customer_schedulesState,
+  Customer_schedulesState,
 } from "../../store/middleTable/customers/customer_schedulesSlice";
 import course_schedulesReducer, {
   Course_schedulesState,
@@ -70,6 +70,7 @@ import monthly_salesReducer, {
 import yearly_salesReducer, {
   Yearly_salesState,
 } from "../../store/sales/yearly_sales/yearly_saleSlice";
+import modalReducer from "../../store/modal/modalSlice";
 
 // 他のリデューサーをインポートする
 
@@ -101,6 +102,7 @@ const rootReducer = combineReducers({
   customer_schedules: customer_schedulesReducer,
   course_schedules: course_schedulesReducer,
   hairstyle_schedules: hairstyle_schedulesReducer,
+  modal: modalReducer,
   // 他のリデューサーをここに追加する
 });
 

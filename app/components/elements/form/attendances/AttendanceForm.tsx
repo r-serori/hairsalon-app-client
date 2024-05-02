@@ -9,22 +9,28 @@ import {
 } from "../../../../store/attendances/attendanceSlice";
 
 interface AttendanceFormProps {
+  node?: AttendanceState;
   // createAttendanceアクションをプロパティとして持つ
   createAttendance: (formData: AttendanceState) => void;
 }
 
 const AttendanceForm: React.FC<AttendanceFormProps> = ({
+  node,
   createAttendance,
 }) => {
-  const [attendance_name, setAttendanceName] = useState("");
-  const [position, setPosition] = useState("オーナー");
-  const [phone_number, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
+  const [attendance_name, setAttendanceName] = useState(
+    node ? node.attendance_name : ""
+  );
+  const [position, setPosition] = useState(node ? node.position : "オーナー");
+  const [phone_number, setPhoneNumber] = useState(
+    node ? node.phone_number : ""
+  );
+  const [address, setAddress] = useState(node ? node.address : "");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createAttendance({
-      id: 0,
+      id: node ? node.id : 0,
       attendance_name: attendance_name,
       position: position,
       phone_number: phone_number,
@@ -64,7 +70,9 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
           <SingleCheckBox
             label={"役職"}
             value={position}
+            getOptions={["オーナー", "マネージャー", "社員"]}
             onChange={handleChange}
+            nodeId={"position"}
           />
 
           <BasicTextField

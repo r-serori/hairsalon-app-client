@@ -23,6 +23,8 @@ export default function BasicModal({
   editNode,
   NodesProp,
   link,
+
+  isLoading,
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -30,11 +32,11 @@ export default function BasicModal({
   const handleClose = () => setOpen(false);
 
   return (
-    <div>
+    <>
       <Button
         onClick={handleOpen}
-        className="text-xl text-gray-900 cursor-pointer hover:bg-gray-400 
-        hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+        className="text-gray-900 cursor-pointer hover:bg-gray-400 
+        hover:text-white focus:ring-4 focus:ring-gray-300 font-medium text-sm dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
       >
         {editValue}
       </Button>
@@ -45,7 +47,7 @@ export default function BasicModal({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} className="rounded-xl">
+        <Box sx={style} className="rounded-xl ">
           {/* モーダルのタイトル */}
           <Typography id="modal-modal-title" variant="h6" component="h2">
             『 {editValue} 』 を編集
@@ -60,9 +62,11 @@ export default function BasicModal({
             link={link}
             open={open}
             setOpen={setOpen}
+            isLoading={isLoading}
           />
+          <button onClick={() => setOpen(false)}>ばつ</button>
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }

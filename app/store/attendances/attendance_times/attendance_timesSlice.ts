@@ -27,7 +27,6 @@ export const createAttendanceTime = createAsyncThunk(
       await attendance_timeApi.createAttendanceTimes(formData);
     console.log("attendanceTimeCreateDataだよ");
     console.log(attendanceTimeData.attendance_times);
-    return attendanceTimeData.attendance_times;
   }
 );
 
@@ -57,7 +56,6 @@ export const updateAttendanceTime = createAsyncThunk(
       await attendance_timeApi.updateAttendanceTimes(id, updateData);
     console.log("attendanceTimeUpdateDataだよ");
     console.log(attendanceTimeData.attendance_times);
-    return attendanceTimeData.attendance_times;
   }
 );
 
@@ -210,7 +208,6 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(createAttendanceTime.fulfilled, (state, action) => {
       state.loading = false;
-      state.attendance_times.push(action.payload);
     });
     builder.addCase(createAttendanceTime.rejected, (state, action) => {
       state.loading = false;
@@ -234,7 +231,6 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(updateAttendanceTime.fulfilled, (state, action) => {
       state.loading = false;
-      state.attendance_times = action.payload;
     });
     builder.addCase(updateAttendanceTime.rejected, (state, action) => {
       state.loading = false;

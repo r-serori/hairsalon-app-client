@@ -1,19 +1,33 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../../../redux/store";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { hairstyleCustomerApi } from "../../../services/middleTable/customers/hairstyle_customersApi";
+import RootState from "../../../redux/reducers/rootReducer";
+
+export const getHairstyle_customers = createAsyncThunk(
+  "hairstyle_customers/getHairstyle_customers",
+  async () => {
+    const hairstyle_customersData: any =
+      await hairstyleCustomerApi.fetchAllHairstyleCustomers();
+    console.log("hairstyle_customersDataだよ");
+    console.log(hairstyle_customersData.hairstyle_customers);
+    return hairstyle_customersData.hairstyle_customers;
+  }
+);
 
 export interface Hairstyle_customersState {
   // ステートの型
   hairstyles_id: number;
   customers_id: number;
+}
+
+export interface RootState {
+  // RootStateの型
+  hairstyle_customers: Hairstyle_customersState[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: Hairstyle_customersState = {
-  // 初期状態
-  hairstyles_id: 0,
-  customers_id: 0,
+export const initialState: RootState = {
+  hairstyle_customers: [],
   loading: false,
   error: null,
 };
@@ -22,41 +36,41 @@ const hairstyle_customersSlice = createSlice({
   name: "hairstyle_customers",
   initialState,
   reducers: {
-    setHairstyle_id: (state, action: PayloadAction<number>) => {
-      state.hairstyles_id = action.payload;
+    updateHairstyle_customersInfo(
+      state,
+      action: PayloadAction<Hairstyle_customersState[]>
+    ) {
+      const newHairstyle_customers = action.payload;
+      state.hairstyle_customers.push(...newHairstyle_customers);
+      return state;
     },
-    setCustomer_id: (state, action: PayloadAction<number>) => {
-      state.customers_id = action.payload;
+
+    deleteHairstyle_customersInfo(state, action: PayloadAction<number>) {
+      state.hairstyle_customers = state.hairstyle_customers.filter(
+        (hairstyle_customers) =>
+          hairstyle_customers.customers_id !== action.payload
+      );
+      return state;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getHairstyle_customers.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getHairstyle_customers.fulfilled, (state, action) => {
+      state.hairstyle_customers = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getHairstyle_customers.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { setHairstyle_id, setCustomer_id, setLoading, setError } =
+export const { updateHairstyle_customersInfo, deleteHairstyle_customersInfo } =
   hairstyle_customersSlice.actions;
 
-export const hairstyle_customersReducer = hairstyle_customersSlice.reducer;
+const hairstyle_customersReducer = hairstyle_customersSlice.reducer;
 
 export default hairstyle_customersReducer;
-
-// Action Creators
-export const createHairstyle_customers =
-  (formData: { hairstyles_id: number; customers_id: number }): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await hairstyleCustomerApi.createHairstyleCustomer(
-        formData
-      );
-      dispatch(setLoading(false));
-      console.log(response);
-      return response;
-    } catch (error) {
-      dispatch(setError(error.toString()));
-    }
-  };

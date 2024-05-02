@@ -5,7 +5,7 @@ export const stockApi = {
   createStock: async (formData: {
     product_name: string;
     product_price: number;
-    quantity: string;
+    quantity: number;
     remarks: string;
     stock_category_id: number;
   }) => {
@@ -40,7 +40,7 @@ export const stockApi = {
     formData: {
       product_name: string;
       product_price: number;
-      quantity: string;
+      quantity: number;
       remarks: string;
       stock_category_id: number;
     }

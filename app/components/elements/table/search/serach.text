@@ -1,5 +1,6 @@
 nodes
 [{…}, {…}, {…}, {…}, {…}]
+node(editNode)
 {
     "id": 1,
     "attendance_name": "田中店長",
@@ -25,13 +26,13 @@ nodes
   text,numberなど。。。
 
 
-  const propValue = node[nodesProp[propName]];
+  const propValue(editValue) = node[nodesProp[propName]];
   田中店長、"09012345678",など。。。
 
 nodesProp[propName] 
 attendance_name,phone_numberなど。。。
 
-  nodesProps = [
+  nodesProps(NodesProp) = [
     { text: "attendance_name" },
     { number: "phone_number" },
     { text: "position" },

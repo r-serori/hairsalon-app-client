@@ -1,19 +1,34 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../../../redux/store";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { courseScheduleApi } from "../../../services/middleTable/schedules/course_schedulesApi";
+import RootState from "../../../redux/reducers/rootReducer";
+
+export const getCourse_schedules = createAsyncThunk(
+  "course_schedules/getCourse_schedules",
+  async () => {
+    const course_schedulesData: any =
+      await courseScheduleApi.fetchAllCourseSchedules();
+    console.log("course_schedulesDataだよ");
+    console.log(course_schedulesData.course_schedules);
+    return course_schedulesData.course_schedules;
+  }
+);
 
 export interface Course_schedulesState {
   // ステートの型
+  id: number;
   courses_id: number;
   schedules_id: number;
+}
+
+export interface RootState {
+  // RootStateの型
+  course_schedules: Course_schedulesState[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: Course_schedulesState = {
-  // 初期状態
-  courses_id: 0,
-  schedules_id: 0,
+export const initialState: RootState = {
+  course_schedules: [],
   loading: false,
   error: null,
 };
@@ -22,39 +37,45 @@ const course_schedulesSlice = createSlice({
   name: "course_schedules",
   initialState,
   reducers: {
-    setCourse_id: (state, action: PayloadAction<number>) => {
-      state.courses_id = action.payload;
+    updateCourse_schedulesInfo(
+      state,
+      action: PayloadAction<Course_schedulesState>
+    ) {
+      const updatedCourse_schedules = action.payload;
+      const index = state.course_schedules.findIndex(
+        (course_schedules) => course_schedules.id === updatedCourse_schedules.id
+      );
+      if (index !== -1) {
+        state.course_schedules[index] = updatedCourse_schedules;
+      }
+      return state;
     },
-    setSchedule_id: (state, action: PayloadAction<number>) => {
-      state.schedules_id = action.payload;
+
+    deleteCourse_schedulesInfo(state, action: PayloadAction<number>) {
+      state.course_schedules = state.course_schedules.filter(
+        (course_schedules) => course_schedules.id !== action.payload
+      );
+      return state;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getCourse_schedules.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getCourse_schedules.fulfilled, (state, action) => {
+      state.course_schedules = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getCourse_schedules.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { setCourse_id, setSchedule_id, setLoading, setError } =
+export const { updateCourse_schedulesInfo, deleteCourse_schedulesInfo } =
   course_schedulesSlice.actions;
 
-export const course_schedulesReducer = course_schedulesSlice.reducer;
+const course_schedulesReducer = course_schedulesSlice.reducer;
 
 export default course_schedulesReducer;
-
-// Action Creators
-export const createCourse_schedules =
-  (formData: { courses_id: number; schedules_id: number }): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await courseScheduleApi.createCourseSchedule(formData);
-      dispatch(setLoading(false));
-      console.log(response);
-      return response;
-    } catch (error) {
-      dispatch(setError(error.toString()));
-    }
-  };

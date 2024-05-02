@@ -1,156 +1,98 @@
 import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { getCustomer } from "../../store/customers/customerSlice";
+import { getCourse } from "../../store/courses/courseSlice";
+import { getOption } from "../../store/options/optionSlice";
+import { getMerchandise } from "../../store/merchandises/merchandiseSlice";
+import { getHairstyle } from "../../store/hairstyles/hairstyleSlice";
+import { getAttendance } from "../../store/attendances/attendanceSlice";
+import { getCourse_customers } from "../../store/middleTable/customers/course_customersSlice";
+import { getOption_customers } from "../../store/middleTable/customers/option_customersSlice";
+import { getMerchandise_customers } from "../../store/middleTable/customers/merchandise_customersSlice";
+import { getHairstyle_customers } from "../../store/middleTable/customers/hairstyle_customersSlice";
+import { getCustomer_attendances } from "../../store/middleTable/customers/customer_attendancesSlice";
+import { RootState } from "../../redux/store";
 
 const customers = () => {
+  const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.customer.loading);
+
+  const customers = useSelector((state: RootState) => state.customer.customers);
+
+  const courses = useSelector((state: RootState) => state.course.course);
+
+  const options = useSelector((state: RootState) => state.option.option);
+
+  const merchandises = useSelector(
+    (state: RootState) => state.merchandise.merchandise
+  );
+
+  const hairstyles = useSelector(
+    (state: RootState) => state.hairstyle.hairstyle
+  );
+
+  const attendances = useSelector(
+    (state: RootState) => state.attendance.attendances
+  );
+
+  const course_customers = useSelector(
+    (state: RootState) => state.course_customers.course_customers
+  );
+
+  console.log("course_customersだよ");
+  console.log(course_customers);
+
+  const option_customers = useSelector(
+    (state: RootState) => state.option_customers.option_customers
+  );
+
+  const merchandise_customers = useSelector(
+    (state: RootState) => state.merchandise_customers.merchandise_customers
+  );
+
+  const hairstyle_customers = useSelector(
+    (state: RootState) => state.hairstyle_customers.hairstyle_customers
+  );
+
+  const customer_attendances = useSelector(
+    (state: RootState) => state.customer_attendances.customer_attendances
+  );
+
   useEffect(() => {
-    console.log(nodes);
-  }, []);
+    try {
+      dispatch(getCourse() as any);
+      dispatch(getOption() as any);
+      dispatch(getMerchandise() as any);
+      dispatch(getHairstyle() as any);
+      dispatch(getAttendance() as any);
+      dispatch(getCourse_customers() as any);
+      dispatch(getOption_customers() as any);
+      dispatch(getMerchandise_customers() as any);
+      dispatch(getHairstyle_customers() as any);
+      dispatch(getCustomer_attendances() as any);
+      dispatch(getCustomer() as any);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("顧客取得！！");
+    }
+  }, [dispatch]);
 
-  const customers = [
+  const searchItems = [
+    { key: "customer_name", value: "顧客名" },
+    { key: "phone_number", value: "電話番号" },
+    { key: "remarks", value: "備考" },
+    { key: "new_customer", value: "新規or既存" },
+    { key: "course", value: "コース名" },
+    { key: "option", value: "オプション名" },
     {
-      id: 1,
-      name: "田中太郎",
-      phone_number: "00011112222",
-      remarks: "初めての来店",
-      new_customer: "新規",
-      updated_at: "2024-01-01",
+      key: "merchandise",
+      value: "商品名",
     },
-    {
-      id: 2,
-      name: "田中次郎",
-      phone_number: "00011113333",
-      remarks: "前回カット",
-      new_customer: "既存",
-      updated_at: "2024-01-01",
-    },
-  ];
-
-  const customer_courses = [
-    {
-      customers_id: 1,
-      courses_id: 1,
-    },
-    {
-      customers_id: 2,
-      courses_id: 2,
-    },
-  ];
-
-  const customer_options = [
-    {
-      customers_id: 1,
-      options_id: 1,
-    },
-    {
-      customers_id: 1,
-      options_id: 2,
-    },
-    {
-      customers_id: 2,
-      options_id: 1,
-    },
-  ];
-
-  const customer_merchandises = [
-    {
-      customers_id: 1,
-      merchandises_id: 1,
-    },
-    {
-      customers_id: 1,
-      merchandises_id: 2,
-    },
-    {
-      customers_id: 2,
-      merchandises_id: 2,
-    },
-  ];
-
-  const customer_hairstyles = [
-    {
-      customers_id: 1,
-      hairstyles_id: 1,
-    },
-    {
-      customers_id: 1,
-      hairstyles_id: 2,
-    },
-    {
-      customers_id: 2,
-      hairstyles_id: 1,
-    },
-  ];
-  const customer_attendances = [
-    {
-      customers_id: 1,
-      attendances_id: 1,
-    },
-    {
-      customers_id: 2,
-      attendances_id: 2,
-    },
-  ];
-
-  const courses = [
-    {
-      id: 1,
-      course_name: "カットとシェービングA",
-      price: 7000,
-    },
-    {
-      id: 2,
-      course_name: "カットとシェービングB",
-      price: 6000,
-    },
-  ];
-
-  const options = [
-    {
-      id: 1,
-      option_name: "トリートメント",
-      price: 1000,
-    },
-    {
-      id: 2,
-      option_name: "パーマ",
-      price: 5000,
-    },
-  ];
-
-  const merchandises = [
-    {
-      id: 1,
-      product_name: "シャンプー",
-      product_price: 2000,
-    },
-    {
-      id: 2,
-      product_name: "コンディショナー",
-      product_price: 2000,
-    },
-  ];
-
-  const hairstyles = [
-    {
-      id: 1,
-      hairstyle_name: "ショート",
-    },
-    {
-      id: 2,
-      hairstyle_name: "ロング",
-    },
-  ];
-
-  const attendances = [
-    {
-      id: 1,
-      attendance_name: "田中店長",
-    },
-    {
-      id: 2,
-      attendance_name: "太郎社長",
-    },
+    { key: "hairstyle", value: "ヘアスタイル名" },
+    { key: "attendance", value: "担当者名" },
   ];
 
   const tHeaderItems = [
@@ -169,15 +111,15 @@ const customers = () => {
   ];
 
   const nodesProps = [
-    { text: "name" },
+    { text: "customer_name" },
     { number: "phone_number" },
     { text: "remarks" },
     { text: "new_customer" },
-    { text: "course_name" },
-    { text: "option_name" },
-    { text: "product_name" },
-    { text: "hairstyle_name" },
-    { text: "attendance_name" },
+    { text: "course" },
+    { text: "option" },
+    { text: "merchandise" },
+    { text: "hairstyle" },
+    { text: "attendance" },
     { date: "updated_at" },
   ];
 
@@ -185,7 +127,7 @@ const customers = () => {
     ...customers.map((customer) => {
       // customerは一回一番下まで行く。その後、次のcustomerに行く。
       // 顧客に関連するコースの情報を取得
-      const customerCourses = customer_courses.filter(
+      const customerCourses = course_customers.filter(
         (course) => course.customers_id === customer.id
       );
       console.log(customerCourses);
@@ -202,7 +144,7 @@ const customers = () => {
       // カットとシェービングA
 
       // 顧客に関連するオプションの情報を取得
-      const customerOptions = customer_options.filter(
+      const customerOptions = option_customers.filter(
         (cus_op) => cus_op.customers_id === customer.id
       );
       console.log(customerOptions);
@@ -220,7 +162,7 @@ const customers = () => {
       // トリートメント, パーマ
 
       // 顧客に関連する商品の情報を取得
-      const customerMerchandises = customer_merchandises.filter(
+      const customerMerchandises = merchandise_customers.filter(
         (merchandise) => merchandise.customers_id === customer.id
       );
       console.log(customerMerchandises);
@@ -233,14 +175,14 @@ const customers = () => {
           const merchandiseInfo = merchandises.find(
             (m) => m.id === merchandise.merchandises_id
           );
-          return merchandiseInfo ? merchandiseInfo.product_name : ""; // 商品名が見つかった場合のみ取得
+          return merchandiseInfo ? merchandiseInfo.merchandise_name : ""; // 商品名が見つかった場合のみ取得
         })
         .join(", "); // 商品名をカンマ区切りの文字列に変換
       console.log(merchandiseNames);
       // シャンプー, コンディショナー
 
       // 顧客に関連するヘアスタイルの情報を取得
-      const customerHairstyles = customer_hairstyles.filter(
+      const customerHairstyles = hairstyle_customers.filter(
         (hairstyle) => hairstyle.customers_id === customer.id
       );
       console.log(customerHairstyles);
@@ -281,45 +223,37 @@ const customers = () => {
       // 顧客情報を返す
       return {
         id: customer.id,
-        name: customer.name,
+        customer_name: customer.customer_name,
         phone_number: customer.phone_number,
         remarks: customer.remarks,
         new_customer: customer.new_customer,
-        course_name: courseNames,
-        option_name: optionNames,
-        product_name: merchandiseNames,
-        hairstyle_name: hairstyleNames,
-        attendance_name: attendanceNames,
+        course: courseNames,
+        option: optionNames,
+        merchandise: merchandiseNames,
+        hairstyle: hairstyleNames,
+        attendance: attendanceNames,
         updated_at: customer.updated_at,
       };
     }),
   ];
+
   return (
-    <div>
-      <h1>Customers</h1>
-      <Link href="/customers/create">新規作成</Link>
-      <br />
-
-      <Link href="/customers/[id]?id=1">詳細</Link>
-      <br />
-
-      <Link href="/customers/[id]/edit?id=1">編集</Link>
-      <br />
-
-      <Link href="/customers/[id]/delete?id=1">削除</Link>
-      <br />
-
-      <Link href="/customers/[id]/search?id=customer">検索</Link>
-      <br />
-
-      <Link href="/customers/[id]/schedule?id=1">予約</Link>
-
-      <ComponentTable
-        nodes={nodes}
-        nodesProps={nodesProps}
-        tHeaderItems={tHeaderItems}
-        link="/customers"
-      />
+    <div className="mx-auto max-w-8xl px-4 py-8 ">
+      <div className="flex space-x-4 mb-4">
+        <Link href="/customers/create">新規作成</Link>
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ComponentTable
+          nodes={nodes}
+          searchItems={searchItems}
+          nodesProps={nodesProps}
+          tHeaderItems={tHeaderItems}
+          link="/customers"
+          isLoading={loading}
+        />
+      )}
     </div>
   );
 };

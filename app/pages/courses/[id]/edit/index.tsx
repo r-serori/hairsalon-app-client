@@ -1,7 +1,59 @@
-const courseEdit = () => {
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import {
+  updateCourse,
+  getCourseById,
+  getCourse,
+} from "../../../../store/courses/courseSlice";
+import { RootState } from "../../../../redux/store";
+import CourseForm from "../../../../components/elements/form/courses/CourseForm";
+import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+
+const courseEdit: React.FC = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const loading = useSelector((state: RootState) => state.course.loading);
+
+  const { id } = router.query; // idを取得
+  console.log("idだよ");
+  console.log({ id });
+
+  const course = useSelector((state: RootState) =>
+    state.course.course.find((course) => course.id === parseInt(id as string))
+  );
+
+  console.log("courseだよ");
+  console.log(course);
+
+  const handleUpdate = async (formData: {
+    id: number;
+    course_name: string;
+    price: number;
+    created_at: string;
+    updated_at: string;
+  }) => {
+    try {
+      try {
+        await dispatch(updateCourse(formData) as any);
+      } catch (error) {
+        console.error(error);
+      }
+      await dispatch(getCourse as any);
+    } catch (error) {
+      console.error(error);
+    }
+    router.push("/courses"); // Redirect to the course list page after updating a course
+  };
   return (
-    <div>
-      <h1>Edit Course</h1>
+    <div className="min-h-full ">
+      <BackAgainButton link={"/courses"} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <CourseForm node={course} createCourse={handleUpdate} />
+      )}
     </div>
   );
 };

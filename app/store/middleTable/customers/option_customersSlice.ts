@@ -1,19 +1,33 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../../../redux/store";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { optionCustomerApi } from "../../../services/middleTable/customers/option_customersApi";
+import RootState from "../../../redux/reducers/rootReducer";
+
+export const getOption_customers = createAsyncThunk(
+  "option_customers/getOption_customers",
+  async () => {
+    const option_customersData: any =
+      await optionCustomerApi.fetchAllOptionCustomers();
+    console.log("option_customersDataだよ");
+    console.log(option_customersData.option_customers);
+    return option_customersData.option_customers;
+  }
+);
 
 export interface Option_customersState {
   // ステートの型
   options_id: number;
   customers_id: number;
+}
+
+export interface RootState {
+  // RootStateの型
+  option_customers: Option_customersState[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: Option_customersState = {
-  // 初期状態
-  options_id: 0,
-  customers_id: 0,
+export const initialState: RootState = {
+  option_customers: [],
   loading: false,
   error: null,
 };
@@ -22,39 +36,40 @@ const option_customersSlice = createSlice({
   name: "option_customers",
   initialState,
   reducers: {
-    setOption_id: (state, action: PayloadAction<number>) => {
-      state.options_id = action.payload;
+    updateOption_customersInfo(
+      state,
+      action: PayloadAction<Option_customersState[]>
+    ) {
+      const newOption_customers = action.payload;
+      state.option_customers.push(...newOption_customers);
+      return state;
     },
-    setCustomer_id: (state, action: PayloadAction<number>) => {
-      state.customers_id = action.payload;
+
+    deleteOption_customersInfo(state, action: PayloadAction<number>) {
+      state.option_customers = state.option_customers.filter(
+        (option_customers) => option_customers.customers_id !== action.payload
+      );
+      return state;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getOption_customers.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getOption_customers.fulfilled, (state, action) => {
+      state.option_customers = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getOption_customers.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { setOption_id, setCustomer_id, setLoading, setError } =
+export const { updateOption_customersInfo, deleteOption_customersInfo } =
   option_customersSlice.actions;
 
-export const option_customersReducer = option_customersSlice.reducer;
+const option_customersReducer = option_customersSlice.reducer;
 
 export default option_customersReducer;
-
-// Action Creators
-export const createOption_customers =
-  (formData: { options_id: number; customers_id: number }): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await optionCustomerApi.createOptionCustomer(formData);
-      dispatch(setLoading(false));
-      console.log(response);
-      return response;
-    } catch (error) {
-      dispatch(setError(error.toString()));
-    }
-  };

@@ -7,7 +7,6 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     price: number;
-    customers_id: number;
   }) => {
     try {
       const csrfToken = await getCsrfToken();
@@ -40,10 +39,10 @@ export const schedulesApi = {
   updateSchedule: async (
     id: number,
     formData: {
-      date: Date;
-      start_time: Date;
-      end_time: Date;
-      customer_id: number;
+      date: string;
+      start_time: string;
+      end_time: string;
+      price: number;
     }
   ) => {
     try {

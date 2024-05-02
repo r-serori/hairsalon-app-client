@@ -1,41 +1,44 @@
 import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getStock } from "../../store/stocks/stockSlice";
+import { getStockCategory } from "../../store/stocks/stock_categories/stock_categorySlice";
+import { RootState } from "../../redux/store";
 
 const stocks: React.FC = () => {
-  //コースカテゴリをとってきて、nosesPropsに追加する
-  const stockCategories = [
-    {
-      id: 1,
-      category: "整髪料",
-    },
-    {
-      id: 2,
-      category: "化粧品",
-    },
+  const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.stock.loading);
+
+  const stocks = useSelector((state: RootState) => state.stock.stocks);
+  console.log(stocks);
+
+  const stockCategories = useSelector(
+    (state: RootState) => state.stock_category.stock_category
+  );
+  console.log(stockCategories);
+
+  useEffect(() => {
+    try {
+      dispatch(getStock() as any);
+      dispatch(getStockCategory() as any);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("ストック、ストックカテゴリー取得！！");
+    }
+  }, [dispatch]);
+
+  const searchItems = [
+    { key: "category_name", value: "在庫カテゴリ" },
+    { key: "product_name", value: "商品名" },
+    { key: "product_price", value: "価格" },
+    { key: "quantity", value: "数量" },
+    { key: "remarks", value: "備考" },
+    { key: "supplier", value: "仕入れ先" },
   ];
 
-  const stocks = [
-    {
-      id: 1,
-      product_name: "ワックス",
-      product_price: 1500,
-      quantity: 20,
-      remarks: "ツヤ",
-      supplier: "資生堂",
-      stock_category_id: 1,
-      updated_at: "2024-01-01",
-    },
-    {
-      id: 2,
-      product_name: "化粧水",
-      product_price: 2000,
-      quantity: 10,
-      remarks: "保湿",
-      supplier: "資生堂",
-      stock_category_id: 2,
-      updated_at: "2024-01-01",
-    },
-  ];
+  //コースカテゴリをとってきて、nosesPropsに追加する
 
   const tHeaderItems = [
     "在庫カテゴリ",
@@ -67,7 +70,7 @@ const stocks: React.FC = () => {
       );
       return {
         id: stock.id,
-        category_name: categoryAndStock.category,
+        category_name: categoryAndStock?.category || "",
         product_name: stock.product_name,
         product_price: stock.product_price,
         quantity: stock.quantity,
@@ -80,28 +83,23 @@ const stocks: React.FC = () => {
     // 他の行データもここに追加する
   ];
   return (
-    <div>
-      <h1>stocks</h1>
-      <Link href="/stocks/create">新規作成</Link>
-      <br />
-      <Link href="/stocks/[id]/edit?id=1">編集</Link>
-      <br />
-      <Link href="/stocks/[id]/delete?id=1">削除</Link>
-      <br />
-      <Link href="/stocks/[id]/search/[search_stock]?id=id&search_stock=search_stock">
-        検索
-      </Link>
-      <br />
-      <Link href="/stock_categories">カテゴリ画面</Link>
-
-      <br />
-
-      <ComponentTable
-        nodes={nodes}
-        nodesProps={nodesProps}
-        tHeaderItems={tHeaderItems}
-        link="/stocks"
-      />
+    <div className="mx-auto max-w-6xl px-4 py-8 ">
+      <div className="flex space-x-4 mb-4">
+        <Link href="/stocks/create">新規作成</Link>
+        <Link href="/stock_categories">カテゴリ画面</Link>
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ComponentTable
+          nodes={nodes}
+          searchItems={searchItems}
+          nodesProps={nodesProps}
+          tHeaderItems={tHeaderItems}
+          link="/stocks"
+          isLoading={loading}
+        />
+      )}
     </div>
   );
 };

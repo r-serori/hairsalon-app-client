@@ -1,6 +1,73 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../../redux/store";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { merchandiseApi } from "../../services/merchandises/api";
+import RootState from "../../redux/reducers/rootReducer";
+
+export const getMerchandise = createAsyncThunk(
+  "merchandise/getMerchandise",
+  async () => {
+    const merchandiseData: any = await merchandiseApi.fetchAllMerchandises();
+    console.log("merchandiseDataだよ");
+    console.log(merchandiseData.merchandises);
+    return merchandiseData.merchandises;
+  }
+);
+
+export const createMerchandise = createAsyncThunk(
+  "merchandise/createMerchandise",
+  async (formData: {
+    id: number;
+    merchandise_name: string;
+    price: number;
+    created_at: string;
+    updated_at: string;
+  }) => {
+    const merchandiseData: any = await merchandiseApi.createMerchandise(
+      formData
+    );
+    console.log("merchandiseCreateDataだよ");
+    console.log(merchandiseData.merchandises);
+  }
+);
+
+export const getMerchandiseById = createAsyncThunk(
+  "merchandise/getMerchandiseById",
+  async (id: number) => {
+    const merchandiseData: any = await merchandiseApi.fetchMerchandiseById(id);
+    console.log("merchandiseShowDataだよ");
+    console.log(merchandiseData.merchandises);
+    return merchandiseData.merchandises;
+  }
+);
+
+export const updateMerchandise = createAsyncThunk(
+  "merchandise/updateMerchandise",
+  async (formData: {
+    id: number;
+    merchandise_name: string;
+    price: number;
+    created_at: string;
+    updated_at: string;
+  }) => {
+    const { id, ...updateData } = formData;
+    const merchandiseData: any = await merchandiseApi.updateMerchandise(
+      id,
+      updateData
+    );
+    console.log("merchandiseUpdateDataだよ");
+    console.log(merchandiseData.merchandises);
+    return merchandiseData.merchandises;
+  }
+);
+
+export const deleteMerchandise = createAsyncThunk(
+  "merchandise/deleteMerchandise",
+  async (id: number) => {
+    const merchandiseData: any = await merchandiseApi.deleteMerchandise(id);
+    console.log("merchandiseDeleteDataだよ");
+    console.log(merchandiseData.merchandises);
+    return merchandiseData.merchandises;
+  }
+);
 
 export interface MerchandiseState {
   // ステートの型
@@ -9,62 +76,138 @@ export interface MerchandiseState {
   price: number;
   created_at: string;
   updated_at: string;
-  loading: boolean;
-  error: string | null;
 }
 
-const initialState: MerchandiseState = {
+export interface RootState {
+  // RootStateの型
+  merchandise: MerchandiseState[];
+  loading: boolean;
+  error: string;
+}
+
+const initialState: RootState = {
   // 初期状態
-  id: 0,
-  merchandise_name: "",
-  price: 0,
-  created_at: "",
-  updated_at: "",
+  merchandise: [],
   loading: false,
-  error: null,
+  error: "",
 };
 
 const merchandiseSlice = createSlice({
   name: "merchandise",
   initialState,
   reducers: {
-    setMerchandiseName: (state, action: PayloadAction<string>) => {
-      state.merchandise_name = action.payload;
+    updateMerchandiseInfo: (state, action: PayloadAction<MerchandiseState>) => {
+      const updatedMerchandise = action.payload;
+      const index = state.merchandise.findIndex(
+        (merchandise) => merchandise.id === updatedMerchandise.id
+      );
+      if (index !== -1) {
+        state.merchandise[index] = updatedMerchandise;
+      }
+      return state;
     },
-    setPrice: (state, action: PayloadAction<number>) => {
-      state.price = action.payload;
+
+    updateMerchandiseName: (state, action: PayloadAction<MerchandiseState>) => {
+      const updatedMerchandise = action.payload;
+      const index = state.merchandise.findIndex(
+        (merchandise) => merchandise.id === updatedMerchandise.id
+      );
+      if (index !== -1) {
+        state.merchandise[index].merchandise_name =
+          updatedMerchandise.merchandise_name;
+      }
+      return state;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+
+    updateMerchandisePrice: (
+      state,
+      action: PayloadAction<MerchandiseState>
+    ) => {
+      const updatedMerchandise = action.payload;
+      const index = state.merchandise.findIndex(
+        (merchandise) => merchandise.id === updatedMerchandise.id
+      );
+      if (index !== -1) {
+        state.merchandise[index].price = updatedMerchandise.price;
+      }
+      return state;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
+
+    deleteMerchandiseInfo: (state, action: PayloadAction<number>) => {
+      const id = action.payload;
+      state.merchandise = state.merchandise.filter(
+        (merchandise) => merchandise.id !== id
+      );
+      return state;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getMerchandise.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getMerchandise.fulfilled, (state, action) => {
+      state.loading = false;
+      state.merchandise = action.payload;
+    });
+    builder.addCase(getMerchandise.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
+
+    builder.addCase(createMerchandise.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(createMerchandise.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(createMerchandise.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
+
+    builder.addCase(getMerchandiseById.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getMerchandiseById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.merchandise = action.payload;
+    });
+    builder.addCase(getMerchandiseById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
+
+    builder.addCase(updateMerchandise.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateMerchandise.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(updateMerchandise.rejected, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(deleteMerchandise.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
+      state.loading = false;
+      state.merchandise = action.payload;
+    });
+    builder.addCase(deleteMerchandise.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message!;
+    });
   },
 });
 
-export const { setMerchandiseName, setPrice, setLoading, setError } =
-  merchandiseSlice.actions;
+export const {
+  updateMerchandiseInfo,
+  updateMerchandiseName,
+  updateMerchandisePrice,
+  deleteMerchandiseInfo,
+} = merchandiseSlice.actions;
 
-export const merchandiseReducer = merchandiseSlice.reducer;
+const merchandiseReducer = merchandiseSlice.reducer;
 
 export default merchandiseReducer;
-
-// Action Creators
-export const createMerchandise =
-  (formData: {
-    id: number;
-    merchandise_name: string;
-    price: number;
-  }): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await merchandiseApi.createMerchandise(formData);
-      dispatch(setLoading(false));
-      console.log(response);
-      return response;
-    } catch (error) {
-      dispatch(setError(error.toString()));
-    }
-  };

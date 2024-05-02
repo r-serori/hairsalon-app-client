@@ -1,23 +1,13 @@
 import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
+import { ScheduleState } from "../../../../store/schedules/scheduleSlice";
 
 interface ScheduleFormProps {
-  onSubmit: (formData: {
-    id: number;
-    date: string;
-    start_time: string;
-    end_time: string;
-    price: number;
-    created_at: string;
-    updated_at: string;
-    loading: boolean;
-    error: string | null;
-  }) => void;
+  createSchedule: (formData: ScheduleState) => void;
 }
 
-const ScheduleForm: React.FC<ScheduleFormProps> = ({ onSubmit }) => {
-  const [id, setId] = useState(0);
+const ScheduleForm: React.FC<ScheduleFormProps> = ({ createSchedule }) => {
   const [date, setDateName] = useState("");
   const [start_time, setStartTime] = useState("");
   const [end_time, setEndTime] = useState("");
@@ -25,16 +15,14 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({
-      id,
+    createSchedule({
+      id: 0,
       date: date,
       start_time: start_time,
       end_time: end_time,
       price: price,
       created_at: "",
       updated_at: "",
-      loading: false,
-      error: null,
     });
   };
 
@@ -47,11 +35,6 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ onSubmit }) => {
           </h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <input
-            type="hidden"
-            value={id}
-            onChange={(e) => setId(parseInt(e.target.value))}
-          />
           <BasicTextField
             type="date"
             placeholder="日付"

@@ -3,77 +3,182 @@ import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
-import { sendRequest } from "../../../../services/requestApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import { SelectChangeEvent } from "@mui/material";
+import { CustomerState } from "../../../../store/customers/customerSlice";
 
 interface CustomerFormProps {
-  onSubmit: (formData: {
-    id: number;
-    customer_name: string;
-    phone_number: string;
-    remarks: string;
-    new_customer: boolean;
-    created_at: string;
-    updated_at: string;
-    loading: boolean;
-    error: string | null;
-  }) => void;
+  node?: CustomerState;
+  onSubmit: (formData: CustomerState) => void;
 }
 
-const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit }) => {
-  const [id, setId] = useState(0);
-  const [customer_name, setCustomerName] = useState("");
-  const [phone_number, setPhoneNumber] = useState("");
-  const [remarks, setRemarks] = useState("");
-  const [new_customer, setNewCustomer] = useState(false);
+const CustomerForm: React.FC<CustomerFormProps> = ({ node, onSubmit }) => {
+  const getCoursesState = useSelector(
+    (state: RootState) => state.course.course
+  );
 
-  const [courses, setCourses] = useState([] as any[]);
-  const [options, setOptions] = useState([] as any[]);
-  const [merchandises, setMerchandises] = useState([] as any[]);
-  const [hairstyles, setHairstyles] = useState([] as any[]);
-  const [attendances, setAttendances] = useState([] as any[]);
+  console.log("getCoursesStateだよ");
+  console.log(getCoursesState);
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const getCourses = await sendRequest<any>("GET", "/courses");
-        console.log(getCourses);
-        setCourses(getCourses);
+  const getCourseNames = getCoursesState.map((course) => course.course_name);
 
-        const getOptions = await sendRequest<any>("GET", "/options");
-        console.log(getOptions);
-        setOptions(getOptions);
+  console.log("getCourseNamesだよ");
+  console.log(getCourseNames);
 
-        const getMerchandises = await sendRequest<any>("GET", "/merchandises");
-        console.log(getMerchandises);
-        setMerchandises(getMerchandises);
+  const getOptionsState = useSelector(
+    (state: RootState) => state.option.option
+  );
 
-        const getHairstyles = await sendRequest<any>("GET", "/hairstyles");
-        console.log(getHairstyles);
-        setHairstyles(getHairstyles);
+  console.log("getOptionsStateだよ");
+  console.log(getOptionsState);
 
-        const getAttendances = await sendRequest<any>("GET", "/attendances");
-        console.log(getAttendances);
-        setAttendances(getAttendances);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchCourses();
-  }, []);
+  const getOptionsNames = getOptionsState.map((option) => option.option_name);
+
+  console.log("getOptionsNamesだよ");
+  console.log(getOptionsNames);
+
+  const getMerchandisesState = useSelector(
+    (state: RootState) => state.merchandise.merchandise
+  );
+
+  console.log("getMerchandisesStateだよ");
+  console.log(getMerchandisesState);
+
+  const getMerchandisesNames = getMerchandisesState.map(
+    (merchandise) => merchandise.merchandise_name
+  );
+
+  console.log("getMerchandisesNamesだよ");
+  console.log(getMerchandisesNames);
+
+  const getHairstylesState = useSelector(
+    (state: RootState) => state.hairstyle.hairstyle
+  );
+
+  console.log("getHairstylesStateだよ");
+  console.log(getHairstylesState);
+
+  const getHairstylesNames = getHairstylesState.map(
+    (hairstyle) => hairstyle.hairstyle_name
+  );
+
+  console.log("getHairstylesNamesだよ");
+  console.log(getHairstylesNames);
+
+  const getAttendancesState = useSelector(
+    (state: RootState) => state.attendance.attendances
+  );
+
+  console.log("getAttendancesStateだよ");
+  console.log(getAttendancesState);
+
+  const getAttendancesNames = getAttendancesState.map(
+    (attendance) => attendance.attendance_name
+  );
+
+  console.log("getAttendancesNamesだよ");
+  console.log(getAttendancesNames);
+
+  const [customer_name, setCustomerName] = useState(
+    node ? node.customer_name : ""
+  );
+  const [phone_number, setPhoneNumber] = useState(
+    node ? node.phone_number : ""
+  );
+  const [remarks, setRemarks] = useState(node ? node.remarks : "");
+  const [new_customer, setNewCustomer] = useState(
+    node ? node.new_customer : "既存"
+  );
+
+  const [courses, setCourses] = useState(
+    node
+      ? getCoursesState
+          .filter((course) => node.courses_id.includes(course.id))
+          .map((course) => course.course_name)
+      : []
+  );
+  const [options, setOptions] = useState(
+    node
+      ? getOptionsState
+          .filter((option) => node.options_id.includes(option.id))
+          .map((option) => option.option_name)
+      : []
+  );
+  const [merchandises, setMerchandises] = useState(
+    node
+      ? getMerchandisesState
+          .filter((merchandise) =>
+            node.merchandises_id.includes(merchandise.id)
+          )
+          .map((merchandise) => merchandise.merchandise_name)
+      : []
+  );
+  const [hairstyles, setHairstyles] = useState(
+    node
+      ? getHairstylesState
+          .filter((hairstyle) => node.hairstyles_id.includes(hairstyle.id))
+          .map((hairstyle) => hairstyle.hairstyle_name)
+      : []
+  );
+  const [attendances, setAttendances] = useState(
+    node
+      ? getAttendancesState
+          .filter((attendance) => node.attendances_id.includes(attendance.id))
+          .map((attendance) => attendance.attendance_name)
+      : []
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit({
-      id: id,
+      id: node ? node.id : 0,
       customer_name: customer_name,
       phone_number: phone_number,
       remarks: remarks,
       new_customer: new_customer,
+      courses_id: getCoursesState
+        .filter((course) => courses.includes(course.course_name))
+        .map((course) => course.id),
+      options_id: getOptionsState
+        .filter((option) => options.includes(option.option_name))
+        .map((option) => option.id),
+      merchandises_id: getMerchandisesState
+        .filter((merchandise) =>
+          merchandises.includes(merchandise.merchandise_name)
+        )
+        .map((merchandise) => merchandise.id),
+      hairstyles_id: getHairstylesState
+        .filter((hairstyle) => hairstyles.includes(hairstyle.hairstyle_name))
+        .map((hairstyle) => hairstyle.id),
+      attendances_id: getAttendancesState
+        .filter((attendance) =>
+          attendances.includes(attendance.attendance_name)
+        )
+        .map((attendance) => attendance.id),
       created_at: "",
       updated_at: "",
-      loading: false,
-      error: null,
     });
+  };
+
+  const handleCourseChange = (event: SelectChangeEvent<string[]>) => {
+    setCourses(event.target.value as string[]);
+  };
+
+  const handleOptionChange = (event: SelectChangeEvent<string[]>) => {
+    setOptions(event.target.value as string[]);
+  };
+
+  const handleMerchandiseChange = (event: SelectChangeEvent<string[]>) => {
+    setMerchandises(event.target.value as string[]);
+  };
+
+  const handleHairstyleChange = (event: SelectChangeEvent<string[]>) => {
+    setHairstyles(event.target.value as string[]);
+  };
+
+  const handleAttendanceChange = (event: SelectChangeEvent<string[]>) => {
+    setAttendances(event.target.value as string[]);
   };
 
   return (
@@ -81,15 +186,10 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit }) => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            スタッフ登録
+            顧客登録
           </h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <input
-            type="hidden"
-            value={id}
-            onChange={(e) => setId(parseInt(e.target.value))}
-          />
           <BasicTextField
             type="text"
             placeholder="スタッフ名"
@@ -112,20 +212,47 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ onSubmit }) => {
           />
 
           <SingleCheckBox
-            label={"新規顧客"}
+            label="新規or既存"
             value={new_customer}
-            onChange={(e) => setNewCustomer(e.target.checked)}
+            nodeId={"new_customer"}
+            getOptions={["新規", "既存"]}
+            onChange={(newValue) => setNewCustomer(newValue)}
           />
 
-          <MultiCheckbox options={courses} />
+          <MultiCheckbox
+            getOptions={getCoursesState}
+            optionName={courses}
+            nodesProp="course"
+            onChanger={handleCourseChange}
+          />
 
-          <MultiCheckbox options={options} />
+          <MultiCheckbox
+            getOptions={getOptionsState}
+            optionName={options}
+            nodesProp="option"
+            onChanger={handleOptionChange}
+          />
 
-          <MultiCheckbox options={merchandises} />
+          <MultiCheckbox
+            getOptions={getMerchandisesState}
+            optionName={merchandises}
+            nodesProp="merchandise"
+            onChanger={handleMerchandiseChange}
+          />
 
-          <MultiCheckbox options={hairstyles} />
+          <MultiCheckbox
+            getOptions={getHairstylesState}
+            optionName={hairstyles}
+            nodesProp="hairstyle"
+            onChanger={handleHairstyleChange}
+          />
 
-          <MultiCheckbox options={attendances} />
+          <MultiCheckbox
+            getOptions={getAttendancesState}
+            optionName={attendances}
+            nodesProp="attendance"
+            onChanger={handleAttendanceChange}
+          />
 
           <PrimaryButton value={"作成"} />
         </form>

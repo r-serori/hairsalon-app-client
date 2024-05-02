@@ -1,7 +1,27 @@
 import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getYearly_sales } from "../../store/sales/yearly_sales/yearly_saleSlice";
+import { RootState } from "../../redux/store";
 
 const yearly_sales: React.FC = () => {
+  const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.yearly_sales.loading);
+
+  const yearly_sales = useSelector(
+    (state: RootState) => state.yearly_sales.yearly_sales
+  );
+
+  useEffect(() => {
+    dispatch(getYearly_sales() as any);
+  }, [dispatch]);
+
+  const searchItems = [
+    { key: "year", value: "年" },
+    { key: "yearly_sales", value: "売上" },
+  ];
+
   const tHeaderItems = ["年", "売上", "更新日", "編集", "削除"];
 
   const nodesProps = [
@@ -10,44 +30,28 @@ const yearly_sales: React.FC = () => {
     { date: "updated_at" },
   ];
 
-  const nodes = [
-    {
-      id: 1,
-      year: "2024",
-      yearly_sales: 12000000,
-      updated_at: "2024-01-01",
-    },
-    {
-      id: 2,
-      year: "2025",
-      yearly_sales: 10000000,
-      updated_at: "2025-01-01",
-    },
-  ];
-  return (
-    <div>
-      <h1>yearly_sales</h1>
-      <Link href="/yearly_sales/create">新規作成</Link>
-      <br />
-      <Link href="/yearly_sales/[id]?id=1">詳細</Link>
-      <br />
-      <Link href="/yearly_sales/[id]/edit?id=1">編集</Link>
-      <br />
-      <Link href="/yearly_sales/[id]/delete?id=1">削除</Link>
-      <br />
-      <Link href="/daily_sales">日売上</Link>
-      <br />
-      <Link href="/monthly_sales">月売上</Link>
-      <br />
-      <Link href="/yearly_sales">年売上</Link>
-      <br />
+  const nodes = yearly_sales;
 
-      <ComponentTable
-        nodes={nodes}
-        nodesProps={nodesProps}
-        tHeaderItems={tHeaderItems}
-        link="/yearly_sales"
-      />
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-8 ">
+      <div className="flex space-x-4 mb-4">
+        <Link href="/yearly_sales/create">新規作成</Link>
+        <Link href="/daily_sales">日売上</Link>
+        <Link href="/monthly_sales">月売上</Link>
+        <Link href="/yearly_sales">年売上</Link>
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ComponentTable
+          nodes={nodes}
+          searchItems={searchItems}
+          nodesProps={nodesProps}
+          tHeaderItems={tHeaderItems}
+          link="/yearly_sales"
+          isLoading={loading}
+        />
+      )}
     </div>
   );
 };

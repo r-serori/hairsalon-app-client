@@ -1,19 +1,34 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../../../redux/store";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { optionScheduleApi } from "../../../services/middleTable/schedules/option_schedulesApi";
+import RootState from "../../../redux/reducers/rootReducer";
+
+export const getOption_schedules = createAsyncThunk(
+  "option_schedules/getOption_schedules",
+  async () => {
+    const option_schedulesData: any =
+      await optionScheduleApi.fetchAllOptionSchedules();
+    console.log("option_schedulesDataだよ");
+    console.log(option_schedulesData.option_schedules);
+    return option_schedulesData.option_schedules;
+  }
+);
 
 export interface Option_schedulesState {
   // ステートの型
+  id: number;
   options_id: number;
   schedules_id: number;
+}
+
+export interface RootState {
+  // RootStateの型
+  option_schedules: Option_schedulesState[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: Option_schedulesState = {
-  // 初期状態
-  options_id: 0,
-  schedules_id: 0,
+export const initialState: RootState = {
+  option_schedules: [],
   loading: false,
   error: null,
 };
@@ -22,39 +37,45 @@ const option_schedulesSlice = createSlice({
   name: "option_schedules",
   initialState,
   reducers: {
-    setOption_id: (state, action: PayloadAction<number>) => {
-      state.options_id = action.payload;
+    updateOption_schedulesInfo(
+      state,
+      action: PayloadAction<Option_schedulesState>
+    ) {
+      const updatedOption_schedules = action.payload;
+      const index = state.option_schedules.findIndex(
+        (option_schedules) => option_schedules.id === updatedOption_schedules.id
+      );
+      if (index !== -1) {
+        state.option_schedules[index] = updatedOption_schedules;
+      }
+      return state;
     },
-    setSchedule_id: (state, action: PayloadAction<number>) => {
-      state.schedules_id = action.payload;
+
+    deleteOption_schedulesInfo(state, action: PayloadAction<number>) {
+      state.option_schedules = state.option_schedules.filter(
+        (option_schedules) => option_schedules.id !== action.payload
+      );
+      return state;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getOption_schedules.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getOption_schedules.fulfilled, (state, action) => {
+      state.option_schedules = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getOption_schedules.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { setOption_id, setSchedule_id, setLoading, setError } =
+export const { updateOption_schedulesInfo, deleteOption_schedulesInfo } =
   option_schedulesSlice.actions;
 
-export const option_schedulesReducer = option_schedulesSlice.reducer;
+const option_schedulesReducer = option_schedulesSlice.reducer;
 
 export default option_schedulesReducer;
-
-// Action Creators
-export const createOption_schedules =
-  (formData: { options_id: number; schedules_id: number }): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await optionScheduleApi.createOptionSchedule(formData);
-      dispatch(setLoading(false));
-      console.log(response);
-      return response;
-    } catch (error) {
-      dispatch(setError(error.toString()));
-    }
-  };

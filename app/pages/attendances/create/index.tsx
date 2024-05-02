@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createAttendance } from "../../../store/attendances/attendanceSlice";
+import {
+  createAttendance,
+  getAttendance,
+} from "../../../store/attendances/attendanceSlice";
 import { RootState } from "../../../redux/store";
 import AttendanceForm from "../../../components/elements/form/attendances/AttendanceForm";
 import { useRouter } from "next/router";
@@ -22,14 +25,20 @@ const attendanceCreate: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      await dispatch(createAttendance(formData) as any);
-      router.push("/attendances"); // Redirect to the attendance list page after creating an attendance
+      try {
+        await dispatch(createAttendance(formData) as any);
+      } catch (error) {
+        console.error(error);
+      }
+      await dispatch(getAttendance() as any);
     } catch (error) {
       console.error(error);
+    } finally {
+      router.push("/attendances"); // Redirect to the attendance list page after creating a attendance
     }
   };
   return (
-    <div>
+    <div className="min-h-full ">
       <BackAgainButton link={"/attendances"} />
       {loading ? (
         <p>Loading...</p>

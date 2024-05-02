@@ -28,7 +28,6 @@ export const createAttendance = createAsyncThunk(
     const attendanceData: any = await attendanceApi.createAttendance(formData);
     console.log("attendanceCreateDataだよ");
     console.log(attendanceData.attendances);
-    return attendanceData.attendances;
   }
 );
 
@@ -60,9 +59,9 @@ export const updateAttendance = createAsyncThunk(
       id,
       updateData
     ); // 更新データのみを渡す
+
     console.log("attendanceUpdateDataだよ");
     console.log(attendanceData.attendances);
-    return attendanceData.attendances;
   }
 );
 
@@ -94,12 +93,14 @@ export interface RootState {
   loading: boolean; // ローディング状態
   error: string; // エラーメッセージ
 }
+
 const initialState: RootState = {
   // 初期状態
   attendances: [], // 出席情報の配列
   loading: false, // ローディング状態
   error: "", // エラーメッセージ
 };
+
 const attendanceSlice = createSlice({
   name: "attendance",
   initialState,
@@ -182,7 +183,6 @@ const attendanceSlice = createSlice({
     });
     builder.addCase(createAttendance.fulfilled, (state, action) => {
       state.loading = false;
-      state.attendances.push(action.payload);
     });
     builder.addCase(createAttendance.rejected, (state, action) => {
       state.loading = false;
@@ -206,18 +206,6 @@ const attendanceSlice = createSlice({
     });
     builder.addCase(updateAttendance.fulfilled, (state, action) => {
       state.loading = false;
-      // 更新された出席情報をStateに反映する
-      const updatedAttendance = action.payload;
-      const index = state.attendances.findIndex(
-        (attendance) => attendance.id === updatedAttendance.id
-      );
-      if (index !== -1) {
-        // 更新された出席情報が既存の出席情報とマッチする場合は、それを更新する
-        state.attendances[index] = updatedAttendance;
-      } else {
-        // マッチする出席情報が見つからない場合は、新しい出席情報を追加する（通常はこのケースは発生しません）
-        state.attendances.push(updatedAttendance);
-      }
     });
 
     builder.addCase(updateAttendance.rejected, (state, action) => {

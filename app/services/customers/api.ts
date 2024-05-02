@@ -5,9 +5,13 @@ export const customerApi = {
   createCustomer: async (formData: {
     customer_name: string;
     phone_number: string;
-    address: string;
     remarks: string;
-    new_customer: boolean;
+    new_customer: string;
+    courses_id: number[];
+    options_id: number[];
+    merchandises_id: number[];
+    hairstyles_id: number[];
+    attendances_id: number[];
   }) => {
     try {
       const csrfToken = await getCsrfToken();
@@ -42,9 +46,13 @@ export const customerApi = {
     formData: {
       customer_name: string;
       phone_number: string;
-      address: string;
       remarks: string;
-      new_customer: boolean;
+      new_customer: string;
+      courses_id: number[];
+      options_id: number[];
+      merchandises_id: number[];
+      hairstyles_id: number[];
+      attendances_id: number[];
     }
   ) => {
     try {

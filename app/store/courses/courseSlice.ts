@@ -21,7 +21,6 @@ export const createCourse = createAsyncThunk(
     const courseData: any = await courseApi.createCourse(formData);
     console.log("courseCreateDataだよ");
     console.log(courseData.courses);
-    return courseData.courses;
   }
 );
 
@@ -48,7 +47,6 @@ export const updateCourse = createAsyncThunk(
     const courseData: any = await courseApi.updateCourse(id, updateData);
     console.log("courseUpdateDataだよ");
     console.log(courseData.courses);
-    return courseData.courses;
   }
 );
 
@@ -146,7 +144,6 @@ const courseSlice = createSlice({
     });
     builder.addCase(createCourse.fulfilled, (state, action) => {
       state.loading = false;
-      state.course = action.payload;
     });
     builder.addCase(createCourse.rejected, (state, action) => {
       state.loading = false;
@@ -170,7 +167,6 @@ const courseSlice = createSlice({
     });
     builder.addCase(updateCourse.fulfilled, (state, action) => {
       state.loading = false;
-      state.course = action.payload;
     });
     builder.addCase(updateCourse.rejected, (state, action) => {
       state.loading = false;

@@ -3,79 +3,70 @@ import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
-import { stockCategoryApi } from "../../../../services/stock_categories/api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
+import { StockState } from "../../../../store/stocks/stockSlice";
 
 interface StockFormProps {
-  onSubmit: (formData: {
-    id: number;
-    product_name: string;
-    product_price: number;
-    remark: string;
-    quantity: string;
-    supplier: string; //仕入れ先
-    stock_category_id: number; //在庫かてゴリーID、外部キー
-    created_at: string;
-    updated_at: string;
-    loading: boolean;
-    error: string | null;
-  }) => void;
+  node?: StockState;
+  createStock: (formData: StockState) => void;
 }
 
-const stockForm: React.FC<StockFormProps> = ({ onSubmit }) => {
-  const [id, setId] = useState(0);
-  const [product_name, setProductName] = useState("");
-  const [product_price, setProductPrice] = useState(0);
-  const [quantity, setQuantity] = useState("");
-  const [remark, setRemark] = useState("");
-  const [supplier, setSupplier] = useState("");
-  const [stock_category_id, setStockCategoryId] = useState(0);
+const stockForm: React.FC<StockFormProps> = ({ node, createStock }) => {
+  const stockCategories = useSelector(
+    (state: RootState) => state.stock_category.stock_category
+  );
+  console.log(stockCategories);
 
-  useEffect(() => {
-    const fetchStockCategories = async () => {
-      try {
-        const getStockCategories: any =
-          await stockCategoryApi.fetchAllStockCategories();
-        console.log(getStockCategories);
-        setStockCategoryId(getStockCategories);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchStockCategories();
-  }, []);
+  const stockCategoryNames = stockCategories.map(
+    (category) => category.category
+  );
+  console.log("stockCategoryNamesだよ");
+  console.log(stockCategoryNames);
+
+  const [product_name, setProductName] = useState(
+    node ? node.product_name : ""
+  );
+  const [product_price, setProductPrice] = useState(
+    node ? node.product_price : 0
+  );
+  const [quantity, setQuantity] = useState(node ? node.quantity : 0);
+  const [remarks, setRemark] = useState(node ? node.remarks : "");
+  const [supplier, setSupplier] = useState(node ? node.supplier : "");
+  const [stockCategoryIdName, setStockCategoryIdName] = useState(
+    node
+      ? stockCategories.find(
+          (category) => category.id === node.stock_category_id
+        )?.category
+      : stockCategoryNames[0]
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit({
-      id: id,
+    createStock({
+      id: node ? node.id : 0,
       product_name: product_name,
       product_price: product_price,
       quantity: quantity,
-      remark: remark,
+      remarks: remarks,
       supplier: supplier,
-      stock_category_id: stock_category_id,
+      stock_category_id: stockCategories.find(
+        (category) => category.category === stockCategoryIdName
+      )?.id,
       created_at: "",
       updated_at: "",
-      loading: false,
-      error: null,
     });
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 h-full ">
+    <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            コース登録
+            在庫登録
           </h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <input
-            type="hidden"
-            value={id}
-            onChange={(e) => setId(parseInt(e.target.value))}
-          />
-
           <BasicTextField
             type="text"
             placeholder="商品名"
@@ -100,7 +91,7 @@ const stockForm: React.FC<StockFormProps> = ({ onSubmit }) => {
           <BasicTextField
             type="text"
             placeholder="備考"
-            value={remark}
+            value={remarks}
             onChange={(e) => setRemark(e.target.value)}
           />
 
@@ -111,8 +102,13 @@ const stockForm: React.FC<StockFormProps> = ({ onSubmit }) => {
             onChange={(e) => setSupplier(e.target.value)}
           />
 
-          <MultiCheckbox options={stock_category_id} />
-
+          <SingleCheckBox
+            label={"在庫カテゴリー"}
+            getOptions={stockCategoryNames}
+            value={stockCategoryIdName}
+            nodeId={node ? node.id.toString() : "stock_category_id"}
+            onChange={(newValue) => setStockCategoryIdName(newValue)}
+          />
           <PrimaryButton value={"作成"} />
         </form>
       </div>

@@ -1,7 +1,61 @@
-const hairstyleEdit = () => {
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import {
+  updateHairstyle,
+  getHairstyle,
+  HairstyleState,
+} from "../../../../store/hairstyles/hairstyleSlice";
+import { RootState } from "../../../../redux/store";
+import HairstyleForm from "../../../../components/elements/form/hairstyles/HairstyleForm";
+import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+
+const hairstyleEdit: React.FC = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const loading = useSelector((state: RootState) => state.hairstyle.loading);
+
+  const { id } = router.query; // idを取得
+  console.log("idだよ");
+  console.log({ id });
+
+  const hairstyle = useSelector((state: RootState) =>
+    state.hairstyle.hairstyle.find(
+      (hairstyle: HairstyleState) => hairstyle.id === parseInt(id as string)
+    )
+  );
+
+  console.log("hairstyleだよ");
+  console.log(hairstyle);
+
+  const handleUpdate = async (formData: {
+    id: number;
+    hairstyle_name: string;
+    created_at: string;
+    updated_at: string;
+  }) => {
+    try {
+      try {
+        await dispatch(updateHairstyle(formData) as any);
+      } catch (error) {
+        console.error(error);
+      }
+      await dispatch(getHairstyle() as any);
+    } catch (error) {
+      console.error(error);
+    }
+    router.push("/hairstyles"); // Redirect to the hairstyle list page after updating a hairstyle
+  };
+
   return (
-    <div>
-      <h1>Hairstyle Edit</h1>
+    <div className="min-h-full ">
+      <BackAgainButton link={"/hairstyles"} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <HairstyleForm node={hairstyle} createHairstyle={handleUpdate} />
+      )}
     </div>
   );
 };

@@ -9,8 +9,8 @@ const getCsrfToken = async () => {
   try {
     const response = await axios.get("/csrf-token");
     console.log("CSRF token fetched successfully");
-    console.log(response);
-    return response;
+    console.log(response.data.csrfToken);
+    return response.data.csrfToken;
   } catch (error) {
     console.error("Failed to fetch CSRF token:", error);
     throw new Error("Failed to fetch CSRF token");
@@ -31,12 +31,15 @@ export const sendRequest = async <T>(
       url,
       data,
       headers: {
+        "Content-Type": "application/json",
         "X-CSRF-Token": csrfToken,
       },
     });
     console.log(`${method} request to ${url} successful:`);
     console.log(response.data);
     // レスポンスのデータをJSON形式に変換して返す
+    console.log("JSON.parse(JSON.stringify(response.data))");
+    console.log(JSON.parse(JSON.stringify(response.data)));
     return JSON.parse(JSON.stringify(response.data));
   } catch (error) {
     handleError(error);

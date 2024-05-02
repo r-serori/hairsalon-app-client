@@ -15,7 +15,13 @@ const Attendances = () => {
   console.log(attendances);
 
   useEffect(() => {
-    dispatch(getAttendance() as any);
+    try {
+      dispatch(getAttendance() as any);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("出席情報取得！！");
+    }
   }, [dispatch]);
 
   const searchItems = [
@@ -23,8 +29,6 @@ const Attendances = () => {
     { key: "phone_number", value: "電話番号" },
     { key: "position", value: "役職" },
     { key: "address", value: "住所" },
-    { key: "created_at", value: "作成日" },
-    { key: "updated_at", value: "更新日" },
   ];
 
   const tHeaderItems = [
@@ -32,17 +36,17 @@ const Attendances = () => {
     "電話番号",
     "役職",
     "住所",
-    "作成日",
     "更新日",
+    "編集",
     "削除",
     "時間管理",
   ];
+
   const nodesProps = [
     { text: "attendance_name" },
     { number: "phone_number" },
     { text: "position" },
     { text: "address" },
-    { date: "created_at" },
     { date: "updated_at" },
   ];
 
@@ -68,6 +72,7 @@ const Attendances = () => {
           nodesProps={nodesProps}
           tHeaderItems={tHeaderItems}
           link="/attendances"
+          isLoading={loading}
         />
       )}
     </div>

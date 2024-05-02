@@ -1,7 +1,30 @@
 import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getMonthly_sales } from "../../store/sales/monthly_sales/monthly_saleSlice";
+import { RootState } from "../../redux/store";
 
 const monthly_sales: React.FC = () => {
+  const dispatch = useDispatch();
+  const loading = useSelector(
+    (state: RootState) => state.monthly_sales.loading
+  );
+
+  const monthly_sales = useSelector(
+    (state: RootState) => state.monthly_sales.monthly_sales
+  );
+
+  useEffect(() => {
+    dispatch(getMonthly_sales() as any);
+  }, [dispatch]);
+
+  const searchItems = [
+    { key: "year", value: "年" },
+    { key: "month", value: "月" },
+    { key: "monthly_sales", value: "売上" },
+  ];
+
   const tHeaderItems = ["年", "月", "売上", "更新日", "編集", "削除"];
 
   const nodesProps = [
@@ -11,46 +34,28 @@ const monthly_sales: React.FC = () => {
     { date: "updated_at" },
   ];
 
-  const nodes = [
-    {
-      id: 1,
-      year: "2024",
-      month: "1",
-      monthly_sales: 1200000,
-      updated_at: "2024-01-01",
-    },
-    {
-      id: 2,
-      year: "2024",
-      month: "2",
-      monthly_sales: 1100000,
-      updated_at: "2024-02-01",
-    },
-  ];
-  return (
-    <div>
-      <h1>monthly_sales</h1>
-      <Link href="/monthly_sales/create">新規作成</Link>
-      <br />
-      <Link href="/monthly_sales/[id]?id=1">詳細</Link>
-      <br />
-      <Link href="/monthly_sales/[id]/edit?id=1">編集</Link>
-      <br />
-      <Link href="/monthly_sales/[id]/delete?id=1">削除</Link>
-      <br />
-      <Link href="/daily_sales">日売上</Link>
-      <br />
-      <Link href="/monthly_sales">月売上</Link>
-      <br />
-      <Link href="/yearly_sales">年売上</Link>
-      <br />
+  const nodes = monthly_sales;
 
-      <ComponentTable
-        nodes={nodes}
-        nodesProps={nodesProps}
-        tHeaderItems={tHeaderItems}
-        link="/monthly_sales"
-      />
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-8 ">
+      <div className="flex space-x-4 mb-4">
+        <Link href="/monthly_sales/create">新規作成</Link>
+        <Link href="/daily_sales">日売上</Link>
+        <Link href="/monthly_sales">月売上</Link>
+        <Link href="/yearly_sales">年売上</Link>
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ComponentTable
+          nodes={nodes}
+          searchItems={searchItems}
+          nodesProps={nodesProps}
+          tHeaderItems={tHeaderItems}
+          link="/monthly_sales"
+          isLoading={loading}
+        />
+      )}
     </div>
   );
 };

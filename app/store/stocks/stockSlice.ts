@@ -1,6 +1,73 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "../../redux/store";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { stockApi } from "../../services/stocks/api";
+import RootState from "../../redux/reducers/rootReducer";
+
+// APIから在庫情報を取得する非同期アクション//get
+export const getStock = createAsyncThunk("stock/getStock", async () => {
+  const stockData: any = await stockApi.fetchAllStocks(); // APIからデータを取得
+  console.log("stockDataだよ");
+  console.log(stockData.stocks);
+  return stockData.stocks;
+});
+
+// 新しい在庫情報を作成する非同期アクション//post,store
+export const createStock = createAsyncThunk(
+  "stock/createStock",
+  async (formData: {
+    id: number;
+    product_name: string;
+    product_price: number;
+    quantity: number;
+    remarks: string;
+    supplier: string;
+    stock_category_id: number;
+  }) => {
+    const stockData: any = await stockApi.createStock(formData);
+    console.log("stockCreateDataだよ");
+    console.log(stockData.stocks);
+  }
+);
+
+// 在庫情報を取得する非同期アクション//show
+export const getStockById = createAsyncThunk(
+  "stock/getStockById",
+  async (id: number) => {
+    const stockData: any = await stockApi.fetchStockById(id);
+    console.log("stockShowDataだよ");
+    console.log(stockData.stocks);
+    return stockData.stocks;
+  }
+);
+
+// 在庫情報を更新する非同期アクション,put,update
+export const updateStock = createAsyncThunk(
+  "stock/updateStock",
+  async (formData: {
+    id: number;
+    product_name: string;
+    product_price: number;
+    quantity: number;
+    remarks: string;
+    supplier: string;
+    stock_category_id: number;
+  }) => {
+    const { id, ...updateData } = formData; // idを除外する
+    const stockData: any = await stockApi.updateStock(id, updateData);
+    console.log("stockUpdateDataだよ");
+    console.log(stockData.stocks);
+  }
+);
+
+// 在庫情報を削除する非同期アクション//delete
+export const deleteStock = createAsyncThunk(
+  "stock/deleteStock",
+  async (id: number) => {
+    const stockData: any = await stockApi.deleteStock(id);
+    console.log("stockDeleteDataだよ");
+    console.log(stockData.stocks);
+    return stockData.stocks;
+  }
+);
 
 export interface StockState {
   // ステートの型
@@ -13,21 +80,17 @@ export interface StockState {
   stock_category_id: number; //在庫カテゴリー、外部キー
   created_at: string;
   updated_at: string;
+}
+
+export interface RootState {
+  stocks: StockState[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: StockState = {
+const initialState: RootState = {
   // 初期状態
-  id: 0,
-  product_name: "",
-  product_price: 0,
-  quantity: 0,
-  remarks: "",
-  supplier: "",
-  stock_category_id: 0,
-  created_at: "",
-  updated_at: "",
+  stocks: [],
   loading: false,
   error: null,
 };
@@ -36,67 +99,164 @@ const stockSlice = createSlice({
   name: "stock",
   initialState,
   reducers: {
-    setStockName: (state, action: PayloadAction<string>) => {
-      state.product_name = action.payload;
+    // ここに同期処理のreducerを記述
+    updateStockInfo(state, action: PayloadAction<StockState>) {
+      const updateStock = action.payload;
+      const index = state.stocks.findIndex(
+        (stock) => stock.id === updateStock.id
+      );
+      if (index !== -1) {
+        state.stocks[index] = updateStock;
+      }
+      return state;
     },
-    setPrice: (state, action: PayloadAction<number>) => {
-      state.product_price = action.payload;
+
+    updateProductName(state, action: PayloadAction<StockState>) {
+      const updateStock = action.payload;
+      const index = state.stocks.findIndex(
+        (stock) => stock.id === updateStock.id
+      );
+      if (index !== -1) {
+        state.stocks[index].product_name = updateStock.product_name;
+      }
+      return state;
     },
-    setQuantity: (state, action: PayloadAction<number>) => {
-      state.quantity = action.payload;
+
+    updateProductPrice(state, action: PayloadAction<StockState>) {
+      const updateStock = action.payload;
+      const index = state.stocks.findIndex(
+        (stock) => stock.id === updateStock.id
+      );
+      if (index !== -1) {
+        state.stocks[index].product_price = updateStock.product_price;
+      }
+      return state;
     },
-    setRemarks: (state, action: PayloadAction<string>) => {
-      state.remarks = action.payload;
+
+    updateStockQuantity(state, action: PayloadAction<StockState>) {
+      const updateStock = action.payload;
+      const index = state.stocks.findIndex(
+        (stock) => stock.id === updateStock.id
+      );
+      if (index !== -1) {
+        state.stocks[index].quantity = updateStock.quantity;
+      }
+      return state;
     },
-    setSupplier: (state, action: PayloadAction<string>) => {
-      state.supplier = action.payload;
+
+    updateStockRemarks(state, action: PayloadAction<StockState>) {
+      const updateStock = action.payload;
+      const index = state.stocks.findIndex(
+        (stock) => stock.id === updateStock.id
+      );
+      if (index !== -1) {
+        state.stocks[index].remarks = updateStock.remarks;
+      }
+      return state;
     },
-    setStockCategoryId: (state, action: PayloadAction<number>) => {
-      state.stock_category_id = action.payload;
+
+    updateStockSupplier(state, action: PayloadAction<StockState>) {
+      const updateStock = action.payload;
+      const index = state.stocks.findIndex(
+        (stock) => stock.id === updateStock.id
+      );
+      if (index !== -1) {
+        state.stocks[index].supplier = updateStock.supplier;
+      }
+      return state;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+
+    updateStockCategoryId(state, action: PayloadAction<StockState>) {
+      const updateStock = action.payload;
+      const index = state.stocks.findIndex(
+        (stock) => stock.id === updateStock.id
+      );
+      if (index !== -1) {
+        state.stocks[index].stock_category_id = updateStock.stock_category_id;
+      }
+      return state;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
+
+    deleteStockInfo(state, action: PayloadAction<number>) {
+      state.stocks = state.stocks.filter(
+        (stock) => stock.id !== action.payload
+      );
+      return state;
     },
+  },
+  extraReducers: (builder) => {
+    // ここに非同期処理のreducerを記述
+    builder.addCase(getStock.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getStock.fulfilled, (state, action) => {
+      state.loading = false;
+      state.stocks = action.payload;
+    });
+    builder.addCase(getStock.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(createStock.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createStock.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(createStock.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(getStockById.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getStockById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.stocks = action.payload;
+    });
+    builder.addCase(getStockById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(updateStock.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateStock.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(updateStock.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteStock.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteStock.fulfilled, (state, action) => {
+      state.loading = false;
+      state.stocks = action.payload;
+    });
+    builder.addCase(deleteStock.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
 export const {
-  setStockName: setProductName,
-  setPrice: setProductPrice,
-  setQuantity: setQuantity,
-  setRemarks: setRemarks,
-  setSupplier: setSupplier,
-  setStockCategoryId: setStockCategoryId,
-  setLoading: setLoading,
-  setError: setError,
+  updateStockInfo,
+  updateProductName,
+  updateProductPrice,
+  updateStockQuantity,
+  updateStockRemarks,
+  updateStockSupplier,
+  updateStockCategoryId,
+  deleteStockInfo,
 } = stockSlice.actions;
 
-export const stockReducer = stockSlice.reducer;
+const stockReducer = stockSlice.reducer;
 
 export default stockReducer;
-
-// Action Creators
-export const createStock =
-  (formData: {
-    id: number;
-    product_name: string;
-    product_price: number;
-    quantity: string;
-    remarks: string;
-    supplier: string;
-    stock_category_id: number;
-  }): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await stockApi.createStock(formData);
-      dispatch(setLoading(false));
-      console.log(response);
-      return response;
-    } catch (error) {
-      dispatch(setError(error.toString()));
-    }
-  };
