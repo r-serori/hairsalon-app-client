@@ -198,7 +198,9 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(deleteMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.monthly_sales = action.payload;
+      state.monthly_sales = state.monthly_sales.filter(
+        (monthly_sales) => monthly_sales.id !== action.payload
+      );
     });
     builder.addCase(deleteMonthly_sales.rejected, (state, action) => {
       state.loading = false;

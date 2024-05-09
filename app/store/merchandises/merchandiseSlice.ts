@@ -192,7 +192,9 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
       state.loading = false;
-      state.merchandise = action.payload;
+      state.merchandise = state.merchandise.filter(
+        (merchandise) => merchandise.id !== action.payload
+      );
     });
     builder.addCase(deleteMerchandise.rejected, (state, action) => {
       state.loading = false;

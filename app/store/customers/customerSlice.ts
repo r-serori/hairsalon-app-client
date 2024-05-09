@@ -19,7 +19,6 @@ export const createCustomer = createAsyncThunk(
     customer_name: string;
     phone_number: string;
     remarks: string;
-    new_customer: string;
     courses_id: number[];
     options_id: number[];
     merchandises_id: number[];
@@ -49,7 +48,6 @@ export const updateCustomer = createAsyncThunk(
     customer_name: string;
     phone_number: string;
     remarks: string;
-    new_customer: string;
     courses_id: number[];
     options_id: number[];
     merchandises_id: number[];
@@ -81,7 +79,6 @@ export interface CustomerState {
   customer_name: string;
   phone_number: string;
   remarks: string;
-  new_customer: string;
   courses_id: number[];
   options_id: number[];
   merchandises_id: number[];
@@ -109,7 +106,7 @@ const customerSlice = createSlice({
   name: "customer",
   initialState,
   reducers: {
-    updateCustomerInfo: (state, action: PayloadAction<CustomerState>) => {
+    updateCustomerInfo(state, action: PayloadAction<CustomerState>) {
       const updateCustomer = action.payload;
       const index = state.customers.findIndex(
         (customer) => customer.id === updateCustomer.id
@@ -156,21 +153,7 @@ const customerSlice = createSlice({
       return state;
     },
 
-    updateCustomerNewCustomer: (
-      state,
-      action: PayloadAction<CustomerState>
-    ) => {
-      const updateCustomer = action.payload;
-      const index = state.customers.findIndex(
-        (customer) => customer.id === updateCustomer.id
-      );
-      if (index !== -1) {
-        state.customers[index].new_customer = updateCustomer.new_customer;
-      }
-      return state;
-    },
-
-    deleteCustomerInfo: (state, action: PayloadAction<number>) => {
+    deleteCustomerInfo(state, action: PayloadAction<number>) {
       state.customers = state.customers.filter(
         (customer) => customer.id !== action.payload
       );
@@ -229,11 +212,13 @@ const customerSlice = createSlice({
     });
     builder.addCase(deleteCustomer.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers = action.payload;
+      state.customers = state.customers.filter(
+        (customer) => customer.id !== action.payload
+      );
     });
     builder.addCase(deleteCustomer.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message!;
+      state.error = action.error.message;
     });
   },
 });
@@ -243,7 +228,6 @@ export const {
   updateCustomerName,
   updateCustomerPhoneNumber,
   updateCustomerRemarks,
-  updateCustomerNewCustomer,
   deleteCustomerInfo,
 } = customerSlice.actions;
 

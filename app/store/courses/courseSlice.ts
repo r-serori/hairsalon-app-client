@@ -178,7 +178,9 @@ const courseSlice = createSlice({
     });
     builder.addCase(deleteCourse.fulfilled, (state, action) => {
       state.loading = false;
-      state.course = action.payload;
+      state.course = state.course.filter(
+        (course) => course.id !== action.payload
+      );
     });
     builder.addCase(deleteCourse.rejected, (state, action) => {
       state.loading = false;

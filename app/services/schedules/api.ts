@@ -2,11 +2,40 @@ import { sendRequest } from "../requestApi";
 import getCsrfToken from "../requestApi";
 
 export const schedulesApi = {
-  createSchedule: async (formData: {
-    date: string;
+  createCustomerSchedule: async (formData: {
+    customer_name: string;
+    phone_number: string;
+    remarks: string;
+    courses_id: number[];
+    options_id: number[];
+    merchandises_id: number[];
+    hairstyles_id: number[];
+    attendances_id: number[];
+    title: string;
     start_time: string;
     end_time: string;
-    price: number;
+    allDay: number;
+    customers_id: number;
+  }) => {
+    try {
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        "/schedules/customers/double",
+        formData,
+        csrfToken
+      );
+    } catch (error) {
+      throw new Error(`Error creating schedule: ${error.message}`);
+    }
+  },
+
+  createSchedule: async (formData: {
+    title: string;
+    start_time: string;
+    end_time: string;
+    allDay: number;
+    customers_id: number;
   }) => {
     try {
       const csrfToken = await getCsrfToken();
@@ -36,26 +65,25 @@ export const schedulesApi = {
     }
   },
 
-  updateSchedule: async (
-    id: number,
-    formData: {
-      date: string;
-      start_time: string;
-      end_time: string;
-      price: number;
-    }
-  ) => {
+  updateSchedule: async (formData: {
+    Sid: number;
+    title: string;
+    start_time: string;
+    end_time: string;
+    allDay: number;
+  }) => {
     try {
       const csrfToken = await getCsrfToken();
+      console.log("updateScheduleの中だよ", formData);
       return await sendRequest(
         "POST",
-        `/schedules/${id}/update`,
+        `/schedules/${formData.Sid}/update`,
         formData,
         csrfToken
       );
     } catch (error) {
       throw new Error(
-        `Error updating schedule with ID ${id}: ${error.message}`
+        `Error updating schedule with ID ${formData.Sid}: ${error.message}`
       );
     }
   },

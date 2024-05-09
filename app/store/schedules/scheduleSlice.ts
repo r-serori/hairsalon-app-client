@@ -15,15 +15,38 @@ export const getSchedule = createAsyncThunk(
 export const createSchedule = createAsyncThunk(
   "schedule/createSchedule",
   async (formData: {
-    id: number;
-    date: string;
+    title: string;
     start_time: string;
     end_time: string;
-    price: number;
-    created_at: string;
-    updated_at: string;
+    allDay: number;
+    customers_id: number;
   }) => {
     const scheduleData: any = await schedulesApi.createSchedule(formData);
+    console.log("scheduleCreateDataだよ");
+    console.log(scheduleData.schedules);
+  }
+);
+
+export const createCustomerSchedule = createAsyncThunk(
+  "schedule/customer/createSchedule",
+  async (formData: {
+    customer_name: string;
+    phone_number: string;
+    remarks: string;
+    courses_id: number[];
+    options_id: number[];
+    merchandises_id: number[];
+    hairstyles_id: number[];
+    attendances_id: number[];
+    title: string;
+    start_time: string;
+    end_time: string;
+    allDay: number;
+    customers_id: number;
+  }) => {
+    const scheduleData: any = await schedulesApi.createCustomerSchedule(
+      formData
+    );
     console.log("scheduleCreateDataだよ");
     console.log(scheduleData.schedules);
   }
@@ -42,16 +65,13 @@ export const getScheduleById = createAsyncThunk(
 export const updateSchedule = createAsyncThunk(
   "schedule/updateSchedule",
   async (formData: {
-    id: number;
-    date: string;
+    Sid: number;
+    title: string;
     start_time: string;
     end_time: string;
-    price: number;
-    created_at: string;
-    updated_at: string;
+    allDay: number;
   }) => {
-    const { id, ...updateData } = formData;
-    const scheduleData: any = await schedulesApi.updateSchedule(id, updateData);
+    const scheduleData: any = await schedulesApi.updateSchedule(formData);
     console.log("scheduleUpdateDataだよ");
     console.log(scheduleData.schedules);
   }
@@ -70,10 +90,11 @@ export const deleteSchedule = createAsyncThunk(
 export interface ScheduleState {
   // ステートの型
   id: number;
-  date: string;
+  title: string;
   start_time: string;
   end_time: string;
-  price: number;
+  allDay: number;
+  customers_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -106,17 +127,6 @@ const scheduleSlice = createSlice({
       return state;
     },
 
-    updateScheduleDate(state, action: PayloadAction<ScheduleState>) {
-      const updateSchedule = action.payload;
-      const index = state.schedule.findIndex(
-        (schedule) => schedule.id === updateSchedule.id
-      );
-      if (index !== -1) {
-        state.schedule[index].date = updateSchedule.date;
-      }
-      return state;
-    },
-
     updateScheduleStartTime(state, action: PayloadAction<ScheduleState>) {
       const updateSchedule = action.payload;
       const index = state.schedule.findIndex(
@@ -139,15 +149,10 @@ const scheduleSlice = createSlice({
       return state;
     },
 
-    updateSchedulePrice(state, action: PayloadAction<ScheduleState>) {
-      const updateSchedule = action.payload;
-      const index = state.schedule.findIndex(
-        (schedule) => schedule.id === updateSchedule.id
+    deleteScheduleInfo(state, action: PayloadAction<number>) {
+      state.schedule = state.schedule.filter(
+        (schedule) => schedule.id !== action.payload
       );
-      if (index !== -1) {
-        state.schedule[index].price = updateSchedule.price;
-      }
-      return state;
     },
   },
   extraReducers: (builder) => {
@@ -163,13 +168,13 @@ const scheduleSlice = createSlice({
         state.error = action.error.message;
         state.loading = false;
       })
-      .addCase(createSchedule.pending, (state) => {
+      .addCase(createCustomerSchedule.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createSchedule.fulfilled, (state, action) => {
+      .addCase(createCustomerSchedule.fulfilled, (state, action) => {
         state.loading = false;
       })
-      .addCase(createSchedule.rejected, (state, action) => {
+      .addCase(createCustomerSchedule.rejected, (state, action) => {
         state.error = action.error.message;
         state.loading = false;
       })
@@ -198,8 +203,10 @@ const scheduleSlice = createSlice({
         state.loading = true;
       })
       .addCase(deleteSchedule.fulfilled, (state, action) => {
-        state.schedule = action.payload;
         state.loading = false;
+        state.schedule = state.schedule.filter(
+          (schedule) => schedule.id !== action.payload
+        );
       })
       .addCase(deleteSchedule.rejected, (state, action) => {
         state.error = action.error.message;
@@ -210,10 +217,9 @@ const scheduleSlice = createSlice({
 
 export const {
   updateScheduleInfo,
-  updateScheduleDate,
   updateScheduleStartTime,
   updateScheduleEndTime,
-  updateSchedulePrice,
+  deleteScheduleInfo,
 } = scheduleSlice.actions;
 
 const scheduleReducer = scheduleSlice.reducer;

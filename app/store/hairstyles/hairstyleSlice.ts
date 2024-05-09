@@ -172,7 +172,9 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(deleteHairstyle.fulfilled, (state, action) => {
       state.loading = false;
-      state.hairstyle = action.payload;
+      state.hairstyle = state.hairstyle.filter(
+        (hairstyle) => hairstyle.id !== action.payload
+      );
     });
     builder.addCase(deleteHairstyle.rejected, (state, action) => {
       state.loading = false;

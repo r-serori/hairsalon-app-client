@@ -28,6 +28,12 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
     options = getOptions;
   } else if (label === "新規or既存") {
     options = getOptions;
+  } else if (label === "顧客名") {
+    options = getOptions;
+  } else if (label === "終日") {
+    options = ["終日", "時間指定"];
+  } else if (label === "顧客orそれ以外") {
+    options = ["顧客", "それ以外"];
   }
 
   return (

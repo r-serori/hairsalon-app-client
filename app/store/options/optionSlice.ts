@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { optionApi } from "../../services/options/api";
 import RootState from "../../redux/reducers/rootReducer";
+import { PaymentOutlined } from "@mui/icons-material";
 
 export const getOption = createAsyncThunk("option/getOption", async () => {
   const optionData: any = await optionApi.fetchAllOptions();
@@ -105,6 +106,12 @@ const optionSlice = createSlice({
       }
       return state;
     },
+
+    deleteOptionInfo: (state, action: PayloadAction<number>) => {
+      state.option = state.option.filter(
+        (option) => option.id !== action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getOption.pending, (state) => {
@@ -157,8 +164,10 @@ const optionSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(deleteOption.fulfilled, (state, action) => {
-      state.option = action.payload;
       state.loading = false;
+      state.option = state.option.filter(
+        (option) => option.id !== action.payload
+      );
     });
     builder.addCase(deleteOption.rejected, (state, action) => {
       state.error = action.error.message!;
@@ -167,8 +176,12 @@ const optionSlice = createSlice({
   },
 });
 
-export const { updateOptionInfo, updateOptionName, updateOptionPrice } =
-  optionSlice.actions;
+export const {
+  updateOptionInfo,
+  updateOptionName,
+  updateOptionPrice,
+  deleteOptionInfo,
+} = optionSlice.actions;
 
 const optionReducer = optionSlice.reducer;
 

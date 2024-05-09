@@ -1,9 +1,54 @@
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 import {
   deleteAttendance,
   deleteAttendanceInfo,
 } from "../../../store/attendances/attendanceSlice";
-import { useRouter } from "next/router";
+import {
+  deleteAttendanceTimeInfo,
+  deleteAttendanceTime,
+} from "../../../store/attendances/attendance_times/attendance_timesSlice";
+import {
+  deleteCourseInfo,
+  deleteCourse,
+} from "../../../store/courses/courseSlice";
+import {
+  deleteCustomer,
+  deleteCustomerInfo,
+} from "../../../store/customers/customerSlice";
+import {
+  deleteHairstyle,
+  deleteHairstyleInfo,
+} from "../../../store/hairstyles/hairstyleSlice";
+import {
+  deleteMerchandise,
+  deleteMerchandiseInfo,
+} from "../../../store/merchandises/merchandiseSlice";
+import {
+  deleteOption,
+  deleteOptionInfo,
+} from "../../../store/options/optionSlice";
+import {
+  deleteSchedule,
+  deleteScheduleInfo,
+} from "../../../store/schedules/scheduleSlice";
+import { deleteStock, deleteStockInfo } from "../../../store/stocks/stockSlice";
+import {
+  deleteStockCategory,
+  deleteStockCategoryInfo,
+} from "../../../store/stocks/stock_categories/stock_categorySlice";
+import {
+  deleteDaily_sales,
+  deleteDailySalesInfo,
+} from "../../../store/sales/daily_sales/daily_saleSlice";
+import {
+  deleteMonthly_sales,
+  deleteMonthlySalesInfo,
+} from "../../../store/sales/monthly_sales/monthly_saleSlice";
+import {
+  deleteYearly_sales,
+  deleteYearlySalesInfo,
+} from "../../../store/sales/yearly_sales/yearly_saleSlice";
 
 const DeleteMan = ({ id, link }) => {
   const dispatch = useDispatch();
@@ -16,11 +61,57 @@ const DeleteMan = ({ id, link }) => {
         await dispatch(deleteAttendanceInfo(id) as any);
         await dispatch(deleteAttendance(id) as any);
         break;
-      // 他の link に対する削除処理を追加する場合はここに追加する
+      case "/attendance_times":
+        await dispatch(deleteAttendanceTimeInfo(id) as any);
+        await dispatch(deleteAttendanceTime(id) as any);
+        break;
+      case "/courses":
+        await dispatch(deleteCourseInfo(id) as any);
+        await dispatch(deleteCourse(id) as any);
+        break;
+      case "/customers":
+        await dispatch(deleteCustomerInfo(id) as any);
+        await dispatch(deleteCustomer(id) as any);
+        break;
+      case "/hairstyles":
+        await dispatch(deleteHairstyleInfo(id) as any);
+        await dispatch(deleteHairstyle(id) as any);
+        break;
+      case "/merchandises":
+        await dispatch(deleteMerchandiseInfo(id) as any);
+        await dispatch(deleteMerchandise(id) as any);
+        break;
+      case "/options":
+        await dispatch(deleteOptionInfo(id) as any);
+        await dispatch(deleteOption(id) as any);
+        break;
+      case "/schedules":
+        await dispatch(deleteScheduleInfo(id) as any);
+        await dispatch(deleteSchedule(id) as any);
+        break;
+      case "/stocks":
+        await dispatch(deleteStockInfo(id) as any);
+        await dispatch(deleteStock(id) as any);
+        break;
+      case "/stock_categories":
+        await dispatch(deleteStockCategoryInfo(id) as any);
+        await dispatch(deleteStockCategory(id) as any);
+        break;
+      case "/daily_sales":
+        await dispatch(deleteDailySalesInfo(id) as any);
+        await dispatch(deleteDaily_sales(id) as any);
+        break;
+      case "/monthly_sales":
+        await dispatch(deleteMonthlySalesInfo(id) as any);
+        await dispatch(deleteMonthly_sales(id) as any);
+        break;
+      case "/yearly_sales":
+        await dispatch(deleteYearlySalesInfo(id) as any);
+        await dispatch(deleteYearly_sales(id) as any);
+        break;
       default:
         break;
     }
-    console.log("削除しました");
   };
 
   return (

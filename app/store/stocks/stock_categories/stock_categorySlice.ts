@@ -186,8 +186,10 @@ const stock_categorySlice = createSlice({
       state.loading = true;
     });
     builder.addCase(deleteStockCategory.fulfilled, (state, action) => {
-      state.stock_category = action.payload;
       state.loading = false;
+      state.stock_category = state.stock_category.filter(
+        (stock_category) => stock_category.id !== action.payload
+      );
     });
     builder.addCase(deleteStockCategory.rejected, (state, action) => {
       state.error = action.error.message;

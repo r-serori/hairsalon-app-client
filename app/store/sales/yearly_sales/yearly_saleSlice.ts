@@ -174,7 +174,9 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(deleteYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.yearly_sales = action.payload;
+      state.yearly_sales = state.yearly_sales.filter(
+        (yearly_sales) => yearly_sales.id !== action.payload
+      );
     });
     builder.addCase(deleteYearly_sales.rejected, (state, action) => {
       state.loading = false;

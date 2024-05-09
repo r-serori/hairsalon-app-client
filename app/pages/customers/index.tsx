@@ -15,7 +15,7 @@ import { getHairstyle_customers } from "../../store/middleTable/customers/hairst
 import { getCustomer_attendances } from "../../store/middleTable/customers/customer_attendancesSlice";
 import { RootState } from "../../redux/store";
 
-const customers = () => {
+const customers: React.FC = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.customer.loading);
 
@@ -84,7 +84,6 @@ const customers = () => {
     { key: "customer_name", value: "顧客名" },
     { key: "phone_number", value: "電話番号" },
     { key: "remarks", value: "備考" },
-    { key: "new_customer", value: "新規or既存" },
     { key: "course", value: "コース名" },
     { key: "option", value: "オプション名" },
     {
@@ -99,7 +98,6 @@ const customers = () => {
     "顧客名",
     "電話番号",
     "備考",
-    "新規or既存",
     "コース名",
     "オプション名",
     "商品名",
@@ -114,7 +112,6 @@ const customers = () => {
     { text: "customer_name" },
     { number: "phone_number" },
     { text: "remarks" },
-    { text: "new_customer" },
     { text: "course" },
     { text: "option" },
     { text: "merchandise" },
@@ -226,7 +223,6 @@ const customers = () => {
         customer_name: customer.customer_name,
         phone_number: customer.phone_number,
         remarks: customer.remarks,
-        new_customer: customer.new_customer,
         course: courseNames,
         option: optionNames,
         merchandise: merchandiseNames,

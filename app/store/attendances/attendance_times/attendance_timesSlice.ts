@@ -242,7 +242,9 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(deleteAttendanceTime.fulfilled, (state, action) => {
       state.loading = false;
-      state.attendance_times = action.payload;
+      state.attendance_times = state.attendance_times.filter(
+        (attendance_time) => attendance_time.id !== action.payload
+      );
     });
     builder.addCase(deleteAttendanceTime.rejected, (state, action) => {
       state.loading = false;

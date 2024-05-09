@@ -70,7 +70,6 @@ import monthly_salesReducer, {
 import yearly_salesReducer, {
   Yearly_salesState,
 } from "../../store/sales/yearly_sales/yearly_saleSlice";
-import modalReducer from "../../store/modal/modalSlice";
 
 // 他のリデューサーをインポートする
 
@@ -102,7 +101,6 @@ const rootReducer = combineReducers({
   customer_schedules: customer_schedulesReducer,
   course_schedules: course_schedulesReducer,
   hairstyle_schedules: hairstyle_schedulesReducer,
-  modal: modalReducer,
   // 他のリデューサーをここに追加する
 });
 

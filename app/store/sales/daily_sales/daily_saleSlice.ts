@@ -171,8 +171,10 @@ const daily_salesSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(deleteDaily_sales.fulfilled, (state, action) => {
-      state.daily_sales = action.payload;
       state.loading = false;
+      state.daily_sales = state.daily_sales.filter(
+        (daily_sales) => daily_sales.id !== action.payload
+      );
     });
     builder.addCase(deleteDaily_sales.rejected, (state, action) => {
       state.error = action.error.message;
@@ -181,8 +183,12 @@ const daily_salesSlice = createSlice({
   },
 });
 
-export const { updateDailySalesInfo, updateDate, updateDaily_sale } =
-  daily_salesSlice.actions;
+export const {
+  updateDailySalesInfo,
+  updateDate,
+  updateDaily_sale,
+  deleteDailySalesInfo,
+} = daily_salesSlice.actions;
 
 const daily_salesReducer = daily_salesSlice.reducer;
 

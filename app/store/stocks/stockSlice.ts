@@ -237,7 +237,9 @@ const stockSlice = createSlice({
     });
     builder.addCase(deleteStock.fulfilled, (state, action) => {
       state.loading = false;
-      state.stocks = action.payload;
+      state.stocks = state.stocks.filter(
+        (stock) => stock.id !== action.payload
+      );
     });
     builder.addCase(deleteStock.rejected, (state, action) => {
       state.loading = false;

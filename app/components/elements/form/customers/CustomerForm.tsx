@@ -80,16 +80,15 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ node, onSubmit }) => {
   console.log("getAttendancesNamesだよ");
   console.log(getAttendancesNames);
 
-  const [customer_name, setCustomerName] = useState(
+  const [customer_name, setCustomer_Name] = useState(
     node ? node.customer_name : ""
   );
+
   const [phone_number, setPhoneNumber] = useState(
     node ? node.phone_number : ""
   );
+
   const [remarks, setRemarks] = useState(node ? node.remarks : "");
-  const [new_customer, setNewCustomer] = useState(
-    node ? node.new_customer : "既存"
-  );
 
   const [courses, setCourses] = useState(
     node
@@ -136,7 +135,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ node, onSubmit }) => {
       customer_name: customer_name,
       phone_number: phone_number,
       remarks: remarks,
-      new_customer: new_customer,
       courses_id: getCoursesState
         .filter((course) => courses.includes(course.course_name))
         .map((course) => course.id),
@@ -192,9 +190,9 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ node, onSubmit }) => {
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <BasicTextField
             type="text"
-            placeholder="スタッフ名"
+            placeholder="顧客名"
             value={customer_name}
-            onChange={(e) => setCustomerName(e.target.value)}
+            onChange={(e) => setCustomer_Name(e.target.value)}
           />
 
           <BasicTextField
@@ -209,14 +207,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ node, onSubmit }) => {
             placeholder="備考"
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
-          />
-
-          <SingleCheckBox
-            label="新規or既存"
-            value={new_customer}
-            nodeId={"new_customer"}
-            getOptions={["新規", "既存"]}
-            onChange={(newValue) => setNewCustomer(newValue)}
           />
 
           <MultiCheckbox

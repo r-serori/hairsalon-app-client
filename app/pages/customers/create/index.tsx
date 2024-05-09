@@ -20,7 +20,6 @@ const customersCreate = () => {
     customer_name: string;
     phone_number: string;
     remarks: string;
-    new_customer: string;
     courses_id: number[];
     options_id: number[];
     merchandises_id: number[];
