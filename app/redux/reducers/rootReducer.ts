@@ -1,12 +1,6 @@
 // reducers/rootReducer.ts
 import { combineReducers } from "@reduxjs/toolkit";
-import authReducer, { AuthState } from "../../store/auth/authLoginSlice";
-import authRegisterReducer, {
-  AuthRegisterState,
-} from "../../store/auth/authRegisterSlice";
-import authLogoutReducer, {
-  AuthLogoutState,
-} from "../../store/auth/authLogoutSlice";
+import { AuthState } from "../../store/auth/authSlice";
 import attendanceReducer, {
   AttendanceState,
 } from "../../store/attendances/attendanceSlice";
@@ -70,14 +64,13 @@ import monthly_salesReducer, {
 import yearly_salesReducer, {
   Yearly_salesState,
 } from "../../store/sales/yearly_sales/yearly_saleSlice";
+import authReducer from "../../store/auth/authSlice";
 
 // 他のリデューサーをインポートする
 
 // 他のリデューサーをインポートする
 const rootReducer = combineReducers({
   auth: authReducer,
-  authRegister: authRegisterReducer,
-  authLogout: authLogoutReducer,
   attendance: attendanceReducer,
   attendance_time: attendance_timeReducer,
   course: courseReducer,

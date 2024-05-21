@@ -50,30 +50,6 @@ const schedules: React.FC = () => {
     }
   }, []);
 
-  //   const events = customer_schedules.map((customer_schedule) => {
-  //     //[customers_id:1, schedules_id:1]
-  //     const customer = customers.find(
-  //       (customer) => customer.id === customer_schedule.customers_id
-  //     );
-  //     //customer = {id:1, customer_name: "test", phone_number: "090-1234-5678", remarks: "test"}
-
-  //     const schedule = schedules.find(
-  //       (schedule) => schedule.id === customer_schedule.schedules_id
-  //     );
-  //     //schedule = {id:1, title: "", start_time: "2021-09-01T10:00:00", end_time: "2021-09-01T11:00:00", allDay: 0, customers_id: 1}
-  // if(customer )
-  //     return {
-  //       id: schedule.id,
-  //       title: schedule.title ? schedule.title : customer.customer_name,
-  //       start: schedule.start_time,
-  //       end: schedule.end_time,
-  //       customers_id: customer.id ? customer.id : 0,
-  //       allDay: schedule.allDay,
-  //     };
-  //   });
-  //   console.log("eventsだよ");
-  //   console.log(events);
-
   const events = schedules.map((schedule) => {
     const customer_schedule = customer_schedules.find(
       (customer_schedule) => schedule.id === customer_schedule.schedules_id
@@ -102,18 +78,7 @@ const schedules: React.FC = () => {
   });
 
   return (
-    <div>
-      <Link href="/schedules/create">予約作成</Link>
-
-      <Link href="/schedules/[id]/edit?id=1">予約編集</Link>
-
-      <Link href="/schedules/[id]/delete?id=1">削除</Link>
-
-      <Link href="/daily_sales">日次売上</Link>
-
-      <br />
-      <MyCalendar events={events} />
-    </div>
+    <div>{loading ? <p>loading...</p> : <MyCalendar events={events} />}</div>
   );
 };
 

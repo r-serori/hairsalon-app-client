@@ -22,25 +22,20 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/attendance_times/[id]/show": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/attendance_times/[id]/show.js"
+    ],
     "/attendances": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/attendances.js"
     ],
-    "/daily_sales": [
+    "/customers": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/daily_sales.js"
-    ],
-    "/dashboard": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/dashboard.js"
-    ],
-    "/yearly_sales": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/yearly_sales.js"
+      "static/chunks/pages/customers.js"
     ]
   },
   "ampFirstPages": []

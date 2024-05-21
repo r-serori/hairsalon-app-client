@@ -107,7 +107,7 @@ const ComponentTable = ({
 
   //時間管理画面へ遷移
   const handleTimeManagement = (id) => {
-    router.push(`/attendance_times/${id}`);
+    router.push(`attendance_times/${id}/show?id=${id}`);
   };
 
   //編集画面へ遷移
@@ -118,15 +118,15 @@ const ComponentTable = ({
   };
 
   return (
-    <div className="px-2 py-8">
-      <label htmlFor="searchField" className="block mb-2 ">
+    <div className="items-center px-2 py-8">
+      <label htmlFor="searchField" className="items-center block mb-2 ">
         検索対象→:
         <select
           id="searchField"
           name="searchField"
           value={searchField}
           onChange={handleSearchFieldChange}
-          className="px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
+          className="items-center px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
         >
           <option value="">すべて</option>
           {searchItems.map((searchItem) => {
@@ -144,7 +144,7 @@ const ComponentTable = ({
         </select>
       </label>
 
-      <label htmlFor="searchText" className="block mb-2 mt-4">
+      <label htmlFor="searchText" className="items-center block mb-2 mt-4">
         検索ワード↓:
       </label>
       <input
@@ -154,7 +154,7 @@ const ComponentTable = ({
         value={searchText}
         onChange={handleSearchTextChange} // イベントオブジェクトを明示的に渡す
         placeholder="検索"
-        className="px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 ml-2"
+        className="items-center px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 ml-2"
       />
 
       {isLoading ? (
@@ -162,7 +162,7 @@ const ComponentTable = ({
       ) : (
         <Table
           data={paginatedData}
-          className="rounded-xl border border-gray-300 shadow-md w-full mt-4"
+          className="items-center rounded-xl border border-gray-300 shadow-md w-full mt-4"
           theme={theme}
           layout={{ custom: true, horizontalScroll: true }}
         >
@@ -174,7 +174,7 @@ const ComponentTable = ({
                   {tHeaderItems.map((tHeaderItem, index) => (
                     <HeaderCell
                       key={`${tHeaderItem} + ${index}`}
-                      className="bg-blue-200 text-blue-700 text-center text-sm "
+                      className="items-center bg-blue-200 text-blue-700 text-center text-sm "
                       style={{
                         whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                         padding: "4px",
@@ -189,7 +189,7 @@ const ComponentTable = ({
               <Body>
                 {/* Bodyの横行を数える */}
                 {tableList.map((node, index) => (
-                  <Row key={`${index} `} item={node} className="">
+                  <Row key={`${index} `} item={node}>
                     {/* nodeの縦列を数える */}
                     {nodesProps.map((nodesProp) => {
                       const propName = Object.keys(nodesProp)[0]; //  Object.keysは()内＝nodesProp　のkeyを取得　[0]は一番上のkeyを取得　mapで一つ一つ取得してるから一番上[0]にあるのは一つだけ
@@ -216,7 +216,7 @@ const ComponentTable = ({
                         return (
                           <Cell
                             key={`${propDate} + ${propName} + ${node.id} + ${index}`}
-                            className="bg-gray-100 text-gray-900 text-sm text-center "
+                            className="items-center bg-gray-100 text-gray-900 text-sm text-center "
                             style={{
                               cursor: "pointer",
                               whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
@@ -225,11 +225,57 @@ const ComponentTable = ({
                             {propDate}
                           </Cell>
                         );
+                      } else if (
+                        propProp === "date" ||
+                        propProp === "daily_sales" ||
+                        propProp === "year_month" ||
+                        propProp === "monthly_sales" ||
+                        propProp === "year" ||
+                        propProp === "yearly_sales" ||
+                        propProp === "shotAttendance_name" ||
+                        propProp === "shotPosition" ||
+                        propProp === "start_time" ||
+                        propProp === "end_time"
+                      ) {
+                        return (
+                          <Cell
+                            key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
+                            className="items-center bg-gray-100 text-gray-900 text-sm text-center"
+                            style={{
+                              cursor: "pointer",
+                            }}
+                          >
+                            {propValue}
+                          </Cell>
+                        );
+                      } else if (
+                        propProp === "start_photo_path" ||
+                        propProp === "end_photo_path"
+                      ) {
+                        return (
+                          <Cell
+                            key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
+                            className="items-center bg-gray-100 text-gray-900 text-sm text-center"
+                            style={{
+                              cursor: "pointer",
+                            }}
+                          >
+                            <img
+                              src={
+                                propValue
+                                  ? propValue
+                                  : "https://via.placeholder.com/150"
+                              }
+                              alt="画像"
+                              className="w-20 h-20"
+                            />
+                          </Cell>
+                        );
                       } else {
                         return (
                           <Cell
                             key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                            className="bg-gray-100 text-gray-900 text-sm text-center"
+                            className="items-center bg-gray-100 text-gray-900 text-sm text-center"
                             style={{
                               cursor: "pointer",
                             }}
@@ -252,15 +298,15 @@ const ComponentTable = ({
                       console.log(node.id),
                       (
                         <Cell
-                          className="bg-gray-100 text-gray-900 pt-2"
+                          className="items-center bg-gray-100 text-gray-900 pt-1 px-1"
                           style={{
                             cursor: "pointer",
                             whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                           }}
                         >
-                          <div className="text-center mx-auto overflow-auto">
+                          <div className="flex justify-center items-center text-center mx-auto pb-1">
                             <button
-                              className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ml-2"
+                              className="items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
                               onClick={() =>
                                 handleEditManagement(node.id, link)
                               }
@@ -273,13 +319,13 @@ const ComponentTable = ({
                     {/* tHeaderItemsに"削除"が含まれていたら作成 */}
                     {tHeaderItems.includes("削除") && (
                       <Cell
-                        className="bg-gray-100 text-gray-900 pt-2 "
+                        className="items-center bg-gray-100 text-gray-900 py-1 pr-1 "
                         style={{
                           cursor: "pointer",
                           whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                         }}
                       >
-                        <div className="text-center mx-auto ">
+                        <div className="items-center mx-auto text-center ">
                           <DeleteMan id={node.id} link={link} />
                         </div>
                       </Cell>
@@ -288,22 +334,84 @@ const ComponentTable = ({
                     {/* tHeaderItemsに"時間管理"が含まれていたら作成 */}
                     {tHeaderItems.includes("時間管理") && (
                       <Cell
-                        className="bg-gray-100 text-gray-900 text-3xl pt-2"
+                        className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
                         style={{
                           cursor: "pointer",
-                          overflow: "auto",
+                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                         }}
                       >
-                        <div className="text-center mx-auto">
+                        <div className="flex justify-center items-center text-center mx-auto pb-1">
                           <button
                             onClick={() => handleTimeManagement(node.id)}
-                            className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-3 py-2.5 text-center me-2 mb-2"
+                            className="items-center text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
                           >
                             時間管理
                           </button>
                         </div>
                       </Cell>
                     )}
+                    {/* tHeaderItemsに"出勤"が含まれていたら作成 */}
+                    {tHeaderItems.includes("出勤") && (
+                      <Cell
+                        className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
+                        style={{
+                          cursor: "pointer",
+                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                        }}
+                      >
+                        {/* <div className="flex justify-center items-center text-center mx-auto pb-1"> */}
+
+                        <div className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm text-center ml-2 ">
+                          <BasicModal
+                            editValue={"出勤"}
+                            editNode={node}
+                            link={link}
+                            isLoading={isLoading}
+                          />
+                          {/* </div> */}
+                        </div>
+                      </Cell>
+                    )}
+                    {/* tHeaderItemsに"退勤"が含まれていたら作成 */}
+                    {tHeaderItems.includes("退勤") && (
+                      <Cell
+                        className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
+                        style={{
+                          cursor: "pointer",
+                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                        }}
+                      >
+                        {/* <div className="flex justify-center items-center text-center mx-auto pb-1"> */}
+                        <div className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm text-center ml-2">
+                          <BasicModal
+                            editValue={"退勤"}
+                            editNode={node}
+                            link={link}
+                            isLoading={isLoading}
+                          />
+                          {/* </div> */}
+                        </div>
+                      </Cell>
+                    )}
+                    {/* tHeaderItemsに"予約"が含まれていたら作成 */}
+                    {/* {tHeaderItems.includes("時間管理") && (
+                      <Cell
+                        className="items-center bg-gray-100 text-gray-900 text-3xl pt-2"
+                        style={{
+                          cursor: "pointer",
+                          overflow: "auto",
+                        }}
+                      >
+                        <div className="items-center text-center mx-auto">
+                          <button
+                            onClick={() => handleReservation(node.id)}
+                            className="items-center text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-3 py-2.5 text-center me-2 mb-2"
+                          >
+                            予約
+                          </button>
+                        </div>
+                      </Cell>
+                    )} */}
                   </Row>
                 ))}
               </Body>
@@ -311,21 +419,23 @@ const ComponentTable = ({
           )}
         </Table>
       )}
-      <div className="flex justify-between items-center mt-8  ">
+      <div className="items-center flex justify-between items-center mt-8  ">
         <div>
-          <span className="text-gray-700">全件数: {pageInfo.total}</span>
+          <span className="items-center text-gray-700">
+            全件数: {pageInfo.total}
+          </span>
         </div>
-        <div className="flex space-x-2">
-          <span className="text-gray-700">
+        <div className="items-center flex space-x-2">
+          <span className="items-center text-gray-700">
             {pageInfo.startSize}-{pageInfo.endSize} 件目 / 全 {pageInfo.total}{" "}
             件
           </span>
-          <div className="flex space-x-2">
+          <div className="items-center flex space-x-2">
             <button
               type="button"
               disabled={pagination.page === 0}
               onClick={() => handlePageChange(0)}
-              className="btn-pagination"
+              className="items-center btn-pagination"
             >
               {"|<"}
             </button>
@@ -333,7 +443,7 @@ const ComponentTable = ({
               type="button"
               disabled={pagination.page === 0}
               onClick={() => handlePageChange(pagination.page - 1)}
-              className="btn-pagination "
+              className="items-center btn-pagination "
             >
               {"<"}
             </button>
@@ -341,7 +451,7 @@ const ComponentTable = ({
               type="button"
               disabled={pagination.page + 1 === pageInfo.totalPages}
               onClick={() => handlePageChange(pagination.page + 1)}
-              className="btn-pagination"
+              className="items-center btn-pagination"
             >
               {">"}
             </button>
@@ -349,7 +459,7 @@ const ComponentTable = ({
               type="button"
               disabled={pagination.page + 1 === pageInfo.totalPages}
               onClick={() => handlePageChange(pageInfo.totalPages - 1)}
-              className="btn-pagination"
+              className="items-center btn-pagination"
             >
               {">|"}
             </button>

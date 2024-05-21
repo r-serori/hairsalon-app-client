@@ -14,7 +14,7 @@ export const getYearly_sales = createAsyncThunk(
 
 export const createYearly_sales = createAsyncThunk(
   "yearly_sales/createYearly_sales",
-  async (formData: { id: number; year: number; yearly_sales: number }) => {
+  async (formData: { year: string; yearly_sales: number }) => {
     const yearly_salesData: any = await yearlySaleApi.createYearlySales(
       formData
     );
@@ -35,7 +35,7 @@ export const getYearly_salesById = createAsyncThunk(
 
 export const updateYearly_sales = createAsyncThunk(
   "yearly_sales/updateYearly_sales",
-  async (formData: { id: number; year: number; yearly_sales: number }) => {
+  async (formData: { id: number; year: string; yearly_sales: number }) => {
     const { id, ...updateData } = formData;
     const yearly_salesData: any = await yearlySaleApi.updateYearlySales(
       id,
@@ -59,7 +59,7 @@ export const deleteYearly_sales = createAsyncThunk(
 export interface Yearly_salesState {
   // ステートの型
   id: number;
-  year: number;
+  year: string;
   yearly_sales: number;
   created_at: string;
   updated_at: string;

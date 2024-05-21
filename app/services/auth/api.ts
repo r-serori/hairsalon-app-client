@@ -2,34 +2,52 @@ import { sendRequest } from "../requestApi";
 import getCsrfToken from "../requestApi";
 
 export const authApi = {
-  login: async (formData: { login_id: string; password: string }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/login", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error logging in: ${error.message}`);
-    }
+  login: async (formData: {
+    id: number;
+    login_id: string;
+    password: string;
+    created_at: string;
+    updated_at: string;
+  }) => {
+    const csrfToken = await getCsrfToken();
+    const response = (await sendRequest(
+      "POST",
+      "/login",
+      formData,
+      csrfToken
+    )) as any;
+    console.log("responseLoginDataだよ", response);
+    return response;
   },
 
   register: async (formData: {
+    id: number;
     login_id: string;
     password: string;
-    confirmPassword: string;
+    created_at: string;
+    updated_at: string;
+    // confirmPassword: string;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/register", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error registering: ${error.message}`);
-    }
+    const csrfToken = await getCsrfToken();
+    const response = (await sendRequest(
+      "POST",
+      "/register",
+      formData,
+      csrfToken
+    )) as any;
+    console.log("responseRegisterDataだよ", response);
+    return response;
   },
 
-  logout: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/logout", csrfToken);
-    } catch (error) {
-      throw new Error(`Error logging out: ${error.message}`);
-    }
+  logout: async (formData) => {
+    const csrfToken = await getCsrfToken();
+    const response = (await sendRequest(
+      "POST",
+      "/logout",
+      formData,
+      csrfToken
+    )) as any;
+    console.log("responseLogoutDataだよ", response);
+    return response;
   },
 };

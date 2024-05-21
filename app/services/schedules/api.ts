@@ -1,3 +1,4 @@
+import { updateCustomerSchedule } from "../../store/schedules/scheduleSlice";
 import { sendRequest } from "../requestApi";
 import getCsrfToken from "../requestApi";
 
@@ -78,6 +79,37 @@ export const schedulesApi = {
       return await sendRequest(
         "POST",
         `/schedules/${formData.Sid}/update`,
+        formData,
+        csrfToken
+      );
+    } catch (error) {
+      throw new Error(
+        `Error updating schedule with ID ${formData.Sid}: ${error.message}`
+      );
+    }
+  },
+
+  updateCustomerSchedule: async (formData: {
+    Sid: number;
+    customer_name: string;
+    phone_number: string;
+    remarks: string;
+    courses_id: number[];
+    options_id: number[];
+    merchandises_id: number[];
+    hairstyles_id: number[];
+    attendances_id: number[];
+    title: string;
+    start_time: string;
+    end_time: string;
+    allDay: number;
+    customers_id: number;
+  }) => {
+    try {
+      const csrfToken = await getCsrfToken();
+      return await sendRequest(
+        "POST",
+        `/schedules/${formData.Sid}/customers/doubleUpdate`,
         formData,
         csrfToken
       );

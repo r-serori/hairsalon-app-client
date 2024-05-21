@@ -5,7 +5,8 @@ import LogoutButton from "../../button/LogoutButton";
 
 const navigation = [
   { name: "一覧画面", href: "/dashboard", current: false },
-  { name: "勤怠管理", href: "/attendances", current: false },
+  { name: "スタッフ管理", href: "/attendances", current: false },
+  { name: "勤怠管理", href: "/attendanceTimeShots", current: false },
   { name: "顧客管理", href: "/customers", current: false },
   { name: "予約表", href: "/schedules", current: false },
   { name: "在庫管理", href: "/stocks", current: false },
@@ -169,10 +170,6 @@ export default function Header() {
             </>
           )}
         </Disclosure>
-
-        <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8"></div>
-        </header>
       </div>
     </>
   );

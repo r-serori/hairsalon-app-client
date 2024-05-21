@@ -22,10 +22,10 @@ const yearly_sales: React.FC = () => {
     { key: "yearly_sales", value: "売上" },
   ];
 
-  const tHeaderItems = ["年", "売上", "更新日", "編集", "削除"];
+  const tHeaderItems = ["年", "売上", "更新日", "削除"];
 
   const nodesProps = [
-    { date: "year" },
+    { string: "year" },
     { number: "yearly_sales" },
     { date: "updated_at" },
   ];

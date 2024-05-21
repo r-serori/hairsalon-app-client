@@ -21,7 +21,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/attendance_times/[attendance_id]/search/[search_date].js", "services/middleTable/customers/course_customers.api"  ],
+, "pages/attendance_times/[id]/search/[search_date].jss/middleTable/customers/course_customers.api"  ],
   "exclude": [
     "node_modules"
   ]

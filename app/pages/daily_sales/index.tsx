@@ -22,10 +22,10 @@ const daily_sales: React.FC = () => {
     { key: "daily_sales", value: "売上" },
   ];
 
-  const tHeaderItems = ["日付", "売上", "更新日", "編集", "削除"];
+  const tHeaderItems = ["日付", "売上", "更新日", "削除"];
 
   const nodesProps = [
-    { date: "date" },
+    { string: "date" },
     { number: "daily_sales" },
     { date: "updated_at" },
   ];

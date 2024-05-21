@@ -2,37 +2,59 @@
 
 import React from "react";
 import { useDispatch } from "react-redux";
-import { isLogout, logoutUser } from "../../../store/auth/authLogoutSlice";
 import { useRouter } from "next/router";
-import { RootState } from "../../../redux/reducers/rootReducer";
+import { logout } from "../../../store/auth/authSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
-function LogoutButton({ className }) {
+interface logoutProps {
+  className?: string;
+}
+
+const LogoutButton: React.FC<logoutProps> = ({ className }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const auth = useSelector((state: RootState) => state.auth);
+
+  const user = auth.auth;
+
+  console.log(user);
+
+  const message = useSelector((state: RootState) => state.auth.message);
+
+  const error = useSelector((state: RootState) => state.auth.error);
+
   // ログアウト処理
   const handleLogout = async () => {
-    try {
-      // ログアウトアクションをディスパッチ
-      dispatch(isLogout());
-      await dispatch(logoutUser() as any);
-      router.push("/login"); // ログアウト後にログインページに遷移
-    } catch (error) {
-      console.error(error);
+    confirm("ログアウトしますか？");
+    if (!confirm) {
+      return;
+    } else {
+      const response = await dispatch(logout({}) as any);
+      console.log("responseindex", response);
+      if (response.payload.status === "error") {
+        console.log("Rejected", response);
+        return;
+      } else if (response.payload.status === "success") {
+        console.log("Success", response);
+        router.push("/login");
+      }
     }
   };
 
   return (
-    <button
-      onClick={(e) => {
-        e.preventDefault();
-        handleLogout();
-      }}
-      className={className}
-    >
-      Logout
-    </button>
+    <>
+      <button
+        onClick={(e) => {
+          handleLogout();
+        }}
+        className={className}
+      >
+        Logout
+      </button>
+    </>
   );
-}
+};
 
 export default LogoutButton;

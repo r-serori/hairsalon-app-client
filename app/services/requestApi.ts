@@ -7,10 +7,10 @@ axios.defaults.withCredentials = true; // Cookieを使用するための設定�
 
 const getCsrfToken = async () => {
   try {
-    const response = await axios.get("/csrf-token");
+    const response = await axios.get("/sanctum/csrf-cookie");
     console.log("CSRF token fetched successfully");
-    console.log(response.data.csrfToken);
-    return response.data.csrfToken;
+    console.log(response);
+    return response; //responseをreturnしなくても自動的にcoolieに保存される
   } catch (error) {
     console.error("Failed to fetch CSRF token:", error);
     throw new Error("Failed to fetch CSRF token");
@@ -36,26 +36,26 @@ export const sendRequest = async <T>(
       },
     });
     console.log(`${method} request to ${url} successful:`);
-    console.log(response.data);
-    // レスポンスのデータをJSON形式に変換して返す
-    console.log("JSON.parse(JSON.stringify(response.data))");
-    console.log(JSON.parse(JSON.stringify(response.data)));
-    return JSON.parse(JSON.stringify(response.data));
+    console.log("REQUESTAPI.response", response.data);
+    return response.data;
   } catch (error) {
-    handleError(error);
+    // handleError(error);
+    console.error("Failed to send request:", error);
+    return error.response.data;
   }
 };
 
-const handleError = (error: AxiosError) => {
-  if (error.response) {
-    // レスポンスがある場合のエラー
-    const { status, data } = error.response;
-    throw new Error(`Request failed with status ${status}: ${data}`);
-  } else if (error.request) {
-    // リクエストが送信されたがレスポンスがない場合のエラー
-    throw new Error("No response from server");
-  } else {
-    // リクエストが送信されなかった場合のエラー
-    throw new Error(error.message);
-  }
-};
+// const handleError = (error: AxiosError) => {
+//   if (error.response) {
+//     // レスポンスがある場合のエラー
+//     console.log("error.responseだよ", error.response);
+//     const { status, data } = error.response;
+//     throw new Error(`Request failed with status ${status}: ${data}`);
+//   } else if (error.request) {
+//     // リクエストが送信されたがレスポンスがない場合のエラー
+//     throw new Error("No response from server");
+//   } else {
+//     // リクエストが送信されなかった場合のエラー
+//     throw new Error(error.message);
+//   }
+// };

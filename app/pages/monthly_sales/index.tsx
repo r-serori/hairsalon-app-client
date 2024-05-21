@@ -20,16 +20,14 @@ const monthly_sales: React.FC = () => {
   }, [dispatch]);
 
   const searchItems = [
-    { key: "year", value: "年" },
-    { key: "month", value: "月" },
+    { key: "year_month", value: "年-月" },
     { key: "monthly_sales", value: "売上" },
   ];
 
-  const tHeaderItems = ["年", "月", "売上", "更新日", "編集", "削除"];
+  const tHeaderItems = ["年-月", "売上", "更新日", "削除"];
 
   const nodesProps = [
-    { number: "year" },
-    { number: "month" },
+    { string: "year_month" },
     { number: "monthly_sales" },
     { date: "updated_at" },
   ];

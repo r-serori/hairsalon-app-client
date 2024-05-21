@@ -29,6 +29,11 @@ body {
   }
 }
 
+.fc-daygrid-day {
+  border: 2px solid #000;
+  /* 日付セルのボーダーの太さと色を変更 */
+}
+
 
 
 

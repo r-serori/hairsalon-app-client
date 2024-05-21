@@ -14,12 +14,7 @@ export const getMonthly_sales = createAsyncThunk(
 
 export const createMonthly_sales = createAsyncThunk(
   "monthly_sales/createMonthly_sales",
-  async (formData: {
-    id: number;
-    year: number;
-    month: number;
-    monthly_sales: number;
-  }) => {
+  async (formData: { year_month: string; monthly_sales: number }) => {
     const monthly_salesData: any = await monthlySaleApi.createMonthlySales(
       formData
     );
@@ -44,8 +39,7 @@ export const updateMonthly_sales = createAsyncThunk(
   "monthly_sales/updateMonthly_sales",
   async (formData: {
     id: number;
-    year: number;
-    month: number;
+    year_month: string;
     monthly_sales: number;
   }) => {
     const { id, ...updateData } = formData;

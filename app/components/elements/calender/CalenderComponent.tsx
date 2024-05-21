@@ -1,5 +1,4 @@
 import { Calendar, EventInput } from "@fullcalendar/core";
-import luxonPlugin from "@fullcalendar/luxon3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
@@ -8,7 +7,10 @@ import listPlugin from "@fullcalendar/list";
 import { DateTime } from "luxon";
 import FullCalendar from "@fullcalendar/react";
 import ScheduleModal from "../modal/scheduleModal";
+import SalesModal from "../modal/sales/SalesModal";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 interface Event {
   id: number;
@@ -19,6 +21,8 @@ interface Event {
 }
 
 const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
+  const loading = useSelector((state: RootState) => state.customer.loading);
+
   const eventInputs: EventInput[] = events.map((event) => ({
     id: event.id.toString(),
     title: event.title,
@@ -27,9 +31,15 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
     allDay: event.allDay === 1 ? true : false,
   }));
 
+  const eventBorderColor = "#333";
+
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [whoIsEvent, setWhoIsEvent] = useState("");
+
+  const [DailySalesModal, setDailySalesModal] = useState(false);
+  const [monthlySalesModal, setMonthlySalesModal] = useState(false);
+  const [yearlySalesModal, setYearlySalesModal] = useState(false);
 
   const handleEventClick = (e) => {
     setSelectedEvent(e);
@@ -43,6 +53,35 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
 
   return (
     <>
+      {loading ? (
+        <p>loading...</p>
+      ) : (
+        // ローディングが終わったらカレンダーを表示する
+
+        <div className="flex justify-center items-center">
+          <SalesModal
+            showModal={DailySalesModal}
+            setShowModal={setDailySalesModal}
+            events={eventInputs}
+            whatSales="日次"
+          />
+
+          <SalesModal
+            showModal={monthlySalesModal}
+            setShowModal={setMonthlySalesModal}
+            events={eventInputs}
+            whatSales="月次"
+          />
+
+          <SalesModal
+            showModal={yearlySalesModal}
+            setShowModal={setYearlySalesModal}
+            events={eventInputs}
+            whatSales="年次"
+          />
+        </div>
+      )}
+
       <FullCalendar
         headerToolbar={{
           left: "prev,next today",
@@ -60,7 +99,7 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
         views={{
           // ↓dayGridMonth, dayGridWeek,dayGridDayの表示形式を設定している
           dayGrid: {
-            dayMaxEventRows: 1, //カレンダーの月表示の際の一日のマスに重ねることができるイベントの最大数を設定している
+            dayMaxEventRows: 2, //カレンダーの月表示の際の一日のマスに重ねることができるイベントの最大数を設定している
             dayHeaderFormat: {
               weekday: "long",
             }, //headerに表示される曜日の表示形式を設定している。月表示には日付は不要なので設定していない
@@ -79,7 +118,7 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
             slotDuration: "00:15:00", //カレンダーの横行の間隔の時間を設定している
             slotLabelInterval: "00:15:00", //カレンダーの左に表示されるの時間をどの間隔で表示するかを設定している
             slotMinTime: "07:00:00", //カレンダーの表示の開始時間を設定している
-            slotMaxTime: "24:15:00", //カレンダーの表示の終了時間を設定している
+            slotMaxTime: "24:00:00", //カレンダーの表示の終了時間を設定している
             selectable: true, //カレンダーの時間をクリックした際にイベントを追加することができるように設定している
             selectMirror: true, //カレンダーの時間をクリックした際にイベントを追加する際にマウスで選択した時間を表示するかどうかを設定している
             dateClick: function (info) {
@@ -111,12 +150,12 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
         weekText="週" //カレンダーの週番号の表示形式を設定している
         navLinks={true} //カレンダーの日付をクリックした際にその日付のページに遷移するかどうかを設定している
         nowIndicator={true} //カレンダーの現在時刻を表示するかどうかを設定している
-        eventMaxStack={5} //カレンダーの週、日の表示の際の一日のマスに重ねることができるイベントの最大数を設定している
+        eventMaxStack={2} //カレンダーの週、日の表示の際の一日のマスに重ねることができるイベントの最大数を設定している
         //カレンダーの曜日と月の表示形式を設定している
         contentHeight={600} //カレンダーの高さを設定している
+        moreLinkText={(num) => `他${num}件`} //カレンダーの月表示の際に一日のマスに重ねることができるイベントの最大数を超えた場合に表示されるテキストを設定している
         plugins={[
           dayGridPlugin,
-          luxonPlugin,
           timeGridPlugin,
           listPlugin,
           multiMonthPlugin,
@@ -124,9 +163,11 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
         ]} //カレンダーのプラグインを設定している。増やしていくことで機能を追加できる
         initialView="dayGridMonth" //カレンダーの初期表示を設定している
         locale={"ja"}
+        allDayText="終日"
         titleFormat={{ year: "numeric", month: "short" }} //カレンダーのタイトルの表示形式を設定している
         weekends={true} //カレンダーの土日の表示を設定している
-        events={eventInputs}
+        events={eventInputs} //カレンダーに表示するイベントを設定している
+        eventBorderColor={eventBorderColor} // ボーダーの色を指定
       />
 
       {showModal && selectedEvent && (

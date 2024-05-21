@@ -77,6 +77,32 @@ export const updateSchedule = createAsyncThunk(
   }
 );
 
+export const updateCustomerSchedule = createAsyncThunk(
+  "schedule/updateCustomerSchedule",
+  async (formData: {
+    Sid: number;
+    customer_name: string;
+    phone_number: string;
+    remarks: string;
+    courses_id: number[];
+    options_id: number[];
+    merchandises_id: number[];
+    hairstyles_id: number[];
+    attendances_id: number[];
+    title: string;
+    start_time: string;
+    end_time: string;
+    allDay: number;
+    customers_id: number;
+  }) => {
+    const scheduleData: any = await schedulesApi.updateCustomerSchedule(
+      formData
+    );
+    console.log("scheduleUpdateDataだよ");
+    console.log(scheduleData.schedules);
+  }
+);
+
 export const deleteSchedule = createAsyncThunk(
   "schedule/deleteSchedule",
   async (id: number) => {
@@ -168,6 +194,16 @@ const scheduleSlice = createSlice({
         state.error = action.error.message;
         state.loading = false;
       })
+      .addCase(createSchedule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createSchedule.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(createSchedule.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loading = false;
+      })
       .addCase(createCustomerSchedule.pending, (state) => {
         state.loading = true;
       })
@@ -199,6 +235,17 @@ const scheduleSlice = createSlice({
         state.error = action.error.message;
         state.loading = false;
       })
+      .addCase(updateCustomerSchedule.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateCustomerSchedule.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateCustomerSchedule.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.loading = false;
+      })
+
       .addCase(deleteSchedule.pending, (state) => {
         state.loading = true;
       })

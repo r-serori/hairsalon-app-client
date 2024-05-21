@@ -3,7 +3,7 @@ import getCsrfToken from "../requestApi";
 
 export const yearlySaleApi = {
   createYearlySales: async (formData: {
-    year: number;
+    year: string;
     yearly_sales: number;
   }) => {
     try {
@@ -37,7 +37,7 @@ export const yearlySaleApi = {
   updateYearlySales: async (
     id: number,
     formData: {
-      year: number;
+      year: string;
       yearly_sales: number;
     }
   ) => {
