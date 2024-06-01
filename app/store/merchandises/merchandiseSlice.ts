@@ -1,71 +1,97 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { merchandiseApi } from "../../services/merchandises/api";
 import RootState from "../../redux/reducers/rootReducer";
+import { getCustomer } from "../customers/customerSlice";
+import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getMerchandise = createAsyncThunk(
   "merchandise/getMerchandise",
-  async () => {
-    const merchandiseData: any = await merchandiseApi.fetchAllMerchandises();
-    console.log("merchandiseDataだよ");
-    console.log(merchandiseData.merchandises);
-    return merchandiseData.merchandises;
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any = await merchandiseApi.fetchAllMerchandises();
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const createMerchandise = createAsyncThunk(
   "merchandise/createMerchandise",
-  async (formData: {
-    id: number;
-    merchandise_name: string;
-    price: number;
-    created_at: string;
-    updated_at: string;
-  }) => {
-    const merchandiseData: any = await merchandiseApi.createMerchandise(
-      formData
-    );
-    console.log("merchandiseCreateDataだよ");
-    console.log(merchandiseData.merchandises);
+  async (
+    formData: {
+      id: number;
+      merchandise_name: string;
+      price: number;
+      created_at: string;
+      updated_at: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const response: any = await merchandiseApi.createMerchandise(formData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const getMerchandiseById = createAsyncThunk(
   "merchandise/getMerchandiseById",
-  async (id: number) => {
-    const merchandiseData: any = await merchandiseApi.fetchMerchandiseById(id);
-    console.log("merchandiseShowDataだよ");
-    console.log(merchandiseData.merchandises);
-    return merchandiseData.merchandises;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await merchandiseApi.fetchMerchandiseById(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const updateMerchandise = createAsyncThunk(
   "merchandise/updateMerchandise",
-  async (formData: {
-    id: number;
-    merchandise_name: string;
-    price: number;
-    created_at: string;
-    updated_at: string;
-  }) => {
+  async (
+    formData: {
+      id: number;
+      merchandise_name: string;
+      price: number;
+      created_at: string;
+      updated_at: string;
+    },
+    { rejectWithValue }
+  ) => {
     const { id, ...updateData } = formData;
-    const merchandiseData: any = await merchandiseApi.updateMerchandise(
+    const response: any = await merchandiseApi.updateMerchandise(
       id,
       updateData
     );
-    console.log("merchandiseUpdateDataだよ");
-    console.log(merchandiseData.merchandises);
-    return merchandiseData.merchandises;
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
-
 export const deleteMerchandise = createAsyncThunk(
   "merchandise/deleteMerchandise",
-  async (id: number) => {
-    const merchandiseData: any = await merchandiseApi.deleteMerchandise(id);
-    console.log("merchandiseDeleteDataだよ");
-    console.log(merchandiseData.merchandises);
-    return merchandiseData.merchandises;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await merchandiseApi.deleteMerchandise(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
@@ -82,83 +108,47 @@ export interface RootState {
   // RootStateの型
   merchandise: MerchandiseState[];
   loading: boolean;
-  error: string;
+  message: string | null;
+  error: string | null;
 }
 
 const initialState: RootState = {
   // 初期状態
   merchandise: [],
   loading: false,
-  error: "",
+  message: null,
+  error: null,
 };
 
 const merchandiseSlice = createSlice({
   name: "merchandise",
   initialState,
-  reducers: {
-    updateMerchandiseInfo: (state, action: PayloadAction<MerchandiseState>) => {
-      const updatedMerchandise = action.payload;
-      const index = state.merchandise.findIndex(
-        (merchandise) => merchandise.id === updatedMerchandise.id
-      );
-      if (index !== -1) {
-        state.merchandise[index] = updatedMerchandise;
-      }
-      return state;
-    },
-
-    updateMerchandiseName: (state, action: PayloadAction<MerchandiseState>) => {
-      const updatedMerchandise = action.payload;
-      const index = state.merchandise.findIndex(
-        (merchandise) => merchandise.id === updatedMerchandise.id
-      );
-      if (index !== -1) {
-        state.merchandise[index].merchandise_name =
-          updatedMerchandise.merchandise_name;
-      }
-      return state;
-    },
-
-    updateMerchandisePrice: (
-      state,
-      action: PayloadAction<MerchandiseState>
-    ) => {
-      const updatedMerchandise = action.payload;
-      const index = state.merchandise.findIndex(
-        (merchandise) => merchandise.id === updatedMerchandise.id
-      );
-      if (index !== -1) {
-        state.merchandise[index].price = updatedMerchandise.price;
-      }
-      return state;
-    },
-
-    deleteMerchandiseInfo: (state, action: PayloadAction<number>) => {
-      const id = action.payload;
-      state.merchandise = state.merchandise.filter(
-        (merchandise) => merchandise.id !== id
-      );
-      return state;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getMerchandise.pending, (state, action) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(getMerchandise.fulfilled, (state, action) => {
       state.loading = false;
-      state.merchandise = action.payload;
+      state.message = "物販商品の取得に成功しました！";
+      state.merchandise = action.payload.merchandises;
     });
     builder.addCase(getMerchandise.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message!;
+      state.error = action.error.message;
     });
 
     builder.addCase(createMerchandise.pending, (state, action) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(createMerchandise.fulfilled, (state, action) => {
       state.loading = false;
+      state.message = "物販商品の作成に成功しました！";
+      state.merchandise.push(action.payload.merchandise);
     });
     builder.addCase(createMerchandise.rejected, (state, action) => {
       state.loading = false;
@@ -167,10 +157,13 @@ const merchandiseSlice = createSlice({
 
     builder.addCase(getMerchandiseById.pending, (state, action) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(getMerchandiseById.fulfilled, (state, action) => {
       state.loading = false;
-      state.merchandise = action.payload;
+      state.merchandise = action.payload.merchandise;
+      state.message = "物販商品の取得に成功しました！";
     });
     builder.addCase(getMerchandiseById.rejected, (state, action) => {
       state.loading = false;
@@ -179,36 +172,48 @@ const merchandiseSlice = createSlice({
 
     builder.addCase(updateMerchandise.pending, (state, action) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(updateMerchandise.fulfilled, (state, action) => {
       state.loading = false;
+      state.message = "物販商品の更新に成功しました！";
+      state.merchandise = state.merchandise.map((merchandise) =>
+        merchandise.id === action.payload.merchandise.id
+          ? { ...merchandise, ...action.payload.merchandise }
+          : merchandise
+      );
     });
     builder.addCase(updateMerchandise.rejected, (state, action) => {
       state.loading = false;
+      state.error = action.error.message;
     });
 
     builder.addCase(deleteMerchandise.pending, (state, action) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
       state.loading = false;
       state.merchandise = state.merchandise.filter(
-        (merchandise) => merchandise.id !== action.payload
+        (merchandise) => merchandise.id !== action.payload.deleteId
       );
     });
     builder.addCase(deleteMerchandise.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message!;
     });
+
+    builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.merchandise = action.payload.merchandises;
+    });
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.merchandise = action.payload.merchandises;
+    });
   },
 });
-
-export const {
-  updateMerchandiseInfo,
-  updateMerchandiseName,
-  updateMerchandisePrice,
-  deleteMerchandiseInfo,
-} = merchandiseSlice.actions;
 
 const merchandiseReducer = merchandiseSlice.reducer;
 

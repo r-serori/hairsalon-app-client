@@ -3,21 +3,26 @@ import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCustomer } from "../../store/customers/customerSlice";
-import { getCourse } from "../../store/courses/courseSlice";
-import { getOption } from "../../store/options/optionSlice";
-import { getMerchandise } from "../../store/merchandises/merchandiseSlice";
-import { getHairstyle } from "../../store/hairstyles/hairstyleSlice";
-import { getAttendance } from "../../store/attendances/attendanceSlice";
-import { getCourse_customers } from "../../store/middleTable/customers/course_customersSlice";
-import { getOption_customers } from "../../store/middleTable/customers/option_customersSlice";
-import { getMerchandise_customers } from "../../store/middleTable/customers/merchandise_customersSlice";
-import { getHairstyle_customers } from "../../store/middleTable/customers/hairstyle_customersSlice";
-import { getCustomer_attendances } from "../../store/middleTable/customers/customer_attendancesSlice";
 import { RootState } from "../../redux/store";
 
 const customers: React.FC = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    try {
+      dispatch(getCustomer({}) as any);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("顧客取得！！");
+    }
+  }, [dispatch]);
+
   const loading = useSelector((state: RootState) => state.customer.loading);
+
+  const message = useSelector((state: RootState) => state.customer.message);
+
+  const error = useSelector((state: RootState) => state.customer.error);
 
   const customers = useSelector((state: RootState) => state.customer.customers);
 
@@ -59,26 +64,6 @@ const customers: React.FC = () => {
   const customer_attendances = useSelector(
     (state: RootState) => state.customer_attendances.customer_attendances
   );
-
-  useEffect(() => {
-    try {
-      dispatch(getCourse() as any);
-      dispatch(getOption() as any);
-      dispatch(getMerchandise() as any);
-      dispatch(getHairstyle() as any);
-      dispatch(getAttendance() as any);
-      dispatch(getCourse_customers() as any);
-      dispatch(getOption_customers() as any);
-      dispatch(getMerchandise_customers() as any);
-      dispatch(getHairstyle_customers() as any);
-      dispatch(getCustomer_attendances() as any);
-      dispatch(getCustomer() as any);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("顧客取得！！");
-    }
-  }, [dispatch]);
 
   const searchItems = [
     { key: "customer_name", value: "顧客名" },
@@ -144,7 +129,7 @@ const customers: React.FC = () => {
       const customerOptions = option_customers.filter(
         (cus_op) => cus_op.customers_id === customer.id
       );
-      console.log(customerOptions);
+      console.log("CUSOP", customerOptions);
       // [{customers_id: 1, options_id: 1},
       // {customers_id: 1, options_id: 2}]
 
@@ -234,7 +219,12 @@ const customers: React.FC = () => {
   ];
 
   return (
-    <div className="mx-auto max-w-8xl px-4 py-8 ">
+    <div className="mx-auto max-w-8xl px-4">
+      {message ? (
+        <p className="py-4 text-blue-700">{message}</p>
+      ) : error ? (
+        <p className="py-4 text-red-700">{error}</p>
+      ) : null}
       <div className="flex space-x-4 mb-4">
         <Link href="/customers/create">新規作成</Link>
       </div>

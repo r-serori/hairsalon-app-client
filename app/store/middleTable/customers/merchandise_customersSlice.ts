@@ -1,18 +1,28 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { merchandiseCustomerApi } from "../../../services/middleTable/customers/merchandise_customersApi";
 import RootState from "../../../redux/reducers/rootReducer";
+import {
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+} from "../../customers/customerSlice";
+import { getSchedule } from "../../schedules/scheduleSlice";
 
 export const getMerchandise_customers = createAsyncThunk(
   "merchandise_customers/getMerchandise_customers",
-  async () => {
-    const merchandise_customersData: any =
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any =
       await merchandiseCustomerApi.fetchAllMerchandiseCustomers();
-    console.log("merchandise_customersDataだよ");
-    console.log(merchandise_customersData.merchandise_customers);
-    return merchandise_customersData.merchandise_customers;
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
-
 export interface Merchandise_customersState {
   // ステートの型
   merchandises_id: number;
@@ -35,43 +45,49 @@ export const initialState: RootState = {
 const merchandise_customersSlice = createSlice({
   name: "merchandise_customers",
   initialState,
-  reducers: {
-    updateMerchandise_customersInfo(
-      state,
-      action: PayloadAction<Merchandise_customersState[]>
-    ) {
-      const newMerchandise_customers = action.payload;
-      state.merchandise_customers.push(...newMerchandise_customers);
-      return state;
-    },
-
-    deleteMerchandise_customersInfo(state, action: PayloadAction<number>) {
-      state.merchandise_customers = state.merchandise_customers.filter(
-        (merchandise_customers) =>
-          merchandise_customers.customers_id !== action.payload
-      );
-      return state;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getMerchandise_customers.pending, (state) => {
-      state.loading = true;
+    builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.merchandise_customers = action.payload.merchandise_customers;
     });
-    builder.addCase(getMerchandise_customers.fulfilled, (state, action) => {
-      state.merchandise_customers = action.payload;
-      state.loading = false;
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.merchandise_customers = action.payload.merchandise_customers;
     });
-    builder.addCase(getMerchandise_customers.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+
+    // builder.addCase(createCustomer.fulfilled, (state, action) => {
+    //   state.merchandise_customers = state.merchandise_customers.map(
+    //     (stateMerchandise_customer) =>
+    //       action.payload.merchandise_customers.map(
+    //         (payloadMerchandise_customer) =>
+    //           stateMerchandise_customer.customers_id ===
+    //           payloadMerchandise_customer.customers_id
+    //             ? {
+    //                 ...stateMerchandise_customer,
+    //                 ...payloadMerchandise_customer,
+    //               }
+    //             : stateMerchandise_customer
+    //       )
+    //   );
+    // });
+
+    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
+    //   state.merchandise_customers = state.merchandise_customers.map(
+    //     (stateMerchandise_customer) =>
+    //       action.payload.merchandise_customers.map(
+    //         (payloadMerchandise_customer) =>
+    //           stateMerchandise_customer.customers_id ===
+    //           payloadMerchandise_customer.customers_id
+    //             ? {
+    //                 ...stateMerchandise_customer,
+    //                 ...payloadMerchandise_customer,
+    //               }
+    //             : stateMerchandise_customer
+    //       )
+    //   );
+    // });
   },
 });
-
-export const {
-  updateMerchandise_customersInfo,
-  deleteMerchandise_customersInfo,
-} = merchandise_customersSlice.actions;
 
 const merchandise_customersReducer = merchandise_customersSlice.reducer;
 

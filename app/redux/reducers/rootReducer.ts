@@ -36,18 +36,6 @@ import customer_attendancesReducer, {
 import customer_schedulesReducer, {
   Customer_schedulesState,
 } from "../../store/middleTable/customers/customer_schedulesSlice";
-import course_schedulesReducer, {
-  Course_schedulesState,
-} from "../../store/middleTable/schedules/course_schedulesSlice";
-import option_schedulesReducer, {
-  Option_schedulesState,
-} from "../../store/middleTable/schedules/option_schedulesSlice";
-import merchandise_schedulesReducer, {
-  Merchandise_schedulesState,
-} from "../../store/middleTable/schedules/merchandise_schedulesSlice";
-import hairstyle_schedulesReducer, {
-  Hairstyle_schedulesState,
-} from "../../store/middleTable/schedules/hairstyle_scheduleSlice";
 import scheduleReducer, {
   ScheduleState,
 } from "../../store/schedules/scheduleSlice";
@@ -81,8 +69,6 @@ const rootReducer = combineReducers({
   schedule: scheduleReducer,
   stock: stockReducer,
   stock_category: stock_categoryReducer,
-  merchandise_schedules: merchandise_schedulesReducer,
-  option_schedules: option_schedulesReducer,
   daily_sales: daily_salesReducer,
   monthly_sales: monthly_salesReducer,
   yearly_sales: yearly_salesReducer,
@@ -92,8 +78,6 @@ const rootReducer = combineReducers({
   hairstyle_customers: hairstyle_customersReducer,
   customer_attendances: customer_attendancesReducer,
   customer_schedules: customer_schedulesReducer,
-  course_schedules: course_schedulesReducer,
-  hairstyle_schedules: hairstyle_schedulesReducer,
   // 他のリデューサーをここに追加する
 });
 

@@ -7,15 +7,19 @@ import { RootState } from "../../redux/store";
 
 const daily_sales: React.FC = () => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDaily_sales({}) as any);
+  }, [dispatch]);
+
   const loading = useSelector((state: RootState) => state.daily_sales.loading);
+
+  const message = useSelector((state: RootState) => state.daily_sales.message);
+
+  const error = useSelector((state: RootState) => state.daily_sales.error);
 
   const daily_sales = useSelector(
     (state: RootState) => state.daily_sales.daily_sales
   );
-
-  useEffect(() => {
-    dispatch(getDaily_sales() as any);
-  }, [dispatch]);
 
   const searchItems = [
     { key: "date", value: "日付" },
@@ -33,7 +37,12 @@ const daily_sales: React.FC = () => {
   const nodes = daily_sales;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 ">
+    <div className="mx-auto max-w-6xl px-4 ">
+      {message ? (
+        <p className="py-4 text-blue-700">{message}</p>
+      ) : error ? (
+        <p className="py-4 text-red-700">{error}</p>
+      ) : null}
       <div className="flex space-x-4 mb-4">
         <Link href="/daily_sales/create">新規作成</Link>
         <Link href="/daily_sales">日売上</Link>

@@ -3,32 +3,18 @@ import getCsrfToken from "../requestApi";
 
 export const dailySaleApi = {
   createDailySales: async (formData: { date: string; daily_sales: number }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/daily_sales", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error creating daily sales: ${error.message}`);
-    }
+    const response = await sendRequest("POST", "/daily_sales", formData);
+    return response;
   },
 
   fetchAllDailySales: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", "/daily_sales", csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching all daily sales: ${error.message}`);
-    }
+    const response = await sendRequest("GET", "/daily_sales");
+    return response;
   },
 
   fetchDailySalesById: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", `/daily_sales/${id}`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error fetching daily sales with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("GET", `/daily_sales/${id}`);
+    return response;
   },
 
   updateDailySales: async (
@@ -38,29 +24,15 @@ export const dailySaleApi = {
       daily_sales: number;
     }
   ) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/daily_sales/${id}/update`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(
-        `Error updating daily sales with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest(
+      "POST",
+      `/daily_sales/${id}/update`,
+      formData
+    );
+    return response;
   },
-
   deleteDailySales: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", `/daily_sales/${id}/delete`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error deleting daily sales with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("POST", `/daily_sales/${id}/delete`);
+    return response;
   },
 };

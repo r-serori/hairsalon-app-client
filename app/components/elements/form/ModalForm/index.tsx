@@ -6,80 +6,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import {
   getAttendance,
-  updateAttendanceInfo,
   updateAttendance,
 } from "../../../../store/attendances/attendanceSlice";
-import {
-  getCourse,
-  updateCourseInfo,
-  updateCourse,
-} from "../../../../store/courses/courseSlice";
-import {
-  getOption,
-  updateOptionInfo,
-  updateOption,
-} from "../../../../store/options/optionSlice";
+import { getCourse, updateCourse } from "../../../../store/courses/courseSlice";
+import { getOption, updateOption } from "../../../../store/options/optionSlice";
 import {
   getMerchandise,
-  updateMerchandiseInfo,
   updateMerchandise,
 } from "../../../../store/merchandises/merchandiseSlice";
 import {
   getHairstyle,
-  updateHairstyleInfo,
   updateHairstyle,
 } from "../../../../store/hairstyles/hairstyleSlice";
 import {
   getStockCategory,
-  updateStockCategoryInfo,
   updateStockCategory,
 } from "../../../../store/stocks/stock_categories/stock_categorySlice";
+import { updateStock } from "../../../../store/stocks/stockSlice";
 import {
-  updateStockInfo,
-  updateStock,
-} from "../../../../store/stocks/stockSlice";
-import {
-  updateCustomerInfo,
   updateCustomer,
   getCustomer,
 } from "../../../../store/customers/customerSlice";
-import {
-  updateDailySalesInfo,
-  updateDaily_sales,
-} from "../../../../store/sales/daily_sales/daily_saleSlice";
-import {
-  updateMonthlySalesInfo,
-  updateMonthly_sales,
-} from "../../../../store/sales/monthly_sales/monthly_saleSlice";
-import {
-  updateYearlySalesInfo,
-  updateYearly_sales,
-} from "../../../../store/sales/yearly_sales/yearly_saleSlice";
-import {
-  updateCourse_customersInfo,
-  deleteCourse_customersInfo,
-  Course_customersState,
-} from "../../../../store/middleTable/customers/course_customersSlice";
-import {
-  updateOption_customersInfo,
-  deleteOption_customersInfo,
-  Option_customersState,
-} from "../../../../store/middleTable/customers/option_customersSlice";
-import {
-  updateMerchandise_customersInfo,
-  deleteMerchandise_customersInfo,
-  Merchandise_customersState,
-} from "../../../../store/middleTable/customers/merchandise_customersSlice";
-import {
-  updateHairstyle_customersInfo,
-  deleteHairstyle_customersInfo,
-  Hairstyle_customersState,
-} from "../../../../store/middleTable/customers/hairstyle_customersSlice";
-import {
-  updateCustomer_attendancesInfo,
-  deleteCustomer_attendancesInfo,
-  Customer_attendancesState,
-} from "../../../../store/middleTable/customers/customer_attendancesSlice";
+import { updateDaily_sales } from "../../../../store/sales/daily_sales/daily_saleSlice";
+import { updateMonthly_sales } from "../../../../store/sales/monthly_sales/monthly_saleSlice";
+import { updateYearly_sales } from "../../../../store/sales/yearly_sales/yearly_saleSlice";
+import { Course_customersState } from "../../../../store/middleTable/customers/course_customersSlice";
+import { Option_customersState } from "../../../../store/middleTable/customers/option_customersSlice";
+import { Merchandise_customersState } from "../../../../store/middleTable/customers/merchandise_customersSlice";
+import { Hairstyle_customersState } from "../../../../store/middleTable/customers/hairstyle_customersSlice";
+import { Customer_attendancesState } from "../../../../store/middleTable/customers/customer_attendancesSlice";
 
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
@@ -124,7 +79,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
     ) {
       const slicer = () => {
         const splitEditValue = EditValue.split(", ");
-
         setCheckName(splitEditValue);
         console.log("splitEditValueだよ");
         console.log(splitEditValue);
@@ -346,150 +300,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
     };
   };
 
-  const updateBoy = async () => {
-    // matchMan();
-    const updatedNode = { ...EditNode }; // 元のeditNodeをコピーして新しいオブジェクトを作成
-    updatedNode[NodesProp] = EditValue; // NodesProp番目に新しい値を追加
-    console.log("updatedNodeだよ");
-    console.log(updatedNode);
-    try {
-      switch (link) {
-        case "/attendances":
-          await dispatch(updateAttendanceInfo(updatedNode) as any); // 更新されたeditNodeをstoreに保存
-          break;
-        case "/courses":
-          await dispatch(updateCourseInfo(updatedNode) as any);
-          break;
-        case "/options":
-          await dispatch(updateOptionInfo(updatedNode) as any);
-          break;
-        case "/merchandises":
-          await dispatch(updateMerchandiseInfo(updatedNode) as any);
-          break;
-        case "/hairstyles":
-          await dispatch(updateHairstyleInfo(updatedNode) as any);
-          break;
-        case "/stock_categories":
-          await dispatch(updateStockCategoryInfo(updatedNode) as any);
-          break;
-        case "/stocks":
-          if (NodesProp === "category_name") {
-            const { category_name, ...newUpdatedNode } = updatedNode;
-            const superUpdatedNode = {
-              ...newUpdatedNode,
-              stock_category_id: changeCategoryId(),
-            };
-            await dispatch(updateStockInfo(superUpdatedNode) as any);
-          } else {
-            const objInCategoryID = getCheckBoxCategoriesState.find(
-              (category) => category.category === EditNode.category_name
-            ).id;
-            const { category, ...newUpdatedNode } = updatedNode;
-            const superUpdatedNode = {
-              ...newUpdatedNode,
-              stock_category_id: objInCategoryID,
-            };
-            await dispatch(updateStockInfo(superUpdatedNode) as any);
-          }
-          break;
-        case "/customers":
-          changeMan();
-          if (NodesProp === "course") {
-            dispatch(deleteCourse_customersInfo(EditNode.id));
-            const courses_id = changeMan().changeCourses_id();
-            const newCourseInfo: Course_customersState[] = await Promise.all(
-              courses_id.map(async (course_id) => {
-                return {
-                  courses_id: course_id,
-                  customers_id: Number(EditNode.id),
-                };
-              })
-            );
-            console.log("newCourseInfoだよ");
-            console.log(newCourseInfo);
-
-            await dispatch(updateCourse_customersInfo(newCourseInfo));
-            await dispatch(updateCustomerInfo(updatedNode) as any);
-          } else if (NodesProp === "option") {
-            dispatch(deleteOption_customersInfo(EditNode.id));
-            const options_id = changeMan().changeOptions_id();
-            const newOptionInfo: Option_customersState[] = await Promise.all(
-              options_id.map(async (option_id) => {
-                return {
-                  options_id: option_id,
-                  customers_id: Number(EditNode.id),
-                };
-              })
-            );
-            await dispatch(updateOption_customersInfo(newOptionInfo));
-          } else if (NodesProp === "merchandise") {
-            dispatch(deleteMerchandise_customersInfo(EditNode.id));
-            const merchandises_id = changeMan().changeMerchandises_id();
-            const newMerchandiseInfo: Merchandise_customersState[] =
-              await Promise.all(
-                merchandises_id.map(async (merchandise_id) => {
-                  return {
-                    merchandises_id: merchandise_id,
-                    customers_id: Number(EditNode.id),
-                  };
-                })
-              );
-
-            await dispatch(updateMerchandise_customersInfo(newMerchandiseInfo));
-          } else if (NodesProp === "hairstyle") {
-            dispatch(deleteHairstyle_customersInfo(EditNode.id));
-            const hairstyles_id = changeMan().changeHairstyles_id();
-            const newHairstyleInfo: Hairstyle_customersState[] =
-              await Promise.all(
-                hairstyles_id.map(async (hairstyle_id) => {
-                  return {
-                    hairstyles_id: hairstyle_id,
-                    customers_id: Number(EditNode.id),
-                  };
-                })
-              );
-
-            await dispatch(updateHairstyle_customersInfo(newHairstyleInfo));
-          } else if (NodesProp === "attendance") {
-            dispatch(deleteCustomer_attendancesInfo(EditNode.id));
-            const attendances_id = changeMan().changeAttendances_id();
-            const newAttendanceInfo: Customer_attendancesState[] =
-              await Promise.all(
-                attendances_id.map(async (attendance_id) => {
-                  return {
-                    attendances_id: attendance_id,
-                    customers_id: Number(EditNode.id),
-                  };
-                })
-              );
-
-            await dispatch(
-              updateCustomer_attendancesInfo(newAttendanceInfo) as any
-            );
-          } else {
-            await dispatch(updateCustomerInfo(updatedNode) as any);
-          }
-          break;
-        case "/daily_sales":
-          await dispatch(updateDailySalesInfo(updatedNode) as any);
-          break;
-        case "/monthly_sales":
-          await dispatch(updateMonthlySalesInfo(updatedNode) as any);
-          break;
-        case "/yearly_sales":
-          await dispatch(updateYearlySalesInfo(updatedNode) as any);
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    console.log("新規updatedNodeだよ");
-    console.log(updatedNode);
-    return updatedNode;
-  };
-
   const handleChange = (e) => {
     try {
       const newValue = e.target.value;
@@ -511,7 +321,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const updatedNode = await updateBoy();
+    const updatedNode = {
+      ...EditNode,
+      [NodesProp]: EditValue,
+    };
     console.log("updatedNodeだよ");
     console.log(updatedNode);
     console.log(EditNode.id);
@@ -583,8 +396,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
             console.log(superUpdatedNode);
 
             await dispatch(updateCustomer(superUpdatedNode) as any);
+            await dispatch(getCustomer({}) as any);
           } else if (NodesProp === "option") {
-            const courses_id = changeMan().defaultChangeCourses_id;
+            const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().changeOptions_id();
             const merchandises_id = changeMan().defaultChangeMerchandises_id();
             const hairstyles_id = changeMan().defaultChangeHairstyles_id();
@@ -606,6 +420,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
+            await dispatch(getCustomer({}) as any);
           } else if (NodesProp === "merchandise") {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -629,6 +444,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
+            await dispatch(getCustomer({}) as any);
           } else if (NodesProp === "hairstyle") {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -652,6 +468,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
+            await dispatch(getCustomer({}) as any);
           } else if (NodesProp === "attendance") {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -675,6 +492,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
+            await dispatch(getCustomer({}) as any);
           } else {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -698,6 +516,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
+            await dispatch(getCustomer({}) as any);
           }
           break;
         case "/daily_sales":
@@ -715,6 +534,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     } catch (error) {
       console.error(error);
     } finally {
+      setOpen(false);
     }
   };
 
@@ -754,26 +574,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
   console.log(link); //"/attendances"
   console.log("checkNameだよ");
   console.log(checkName);
-
-  // const matchMan = () => {
-  //   if (NodesProp === "course") {
-  //     const defaultCourses_id = defaultChangeCourses_id();
-  //     const afterChangeCourses_id = changeCourses_id();
-  //     const matchCourseCustomer = getCourse_customers.map(
-  //       (course_customer) => {
-  //         afterChangeCourses_id.find(newItem => new)
-
-  //         course_customer.customers_id === EditNode.id
-  //     );
-
-  //     const matchCourses = matchCourseCustomer.filter((course_customer) =>
-  //       defaultCourses_id.includes(course_customer.courses_id)
-  //     );
-
-  //     console.log("matchCoursesだよ");
-  //     console.log(matchCourses);
-  //   }
-  // };
 
   const handleCheckChange = (event: SelectChangeEvent<typeof checkName>) => {
     const {

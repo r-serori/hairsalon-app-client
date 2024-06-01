@@ -11,7 +11,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 interface DateTimeRangePickerProps {
   value: Dayjs;
   changer: (newValue: Dayjs) => void;
-  isAllDay: boolean; //終日の予定かどうか
+  isAllDay?: boolean; //終日の予定かどうか
 }
 
 const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({

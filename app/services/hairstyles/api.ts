@@ -1,34 +1,21 @@
 import { sendRequest } from "../requestApi";
-import getCsrfToken from "../requestApi";
 
 export const hairstyleApi = {
   createHairstyle: async (formData: { hairstyle_name: string }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/hairstyles", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error creating hairstyle: ${error.message}`);
-    }
+    const response = await sendRequest("POST", "/hairstyles", formData);
+    console.log("APIのhairstyleDataだよ");
+    return response;
   },
 
   fetchAllHairstyles: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", "/hairstyles", csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching all hairstyles: ${error.message}`);
-    }
+    const response = await sendRequest("GET", "/hairstyles");
+    console.log("hairstyles fetched");
+    return response;
   },
 
   fetchHairstyleById: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", `/hairstyles/${id}`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error fetching hairstyle with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("GET", `/hairstyles/${id}`);
+    return response;
   },
 
   updateHairstyle: async (
@@ -37,29 +24,16 @@ export const hairstyleApi = {
       hairstyle_name: string;
     }
   ) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/hairstyles/${id}/update`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(
-        `Error updating hairstyle with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest(
+      "POST",
+      `/hairstyles/${id}/update`,
+      formData
+    );
+    return response;
   },
 
   deleteHairstyle: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", `/hairstyles/${id}/delete`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error deleting hairstyle with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("POST", `/hairstyles/${id}/delete`);
+    return response;
   },
 };

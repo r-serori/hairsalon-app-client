@@ -20,16 +20,13 @@ const courseCreate: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createCourse(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getCourse() as any);
+      await dispatch(createCourse(formData) as any);
     } catch (error) {
       console.error(error);
+    } finally {
+      console.log("コース作成！！");
+      router.push("/courses");
     }
-    router.push("/courses"); // Redirect to the course list page after creating a course
   };
 
   return (

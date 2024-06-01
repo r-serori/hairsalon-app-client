@@ -1,5 +1,5 @@
-import getCsrfToken from "../requestApi";
 import { sendRequest } from "../requestApi";
+import getCsrfToken from "../requestApi";
 
 export const attendanceApi = {
   createAttendance: async (formData: {
@@ -7,34 +7,22 @@ export const attendanceApi = {
     position: string;
     phone_number: string;
     address: string;
+    isAttendance: boolean;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/attendances", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error creating attendance: ${error.message}`);
-    }
+    const response = await sendRequest("POST", "/attendances", formData);
+    return response;
   },
 
   fetchAllAttendances: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      console.log("fetching all attendances");
-      return await sendRequest("GET", "/attendances", csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching all attendances: ${error.message}`);
-    }
+    const response = await sendRequest("GET", "/attendances");
+    console.log("attendances fetched");
+    return response;
   },
 
   fetchAttendanceById: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", `/attendances/${id}`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error fetching attendance with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("GET", `/attendances/${id}`);
+    console.log("attendance fetched");
+    return response;
   },
 
   updateAttendance: async (
@@ -44,31 +32,19 @@ export const attendanceApi = {
       position: string;
       phone_number: string;
       address: string;
+      isAttendance: boolean;
     }
   ) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/attendances/${id}/update`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(
-        `Error updating attendance with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest(
+      "POST",
+      `/attendances/${id}/update`,
+      formData
+    );
+    return response;
   },
 
   deleteAttendance: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", `/attendances/${id}/delete`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error deleting attendance with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("POST", `/attendances/${id}/delete`);
+    return response;
   },
 };

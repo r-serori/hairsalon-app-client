@@ -35,6 +35,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
       position: position,
       phone_number: phone_number,
       address: address,
+      isAttendance: false,
       created_at: "",
       updated_at: "",
     });

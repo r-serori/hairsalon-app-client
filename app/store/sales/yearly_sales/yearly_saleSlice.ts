@@ -4,55 +4,82 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getYearly_sales = createAsyncThunk(
   "yearly_sales/getYearly_sales",
-  async () => {
-    const yearly_salesData: any = await yearlySaleApi.fetchAllYearlySales();
-    console.log("yearly_salesDataだよ");
-    console.log(yearly_salesData.yearly_sales);
-    return yearly_salesData.yearly_sales;
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any = await yearlySaleApi.fetchAllYearlySales();
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const createYearly_sales = createAsyncThunk(
   "yearly_sales/createYearly_sales",
-  async (formData: { year: string; yearly_sales: number }) => {
-    const yearly_salesData: any = await yearlySaleApi.createYearlySales(
-      formData
-    );
-    console.log("yearly_salesCreateDataだよ");
-    console.log(yearly_salesData.yearly_sales);
+  async (
+    formData: { year: string; yearly_sales: number },
+    { rejectWithValue }
+  ) => {
+    const response: any = await yearlySaleApi.createYearlySales(formData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
-
 export const getYearly_salesById = createAsyncThunk(
   "yearly_sales/getYearly_salesById",
-  async (id: number) => {
-    const yearly_salesData: any = await yearlySaleApi.fetchYearlySalesById(id);
-    console.log("yearly_salesShowDataだよ");
-    console.log(yearly_salesData.yearly_sales);
-    return yearly_salesData.yearly_sales;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await yearlySaleApi.fetchYearlySalesById(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const updateYearly_sales = createAsyncThunk(
   "yearly_sales/updateYearly_sales",
-  async (formData: { id: number; year: string; yearly_sales: number }) => {
+  async (
+    formData: { id: number; year: string; yearly_sales: number },
+    { rejectWithValue }
+  ) => {
     const { id, ...updateData } = formData;
-    const yearly_salesData: any = await yearlySaleApi.updateYearlySales(
-      id,
-      updateData
-    );
-    console.log("yearly_salesUpdateDataだよ");
-    console.log(yearly_salesData.yearly_sales);
+    const response: any = await yearlySaleApi.updateYearlySales(id, updateData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const deleteYearly_sales = createAsyncThunk(
   "yearly_sales/deleteYearly_sales",
-  async (id: number) => {
-    const yearly_salesData: any = await yearlySaleApi.deleteYearlySales(id);
-    console.log("yearly_salesDeleteDataだよ");
-    console.log(yearly_salesData.yearly_sales);
-    return yearly_salesData.yearly_sales;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await yearlySaleApi.deleteYearlySales(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
@@ -69,66 +96,31 @@ export interface RootState {
   // ルートステートの型を定義
   yearly_sales: Yearly_salesState[];
   loading: boolean; // ローディング状態
+  message: string | null; // メッセージ
   error: string | null; // エラー
 }
 
 export const initialState: RootState = {
   yearly_sales: [],
   loading: false,
+  message: null,
   error: null,
 };
 
 const yearly_salesSlice = createSlice({
   name: "yearly_sales",
   initialState,
-  reducers: {
-    updateYearlySalesInfo(state, action: PayloadAction<Yearly_salesState>) {
-      const updatedYearlySales = action.payload;
-      const index = state.yearly_sales.findIndex(
-        (yearly_sales) => yearly_sales.id === updatedYearlySales.id
-      );
-      if (index !== -1) {
-        state.yearly_sales[index] = updatedYearlySales;
-      }
-      return state;
-    },
-
-    updateYear(state, action: PayloadAction<Yearly_salesState>) {
-      const updatedYearlySales = action.payload;
-      const index = state.yearly_sales.findIndex(
-        (yearly_sales) => yearly_sales.id === updatedYearlySales.id
-      );
-      if (index !== -1) {
-        state.yearly_sales[index].year = updatedYearlySales.year;
-      }
-      return state;
-    },
-
-    updateYearly_sale(state, action: PayloadAction<Yearly_salesState>) {
-      const updatedYearlySales = action.payload;
-      const index = state.yearly_sales.findIndex(
-        (yearly_sales) => yearly_sales.id === updatedYearlySales.id
-      );
-      if (index !== -1) {
-        state.yearly_sales[index].yearly_sales =
-          updatedYearlySales.yearly_sales;
-      }
-      return state;
-    },
-
-    deleteYearlySalesInfo(state, action: PayloadAction<number>) {
-      state.yearly_sales = state.yearly_sales.filter(
-        (yearly_sales) => yearly_sales.id !== action.payload
-      );
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder.addCase(getYearly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(getYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.yearly_sales = action.payload;
+      state.yearly_sales = action.payload.yearlySales;
+      state.message = "年間売上の取得に成功しました！";
     });
     builder.addCase(getYearly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -137,9 +129,13 @@ const yearly_salesSlice = createSlice({
 
     builder.addCase(createYearly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(createYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
+      state.yearly_sales.push(action.payload.yearlySale);
+      state.message = "年間売上の登録に成功しました！";
     });
     builder.addCase(createYearly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -148,10 +144,13 @@ const yearly_salesSlice = createSlice({
 
     builder.addCase(getYearly_salesById.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(getYearly_salesById.fulfilled, (state, action) => {
       state.loading = false;
-      state.yearly_sales = action.payload;
+      state.yearly_sales = action.payload.yearlySale;
+      state.message = "年間売上の取得に成功しました！";
     });
     builder.addCase(getYearly_salesById.rejected, (state, action) => {
       state.loading = false;
@@ -160,9 +159,17 @@ const yearly_salesSlice = createSlice({
 
     builder.addCase(updateYearly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(updateYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
+      state.yearly_sales = state.yearly_sales.map((yearly_sale) =>
+        yearly_sale.id === action.payload.yearlySale.id
+          ? { ...yearly_sale, ...action.payload.yearlySale }
+          : yearly_sale
+      );
+      state.message = "年間売上の更新に成功しました！";
     });
     builder.addCase(updateYearly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -171,11 +178,13 @@ const yearly_salesSlice = createSlice({
 
     builder.addCase(deleteYearly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(deleteYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
       state.yearly_sales = state.yearly_sales.filter(
-        (yearly_sales) => yearly_sales.id !== action.payload
+        (yearly_sales) => yearly_sales.id !== action.payload.deleteId
       );
     });
     builder.addCase(deleteYearly_sales.rejected, (state, action) => {
@@ -184,13 +193,6 @@ const yearly_salesSlice = createSlice({
     });
   },
 });
-
-export const {
-  updateYearlySalesInfo,
-  updateYear,
-  updateYearly_sale,
-  deleteYearlySalesInfo,
-} = yearly_salesSlice.actions;
 
 const yearly_salesReducer = yearly_salesSlice.reducer;
 

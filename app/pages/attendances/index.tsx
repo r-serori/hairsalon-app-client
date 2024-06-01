@@ -7,22 +7,29 @@ import { RootState } from "../../redux/store";
 
 const Attendances = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    try {
+      const fetchAttendances = async () => {
+        await dispatch(getAttendance({}) as any);
+      };
+      fetchAttendances();
+    } catch (error) {
+      console.log("Error", error);
+      return;
+    }
+  }, []);
+
   const loading = useSelector((state: RootState) => state.attendance.loading);
+
+  const message = useSelector((state: RootState) => state.attendance.message);
+
+  const error = useSelector((state: RootState) => state.attendance.error);
 
   const attendances = useSelector(
     (state: RootState) => state.attendance.attendances
   );
   console.log(attendances);
-
-  useEffect(() => {
-    try {
-      dispatch(getAttendance() as any);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("出席情報取得！！");
-    }
-  }, [dispatch]);
 
   const searchItems = [
     { key: "attendance_name", value: "名前" },
@@ -54,7 +61,13 @@ const Attendances = () => {
   const nodes = attendances;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 ">
+    <div className="mx-auto max-w-6xl px-4 ">
+      {message ? (
+        <p className="py-4 text-blue-700">{message}</p>
+      ) : error ? (
+        <p className="py-4 text-red-700">{error}</p>
+      ) : null}
+
       <div className="flex space-x-4 mb-4">
         <Link href="/attendances/create" className="btn">
           新規作成

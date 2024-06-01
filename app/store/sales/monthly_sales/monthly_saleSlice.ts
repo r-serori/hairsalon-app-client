@@ -4,61 +4,85 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getMonthly_sales = createAsyncThunk(
   "monthly_sales/getMonthly_sales",
-  async () => {
-    const monthly_salesData: any = await monthlySaleApi.fetchAllMonthlySales();
-    console.log("monthly_salesDataだよ");
-    console.log(monthly_salesData.monthly_sales);
-    return monthly_salesData.monthly_sales;
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any = await monthlySaleApi.fetchAllMonthlySales();
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const createMonthly_sales = createAsyncThunk(
   "monthly_sales/createMonthly_sales",
-  async (formData: { year_month: string; monthly_sales: number }) => {
-    const monthly_salesData: any = await monthlySaleApi.createMonthlySales(
-      formData
-    );
-    console.log("monthly_salesCreateDataだよ");
-    console.log(monthly_salesData.monthly_sales);
+  async (
+    formData: { year_month: string; monthly_sales: number },
+    { rejectWithValue }
+  ) => {
+    const response: any = await monthlySaleApi.createMonthlySales(formData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const getMonthly_salesById = createAsyncThunk(
   "monthly_sales/getMonthly_salesById",
-  async (id: number) => {
-    const monthly_salesData: any = await monthlySaleApi.fetchMonthlySalesById(
-      id
-    );
-    console.log("monthly_salesShowDataだよ");
-    console.log(monthly_salesData.monthly_sales);
-    return monthly_salesData.monthly_sales;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await monthlySaleApi.fetchMonthlySalesById(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const updateMonthly_sales = createAsyncThunk(
   "monthly_sales/updateMonthly_sales",
-  async (formData: {
-    id: number;
-    year_month: string;
-    monthly_sales: number;
-  }) => {
+  async (
+    formData: {
+      id: number;
+      year_month: string;
+      monthly_sales: number;
+    },
+    { rejectWithValue }
+  ) => {
     const { id, ...updateData } = formData;
-    const monthly_salesData: any = await monthlySaleApi.updateMonthlySales(
+    const response: any = await monthlySaleApi.updateMonthlySales(
       id,
       updateData
     );
-    console.log("monthly_salesUpdateDataだよ");
-    console.log(monthly_salesData.monthly_sales);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const deleteMonthly_sales = createAsyncThunk(
   "monthly_sales/deleteMonthly_sales",
-  async (id: number) => {
-    const monthly_salesData: any = await monthlySaleApi.deleteMonthlySales(id);
-    console.log("monthly_salesDeleteDataだよ");
-    console.log(monthly_salesData.monthly_sales);
-    return monthly_salesData.monthly_sales;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await monthlySaleApi.deleteMonthlySales(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
@@ -76,77 +100,31 @@ export interface RootState {
   // ルートステートの型を定義
   monthly_sales: Monthly_salesState[];
   loading: boolean; // ローディング状態
+  message: string | null; // メッセージ
   error: string | null; // エラー
 }
 
 export const initialState: RootState = {
   monthly_sales: [],
   loading: false,
+  message: null,
   error: null,
 };
 
 const monthly_salesSlice = createSlice({
   name: "monthly_sales",
   initialState,
-  reducers: {
-    updateMonthlySalesInfo(state, action: PayloadAction<Monthly_salesState>) {
-      const updatedMonthlySales = action.payload;
-      const index = state.monthly_sales.findIndex(
-        (monthly_sales) => monthly_sales.id === updatedMonthlySales.id
-      );
-      if (index !== -1) {
-        state.monthly_sales[index] = updatedMonthlySales;
-      }
-      return state;
-    },
-
-    updateMYear(state, action: PayloadAction<Monthly_salesState>) {
-      const updatedMonthlySales = action.payload;
-      const index = state.monthly_sales.findIndex(
-        (monthly_sales) => monthly_sales.id === updatedMonthlySales.id
-      );
-      if (index !== -1) {
-        state.monthly_sales[index].year = updatedMonthlySales.year;
-      }
-      return state;
-    },
-
-    updateMonth(state, action: PayloadAction<Monthly_salesState>) {
-      const updatedMonthlySales = action.payload;
-      const index = state.monthly_sales.findIndex(
-        (monthly_sales) => monthly_sales.id === updatedMonthlySales.id
-      );
-      if (index !== -1) {
-        state.monthly_sales[index].month = updatedMonthlySales.month;
-      }
-      return state;
-    },
-
-    updateMonthly_sale(state, action: PayloadAction<Monthly_salesState>) {
-      const updatedMonthlySales = action.payload;
-      const index = state.monthly_sales.findIndex(
-        (monthly_sales) => monthly_sales.id === updatedMonthlySales.id
-      );
-      if (index !== -1) {
-        state.monthly_sales[index].monthly_sales =
-          updatedMonthlySales.monthly_sales;
-      }
-      return state;
-    },
-
-    deleteMonthlySalesInfo(state, action: PayloadAction<number>) {
-      state.monthly_sales = state.monthly_sales.filter(
-        (monthly_sales) => monthly_sales.id !== action.payload
-      );
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder.addCase(getMonthly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(getMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.monthly_sales = action.payload;
+      state.monthly_sales = action.payload.monthlySales;
+      state.message = "月次売上の取得に成功しました！";
     });
     builder.addCase(getMonthly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -155,9 +133,13 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(createMonthly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(createMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
+      state.monthly_sales.push(action.payload.monthlySale);
+      state.message = "月次売上の作成に成功しました！";
     });
     builder.addCase(createMonthly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -166,10 +148,13 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(getMonthly_salesById.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(getMonthly_salesById.fulfilled, (state, action) => {
       state.loading = false;
-      state.monthly_sales = action.payload;
+      state.monthly_sales = action.payload.monthlySale;
+      state.message = "月次売上の取得に成功しました！";
     });
     builder.addCase(getMonthly_salesById.rejected, (state, action) => {
       state.loading = false;
@@ -178,9 +163,17 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(updateMonthly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(updateMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
+      state.monthly_sales = state.monthly_sales.map((monthly_sales) =>
+        monthly_sales.id === action.payload.monthlySale.id
+          ? { ...monthly_sales, ...action.payload.monthlySale }
+          : monthly_sales
+      );
+      state.message = "月次売上の更新に成功しました！";
     });
     builder.addCase(updateMonthly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -189,12 +182,15 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(deleteMonthly_sales.pending, (state, action) => {
       state.loading = true;
+      state.error = null;
+      state.message = null;
     });
     builder.addCase(deleteMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
       state.monthly_sales = state.monthly_sales.filter(
-        (monthly_sales) => monthly_sales.id !== action.payload
+        (monthly_sales) => monthly_sales.id !== action.payload.deleteId
       );
+      state.message = "月次売上の削除に成功しました！";
     });
     builder.addCase(deleteMonthly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -202,14 +198,6 @@ const monthly_salesSlice = createSlice({
     });
   },
 });
-
-export const {
-  updateMonthlySalesInfo,
-  updateMYear,
-  updateMonth,
-  updateMonthly_sale,
-  deleteMonthlySalesInfo,
-} = monthly_salesSlice.actions;
 
 const monthly_salesReducer = monthly_salesSlice.reducer;
 

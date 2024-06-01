@@ -31,7 +31,15 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
-        label="更新日付選択"
+        label={
+          whatSales === "過去未来"
+            ? "表示したい年を選択"
+            : whatSales === "日次"
+            ? "日付を選択"
+            : whatSales === "月次"
+            ? "月を選択"
+            : "年を選択"
+        }
         value={dayjs(value).utc().tz("Asia/Tokyo")}
         onChange={(newValue) => {
           changer(newValue);

@@ -9,7 +9,6 @@ import {
   getCustomer,
   createCustomer,
   updateCustomer,
-  updateCustomerInfo,
 } from "../../../../store/customers/customerSlice";
 import {
   getSchedule,
@@ -18,6 +17,7 @@ import {
   updateSchedule,
   updateCustomerSchedule,
   deleteSchedule,
+  updateCustomerOnlySchedule,
 } from "../../../../store/schedules/scheduleSlice";
 import { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
@@ -37,6 +37,7 @@ import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { v4 as uuidv4 } from "uuid";
 
 const style = {
   position: "absolute" as "absolute",
@@ -71,6 +72,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   dayjs.extend(timezone);
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const uniqueId = uuidv4();
 
   const customers = useSelector((state: RootState) => state.customer.customers);
 
@@ -378,38 +381,32 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     newCustomer
   ) => {
     try {
-      if (newReservation && newCustomer && !title) {
+      if (
         //新規予約、新規顧客、タイトルなし
+        newReservation &&
+        newCustomer &&
+        !title
+      ) {
         await dispatch(
           createCustomerSchedule(scheduleAndCustomerFormData) as any
         );
       } else if (
+        //新規予約、既存顧客、タイトルなし,イベントクリック以外
         newReservation &&
         !newCustomer &&
         whoIsEvent !== "イベントクリック" &&
         !title
       ) {
-        //新規予約、既存顧客、タイトルなし,イベントクリック以外
         await dispatch(
-          createCustomerSchedule(scheduleAndCustomerFormData) as any
+          updateCustomerOnlySchedule(scheduleAndCustomerFormData) as any
         );
       } else if (
-        newReservation &&
-        !newCustomer &&
-        whoIsEvent === "イベントクリック" &&
-        !title
-      ) {
-        //新規予約、既存顧客、タイトルなし、イベントクリック
-        await dispatch(
-          createCustomerSchedule(scheduleAndCustomerFormData) as any
-        );
-      } else if (
+        //予約編集、既存顧客、タイトルなし、イベントクリック
         !newReservation &&
         !newCustomer &&
         whoIsEvent === "イベントクリック" &&
         !title
       ) {
-        //予約編集、既存顧客、タイトルなし、イベントクリック
         await dispatch(
           updateCustomerSchedule(scheduleAndCustomerFormData) as any
         );
@@ -422,7 +419,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ) {
         await dispatch(createSchedule(scheduleAndCustomerFormData) as any);
       } else if (
-        //予約編集、顧客以外、タイトルあり
+        //予約編集、顧客以外、タイトルあり,イベントクリック
         !newReservation &&
         !isCustomer &&
         whoIsEvent === "イベントクリック" &&
@@ -434,7 +431,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       console.error(error);
     } finally {
       handleClose();
-      window.location.reload();
+      // window.location.reload();
     }
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -508,6 +505,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   console.log("endTimeです", endTime);
 
   console.log("ScheIdです", Sid);
+
+  console.log("uniqueIdです", uniqueId);
 
   return (
     <div>
@@ -655,6 +654,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                           onChange={(newValue) => {
                             changeCustomerState(newValue);
                           }}
+                          nodeId={customerId + uniqueId}
                           getOptions={customersNames}
                           value={customerName}
                         />

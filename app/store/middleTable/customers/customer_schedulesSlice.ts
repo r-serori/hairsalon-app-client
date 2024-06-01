@@ -1,15 +1,20 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { customerScheduleApi } from "../../../services/middleTable/customers/customer_schedulesApi";
 import RootState from "../../../redux/reducers/rootReducer";
+import { getSchedule } from "../../schedules/scheduleSlice";
 
 export const getCustomer_schedules = createAsyncThunk(
   "customer_schedules/getCustomer_schedules",
-  async () => {
-    const customer_schedulesData: any =
-      await customerScheduleApi.fetchAllCustomerSchedules();
-    console.log("customer_schedulesDataだよ");
-    console.log(customer_schedulesData.customer_schedules);
-    return customer_schedulesData.customer_schedules;
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any = await customerScheduleApi.fetchAllCustomerSchedules();
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
@@ -36,46 +41,13 @@ export const initialState: RootState = {
 const customer_schedulesSlice = createSlice({
   name: "customer_schedules",
   initialState,
-  reducers: {
-    updateCustomer_schedulesInfo(
-      state,
-      action: PayloadAction<Customer_schedulesState>
-    ) {
-      const updatedCustomer_schedules = action.payload;
-      const index = state.customer_schedules.findIndex(
-        (customer_schedules) =>
-          customer_schedules.id === updatedCustomer_schedules.id
-      );
-      if (index !== -1) {
-        state.customer_schedules[index] = updatedCustomer_schedules;
-      }
-      return state;
-    },
-
-    deleteCustomer_schedulesInfo(state, action: PayloadAction<number>) {
-      state.customer_schedules = state.customer_schedules.filter(
-        (customer_schedules) => customer_schedules.id !== action.payload
-      );
-      return state;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getCustomer_schedules.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getCustomer_schedules.fulfilled, (state, action) => {
-      state.customer_schedules = action.payload;
-      state.loading = false;
-    });
-    builder.addCase(getCustomer_schedules.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.customer_schedules = action.payload.customer_schedules;
     });
   },
 });
-
-export const { updateCustomer_schedulesInfo, deleteCustomer_schedulesInfo } =
-  customer_schedulesSlice.actions;
 
 const customer_schedulesReducer = customer_schedulesSlice.reducer;
 

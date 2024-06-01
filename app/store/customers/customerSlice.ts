@@ -1,75 +1,102 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { customerApi } from "../../services/customers/api";
 import RootState from "../../redux/reducers/rootReducer";
+import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getCustomer = createAsyncThunk(
   "customer/getCustomer",
-  async () => {
-    const customerData: any = await customerApi.fetchAllCustomers();
-    console.log("customerDataだよ");
-    console.log(customerData.customers);
-    return customerData.customers;
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any = await customerApi.fetchAllCustomers();
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const createCustomer = createAsyncThunk(
   "customer/createCustomer",
-  async (formData: {
-    id: number;
-    customer_name: string;
-    phone_number: string;
-    remarks: string;
-    courses_id: number[];
-    options_id: number[];
-    merchandises_id: number[];
-    hairstyles_id: number[];
-    attendances_id: number[];
-  }) => {
-    const customerData: any = await customerApi.createCustomer(formData);
-    console.log("customerCreateDataだよ");
-    console.log(customerData.customers);
+  async (
+    formData: {
+      id: number;
+      customer_name: string;
+      phone_number: string;
+      remarks: string;
+      courses_id: number[];
+      options_id: number[];
+      merchandises_id: number[];
+      hairstyles_id: number[];
+      attendances_id: number[];
+    },
+    { rejectWithValue }
+  ) => {
+    const response: any = await customerApi.createCustomer(formData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const getCustomerById = createAsyncThunk(
   "customer/getCustomerById",
-  async (id: number) => {
-    const customerData: any = await customerApi.fetchCustomerById(id);
-    console.log("customerShowDataだよ");
-    console.log(customerData.customers);
-    return customerData.customers;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await customerApi.fetchCustomerById(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const updateCustomer = createAsyncThunk(
   "customer/updateCustomer",
-  async (formData: {
-    id: number;
-    customer_name: string;
-    phone_number: string;
-    remarks: string;
-    courses_id: number[];
-    options_id: number[];
-    merchandises_id: number[];
-    hairstyles_id: number[];
-    attendances_id: number[];
-  }) => {
-    const { id, ...updateData } = formData;
-    console.log("updateDataだよ");
-    console.log(updateData);
-    const customerData: any = await customerApi.updateCustomer(id, updateData);
-    console.log("customerUpdateDataだよ");
-    console.log(customerData.customers);
+  async (
+    formData: {
+      id: number;
+      customer_name: string;
+      phone_number: string;
+      remarks: string;
+      courses_id: number[];
+      options_id: number[];
+      merchandises_id: number[];
+      hairstyles_id: number[];
+      attendances_id: number[];
+    },
+    { rejectWithValue }
+  ) => {
+    const response: any = await customerApi.updateCustomer(formData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const deleteCustomer = createAsyncThunk(
   "customer/deleteCustomer",
-  async (id: number) => {
-    const customerData: any = await customerApi.deleteCustomer(id);
-    console.log("customerDeleteDataだよ");
-    console.log(customerData.customers);
-    return customerData.customers;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await customerApi.deleteCustomer(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
@@ -79,11 +106,11 @@ export interface CustomerState {
   customer_name: string;
   phone_number: string;
   remarks: string;
-  courses_id: number[];
-  options_id: number[];
-  merchandises_id: number[];
-  hairstyles_id: number[];
-  attendances_id: number[];
+  courses_id?: number[];
+  options_id?: number[];
+  merchandises_id?: number[];
+  hairstyles_id?: number[];
+  attendances_id?: number[];
   created_at: string;
   updated_at: string;
 }
@@ -92,92 +119,48 @@ export interface RootState {
   // ルートステートの型を定義
   customers: CustomerState[]; // 顧客情報の配列
   loading: boolean; // ローディング状態
-  error: string; // エラーメッセージ
+  message: string | null; // メッセージ
+  error: string | null; // エラーメッセージ
 }
 
 const initialState: RootState = {
   // 初期状態
   customers: [], // 顧客情報の配列
   loading: false, // ローディング状態
-  error: "", // エラーメッセージ
+  message: null, // メッセージ
+  error: null, // エラーメッセージ
 };
 
 const customerSlice = createSlice({
   name: "customer",
   initialState,
-  reducers: {
-    updateCustomerInfo(state, action: PayloadAction<CustomerState>) {
-      const updateCustomer = action.payload;
-      const index = state.customers.findIndex(
-        (customer) => customer.id === updateCustomer.id
-      );
-      if (index !== -1) {
-        state.customers[index] = updateCustomer;
-      }
-      return state;
-    },
-
-    updateCustomerName: (state, action: PayloadAction<CustomerState>) => {
-      const updateCustomer = action.payload;
-      const index = state.customers.findIndex(
-        (customer) => customer.id === updateCustomer.id
-      );
-      if (index !== -1) {
-        state.customers[index].customer_name = updateCustomer.customer_name;
-      }
-      return state;
-    },
-
-    updateCustomerPhoneNumber: (
-      state,
-      action: PayloadAction<CustomerState>
-    ) => {
-      const updateCustomer = action.payload;
-      const index = state.customers.findIndex(
-        (customer) => customer.id === updateCustomer.id
-      );
-      if (index !== -1) {
-        state.customers[index].phone_number = updateCustomer.phone_number;
-      }
-      return state;
-    },
-
-    updateCustomerRemarks: (state, action: PayloadAction<CustomerState>) => {
-      const updateCustomer = action.payload;
-      const index = state.customers.findIndex(
-        (customer) => customer.id === updateCustomer.id
-      );
-      if (index !== -1) {
-        state.customers[index].remarks = updateCustomer.remarks;
-      }
-      return state;
-    },
-
-    deleteCustomerInfo(state, action: PayloadAction<number>) {
-      state.customers = state.customers.filter(
-        (customer) => customer.id !== action.payload
-      );
-      return state;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers = action.payload;
+      state.customers = action.payload.customers;
+      state.message = "顧客情報を取得しました！";
     });
     builder.addCase(getCustomer.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message!;
+      state.error = action.error.message;
     });
 
     builder.addCase(createCustomer.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(createCustomer.fulfilled, (state, action) => {
       state.loading = false;
+      state.customers.push(action.payload.customer);
+
+      state.message = "顧客情報を作成しました！";
     });
     builder.addCase(createCustomer.rejected, (state, action) => {
       state.loading = false;
@@ -186,10 +169,13 @@ const customerSlice = createSlice({
 
     builder.addCase(getCustomerById.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(getCustomerById.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers = action.payload;
+      state.customers = action.payload.customer;
+      state.message = "顧客情報を取得しました！";
     });
     builder.addCase(getCustomerById.rejected, (state, action) => {
       state.loading = false;
@@ -198,10 +184,20 @@ const customerSlice = createSlice({
 
     builder.addCase(updateCustomer.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
+
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
       state.loading = false;
+      // state.customers = state.customers.map((customer) =>
+      //   customer.id === action.payload.customer.id
+      //     ? { ...customer, ...action.payload.customer }
+      //     : customer
+      // );
+      state.message = "顧客情報を更新しました！";
     });
+
     builder.addCase(updateCustomer.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message!;
@@ -209,27 +205,25 @@ const customerSlice = createSlice({
 
     builder.addCase(deleteCustomer.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(deleteCustomer.fulfilled, (state, action) => {
       state.loading = false;
       state.customers = state.customers.filter(
-        (customer) => customer.id !== action.payload
+        (customer) => customer.id !== action.payload.deleteId
       );
     });
     builder.addCase(deleteCustomer.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.customers = action.payload.customers;
+    });
   },
 });
-
-export const {
-  updateCustomerInfo,
-  updateCustomerName,
-  updateCustomerPhoneNumber,
-  updateCustomerRemarks,
-  deleteCustomerInfo,
-} = customerSlice.actions;
 
 const customerReducer = customerSlice.reducer;
 

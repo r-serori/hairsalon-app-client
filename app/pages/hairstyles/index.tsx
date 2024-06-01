@@ -7,16 +7,21 @@ import { RootState } from "../../redux/store";
 
 const hairstyles: React.FC = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getHairstyle({}) as any);
+  }, [dispatch]);
+
   const loading = useSelector((state: RootState) => state.hairstyle.loading);
+
+  const message = useSelector((state: RootState) => state.hairstyle.message);
+
+  const error = useSelector((state: RootState) => state.hairstyle.error);
 
   const hairstyles = useSelector(
     (state: RootState) => state.hairstyle.hairstyle
   );
   console.log(hairstyles);
-
-  useEffect(() => {
-    dispatch(getHairstyle() as any);
-  }, [dispatch]);
 
   const searchItems = [{ key: "hairstyle_name", value: "髪型" }];
 
@@ -26,7 +31,12 @@ const hairstyles: React.FC = () => {
 
   const nodes = hairstyles;
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 ">
+    <div className="mx-auto max-w-6xl px-4 ">
+      {message ? (
+        <p className="py-4 text-blue-700">{message}</p>
+      ) : error ? (
+        <p className="py-4 text-red-700">{error}</p>
+      ) : null}
       <div className="flex space-x-4 mb-4">
         <Link href="/hairstyles/create">新規作成</Link>
       </div>

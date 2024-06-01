@@ -1,57 +1,40 @@
 import { sendRequest } from "../requestApi";
-import getCsrfToken from "../requestApi";
 
 export const courseApi = {
   createCourse: async (formData: { course_name: string; price: number }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/courses", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error creating course: ${error.message}`);
-    }
+    const response = await sendRequest("POST", "/courses", formData);
+    console.log("APIのcourseDataだよ");
+    return response;
   },
 
   fetchAllCourses: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", "/courses", csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching all courses: ${error.message}`);
-    }
+    const response = await sendRequest("GET", "/courses");
+    console.log("courses fetched");
+    return response;
   },
 
   fetchCourseById: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", `/courses/${id}`, csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
-    }
+    const response = await sendRequest("GET", `/courses/${id}`);
+    console.log("course fetched");
+    return response;
   },
 
   updateCourse: async (
     id: number,
     formData: { course_name: string; price: number }
   ) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/courses/${id}/update`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(`Error updating course with ID ${id}: ${error.message}`);
-    }
+    const response = await sendRequest(
+      "POST",
+      `/courses/${id}/update`,
+      formData
+    );
+    console.log("APIのcourseDataだよ");
+    return response;
   },
 
   deleteCourse: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", `/courses/${id}/delete`, csrfToken);
-    } catch (error) {
-      throw new Error(`Error deleting course with ID ${id}: ${error.message}`);
-    }
+    const response = await sendRequest("POST", `/courses/${id}/delete`);
+    console.log("APIのcourseDataだよ");
+    return response;
   },
 };

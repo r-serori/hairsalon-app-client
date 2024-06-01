@@ -33,12 +33,12 @@ const AttendanceStyle = {
 };
 
 interface BasicModalProps {
-  type?: string;
-  editValue?: string;
+  type?: any;
+  editValue?: any;
   editNode?: any;
   NodesProp?: any;
   link: string;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const BasicModal: React.FC<BasicModalProps> = ({
@@ -60,7 +60,9 @@ const BasicModal: React.FC<BasicModalProps> = ({
 
   return (
     <>
-      {link === "/attendanceTimeShots" ? (
+      {link === "/attendanceTimeShots" ||
+      link === "/attendance_timesStart" ||
+      link === "/attendance_timesEnd" ? (
         <Button onClick={handleOpenAttendance} className="w-full y-full p-4 ">
           {editValue}
         </Button>
@@ -74,7 +76,9 @@ const BasicModal: React.FC<BasicModalProps> = ({
         </Button>
       )}
 
-      {link === "/attendanceTimeShots" ? (
+      {link === "/attendanceTimeShots" ||
+      link === "/attendance_timesStart" ||
+      link === "/attendance_timesEnd" ? (
         <Modal
           open={openAttendance}
           onClose={handleCloseAttendance}
@@ -83,8 +87,8 @@ const BasicModal: React.FC<BasicModalProps> = ({
         >
           <Box sx={AttendanceStyle} className="rounded-xl">
             {/* モーダルのタイトル */}
-            <div className="flex justify-between items-center md:mx-16">
-              <div className="text-3xl bold">{editValue}画面</div>
+            <div className="flex justify-between items-center md:mx-4 ">
+              <div className="text-3xl bold">{editValue}</div>
               <div className="items-center mr-2 ">
                 <BackAgainButton onChanger={handleCloseAttendance} />
               </div>

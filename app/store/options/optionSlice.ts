@@ -1,51 +1,83 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { optionApi } from "../../services/options/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { PaymentOutlined } from "@mui/icons-material";
+import { getCustomer } from "../customers/customerSlice";
+import { getSchedule } from "../schedules/scheduleSlice";
 
-export const getOption = createAsyncThunk("option/getOption", async () => {
-  const optionData: any = await optionApi.fetchAllOptions();
-  console.log("optionDataだよ");
-  console.log(optionData.options);
-  return optionData.options;
-});
+export const getOption = createAsyncThunk(
+  "option/getOption",
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any = await optionApi.fetchAllOptions();
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
+  }
+);
 
 export const createOption = createAsyncThunk(
   "option/createOption",
-  async (formData: { id: number; option_name: string; price: number }) => {
-    const optionData: any = await optionApi.createOption(formData);
-    console.log("optionCreateDataだよ");
-    console.log(optionData.options);
+  async (
+    formData: { id: number; option_name: string; price: number },
+    { rejectWithValue }
+  ) => {
+    const response: any = await optionApi.createOption(formData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const getOptionById = createAsyncThunk(
   "option/getOptionById",
-  async (id: number) => {
-    const optionData: any = await optionApi.fetchOptionById(id);
-    console.log("optionShowDataだよ");
-    console.log(optionData.options);
-    return optionData.options;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await optionApi.fetchOptionById(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const updateOption = createAsyncThunk(
   "option/updateOption",
-  async (formData: { id: number; option_name: string; price: number }) => {
+  async (
+    formData: { id: number; option_name: string; price: number },
+    { rejectWithValue }
+  ) => {
     const { id, ...updateData } = formData;
-    const optionData: any = await optionApi.updateOption(id, updateData);
-    console.log("optionUpdateDataだよ");
-    console.log(optionData.options);
+    const response: any = await optionApi.updateOption(id, updateData);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
 export const deleteOption = createAsyncThunk(
   "option/deleteOption",
-  async (id: number) => {
-    const optionData: any = await optionApi.deleteOption(id);
-    console.log("optionDeleteDataだよ");
-    console.log(optionData.options);
-    return optionData.options;
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await optionApi.deleteOption(id);
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
 
@@ -61,65 +93,31 @@ export interface OptionState {
 export interface RootState {
   option: OptionState[];
   loading: boolean;
-  error: string;
+  message: string | null;
+  error: string | null;
 }
 
 const initialState: RootState = {
   option: [],
   loading: false,
-  error: "",
+  message: null,
+  error: null,
 };
 
 const optionSlice = createSlice({
   name: "option",
   initialState,
-  reducers: {
-    updateOptionInfo: (state, action: PayloadAction<OptionState>) => {
-      const updatedOption = action.payload;
-      const index = state.option.findIndex(
-        (option) => option.id === updatedOption.id
-      );
-      if (index !== -1) {
-        state.option[index] = updatedOption;
-      }
-      return state;
-    },
-
-    updateOptionName: (state, action: PayloadAction<OptionState>) => {
-      const updatedOption = action.payload;
-      const index = state.option.findIndex(
-        (option) => option.id === updatedOption.id
-      );
-      if (index !== -1) {
-        state.option[index].option_name = updatedOption.option_name;
-      }
-      return state;
-    },
-
-    updateOptionPrice: (state, action: PayloadAction<OptionState>) => {
-      const updatedOption = action.payload;
-      const index = state.option.findIndex(
-        (option) => option.id === updatedOption.id
-      );
-      if (index !== -1) {
-        state.option[index].price = updatedOption.price;
-      }
-      return state;
-    },
-
-    deleteOptionInfo: (state, action: PayloadAction<number>) => {
-      state.option = state.option.filter(
-        (option) => option.id !== action.payload
-      );
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getOption.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(getOption.fulfilled, (state, action) => {
-      state.option = action.payload;
       state.loading = false;
+      state.option = action.payload.options;
+      state.message = "オプションの取得に成功しました！";
     });
     builder.addCase(getOption.rejected, (state, action) => {
       state.error = action.error.message!;
@@ -128,9 +126,13 @@ const optionSlice = createSlice({
 
     builder.addCase(createOption.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(createOption.fulfilled, (state, action) => {
       state.loading = false;
+      state.option.push(action.payload.option);
+      state.message = "オプションの登録に成功しました！";
     });
     builder.addCase(createOption.rejected, (state, action) => {
       state.error = action.error.message!;
@@ -139,10 +141,13 @@ const optionSlice = createSlice({
 
     builder.addCase(getOptionById.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(getOptionById.fulfilled, (state, action) => {
-      state.option = action.payload;
       state.loading = false;
+      state.option = action.payload.option;
+      state.message = "オプション情報を取得しました！";
     });
     builder.addCase(getOptionById.rejected, (state, action) => {
       state.error = action.error.message!;
@@ -151,9 +156,17 @@ const optionSlice = createSlice({
 
     builder.addCase(updateOption.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(updateOption.fulfilled, (state, action) => {
       state.loading = false;
+      state.option = state.option.map((option) =>
+        option.id === action.payload.option.id
+          ? { ...option, ...action.payload.option }
+          : option
+      );
+      state.message = "オプション情報を更新しました！";
     });
     builder.addCase(updateOption.rejected, (state, action) => {
       state.error = action.error.message!;
@@ -162,26 +175,30 @@ const optionSlice = createSlice({
 
     builder.addCase(deleteOption.pending, (state) => {
       state.loading = true;
+      state.message = null;
+      state.error = null;
     });
     builder.addCase(deleteOption.fulfilled, (state, action) => {
       state.loading = false;
       state.option = state.option.filter(
-        (option) => option.id !== action.payload
+        (option) => option.id !== action.payload.deleteId
       );
+      state.message = "オプション情報を削除しました！";
     });
     builder.addCase(deleteOption.rejected, (state, action) => {
       state.error = action.error.message!;
       state.loading = false;
     });
+
+    builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.option = action.payload.options;
+    });
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.option = action.payload.options;
+    });
   },
 });
-
-export const {
-  updateOptionInfo,
-  updateOptionName,
-  updateOptionPrice,
-  deleteOptionInfo,
-} = optionSlice.actions;
 
 const optionReducer = optionSlice.reducer;
 

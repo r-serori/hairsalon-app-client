@@ -3,24 +3,43 @@ import Link from "next/link";
 import MyCalendar from "../../components/elements/calender/CalenderComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getSchedule } from "../../store/schedules/scheduleSlice";
+import {
+  selectGetSchedules,
+  getSchedule,
+} from "../../store/schedules/scheduleSlice";
 import { RootState } from "../../redux/store";
-import { getCustomer } from "../../store/customers/customerSlice";
-import { getCourse } from "../../store/courses/courseSlice";
-import { getOption } from "../../store/options/optionSlice";
-import { getMerchandise } from "../../store/merchandises/merchandiseSlice";
-import { getHairstyle } from "../../store/hairstyles/hairstyleSlice";
-import { getAttendance } from "../../store/attendances/attendanceSlice";
-import { getCourse_customers } from "../../store/middleTable/customers/course_customersSlice";
-import { getOption_customers } from "../../store/middleTable/customers/option_customersSlice";
-import { getMerchandise_customers } from "../../store/middleTable/customers/merchandise_customersSlice";
-import { getHairstyle_customers } from "../../store/middleTable/customers/hairstyle_customersSlice";
-import { getCustomer_attendances } from "../../store/middleTable/customers/customer_attendancesSlice";
-import { getCustomer_schedules } from "../../store/middleTable/customers/customer_schedulesSlice";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ja";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
-const schedules: React.FC = () => {
+interface Schedule {
+  year?: string;
+}
+
+const schedules: React.FC<Schedule> = ({ year }) => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    try {
+      if (year) {
+        dispatch(selectGetSchedules({ year }) as any);
+      } else {
+        dispatch(getSchedule({}) as any);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch, year]);
+
+  dayjs.locale("ja");
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
   const loading = useSelector((state: RootState) => state.schedule.loading);
+
+  const message = useSelector((state: RootState) => state.schedule.message);
+
+  const error = useSelector((state: RootState) => state.schedule.error);
 
   const schedules = useSelector((state: RootState) => state.schedule.schedule);
 
@@ -29,26 +48,6 @@ const schedules: React.FC = () => {
   const customer_schedules = useSelector(
     (state: RootState) => state.customer_schedules.customer_schedules
   );
-
-  useEffect(() => {
-    try {
-      dispatch(getSchedule() as any);
-      dispatch(getCustomer() as any);
-      dispatch(getCourse() as any);
-      dispatch(getOption() as any);
-      dispatch(getMerchandise() as any);
-      dispatch(getHairstyle() as any);
-      dispatch(getAttendance() as any);
-      dispatch(getCourse_customers() as any);
-      dispatch(getOption_customers() as any);
-      dispatch(getMerchandise_customers() as any);
-      dispatch(getHairstyle_customers() as any);
-      dispatch(getCustomer_attendances() as any);
-      dispatch(getCustomer_schedules() as any);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
   const events = schedules.map((schedule) => {
     const customer_schedule = customer_schedules.find(
@@ -78,7 +77,18 @@ const schedules: React.FC = () => {
   });
 
   return (
-    <div>{loading ? <p>loading...</p> : <MyCalendar events={events} />}</div>
+    <div>
+      {message ? (
+        <p className="py-4 text-blue-700">{message}</p>
+      ) : error ? (
+        <p className="py-4 text-red-700">{error}</p>
+      ) : null}
+      {loading ? (
+        <p>loading...</p>
+      ) : (
+        <MyCalendar events={events} year={year ? year : null} />
+      )}
+    </div>
   );
 };
 

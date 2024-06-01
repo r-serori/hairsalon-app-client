@@ -1,15 +1,27 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { customerAttendanceApi } from "../../../services/middleTable/customers/customer_attendancesApi";
 import RootState from "../../../redux/reducers/rootReducer";
+import {
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+} from "../../customers/customerSlice";
+import { getSchedule } from "../../schedules/scheduleSlice";
 
 export const getCustomer_attendances = createAsyncThunk(
   "customer_attendances/getCustomer_attendances",
-  async () => {
-    const customer_attendancesData: any =
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any =
       await customerAttendanceApi.fetchAllCustomerAttendances();
-    console.log("customer_attendancesDataだよ");
-    console.log(customer_attendancesData.customer_attendances);
-    return customer_attendancesData.customer_attendances;
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    }
   }
 );
 
@@ -35,43 +47,49 @@ export const initialState: RootState = {
 const customer_attendancesSlice = createSlice({
   name: "customer_attendances",
   initialState,
-  reducers: {
-    updateCustomer_attendancesInfo(
-      state,
-      action: PayloadAction<Customer_attendancesState[]>
-    ) {
-      const newCustomer_attendance = action.payload;
-      state.customer_attendances.push(...newCustomer_attendance);
-      return state;
-    },
-
-    deleteCustomer_attendancesInfo(state, action: PayloadAction<number>) {
-      state.customer_attendances = state.customer_attendances.filter(
-        (customer_attendances) =>
-          customer_attendances.customers_id !== action.payload
-      );
-      return state;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getCustomer_attendances.pending, (state) => {
-      state.loading = true;
+    builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.customer_attendances = action.payload.customer_attendances;
     });
-    builder.addCase(getCustomer_attendances.fulfilled, (state, action) => {
-      state.customer_attendances = action.payload;
-      state.loading = false;
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.customer_attendances = action.payload.customer_attendances;
     });
-    builder.addCase(getCustomer_attendances.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+
+    // builder.addCase(createCustomer.fulfilled, (state, action) => {
+    //   state.customer_attendances = state.customer_attendances.map(
+    //     (stateCustomer_attendance) =>
+    //       action.payload.customer_attendances.map(
+    //         (payloadCustomer_attendance) =>
+    //           stateCustomer_attendance.customers_id ===
+    //           payloadCustomer_attendance.customers_id
+    //             ? {
+    //                 ...stateCustomer_attendance,
+    //                 ...payloadCustomer_attendance,
+    //               }
+    //             : stateCustomer_attendance
+    //       )
+    //   );
+    // });
+
+    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
+    //   state.customer_attendances = state.customer_attendances.map(
+    //     (stateCustomer_attendance) =>
+    //       action.payload.customer_attendances.map(
+    //         (payloadCustomer_attendance) =>
+    //           stateCustomer_attendance.customers_id ===
+    //           payloadCustomer_attendance.customers_id
+    //             ? {
+    //                 ...stateCustomer_attendance,
+    //                 ...payloadCustomer_attendance,
+    //               }
+    //             : stateCustomer_attendance
+    //       )
+    //   );
+    // });
   },
 });
-
-export const {
-  updateCustomer_attendancesInfo,
-  deleteCustomer_attendancesInfo,
-} = customer_attendancesSlice.actions;
 
 const customer_attendancesReducer = customer_attendancesSlice.reducer;
 

@@ -24,12 +24,7 @@ const stockCreate: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createStock(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getStock() as any);
+      await dispatch(createStock(formData) as any);
     } catch (error) {
       console.error(error);
     }

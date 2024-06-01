@@ -1,18 +1,27 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { optionCustomerApi } from "../../../services/middleTable/customers/option_customersApi";
 import RootState from "../../../redux/reducers/rootReducer";
+import {
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+} from "../../customers/customerSlice";
+import { getSchedule } from "../../schedules/scheduleSlice";
 
 export const getOption_customers = createAsyncThunk(
   "option_customers/getOption_customers",
-  async () => {
-    const option_customersData: any =
-      await optionCustomerApi.fetchAllOptionCustomers();
-    console.log("option_customersDataだよ");
-    console.log(option_customersData.option_customers);
-    return option_customersData.option_customers;
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any = await optionCustomerApi.fetchAllOptionCustomers();
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
-
 export interface Option_customersState {
   // ステートの型
   options_id: number;
@@ -35,40 +44,47 @@ export const initialState: RootState = {
 const option_customersSlice = createSlice({
   name: "option_customers",
   initialState,
-  reducers: {
-    updateOption_customersInfo(
-      state,
-      action: PayloadAction<Option_customersState[]>
-    ) {
-      const newOption_customers = action.payload;
-      state.option_customers.push(...newOption_customers);
-      return state;
-    },
-
-    deleteOption_customersInfo(state, action: PayloadAction<number>) {
-      state.option_customers = state.option_customers.filter(
-        (option_customers) => option_customers.customers_id !== action.payload
-      );
-      return state;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getOption_customers.pending, (state) => {
-      state.loading = true;
+    builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.option_customers = action.payload.option_customers;
     });
-    builder.addCase(getOption_customers.fulfilled, (state, action) => {
-      state.option_customers = action.payload;
-      state.loading = false;
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.option_customers = action.payload.option_customers;
     });
-    builder.addCase(getOption_customers.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+
+    // builder.addCase(createCustomer.fulfilled, (state, action) => {
+    //   state.option_customers = state.option_customers.map(
+    //     (stateOption_customer) =>
+    //       action.payload.option_customers.map((payloadOption_customer) =>
+    //         stateOption_customer.customers_id ===
+    //         payloadOption_customer.customers_id
+    //           ? {
+    //               ...stateOption_customer,
+    //               ...payloadOption_customer,
+    //             }
+    //           : stateOption_customer
+    //       )
+    //   );
+    // });
+
+    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
+    //   state.option_customers = state.option_customers.map(
+    //     (stateOption_customer) =>
+    //       action.payload.option_customers.map((payloadOption_customer) =>
+    //         stateOption_customer.customers_id ===
+    //         payloadOption_customer.customers_id
+    //           ? {
+    //               ...stateOption_customer,
+    //               ...payloadOption_customer,
+    //             }
+    //           : stateOption_customer
+    //       )
+    //   );
+    // });
   },
 });
-
-export const { updateOption_customersInfo, deleteOption_customersInfo } =
-  option_customersSlice.actions;
 
 const option_customersReducer = option_customersSlice.reducer;
 

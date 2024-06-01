@@ -25,20 +25,25 @@ const LogoutButton: React.FC<logoutProps> = ({ className }) => {
 
   const error = useSelector((state: RootState) => state.auth.error);
 
+  const deleteCookie = (name) => {
+    document.cookie = `${name}=; Max-Age=0; path=/; domain=${location.hostname}`;
+  };
+
   // ログアウト処理
   const handleLogout = async () => {
     confirm("ログアウトしますか？");
     if (!confirm) {
       return;
     } else {
-      const response = await dispatch(logout({}) as any);
-      console.log("responseindex", response);
-      if (response.payload.status === "error") {
-        console.log("Rejected", response);
-        return;
-      } else if (response.payload.status === "success") {
-        console.log("Success", response);
+      try {
+        const response = await dispatch(logout({}) as any);
+        deleteCookie("sanctum_token");
+        deleteCookie("XSRF-TOKEN");
+        console.log("responseindex", response);
         router.push("/login");
+      } catch (error) {
+        console.log("Error", error);
+        return;
       }
     }
   };

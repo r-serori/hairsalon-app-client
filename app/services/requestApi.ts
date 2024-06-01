@@ -9,7 +9,7 @@ const getCsrfToken = async () => {
   try {
     const response = await axios.get("/sanctum/csrf-cookie");
     console.log("CSRF token fetched successfully");
-    console.log(response);
+    console.log("responseCSRF", response);
     return response; //responseをreturnしなくても自動的にcoolieに保存される
   } catch (error) {
     console.error("Failed to fetch CSRF token:", error);
@@ -20,7 +20,7 @@ const getCsrfToken = async () => {
 export default getCsrfToken;
 
 export const sendRequest = async <T>(
-  method: "GET" | "POST" | "PUT" | "DELETE",
+  method: "GET" | "POST" | "OPTIONS",
   url: string,
   data?: any,
   csrfToken?: any
@@ -35,13 +35,14 @@ export const sendRequest = async <T>(
         "X-CSRF-Token": csrfToken,
       },
     });
+
     console.log(`${method} request to ${url} successful:`);
-    console.log("REQUESTAPI.response", response.data);
-    return response.data;
+    console.log("REQUESTAPI.response", response);
+    return response.data as any;
   } catch (error) {
     // handleError(error);
     console.error("Failed to send request:", error);
-    return error.response.data;
+    return error.response as any;
   }
 };
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import {
   updateCustomer,
-  getCustomerById,
+  getCustomer,
 } from "../../../../store/customers/customerSlice";
 import { RootState } from "../../../../redux/store";
 import CustomerForm from "../../../../components/elements/form/customers/CustomerForm";
@@ -108,14 +108,11 @@ const customersEdit: React.FC = () => {
     merchandises_id: number[];
     hairstyles_id: number[];
     attendances_id: number[];
+    created_at: string;
+    updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(updateCustomer(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getCustomerById as any);
+      await dispatch(updateCustomer(formData) as any);
     } catch (error) {
       console.error(error);
     }

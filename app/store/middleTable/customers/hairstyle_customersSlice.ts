@@ -1,18 +1,28 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { hairstyleCustomerApi } from "../../../services/middleTable/customers/hairstyle_customersApi";
 import RootState from "../../../redux/reducers/rootReducer";
+import {
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+} from "../../customers/customerSlice";
+import { getSchedule } from "../../schedules/scheduleSlice";
 
 export const getHairstyle_customers = createAsyncThunk(
   "hairstyle_customers/getHairstyle_customers",
-  async () => {
-    const hairstyle_customersData: any =
+  async (formData: {}, { rejectWithValue }) => {
+    const response: any =
       await hairstyleCustomerApi.fetchAllHairstyleCustomers();
-    console.log("hairstyle_customersDataだよ");
-    console.log(hairstyle_customersData.hairstyle_customers);
-    return hairstyle_customersData.hairstyle_customers;
+    if (response.resStatus === "error") {
+      console.log("response.error", response);
+      return rejectWithValue(response);
+    }
+    if (response.resStatus === "success") {
+      console.log("response.success", response);
+      return response;
+    }
   }
 );
-
 export interface Hairstyle_customersState {
   // ステートの型
   hairstyles_id: number;
@@ -35,41 +45,47 @@ export const initialState: RootState = {
 const hairstyle_customersSlice = createSlice({
   name: "hairstyle_customers",
   initialState,
-  reducers: {
-    updateHairstyle_customersInfo(
-      state,
-      action: PayloadAction<Hairstyle_customersState[]>
-    ) {
-      const newHairstyle_customers = action.payload;
-      state.hairstyle_customers.push(...newHairstyle_customers);
-      return state;
-    },
-
-    deleteHairstyle_customersInfo(state, action: PayloadAction<number>) {
-      state.hairstyle_customers = state.hairstyle_customers.filter(
-        (hairstyle_customers) =>
-          hairstyle_customers.customers_id !== action.payload
-      );
-      return state;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getHairstyle_customers.pending, (state) => {
-      state.loading = true;
+    builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.hairstyle_customers = action.payload.hairstyle_customers;
     });
-    builder.addCase(getHairstyle_customers.fulfilled, (state, action) => {
-      state.hairstyle_customers = action.payload;
-      state.loading = false;
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.hairstyle_customers = action.payload.hairstyle_customers;
     });
-    builder.addCase(getHairstyle_customers.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+
+    // builder.addCase(createCustomer.fulfilled, (state, action) => {
+    //   state.hairstyle_customers = state.hairstyle_customers.map(
+    //     (stateHairstyle_customer) =>
+    //       action.payload.hairstyle_customers.map((payloadHairstyle_customer) =>
+    //         stateHairstyle_customer.customers_id ===
+    //         payloadHairstyle_customer.customers_id
+    //           ? {
+    //               ...stateHairstyle_customer,
+    //               ...payloadHairstyle_customer,
+    //             }
+    //           : stateHairstyle_customer
+    //       )
+    //   );
+    // });
+
+    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
+    //   state.hairstyle_customers = state.hairstyle_customers.map(
+    //     (stateHairstyle_customer) =>
+    //       action.payload.hairstyle_customers.map((payloadHairstyle_customer) =>
+    //         stateHairstyle_customer.customers_id ===
+    //         payloadHairstyle_customer.customers_id
+    //           ? {
+    //               ...stateHairstyle_customer,
+    //               ...payloadHairstyle_customer,
+    //             }
+    //           : stateHairstyle_customer
+    //       )
+    //   );
+    // });
   },
 });
-
-export const { updateHairstyle_customersInfo, deleteHairstyle_customersInfo } =
-  hairstyle_customersSlice.actions;
 
 const hairstyle_customersReducer = hairstyle_customersSlice.reducer;
 

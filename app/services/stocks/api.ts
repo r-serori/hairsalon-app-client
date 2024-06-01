@@ -1,5 +1,4 @@
 import { sendRequest } from "../requestApi";
-import getCsrfToken from "../requestApi";
 
 export const stockApi = {
   createStock: async (formData: {
@@ -9,30 +8,18 @@ export const stockApi = {
     remarks: string;
     stock_category_id: number;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/stocks", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error creating stock: ${error.message}`);
-    }
+    const response = await sendRequest("POST", "/stocks", formData);
+    return response;
   },
 
   fetchAllStocks: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", "/stocks", csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching all stocks: ${error.message}`);
-    }
+    const response = await sendRequest("GET", "/stocks");
+    return response;
   },
 
   fetchStockById: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", `/stocks/${id}`, csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching stock with ID ${id}: ${error.message}`);
-    }
+    const response = await sendRequest("GET", `/stocks/${id}`);
+    return response;
   },
 
   updateStock: async (
@@ -45,25 +32,16 @@ export const stockApi = {
       stock_category_id: number;
     }
   ) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/stocks/${id}/update`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(`Error updating stock with ID ${id}: ${error.message}`);
-    }
+    const response = await sendRequest(
+      "POST",
+      `/stocks/${id}/update`,
+      formData
+    );
+    return response;
   },
 
   deleteStock: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", `/stocks/${id}/delete`, csrfToken);
-    } catch (error) {
-      throw new Error(`Error deleting stock with ID ${id}: ${error.message}`);
-    }
+    const response = await sendRequest("POST", `/stocks/${id}/delete`);
+    return response;
   },
 };

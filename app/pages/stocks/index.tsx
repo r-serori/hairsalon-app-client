@@ -8,7 +8,22 @@ import { RootState } from "../../redux/store";
 
 const stocks: React.FC = () => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    try {
+      dispatch(getStock({}) as any);
+      dispatch(getStockCategory({}) as any);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("ストック、ストックカテゴリー取得！！");
+    }
+  }, [dispatch]);
+
   const loading = useSelector((state: RootState) => state.stock.loading);
+
+  const message = useSelector((state: RootState) => state.stock.message);
+
+  const error = useSelector((state: RootState) => state.stock.error);
 
   const stocks = useSelector((state: RootState) => state.stock.stocks);
   console.log(stocks);
@@ -17,17 +32,6 @@ const stocks: React.FC = () => {
     (state: RootState) => state.stock_category.stock_category
   );
   console.log(stockCategories);
-
-  useEffect(() => {
-    try {
-      dispatch(getStock() as any);
-      dispatch(getStockCategory() as any);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("ストック、ストックカテゴリー取得！！");
-    }
-  }, [dispatch]);
 
   const searchItems = [
     { key: "category_name", value: "在庫カテゴリ" },
@@ -83,7 +87,12 @@ const stocks: React.FC = () => {
     // 他の行データもここに追加する
   ];
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 ">
+    <div className="mx-auto max-w-6xl px-4 ">
+      {message ? (
+        <p className="py-4 text-blue-700">{message}</p>
+      ) : error ? (
+        <p className="py-4 text-red-700">{error}</p>
+      ) : null}
       <div className="flex space-x-4 mb-4">
         <Link href="/stocks/create">新規作成</Link>
         <Link href="/stock_categories">カテゴリ画面</Link>

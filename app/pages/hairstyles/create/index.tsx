@@ -22,12 +22,7 @@ const hairstyleCreate = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createHairstyle(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getHairstyle() as any);
+      await dispatch(createHairstyle(formData) as any);
     } catch (error) {
       console.error(error);
     }

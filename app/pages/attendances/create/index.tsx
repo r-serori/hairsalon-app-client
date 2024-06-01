@@ -21,16 +21,12 @@ const attendanceCreate: React.FC = () => {
     position: string;
     phone_number: string;
     address: string;
+    isAttendance: boolean;
     created_at: string;
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createAttendance(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getAttendance() as any);
+      await dispatch(createAttendance(formData) as any);
     } catch (error) {
       console.error(error);
     } finally {

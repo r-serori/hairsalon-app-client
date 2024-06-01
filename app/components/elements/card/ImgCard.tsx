@@ -6,12 +6,12 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 
 interface ImgCardProps {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   imageUrl: string;
 }
 
-const MultiActionAreaCard: React.FC = ({}) => {
+const ImgCard: React.FC<ImgCardProps> = ({ imageUrl }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea>
@@ -40,4 +40,4 @@ const MultiActionAreaCard: React.FC = ({}) => {
   );
 };
 
-export default MultiActionAreaCard;
+export default ImgCard;

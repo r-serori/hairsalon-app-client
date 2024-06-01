@@ -15,7 +15,11 @@ import BasicModal from "../modal";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { useRouter } from "next/router";
 import DeleteMan from "../../DeleteMan/[DeleteMan]/[id]";
-import { WidthFull } from "@mui/icons-material";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ja";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import { Padding } from "@mui/icons-material";
 
 const ComponentTable = ({
   nodes,
@@ -32,6 +36,10 @@ const ComponentTable = ({
     handleSearchFieldChange,
   } = useSearchLogic();
   const { pagination, handlePageChange } = usePaginationLogic();
+
+  dayjs.locale("ja");
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
   console.log("nodesだよ");
   console.log(nodes); // [{id: 1, attendance_name: "田中店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}, {id: 2, attendance_name: "佐藤店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}]
@@ -199,6 +207,8 @@ const ComponentTable = ({
 
                       const propProp = nodesProp[propName];
 
+                      const imgUrl = "http://localhost:8000/";
+
                       if (
                         propProp === "created_at" ||
                         propProp === "updated_at"
@@ -234,8 +244,7 @@ const ComponentTable = ({
                         propProp === "yearly_sales" ||
                         propProp === "shotAttendance_name" ||
                         propProp === "shotPosition" ||
-                        propProp === "start_time" ||
-                        propProp === "end_time"
+                        propProp === "isAttendance"
                       ) {
                         return (
                           <Cell
@@ -249,26 +258,49 @@ const ComponentTable = ({
                           </Cell>
                         );
                       } else if (
+                        propProp === "start_time" ||
+                        propProp === "end_time"
+                      ) {
+                        return (
+                          <Cell
+                            key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
+                            className="items-center bg-gray-100 text-gray-900 text-xl text-center"
+                            style={{
+                              cursor: "pointer",
+                            }}
+                          >
+                            {propValue
+                              ? dayjs(propValue)
+                                  .tz("Asia/Tokyo")
+                                  .format("YYYY/MM/DD HH:mm")
+                              : "未登録"}
+                          </Cell>
+                        );
+                      } else if (
                         propProp === "start_photo_path" ||
                         propProp === "end_photo_path"
                       ) {
                         return (
                           <Cell
                             key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                            className="items-center bg-gray-100 text-gray-900 text-sm text-center"
+                            className="items-center bg-gray-100 text-gray-900 text-center pb-1 "
                             style={{
                               cursor: "pointer",
                             }}
                           >
-                            <img
-                              src={
-                                propValue
-                                  ? propValue
-                                  : "https://via.placeholder.com/150"
-                              }
-                              alt="画像"
-                              className="w-20 h-20"
-                            />
+                            <div className="flex justify-center items-center text-center mx-auto">
+                              <img
+                                src={
+                                  propValue
+                                    ? imgUrl +
+                                      "attendance_times/images/" +
+                                      propValue
+                                    : "https://via.placeholder.com/150"
+                                }
+                                alt="画像"
+                                className="w-36 h-28 object-cover object-fill"
+                              />
+                            </div>
                           </Cell>
                         );
                       } else {
@@ -292,6 +324,84 @@ const ComponentTable = ({
                         );
                       }
                     })}
+                    {/* tHeaderItemsに"出勤"が含まれていたら作成 */}
+                    {tHeaderItems.includes("出勤") ||
+                    tHeaderItems.includes("出勤時間と写真を編集") ? (
+                      <Cell
+                        className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 "
+                        style={{
+                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                        }}
+                      >
+                        {node.isAttendance === "勤務中" ? (
+                          <div className="w-full y-full p-4 ">
+                            今日も１日頑張りましょう！！
+                          </div>
+                        ) : (
+                          <div className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm text-center ml-2　pointer ">
+                            <BasicModal
+                              editValue={
+                                link === "/attendance_times"
+                                  ? "出勤時間と写真を編集"
+                                  : link === "/attendanceTimeShots"
+                                  ? "出勤"
+                                  : "出勤時間と写真を編集"
+                              }
+                              editNode={node}
+                              link={
+                                link === "/attendance_times"
+                                  ? "/attendance_timesStart"
+                                  : link === "/attendanceTimeShots"
+                                  ? "/attendanceTimeShots"
+                                  : "/attendance_times"
+                              }
+                              isLoading={isLoading}
+                            />
+                          </div>
+                        )}
+                      </Cell>
+                    ) : (
+                      ""
+                    )}
+                    {/* tHeaderItemsに"退勤"が含まれていたら作成 */}
+                    {tHeaderItems.includes("退勤") ||
+                    tHeaderItems.includes("退勤時間と写真を編集") ? (
+                      <Cell
+                        className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
+                        style={{
+                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                        }}
+                      >
+                        {node.isAttendance === "退勤中" ? (
+                          <div className="w-full y-full p-4  ">
+                            今日も１日お疲れ様でした！！
+                          </div>
+                        ) : (
+                          <div className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm text-center ml-2 pointer">
+                            <BasicModal
+                              editValue={
+                                link === "/attendance_times"
+                                  ? "退勤時間と写真を編集"
+                                  : link === "/attendanceTimeShots"
+                                  ? "退勤"
+                                  : "退勤時間と写真を編集"
+                              }
+                              editNode={node}
+                              link={
+                                link === "/attendance_times"
+                                  ? "/attendance_timesEnd"
+                                  : link === "/attendanceTimeShots"
+                                  ? "/attendanceTimeShots"
+                                  : "/attendance_times"
+                              }
+                              isLoading={isLoading}
+                            />
+                          </div>
+                        )}
+                      </Cell>
+                    ) : (
+                      ""
+                    )}
                     {/* tHeaderItemsに"編集"が含まれていたら作成 */}
                     {tHeaderItems.includes("編集") &&
                       (console.log("編集nodeだよ"),
@@ -350,49 +460,7 @@ const ComponentTable = ({
                         </div>
                       </Cell>
                     )}
-                    {/* tHeaderItemsに"出勤"が含まれていたら作成 */}
-                    {tHeaderItems.includes("出勤") && (
-                      <Cell
-                        className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
-                        style={{
-                          cursor: "pointer",
-                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                        }}
-                      >
-                        {/* <div className="flex justify-center items-center text-center mx-auto pb-1"> */}
 
-                        <div className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm text-center ml-2 ">
-                          <BasicModal
-                            editValue={"出勤"}
-                            editNode={node}
-                            link={link}
-                            isLoading={isLoading}
-                          />
-                          {/* </div> */}
-                        </div>
-                      </Cell>
-                    )}
-                    {/* tHeaderItemsに"退勤"が含まれていたら作成 */}
-                    {tHeaderItems.includes("退勤") && (
-                      <Cell
-                        className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
-                        style={{
-                          cursor: "pointer",
-                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                        }}
-                      >
-                        {/* <div className="flex justify-center items-center text-center mx-auto pb-1"> */}
-                        <div className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm text-center ml-2">
-                          <BasicModal
-                            editValue={"退勤"}
-                            editNode={node}
-                            link={link}
-                            isLoading={isLoading}
-                          />
-                          {/* </div> */}
-                        </div>
-                      </Cell>
-                    )}
                     {/* tHeaderItemsに"予約"が含まれていたら作成 */}
                     {/* {tHeaderItems.includes("時間管理") && (
                       <Cell

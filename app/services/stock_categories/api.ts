@@ -3,37 +3,18 @@ import getCsrfToken from "../requestApi";
 
 export const stockCategoryApi = {
   createStockCategory: async (formData: { category: string }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        "/stock_categories",
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(`Error creating stock category: ${error.message}`);
-    }
+    const response = await sendRequest("POST", "/stock_categories", formData);
+    return response;
   },
 
   fetchAllStockCategories: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", "/stock_categories", csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching all stock categories: ${error.message}`);
-    }
+    const response = await sendRequest("GET", "/stock_categories");
+    return response;
   },
 
   fetchStockCategoryById: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", `/stock_categories/${id}`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error fetching stock category with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("GET", `/stock_categories/${id}`);
+    return response;
   },
 
   updateStockCategory: async (
@@ -42,33 +23,19 @@ export const stockCategoryApi = {
       category: string;
     }
   ) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/stock_categories/${id}/update`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(
-        `Error updating stock category with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest(
+      "POST",
+      `/stock_categories/${id}/update`,
+      formData
+    );
+    return response;
   },
 
   deleteStockCategory: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/stock_categories/${id}/delete`,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(
-        `Error deleting stock category with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest(
+      "POST",
+      `/stock_categories/${id}/delete`
+    );
+    return response;
   },
 };

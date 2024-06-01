@@ -11,10 +11,13 @@ import "../styles/CustomTable.module.css";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import axios from "axios";
 
 dayjs.locale("ja");
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+axios.defaults.withCredentials = true;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

@@ -25,18 +25,16 @@ const customersCreate = () => {
     merchandises_id: number[];
     hairstyles_id: number[];
     attendances_id: number[];
+    created_at: string;
+    updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createCustomer(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getCustomer() as any);
+      await dispatch(createCustomer(formData) as any);
     } catch (error) {
       console.error(error);
+    } finally {
+      router.push("/customers");
     }
-    router.push("/customers"); // Redirect to the customer list page after creating a customer
   };
   return (
     <div className="min-h-full">

@@ -20,12 +20,7 @@ const optionCreate: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createOption(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getOption() as any);
+      await dispatch(createOption(formData) as any);
     } catch (error) {
       console.error(error);
     }

@@ -4,13 +4,17 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import { DateTime } from "luxon";
 import FullCalendar from "@fullcalendar/react";
 import ScheduleModal from "../modal/scheduleModal";
 import SalesModal from "../modal/sales/SalesModal";
+import EasyModal from "../modal/easy/EasyModal";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ja";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 interface Event {
   id: number;
@@ -20,7 +24,15 @@ interface Event {
   allDay: number;
 }
 
-const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
+interface OpenCalendarProps {
+  events: Event[];
+  year?: string | null;
+}
+
+const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
+  dayjs.locale("ja");
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const loading = useSelector((state: RootState) => state.customer.loading);
 
   const eventInputs: EventInput[] = events.map((event) => ({
@@ -41,6 +53,8 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
   const [monthlySalesModal, setMonthlySalesModal] = useState(false);
   const [yearlySalesModal, setYearlySalesModal] = useState(false);
 
+  const [easyOpen, setEasyOpen] = useState(false);
+
   const handleEventClick = (e) => {
     setSelectedEvent(e);
     setShowModal(true);
@@ -51,6 +65,14 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
     setSelectedEvent(null);
   };
 
+  const currentYear = year
+    ? year
+    : dayjs().utc().tz("Asia/Tokyo").format("YYYY");
+
+  const nextYear = year
+    ? currentYear
+    : dayjs(currentYear).add(1, "year").format("YYYY");
+
   return (
     <>
       {loading ? (
@@ -59,26 +81,31 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
         // ローディングが終わったらカレンダーを表示する
 
         <div className="flex justify-center items-center">
-          <SalesModal
-            showModal={DailySalesModal}
-            setShowModal={setDailySalesModal}
-            events={eventInputs}
-            whatSales="日次"
-          />
+          <div className="mr-auto">
+            <EasyModal open={easyOpen} setOpen={setEasyOpen} />
+          </div>
+          <div className="flex justify-start items-center ">
+            <SalesModal
+              showModal={DailySalesModal}
+              setShowModal={setDailySalesModal}
+              events={eventInputs}
+              whatSales="日次"
+            />
 
-          <SalesModal
-            showModal={monthlySalesModal}
-            setShowModal={setMonthlySalesModal}
-            events={eventInputs}
-            whatSales="月次"
-          />
+            <SalesModal
+              showModal={monthlySalesModal}
+              setShowModal={setMonthlySalesModal}
+              events={eventInputs}
+              whatSales="月次"
+            />
 
-          <SalesModal
-            showModal={yearlySalesModal}
-            setShowModal={setYearlySalesModal}
-            events={eventInputs}
-            whatSales="年次"
-          />
+            <SalesModal
+              showModal={yearlySalesModal}
+              setShowModal={setYearlySalesModal}
+              events={eventInputs}
+              whatSales="年次"
+            />
+          </div>
         </div>
       )}
 
@@ -140,6 +167,10 @@ const MyCalendar: React.FC<{ events: Event[] }> = ({ events }) => {
               weekday: "short",
             },
           },
+        }}
+        validRange={{
+          start: `${currentYear}-01-01`,
+          end: `${nextYear}-12-31`,
         }}
         businessHours={{
           daysOfWeek: [0, 1, 2, 3, 4, 5, 6], //カレンダーの営業日を設定している

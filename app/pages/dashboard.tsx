@@ -32,7 +32,7 @@ const dashboard: React.FC = () => {
 
   console.log(auth);
 
-  const message = auth.message;
+  const message = useSelector((state: RootState) => state.auth.message);
 
   return (
     <>
@@ -52,8 +52,14 @@ const dashboard: React.FC = () => {
               IconName={ManageAccountsIcon}
               href="/attendances"
               iconSrc="#"
-              label="勤怠管理"
+              label="スタッフ管理"
             />
+            {/* <NavLink
+              IconName={ManageAccountsIcon}
+              href="/attendance_times"
+              iconSrc="#"
+              label="スタッフ管理"
+            /> */}
             <NavLink
               IconName={SentimentVerySatisfiedIcon}
               href="/customers"

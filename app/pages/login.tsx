@@ -15,28 +15,29 @@ const LoginPage: React.FC = () => {
 
   const error = useSelector((state: RootState) => state.auth.error);
 
-  // useEffect(() => {
-  //   const hasLaravelSessionCookie = () => {
-  //     // ブラウザのCookieからlaravel_session Cookieを取得する
-  //     const cookies = document.cookie;
-  //     console.log("cookies", cookies);
+  useEffect(() => {
+    const hasLaravelSessionCookie = () => {
+      // ブラウザのCookieからlaravel_session Cookieを取得する
+      const cookies = document.cookie;
+      console.log("cookies", cookies);
 
-  //     if (cookies.startsWith("XSRF-TOKEN")) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   };
+      if (cookies.startsWith("XSRF-TOKEN")) {
+        return true;
+      } else {
+        return false;
+      }
+    };
 
-  //   if (hasLaravelSessionCookie()) {
-  //     console.log("XCSRF存在します");
-  //     router.push("/dashboard");
-  //     // ログイン済みの場合の処理を記述する
-  //   } else {
-  //     console.log("XCSRFが存在しません");
-  //     // 未ログインの場合の処理を記述する
-  //   }
-  // }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
+    if (hasLaravelSessionCookie()) {
+      console.log("XCSRF存在します");
+      router.push("/dashboard");
+      // ログイン済みの場合の処理を記述する
+    } else {
+      console.log("XCSRFが存在しません");
+      router.push("/login");
+      // 未ログインの場合の処理を記述する
+    }
+  }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleLogin = async (formData: {
     id: number;
@@ -46,20 +47,19 @@ const LoginPage: React.FC = () => {
     updated_at: string;
   }) => {
     console.log(formData);
-    const response = await dispatch(login(formData) as any);
-    console.log("responseindex", response);
-    if (response.payload.status === "error") {
-      console.log("Rejected", response);
-      return;
-    } else if (response.payload.status === "success") {
+    try {
+      const response = await dispatch(login(formData) as any);
       console.log("Success", response);
       router.push("/dashboard");
+    } catch (error) {
+      console.log("Error", error);
+      return;
     }
   };
 
   return (
     <div>
-      {message ? <div className="bg-gray-100">{message}</div> : null}
+      {message ? <div className="bg-white">{message}</div> : null}
       {isLoading ? (
         <p>Loading...</p>
       ) : (

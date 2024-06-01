@@ -23,12 +23,7 @@ const merchandiseCreate: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createMerchandise(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getMerchandise() as any);
+      await dispatch(createMerchandise(formData) as any);
     } catch (error) {
       console.error(error);
     }

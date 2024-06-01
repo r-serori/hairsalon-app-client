@@ -24,12 +24,7 @@ const stockCategoryCreate: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(createStockCategory(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getStockCategory() as any);
+      await dispatch(createStockCategory(formData) as any);
     } catch (error) {
       console.error(error);
     } finally {

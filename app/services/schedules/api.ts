@@ -1,6 +1,4 @@
-import { updateCustomerSchedule } from "../../store/schedules/scheduleSlice";
 import { sendRequest } from "../requestApi";
-import getCsrfToken from "../requestApi";
 
 export const schedulesApi = {
   createCustomerSchedule: async (formData: {
@@ -18,17 +16,12 @@ export const schedulesApi = {
     allDay: number;
     customers_id: number;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        "/schedules/customers/double",
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(`Error creating schedule: ${error.message}`);
-    }
+    const response = await sendRequest(
+      "POST",
+      "/schedules/customers/double",
+      formData
+    );
+    return response;
   },
 
   createSchedule: async (formData: {
@@ -36,34 +29,28 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     allDay: number;
-    customers_id: number;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", "/schedules", formData, csrfToken);
-    } catch (error) {
-      throw new Error(`Error creating schedule: ${error.message}`);
-    }
+    const response = await sendRequest("POST", "/schedules", formData);
+    return response;
   },
 
   fetchAllSchedules: async () => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", "/schedules", csrfToken);
-    } catch (error) {
-      throw new Error(`Error fetching all schedules: ${error.message}`);
-    }
+    const response = await sendRequest("GET", "/schedules");
+    return response;
+  },
+
+  selectGetSchedules: async (formData: { year: string }) => {
+    const response = await sendRequest(
+      "GET",
+      "/schedules/customers/selectGetYear",
+      formData
+    );
+    return response;
   },
 
   fetchScheduleById: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("GET", `/schedules/${id}`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error fetching schedule with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("GET", `/schedules/${id}`);
+    return response;
   },
 
   updateSchedule: async (formData: {
@@ -73,20 +60,13 @@ export const schedulesApi = {
     end_time: string;
     allDay: number;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      console.log("updateScheduleの中だよ", formData);
-      return await sendRequest(
-        "POST",
-        `/schedules/${formData.Sid}/update`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(
-        `Error updating schedule with ID ${formData.Sid}: ${error.message}`
-      );
-    }
+    console.log("updateScheduleの中だよ", formData);
+    const response = await sendRequest(
+      "POST",
+      `/schedules/${formData.Sid}/update`,
+      formData
+    );
+    return response;
   },
 
   updateCustomerSchedule: async (formData: {
@@ -105,29 +85,39 @@ export const schedulesApi = {
     allDay: number;
     customers_id: number;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest(
-        "POST",
-        `/schedules/${formData.Sid}/customers/doubleUpdate`,
-        formData,
-        csrfToken
-      );
-    } catch (error) {
-      throw new Error(
-        `Error updating schedule with ID ${formData.Sid}: ${error.message}`
-      );
-    }
+    const response = await sendRequest(
+      "POST",
+      `/schedules/${formData.Sid}/customers/doubleUpdate`,
+      formData
+    );
+    return response;
   },
 
   deleteSchedule: async (id: number) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      return await sendRequest("POST", `/schedules/${id}/delete`, csrfToken);
-    } catch (error) {
-      throw new Error(
-        `Error deleting schedule with ID ${id}: ${error.message}`
-      );
-    }
+    const response = await sendRequest("POST", `/schedules/${id}/delete`);
+    return response;
+  },
+
+  updateCustomerOnlySchedule: async (formData: {
+    customer_name: string;
+    phone_number: string;
+    remarks: string;
+    courses_id: number[];
+    options_id: number[];
+    merchandises_id: number[];
+    hairstyles_id: number[];
+    attendances_id: number[];
+    title: string;
+    start_time: string;
+    end_time: string;
+    allDay: number;
+    customers_id: number;
+  }) => {
+    const response = await sendRequest(
+      "POST",
+      `schedules/${formData.customers_id}/customers/customerOnlyUpdate`,
+      formData
+    );
+    return response;
   },
 };

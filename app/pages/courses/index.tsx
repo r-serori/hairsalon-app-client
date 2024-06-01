@@ -7,15 +7,19 @@ import { RootState } from "../../redux/store";
 
 const courses: React.FC = () => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCourse({}) as any);
+  }, [dispatch]);
+
   const loading = useSelector((state: RootState) => state.course.loading);
+
+  const message = useSelector((state: RootState) => state.course.message);
+
+  const error = useSelector((state: RootState) => state.course.error);
 
   const courses = useSelector((state: RootState) => state.course.course);
   console.log("coursesです");
   console.log(courses);
-
-  useEffect(() => {
-    dispatch(getCourse() as any);
-  }, [dispatch]);
 
   const searchItems = [
     { key: "course_name", value: "コース名" },
@@ -34,6 +38,11 @@ const courses: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 ">
+      {message ? (
+        <p className="py-4 text-blue-700">{message}</p>
+      ) : error ? (
+        <p className="py-4 text-red-700">{error}</p>
+      ) : null}
       <div className="flex space-x-4 mb-4">
         <Link href="/courses/create">新規作成</Link>
       </div>
