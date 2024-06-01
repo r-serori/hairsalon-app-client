@@ -1,7 +1,13 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { customerScheduleApi } from "../../../services/middleTable/customers/customer_schedulesApi";
 import RootState from "../../../redux/reducers/rootReducer";
-import { getSchedule } from "../../schedules/scheduleSlice";
+import {
+  getSchedule,
+  selectGetSchedules,
+  createCustomerSchedule,
+  updateCustomerOnlySchedule,
+  updateCustomerSchedule,
+} from "../../schedules/scheduleSlice";
 
 export const getCustomer_schedules = createAsyncThunk(
   "customer_schedules/getCustomer_schedules",
@@ -44,7 +50,37 @@ const customer_schedulesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.customer_schedules = action.payload.customer_schedules;
+      state.customer_schedules = [
+        ...state.customer_schedules,
+        ...action.payload.customer_schedules,
+      ];
+    });
+    builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
+      state.customer_schedules = [
+        ...state.customer_schedules,
+        ...action.payload.customer_schedules,
+      ];
+    });
+
+    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+      state.customer_schedules = [
+        ...state.customer_schedules,
+        action.payload.customer_schedules,
+      ];
+    });
+
+    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
+      state.customer_schedules = [
+        ...state.customer_schedules,
+        action.payload.customer_schedules,
+      ];
+    });
+
+    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
+      state.customer_schedules = [
+        ...state.customer_schedules,
+        action.payload.customer_schedules,
+      ];
     });
   },
 });

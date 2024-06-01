@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import PrimaryButton from "../../button/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 import { RootState } from "../../../../redux/store";
 import {
@@ -68,6 +69,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
   const [checkName, setCheckName] = React.useState<string[]>([]);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     if (
@@ -325,6 +327,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
       ...EditNode,
       [NodesProp]: EditValue,
     };
+    const update = true;
     console.log("updatedNodeだよ");
     console.log(updatedNode);
     console.log(EditNode.id);
@@ -396,7 +399,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
             console.log(superUpdatedNode);
 
             await dispatch(updateCustomer(superUpdatedNode) as any);
-            await dispatch(getCustomer({}) as any);
+            router.push({
+              pathname: "/customers",
+              query: { update },
+            });
           } else if (NodesProp === "option") {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().changeOptions_id();
@@ -420,7 +426,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
-            await dispatch(getCustomer({}) as any);
+            router.push({
+              pathname: "/customers",
+              query: { update },
+            });
           } else if (NodesProp === "merchandise") {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -444,7 +453,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
-            await dispatch(getCustomer({}) as any);
+            router.push({
+              pathname: "/customers",
+              query: { update },
+            });
           } else if (NodesProp === "hairstyle") {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -468,7 +480,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
-            await dispatch(getCustomer({}) as any);
+            router.push({
+              pathname: "/customers",
+              query: { update },
+            });
           } else if (NodesProp === "attendance") {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -492,7 +507,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
-            await dispatch(getCustomer({}) as any);
+            router.push({
+              pathname: "/customers",
+              query: { update },
+            });
           } else {
             const courses_id = changeMan().defaultChangeCourses_id();
             const options_id = changeMan().defaultChangeOptions_id();
@@ -516,7 +534,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
               attendances_id: attendances_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
-            await dispatch(getCustomer({}) as any);
+            router.push({
+              pathname: "/customers",
+              query: { update },
+            });
           }
           break;
         case "/daily_sales":
@@ -534,7 +555,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     } catch (error) {
       console.error(error);
     } finally {
-      setOpen(false);
+      // setOpen(false);
     }
   };
 

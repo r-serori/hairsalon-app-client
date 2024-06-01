@@ -48,41 +48,46 @@ const course_customersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.course_customers = action.payload.course_customers;
+      state.course_customers = [
+        ...state.course_customers,
+        ...action.payload.course_customers,
+      ];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.course_customers = action.payload.course_customers;
+      state.course_customers = [
+        ...state.course_customers,
+        ...action.payload.course_customers,
+      ];
     });
 
-    // builder.addCase(createCustomer.fulfilled, (state, action) => {
-    //   state.course_customers = state.course_customers.map(
-    //     (stateCourse_customer) =>
-    //       action.payload.course_customers.map((payloadCourse_customer) =>
-    //         stateCourse_customer.customers_id ===
-    //         payloadCourse_customer.customers_id
-    //           ? {
-    //               ...stateCourse_customer,
-    //               ...payloadCourse_customer,
-    //             }
-    //           : stateCourse_customer
-    //       )
-    //   );
-    // });
-    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
-    //   state.course_customers = state.course_customers.map(
-    //     (stateCourse_customer) =>
-    //       action.payload.course_customers.map((payloadCourse_customer) =>
-    //         stateCourse_customer.customers_id ===
-    //         payloadCourse_customer.customers_id
-    //           ? {
-    //               ...stateCourse_customer,
-    //               ...payloadCourse_customer,
-    //             }
-    //           : stateCourse_customer
-    //       )
-    //   );
-    // });
+    builder.addCase(createCustomer.fulfilled, (state, action) => {
+      state.course_customers = [
+        ...state.course_customers.filter(
+          (stateCourse_customer) =>
+            !action.payload.course_customers.some(
+              (payloadCourse_customer) =>
+                stateCourse_customer.customers_id ===
+                payloadCourse_customer.customers_id
+            )
+        ),
+        ...action.payload.course_customers,
+      ];
+    });
+
+    builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.course_customers = [
+        ...state.course_customers.filter(
+          (stateCourse_customer) =>
+            !action.payload.course_customers.some(
+              (payloadCourse_customer) =>
+                stateCourse_customer.customers_id ===
+                payloadCourse_customer.customers_id
+            )
+        ),
+        ...action.payload.course_customers,
+      ];
+    });
   },
 });
 

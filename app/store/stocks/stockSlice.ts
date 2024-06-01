@@ -142,7 +142,7 @@ const stockSlice = createSlice({
     });
     builder.addCase(getStock.fulfilled, (state, action) => {
       state.loading = false;
-      state.stocks = action.payload.stocks;
+      state.stocks = [...state.stocks, ...action.payload.stocks];
       state.message = "在庫情報を取得しました！";
     });
     builder.addCase(getStock.rejected, (state, action) => {
@@ -157,7 +157,7 @@ const stockSlice = createSlice({
     });
     builder.addCase(createStock.fulfilled, (state, action) => {
       state.loading = false;
-      state.stocks.push(action.payload.stock);
+      state.stocks = [...state.stocks, action.payload.stock];
       state.message = "在庫情報を作成しました！";
     });
     builder.addCase(createStock.rejected, (state, action) => {
@@ -172,7 +172,7 @@ const stockSlice = createSlice({
     });
     builder.addCase(getStockById.fulfilled, (state, action) => {
       state.loading = false;
-      state.stocks = action.payload.stock;
+      state.stocks = [...state.stocks, action.payload.stock];
       state.message = "在庫情報を取得しました！";
     });
     builder.addCase(getStockById.rejected, (state, action) => {

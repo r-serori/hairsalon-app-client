@@ -148,7 +148,6 @@ export interface Attendance_timeState {
 export interface RootState {
   // ルートステートの型を定義
   attendance_times: Attendance_timeState[]; // 出席情報の配列
-  attendances?: AttendanceState[]; // 出席情報の配列
   loading: boolean; // ローディング状態
   message: string | null; // メッセージ
   error: string | null; // エラーメッセージ
@@ -175,7 +174,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "勤怠時間と画像の取得に成功しました！";
-      state.attendance_times = action.payload.attendanceTimes;
+      state.attendance_times = [
+        ...state.attendance_times,
+        ...action.payload.attendance_times,
+      ];
     });
     builder.addCase(selectGetAttendanceTimes.rejected, (state, action) => {
       state.loading = false;
@@ -228,12 +230,10 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(createStartTime.fulfilled, (state, action) => {
       state.loading = false;
-      state.attendance_times.push(action.payload.attendance_time);
-      state.attendances = state.attendances.map((attendance) =>
-        attendance.id === action.payload.attendance.id
-          ? { ...attendance, ...action.payload.attendance }
-          : attendance
-      );
+      state.attendance_times = [
+        ...state.attendance_times,
+        action.payload.attendance_time,
+      ];
       state.message = "出勤時間と画像の登録に成功しました！";
     });
     builder.addCase(createStartTime.rejected, (state, action) => {
@@ -252,11 +252,6 @@ const attendance_timeSlice = createSlice({
         attendance_time.id === action.payload.attendance_time.id
           ? { ...attendance_time, ...action.payload.attendance_time }
           : attendance_time
-      );
-      state.attendances = state.attendances.map((attendance) =>
-        attendance.id === action.payload.attendance.id
-          ? { ...attendance, ...action.payload.attendance }
-          : attendance
       );
       state.message = "退勤時間と画像の登録に成功しました！";
     });

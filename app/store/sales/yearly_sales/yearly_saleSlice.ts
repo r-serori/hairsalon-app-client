@@ -119,7 +119,10 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(getYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.yearly_sales = action.payload.yearlySales;
+      state.yearly_sales = [
+        ...state.yearly_sales,
+        ...action.payload.yearlySales,
+      ];
       state.message = "年間売上の取得に成功しました！";
     });
     builder.addCase(getYearly_sales.rejected, (state, action) => {
@@ -134,7 +137,7 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(createYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.yearly_sales.push(action.payload.yearlySale);
+      state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
       state.message = "年間売上の登録に成功しました！";
     });
     builder.addCase(createYearly_sales.rejected, (state, action) => {
@@ -149,7 +152,7 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(getYearly_salesById.fulfilled, (state, action) => {
       state.loading = false;
-      state.yearly_sales = action.payload.yearlySale;
+      state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
       state.message = "年間売上の取得に成功しました！";
     });
     builder.addCase(getYearly_salesById.rejected, (state, action) => {

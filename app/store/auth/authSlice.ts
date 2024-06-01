@@ -107,7 +107,7 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth.push(action.payload.responseUser);
+      state.auth = [...state.auth, action.payload.responseUser];
       state.message = `お帰りなさい！ ${action.payload.responseUser.login_id}さん！`;
     });
     builder.addCase(login.rejected, (state, action) => {
@@ -121,7 +121,7 @@ const authSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth.push(action.payload.responseUser);
+      state.auth = [...state.auth, action.payload.responseUser];
       state.message = `登録に成功しました！ ${action.payload.responseUser.login_id}さん！`;
     });
     builder.addCase(register.rejected, (state, action) => {

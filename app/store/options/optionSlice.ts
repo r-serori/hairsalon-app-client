@@ -116,7 +116,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(getOption.fulfilled, (state, action) => {
       state.loading = false;
-      state.option = action.payload.options;
+      state.option = [...state.option, ...action.payload.options];
       state.message = "オプションの取得に成功しました！";
     });
     builder.addCase(getOption.rejected, (state, action) => {
@@ -131,7 +131,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(createOption.fulfilled, (state, action) => {
       state.loading = false;
-      state.option.push(action.payload.option);
+      state.option = [...state.option, action.payload.option];
       state.message = "オプションの登録に成功しました！";
     });
     builder.addCase(createOption.rejected, (state, action) => {
@@ -146,7 +146,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(getOptionById.fulfilled, (state, action) => {
       state.loading = false;
-      state.option = action.payload.option;
+      state.option = [...state.option, action.payload.option];
       state.message = "オプション情報を取得しました！";
     });
     builder.addCase(getOptionById.rejected, (state, action) => {
@@ -186,16 +186,16 @@ const optionSlice = createSlice({
       state.message = "オプション情報を削除しました！";
     });
     builder.addCase(deleteOption.rejected, (state, action) => {
-      state.error = action.error.message!;
+      state.error = action.error.message;
       state.loading = false;
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.option = action.payload.options;
+      state.option = [...state.option, ...action.payload.options];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.option = action.payload.options;
+      state.option = [...state.option, ...action.payload.options];
     });
   },
 });

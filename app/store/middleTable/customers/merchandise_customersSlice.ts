@@ -55,37 +55,33 @@ const merchandise_customersSlice = createSlice({
       state.merchandise_customers = action.payload.merchandise_customers;
     });
 
-    // builder.addCase(createCustomer.fulfilled, (state, action) => {
-    //   state.merchandise_customers = state.merchandise_customers.map(
-    //     (stateMerchandise_customer) =>
-    //       action.payload.merchandise_customers.map(
-    //         (payloadMerchandise_customer) =>
-    //           stateMerchandise_customer.customers_id ===
-    //           payloadMerchandise_customer.customers_id
-    //             ? {
-    //                 ...stateMerchandise_customer,
-    //                 ...payloadMerchandise_customer,
-    //               }
-    //             : stateMerchandise_customer
-    //       )
-    //   );
-    // });
+    builder.addCase(createCustomer.fulfilled, (state, action) => {
+      state.merchandise_customers = [
+        ...state.merchandise_customers.filter(
+          (stateMerchandise_customer) =>
+            !action.payload.merchandise_customers.some(
+              (payloadMerchandise_customer) =>
+                stateMerchandise_customer.customers_id ===
+                payloadMerchandise_customer.customers_id
+            )
+        ),
+        ...action.payload.merchandise_customers,
+      ];
+    });
 
-    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
-    //   state.merchandise_customers = state.merchandise_customers.map(
-    //     (stateMerchandise_customer) =>
-    //       action.payload.merchandise_customers.map(
-    //         (payloadMerchandise_customer) =>
-    //           stateMerchandise_customer.customers_id ===
-    //           payloadMerchandise_customer.customers_id
-    //             ? {
-    //                 ...stateMerchandise_customer,
-    //                 ...payloadMerchandise_customer,
-    //               }
-    //             : stateMerchandise_customer
-    //       )
-    //   );
-    // });
+    builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.merchandise_customers = [
+        ...state.merchandise_customers.filter(
+          (stateMerchandise_customer) =>
+            !action.payload.merchandise_customers.some(
+              (payloadMerchandise_customer) =>
+                stateMerchandise_customer.customers_id ===
+                payloadMerchandise_customer.customers_id
+            )
+        ),
+        ...action.payload.merchandise_customers,
+      ];
+    });
   },
 });
 

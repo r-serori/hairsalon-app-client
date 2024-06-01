@@ -133,7 +133,10 @@ const merchandiseSlice = createSlice({
     builder.addCase(getMerchandise.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "物販商品の取得に成功しました！";
-      state.merchandise = action.payload.merchandises;
+      state.merchandise = [
+        ...state.merchandise,
+        ...action.payload.merchandises,
+      ];
     });
     builder.addCase(getMerchandise.rejected, (state, action) => {
       state.loading = false;
@@ -148,7 +151,7 @@ const merchandiseSlice = createSlice({
     builder.addCase(createMerchandise.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "物販商品の作成に成功しました！";
-      state.merchandise.push(action.payload.merchandise);
+      state.merchandise = [...state.merchandise, action.payload.merchandise];
     });
     builder.addCase(createMerchandise.rejected, (state, action) => {
       state.loading = false;
@@ -162,7 +165,7 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(getMerchandiseById.fulfilled, (state, action) => {
       state.loading = false;
-      state.merchandise = action.payload.merchandise;
+      state.merchandise = [...state.merchandise, action.payload.merchandise];
       state.message = "物販商品の取得に成功しました！";
     });
     builder.addCase(getMerchandiseById.rejected, (state, action) => {
@@ -206,11 +209,17 @@ const merchandiseSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.merchandise = action.payload.merchandises;
+      state.merchandise = [
+        ...state.merchandise,
+        ...action.payload.merchandises,
+      ];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.merchandise = action.payload.merchandises;
+      state.merchandise = [
+        ...state.merchandise,
+        ...action.payload.merchandises,
+      ];
     });
   },
 });

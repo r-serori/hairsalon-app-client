@@ -5,16 +5,18 @@ import { useEffect } from "react";
 import { getCustomer } from "../../store/customers/customerSlice";
 import { RootState } from "../../redux/store";
 
-const customers: React.FC = () => {
+interface CustomerProps {
+  update?: boolean;
+}
+
+const customers: React.FC<CustomerProps> = ({ update }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    try {
+    if (update) {
+      return;
+    } else {
       dispatch(getCustomer({}) as any);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("顧客取得！！");
     }
   }, [dispatch]);
 

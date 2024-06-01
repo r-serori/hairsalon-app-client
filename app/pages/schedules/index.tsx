@@ -15,14 +15,17 @@ import timezone from "dayjs/plugin/timezone";
 
 interface Schedule {
   year?: string;
+  update?: boolean;
 }
 
-const schedules: React.FC<Schedule> = ({ year }) => {
+const schedules: React.FC<Schedule> = ({ year, update }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     try {
       if (year) {
         dispatch(selectGetSchedules({ year }) as any);
+      } else if (update) {
+        return;
       } else {
         dispatch(getSchedule({}) as any);
       }

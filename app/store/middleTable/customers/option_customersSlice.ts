@@ -47,42 +47,46 @@ const option_customersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.option_customers = action.payload.option_customers;
+      state.option_customers = [
+        ...state.option_customers,
+        ...action.payload.option_customers,
+      ];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.option_customers = action.payload.option_customers;
+      state.option_customers = [
+        ...state.option_customers,
+        ...action.payload.option_customers,
+      ];
     });
 
-    // builder.addCase(createCustomer.fulfilled, (state, action) => {
-    //   state.option_customers = state.option_customers.map(
-    //     (stateOption_customer) =>
-    //       action.payload.option_customers.map((payloadOption_customer) =>
-    //         stateOption_customer.customers_id ===
-    //         payloadOption_customer.customers_id
-    //           ? {
-    //               ...stateOption_customer,
-    //               ...payloadOption_customer,
-    //             }
-    //           : stateOption_customer
-    //       )
-    //   );
-    // });
+    builder.addCase(createCustomer.fulfilled, (state, action) => {
+      state.option_customers = [
+        ...state.option_customers.filter(
+          (stateOptionCustomer) =>
+            !action.payload.option_customers.some(
+              (payloadOptionCustomer) =>
+                stateOptionCustomer.customers_id ===
+                payloadOptionCustomer.customers_id
+            )
+        ),
+        ...action.payload.option_customers,
+      ];
+    });
 
-    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
-    //   state.option_customers = state.option_customers.map(
-    //     (stateOption_customer) =>
-    //       action.payload.option_customers.map((payloadOption_customer) =>
-    //         stateOption_customer.customers_id ===
-    //         payloadOption_customer.customers_id
-    //           ? {
-    //               ...stateOption_customer,
-    //               ...payloadOption_customer,
-    //             }
-    //           : stateOption_customer
-    //       )
-    //   );
-    // });
+    builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.option_customers = [
+        ...state.option_customers.filter(
+          (stateOptionCustomers) =>
+            !action.payload.option_customers.some(
+              (payloadOptionCustomers) =>
+                stateOptionCustomers.customers_id ===
+                payloadOptionCustomers.customers_id
+            )
+        ),
+        ...action.payload.option_customers,
+      ];
+    });
   },
 });
 

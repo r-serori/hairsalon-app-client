@@ -143,7 +143,7 @@ const customerSlice = createSlice({
     });
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers = action.payload.customers;
+      state.customers = [...state.customers, ...action.payload.customers];
       state.message = "顧客情報を取得しました！";
     });
     builder.addCase(getCustomer.rejected, (state, action) => {
@@ -158,8 +158,7 @@ const customerSlice = createSlice({
     });
     builder.addCase(createCustomer.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers.push(action.payload.customer);
-
+      state.customers = [...state.customers, action.payload.customer];
       state.message = "顧客情報を作成しました！";
     });
     builder.addCase(createCustomer.rejected, (state, action) => {
@@ -174,7 +173,7 @@ const customerSlice = createSlice({
     });
     builder.addCase(getCustomerById.fulfilled, (state, action) => {
       state.loading = false;
-      state.customers = action.payload.customer;
+      state.customers = [...state.customers, action.payload.customer];
       state.message = "顧客情報を取得しました！";
     });
     builder.addCase(getCustomerById.rejected, (state, action) => {
@@ -190,11 +189,11 @@ const customerSlice = createSlice({
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
       state.loading = false;
-      // state.customers = state.customers.map((customer) =>
-      //   customer.id === action.payload.customer.id
-      //     ? { ...customer, ...action.payload.customer }
-      //     : customer
-      // );
+      state.customers = state.customers.map((customer) =>
+        customer.id === action.payload.customer.id
+          ? { ...customer, ...action.payload.customer }
+          : customer
+      );
       state.message = "顧客情報を更新しました！";
     });
 
@@ -220,7 +219,7 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.customers = action.payload.customers;
+      state.customers = [...state.customers, ...action.payload.customers];
     });
   },
 });

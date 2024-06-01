@@ -390,6 +390,11 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         await dispatch(
           createCustomerSchedule(scheduleAndCustomerFormData) as any
         );
+        const update = "true";
+        router.push({
+          pathname: "/schedules",
+          query: { update },
+        });
       } else if (
         //新規予約、既存顧客、タイトルなし,イベントクリック以外
         newReservation &&

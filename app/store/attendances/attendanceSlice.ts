@@ -3,6 +3,10 @@ import { attendanceApi } from "../../services/attendances/api";
 import RootState from "../../redux/reducers/rootReducer";
 import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
+import {
+  createStartTime,
+  createEndTime,
+} from "../attendances/attendance_times/attendance_timesSlice";
 
 // APIから出席情報を取得する非同期アクション//get
 export const getAttendance = createAsyncThunk(
@@ -147,7 +151,7 @@ const attendanceSlice = createSlice({
     builder.addCase(getAttendance.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "スタッフ情報を取得しました！";
-      state.attendances = action.payload.attendances;
+      state.attendances = [...state.attendances, ...action.payload.attendances];
     });
     builder.addCase(getAttendance.rejected, (state, action) => {
       state.loading = false;
@@ -162,7 +166,7 @@ const attendanceSlice = createSlice({
     builder.addCase(createAttendance.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "スタッフ情報を作成しました！";
-      state.attendances.push(action.payload.attendance);
+      state.attendances = [...state.attendances, action.payload.attendance];
     });
     builder.addCase(createAttendance.rejected, (state, action) => {
       state.loading = false;
@@ -177,7 +181,7 @@ const attendanceSlice = createSlice({
     builder.addCase(getAttendanceById.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "スタッフ情報を取得しました！";
-      state.attendances = action.payload.attendance;
+      state.attendances = [...state.attendances, action.payload.attendance];
     });
     builder.addCase(getAttendanceById.rejected, (state, action) => {
       state.loading = false;
@@ -222,11 +226,27 @@ const attendanceSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.attendances = action.payload.attendances;
+      state.attendances = [...state.attendances, ...action.payload.attendances];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.attendances = action.payload.attendances;
+      state.attendances = [...state.attendances, ...action.payload.attendances];
+    });
+
+    builder.addCase(createStartTime.fulfilled, (state, action) => {
+      state.attendances = state.attendances.map((attendance) =>
+        attendance.id === action.payload.attendance.id
+          ? { ...attendance, ...action.payload.attendance }
+          : attendance
+      );
+    });
+
+    builder.addCase(createEndTime.fulfilled, (state, action) => {
+      state.attendances = state.attendances.map((attendance) =>
+        attendance.id === action.payload.attendance.id
+          ? { ...attendance, ...action.payload.attendance }
+          : attendance
+      );
     });
   },
 });

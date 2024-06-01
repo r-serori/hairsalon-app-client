@@ -115,7 +115,7 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(getDaily_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.daily_sales = action.payload.dailySales;
+      state.daily_sales = [...state.daily_sales, ...action.payload.dailySales];
       state.message = "日次売上の取得に成功しました！";
     });
     builder.addCase(getDaily_sales.rejected, (state, action) => {
@@ -130,7 +130,7 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(createDaily_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.daily_sales.push(action.payload.dailySale);
+      state.daily_sales = [...state.daily_sales, action.payload.dailySale];
       state.message = "日次売上の作成に成功しました！";
     });
     builder.addCase(createDaily_sales.rejected, (state, action) => {
@@ -145,7 +145,7 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(getDaily_salesById.fulfilled, (state, action) => {
       state.loading = false;
-      state.daily_sales = action.payload.dailySale;
+      state.daily_sales = [...state.daily_sales, action.payload.dailySale];
       state.message = "日次売上の取得に成功しました！";
     });
     builder.addCase(getDaily_salesById.rejected, (state, action) => {

@@ -7,6 +7,7 @@ import {
   updateCustomer,
 } from "../../customers/customerSlice";
 import { getSchedule } from "../../schedules/scheduleSlice";
+import { stat } from "fs";
 
 export const getCustomer_attendances = createAsyncThunk(
   "customer_attendances/getCustomer_attendances",
@@ -50,44 +51,46 @@ const customer_attendancesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.customer_attendances = action.payload.customer_attendances;
+      state.customer_attendances = [
+        ...state.customer_attendances,
+        ...action.payload.customer_attendances,
+      ];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.customer_attendances = action.payload.customer_attendances;
+      state.customer_attendances = [
+        ...state.customer_attendances,
+        ...action.payload.customer_attendances,
+      ];
     });
 
-    // builder.addCase(createCustomer.fulfilled, (state, action) => {
-    //   state.customer_attendances = state.customer_attendances.map(
-    //     (stateCustomer_attendance) =>
-    //       action.payload.customer_attendances.map(
-    //         (payloadCustomer_attendance) =>
-    //           stateCustomer_attendance.customers_id ===
-    //           payloadCustomer_attendance.customers_id
-    //             ? {
-    //                 ...stateCustomer_attendance,
-    //                 ...payloadCustomer_attendance,
-    //               }
-    //             : stateCustomer_attendance
-    //       )
-    //   );
-    // });
+    builder.addCase(createCustomer.fulfilled, (state, action) => {
+      state.customer_attendances = [
+        ...state.customer_attendances.filter(
+          (stateCustomerAttendance) =>
+            !action.payload.customer_attendances.some(
+              (payloadCustomerAttendance) =>
+                stateCustomerAttendance.customers_id ===
+                payloadCustomerAttendance.customers_id
+            )
+        ),
+        ...action.payload.customer_attendances,
+      ];
+    });
 
-    // builder.addCase(updateCustomer.fulfilled, (state, action) => {
-    //   state.customer_attendances = state.customer_attendances.map(
-    //     (stateCustomer_attendance) =>
-    //       action.payload.customer_attendances.map(
-    //         (payloadCustomer_attendance) =>
-    //           stateCustomer_attendance.customers_id ===
-    //           payloadCustomer_attendance.customers_id
-    //             ? {
-    //                 ...stateCustomer_attendance,
-    //                 ...payloadCustomer_attendance,
-    //               }
-    //             : stateCustomer_attendance
-    //       )
-    //   );
-    // });
+    builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.customer_attendances = [
+        ...state.customer_attendances.filter(
+          (stateCustomerAttendance) =>
+            !action.payload.customer_attendances.some(
+              (payloadCustomerAttendance) =>
+                stateCustomerAttendance.customers_id ===
+                payloadCustomerAttendance.customers_id
+            )
+        ),
+        ...action.payload.customer_attendances,
+      ];
+    });
   },
 });
 

@@ -2,6 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/yearly_sales": "pages/yearly_sales.js",
-  "/": "pages/index.js"
+  "/schedules": "pages/schedules.js",
+  "/login": "pages/login.js",
+  "/customers": "pages/customers.js"
 }

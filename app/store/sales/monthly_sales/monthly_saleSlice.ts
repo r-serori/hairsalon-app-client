@@ -123,7 +123,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(getMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.monthly_sales = action.payload.monthlySales;
+      state.monthly_sales = [
+        ...state.monthly_sales,
+        ...action.payload.monthlySales,
+      ];
       state.message = "月次売上の取得に成功しました！";
     });
     builder.addCase(getMonthly_sales.rejected, (state, action) => {
@@ -138,7 +141,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(createMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
-      state.monthly_sales.push(action.payload.monthlySale);
+      state.monthly_sales = [
+        ...state.monthly_sales,
+        action.payload.monthlySale,
+      ];
       state.message = "月次売上の作成に成功しました！";
     });
     builder.addCase(createMonthly_sales.rejected, (state, action) => {
@@ -153,7 +159,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(getMonthly_salesById.fulfilled, (state, action) => {
       state.loading = false;
-      state.monthly_sales = action.payload.monthlySale;
+      state.monthly_sales = [
+        ...state.monthly_sales,
+        action.payload.monthlySale,
+      ];
       state.message = "月次売上の取得に成功しました！";
     });
     builder.addCase(getMonthly_salesById.rejected, (state, action) => {

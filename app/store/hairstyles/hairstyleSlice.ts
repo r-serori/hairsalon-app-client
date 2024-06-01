@@ -127,7 +127,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(getHairstyle.fulfilled, (state, action) => {
       state.loading = false;
-      state.hairstyle = action.payload.hairstyles;
+      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyle];
       state.message = "ヘアスタイル情報を取得しました！ ";
     });
     builder.addCase(getHairstyle.rejected, (state, action) => {
@@ -142,7 +142,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(createHairstyle.fulfilled, (state, action) => {
       state.loading = false;
-      state.hairstyle.push(action.payload.hairstyle);
+      state.hairstyle = [...state.hairstyle, action.payload.hairstyle];
       state.message = "ヘアスタイル情報を作成しました！";
     });
     builder.addCase(createHairstyle.rejected, (state, action) => {
@@ -157,7 +157,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(getHairstyleById.fulfilled, (state, action) => {
       state.loading = false;
-      state.hairstyle = action.payload.hairstyle;
+      state.hairstyle = [...state.hairstyle, action.payload.hairstyle];
       state.message = "ヘアスタイル情報を取得しました！";
     });
     builder.addCase(getHairstyleById.rejected, (state, action) => {
@@ -202,11 +202,11 @@ const hairstyleSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.hairstyle = action.payload.hairstyles;
+      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyles];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.hairstyle = action.payload.hairstyles;
+      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyles];
     });
   },
 });

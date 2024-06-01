@@ -135,7 +135,7 @@ const courseSlice = createSlice({
     builder.addCase(getCourse.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "コースの取得に成功しました！";
-      state.course = action.payload.courses;
+      state.course = [...state.course, ...action.payload.courses];
     });
     builder.addCase(getCourse.rejected, (state, action) => {
       state.loading = false;
@@ -150,7 +150,7 @@ const courseSlice = createSlice({
     builder.addCase(createCourse.fulfilled, (state, action) => {
       state.loading = false;
       state.message = "コースの作成に成功しました！";
-      state.course.push(action.payload.course);
+      state.course = [...state.course, action.payload.course];
     });
     builder.addCase(createCourse.rejected, (state, action) => {
       state.loading = false;
@@ -164,7 +164,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(getCourseById.fulfilled, (state, action) => {
       state.loading = false;
-      state.course = action.payload.course;
+      state.course = [...state.course, action.payload.course];
     });
     builder.addCase(getCourseById.rejected, (state, action) => {
       state.loading = false;
@@ -208,11 +208,11 @@ const courseSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.course = action.payload.courses;
+      state.course = [...state.course, ...action.payload.courses];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.course = action.payload.courses;
+      state.course = [...state.course, ...action.payload.courses];
     });
   },
 });

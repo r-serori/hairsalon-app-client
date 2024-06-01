@@ -238,7 +238,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(getSchedule.fulfilled, (state, action) => {
         state.loading = false;
-        state.schedule = action.payload.schedules;
+        state.schedule = [...state.schedule, ...action.payload.schedules];
         state.message = "スケジュールの取得に成功しました！";
       })
       .addCase(getSchedule.rejected, (state, action) => {
@@ -252,7 +252,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(createSchedule.fulfilled, (state, action) => {
         state.loading = false;
-        state.schedule.push(action.payload.schedule);
+        state.schedule = [...state.schedule, ...action.payload.schedule];
         state.message = "スケジュールの作成に成功しました！";
       })
       .addCase(createSchedule.rejected, (state, action) => {
@@ -279,7 +279,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(getScheduleById.fulfilled, (state, action) => {
         state.loading = false;
-        state.schedule = action.payload.schedule;
+        state.schedule = [...state.schedule, action.payload.schedule];
         state.message = "スケジュールの取得に成功しました！";
       })
       .addCase(getScheduleById.rejected, (state, action) => {
@@ -293,6 +293,14 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateSchedule.fulfilled, (state, action) => {
         state.loading = false;
+        state.schedule = state.schedule.map((schedule) =>
+          schedule.id === action.payload.schedule.id
+            ? {
+                ...schedule,
+                ...action.payload.schedule,
+              }
+            : schedule
+        );
         state.message = "スケジュールの更新に成功しました！";
       })
       .addCase(updateSchedule.rejected, (state, action) => {
@@ -306,6 +314,14 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateCustomerSchedule.fulfilled, (state, action) => {
         state.loading = false;
+        state.schedule = state.schedule.map((schedule) =>
+          schedule.id === action.payload.schedule.id
+            ? {
+                ...schedule,
+                ...action.payload.schedule,
+              }
+            : schedule
+        );
         state.message = "スケジュールと顧客情報の更新に成功しました！";
       })
       .addCase(updateCustomerSchedule.rejected, (state, action) => {
@@ -320,6 +336,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
         state.loading = false;
+        state.schedule = [...state.schedule, ...action.payload.schedule];
         state.message = "顧客情報の更新とスケジュールの作成に成功しました！";
       })
       .addCase(updateCustomerOnlySchedule.rejected, (state, action) => {

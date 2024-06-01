@@ -131,8 +131,11 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(getStockCategory.fulfilled, (state, action) => {
       state.loading = false;
-      state.stock_category = action.payload.stockCategories;
-      state.message = action.payload.message;
+      state.stock_category = [
+        ...state.stock_category,
+        ...action.payload.stockCategories,
+      ];
+      state.message = "在庫カテゴリーの取得に成功しました！";
     });
     builder.addCase(getStockCategory.rejected, (state, action) => {
       state.loading = false;
@@ -146,8 +149,11 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(createStockCategory.fulfilled, (state, action) => {
       state.loading = false;
-      state.stock_category.push(action.payload.stockCategory);
-      state.message = action.payload.message;
+      state.stock_category = [
+        ...state.stock_category,
+        action.payload.stockCategory,
+      ];
+      state.message = "在庫カテゴリーの作成に成功しました！";
     });
     builder.addCase(createStockCategory.rejected, (state, action) => {
       state.error = action.error.message;
@@ -160,9 +166,12 @@ const stock_categorySlice = createSlice({
       state.message = null;
     });
     builder.addCase(getStockCategoryById.fulfilled, (state, action) => {
-      state.stock_category = action.payload.stockCategory;
+      state.stock_category = [
+        ...state.stock_category,
+        action.payload.stockCategory,
+      ];
       state.loading = false;
-      state.message = action.payload.message;
+      state.message = "在庫カテゴリーの取得に成功しました！";
     });
     builder.addCase(getStockCategoryById.rejected, (state, action) => {
       state.error = action.error.message;
@@ -181,7 +190,7 @@ const stock_categorySlice = createSlice({
           ? { ...stock_category, ...action.payload.stockCategory }
           : stock_category
       );
-      state.message = action.payload.message;
+      state.message = "在庫カテゴリーの更新に成功しました！";
     });
     builder.addCase(updateStockCategory.rejected, (state, action) => {
       state.error = action.error.message;
@@ -198,7 +207,7 @@ const stock_categorySlice = createSlice({
       state.stock_category = state.stock_category.filter(
         (stock_category) => stock_category.id !== action.payload.deleteId
       );
-      state.message = action.payload.message;
+      state.message = "在庫カテゴリーの削除に成功しました！";
     });
     builder.addCase(deleteStockCategory.rejected, (state, action) => {
       state.error = action.error.message;
