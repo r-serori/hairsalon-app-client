@@ -6,8 +6,12 @@ import {
   createCustomer,
   updateCustomer,
 } from "../../customers/customerSlice";
-import { getSchedule } from "../../schedules/scheduleSlice";
-import { stat } from "fs";
+import {
+  getSchedule,
+  createCustomerSchedule,
+  updateCustomerOnlySchedule,
+  updateCustomerSchedule,
+} from "../../schedules/scheduleSlice";
 
 export const getCustomer_attendances = createAsyncThunk(
   "customer_attendances/getCustomer_attendances",
@@ -79,6 +83,41 @@ const customer_attendancesSlice = createSlice({
     });
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.customer_attendances = [
+        ...state.customer_attendances.filter(
+          (stateCustomerAttendance) =>
+            !action.payload.customer_attendances.some(
+              (payloadCustomerAttendance) =>
+                stateCustomerAttendance.customers_id ===
+                payloadCustomerAttendance.customers_id
+            )
+        ),
+        ...action.payload.customer_attendances,
+      ];
+    });
+
+    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+      state.customer_attendances = [
+        ...state.customer_attendances,
+        ...action.payload.customer_attendances,
+      ];
+    });
+
+    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
+      state.customer_attendances = [
+        ...state.customer_attendances.filter(
+          (stateCustomerAttendance) =>
+            !action.payload.customer_attendances.some(
+              (payloadCustomerAttendance) =>
+                stateCustomerAttendance.customers_id ===
+                payloadCustomerAttendance.customers_id
+            )
+        ),
+        ...action.payload.customer_attendances,
+      ];
+    });
+
+    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
       state.customer_attendances = [
         ...state.customer_attendances.filter(
           (stateCustomerAttendance) =>

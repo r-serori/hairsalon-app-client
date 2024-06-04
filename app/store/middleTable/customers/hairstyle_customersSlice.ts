@@ -6,7 +6,12 @@ import {
   createCustomer,
   updateCustomer,
 } from "../../customers/customerSlice";
-import { getSchedule } from "../../schedules/scheduleSlice";
+import {
+  getSchedule,
+  createCustomerSchedule,
+  updateCustomerOnlySchedule,
+  updateCustomerSchedule,
+} from "../../schedules/scheduleSlice";
 
 export const getHairstyle_customers = createAsyncThunk(
   "hairstyle_customers/getHairstyle_customers",
@@ -70,6 +75,41 @@ const hairstyle_customersSlice = createSlice({
     });
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.hairstyle_customers = [
+        ...state.hairstyle_customers.filter(
+          (stateHairstyleCustomer) =>
+            !action.payload.hairstyle_customers.some(
+              (payloadHairstyleCustomer) =>
+                stateHairstyleCustomer.customers_id ===
+                payloadHairstyleCustomer.customers_id
+            )
+        ),
+        ...action.payload.hairstyle_customers,
+      ];
+    });
+
+    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+      state.hairstyle_customers = [
+        ...state.hairstyle_customers,
+        ...action.payload.hairstyle_customers,
+      ];
+    });
+
+    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
+      state.hairstyle_customers = [
+        ...state.hairstyle_customers.filter(
+          (stateHairstyleCustomer) =>
+            !action.payload.hairstyle_customers.some(
+              (payloadHairstyleCustomer) =>
+                stateHairstyleCustomer.customers_id ===
+                payloadHairstyleCustomer.customers_id
+            )
+        ),
+        ...action.payload.hairstyle_customers,
+      ];
+    });
+
+    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
       state.hairstyle_customers = [
         ...state.hairstyle_customers.filter(
           (stateHairstyleCustomer) =>

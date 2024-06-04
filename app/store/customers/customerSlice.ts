@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { customerApi } from "../../services/customers/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { getSchedule } from "../schedules/scheduleSlice";
+import {
+  getSchedule,
+  createCustomerSchedule,
+  updateCustomerOnlySchedule,
+  updateCustomerSchedule,
+} from "../../store/schedules/scheduleSlice";
 
 export const getCustomer = createAsyncThunk(
   "customer/getCustomer",
@@ -220,6 +225,26 @@ const customerSlice = createSlice({
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.customers = [...state.customers, ...action.payload.customers];
+    });
+
+    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+      state.customers = [...state.customers, action.payload.customer];
+    });
+
+    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
+      state.customers = state.customers.map((customer) =>
+        customer.id === action.payload.customer.id
+          ? { ...customer, ...action.payload.customer }
+          : customer
+      );
+    });
+
+    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
+      state.customers = state.customers.map((customer) =>
+        customer.id === action.payload.customer.id
+          ? { ...customer, ...action.payload.customer }
+          : customer
+      );
     });
   },
 });

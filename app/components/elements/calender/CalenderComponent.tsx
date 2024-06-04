@@ -84,6 +84,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
           <div className="mr-auto">
             <EasyModal open={easyOpen} setOpen={setEasyOpen} />
           </div>
+
           <div className="flex justify-start items-center ">
             <SalesModal
               showModal={DailySalesModal}

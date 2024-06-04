@@ -176,7 +176,7 @@ const attendance_timeSlice = createSlice({
       state.message = "勤怠時間と画像の取得に成功しました！";
       state.attendance_times = [
         ...state.attendance_times,
-        ...action.payload.attendance_times,
+        ...action.payload.attendanceTimes,
       ];
     });
     builder.addCase(selectGetAttendanceTimes.rejected, (state, action) => {
@@ -193,8 +193,11 @@ const attendance_timeSlice = createSlice({
       state.loading = false;
       state.message = "出勤時間と画像の更新に成功しました！";
       state.attendance_times = state.attendance_times.map((attendance_time) =>
-        attendance_time.id === action.payload.attendance_time.id
-          ? { ...attendance_time, ...action.payload.attendance_time }
+        attendance_time.id === action.payload.attendanceTime.id
+          ? {
+              ...attendance_time,
+              ...action.payload.attendanceTime,
+            }
           : attendance_time
       );
     });
@@ -212,8 +215,8 @@ const attendance_timeSlice = createSlice({
       state.loading = false;
       state.message = "退勤時間と画像の更新に成功しました！";
       state.attendance_times = state.attendance_times.map((attendance_time) =>
-        attendance_time.id === action.payload.attendance_time.id
-          ? { ...attendance_time, ...action.payload.attendance_time }
+        attendance_time.id === action.payload.attendanceTime.id
+          ? { ...attendance_time, ...action.payload.attendanceTime }
           : attendance_time
       );
     });
@@ -232,7 +235,7 @@ const attendance_timeSlice = createSlice({
       state.loading = false;
       state.attendance_times = [
         ...state.attendance_times,
-        action.payload.attendance_time,
+        action.payload.attendanceTime,
       ];
       state.message = "出勤時間と画像の登録に成功しました！";
     });
@@ -249,8 +252,11 @@ const attendance_timeSlice = createSlice({
     builder.addCase(createEndTime.fulfilled, (state, action) => {
       state.loading = false;
       state.attendance_times = state.attendance_times.map((attendance_time) =>
-        attendance_time.id === action.payload.attendance_time.id
-          ? { ...attendance_time, ...action.payload.attendance_time }
+        attendance_time.id === action.payload.attendanceTime.id
+          ? {
+              ...attendance_time,
+              ...action.payload.attendanceTime,
+            }
           : attendance_time
       );
       state.message = "退勤時間と画像の登録に成功しました！";

@@ -40,27 +40,39 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
   const dispatch = useDispatch();
   const router = useRouter();
   const webcamRef = useRef(null);
+
+  const [edit, setEdit] = useState(
+    link === "/attendanceTimeStart" || link === "/attendanceTimeEnd"
+      ? true
+      : false
+  );
+
+  const [shotEdit, setShotEdit] = useState(false);
+
   const [photo, setPhoto] = useState(
-    link === "/attendance_timesStart"
+    link === "/attendanceTimeStart" && edit
       ? node.start_photo_path
-      : link === "/attendance_timesEnd"
+      : link === "/attendanceTimeEnd" && edit
       ? node.end_photo_path
       : null
   );
   const [time, setTime] = useState<Dayjs | null>(
-    link === "/attendance_timesStart"
+    link === "/attendanceTimeStart" && node.start_time
       ? dayjs(node.start_time).utc().tz("Asia/Tokyo")
-      : link === "/attendance_timesEnd"
+      : link === "/attendanceTimeEnd" && node.end_time
       ? dayjs(node.end_time).utc().tz("Asia/Tokyo")
-      : dayjs().utc().tz("Asia/Tokyo")
+      : link === "/attendanceTimeShots"
+      ? dayjs().utc().tz("Asia/Tokyo")
+      : null
   );
+
   const [showTime, setShowTime] = useState(
-    link === "/attendance_timesStart" && node.start_time
+    link === "/attendanceTimeStart" && node.start_time
       ? dayjs(node.start_time)
           .utc()
           .tz("Asia/Tokyo")
           .format("YYYY/MM/DD HH:mm:ss")
-      : link === "/attendance_timesEnd" && node.end_time
+      : link === "/attendanceTimeEnd" && node.end_time
       ? dayjs(node.end_time)
           .utc()
           .tz("Asia/Tokyo")
@@ -76,17 +88,20 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
     link === "/attendanceTimeShots" ? true : false
   );
 
-  const [edit, setEdit] = useState(false);
+  console.log("edit", edit);
+
+  const [editEnd, setEditEnd] = useState(false);
 
   const handleUserMedia = () => {
     setIsLoading(false);
+    setShotEdit(true);
   };
 
   const handleCapture = () => {
     if (
-      link === "/attendance_timesStart" ||
+      link === "/attendanceTimeStart" ||
       // && node.start_photo_path
-      link === "/attendance_timesEnd"
+      link === "/attendanceTimeEnd"
       // && node.end_photo_path
     ) {
       const imageSrc = webcamRef.current.getScreenshot();
@@ -97,9 +112,11 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
 
       setTime(dayjs().utc().tz("Asia/Tokyo"));
       setShowTime(dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm:ss"));
+      setShotEdit(true);
     } else {
       const imageSrc = webcamRef.current.getScreenshot();
       setPhoto(imageSrc);
+      setShotEdit(true);
     }
   };
 
@@ -109,27 +126,33 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
       setIsLoading(true);
       setTime(null);
       setShowTime("");
+      setShotEdit(false);
     } else {
       setPhoto(null);
-      setEdit(true);
-      setIsLoading(true);
+      setEditEnd(false);
+      setEdit(false);
     }
   };
 
-  const handleStartTime = async (event) => {
-    event.preventDefault();
+  const editPhoto = () => {
+    setPhoto(null);
+    setEditEnd(true);
+  };
 
+  const handleStartTime = async () => {
     const getTime = time.toISOString();
-    const startTimePhoto = photo;
     let formData;
 
     if (!edit) {
+      const startTimePhoto = photo;
       formData = {
         start_time: getTime,
         start_photo_path: startTimePhoto,
         attendance_id: node.id,
       };
     } else {
+      const startTimePhoto =
+        "https://dummyimage.com/320x240/000/fff&text=編集済み";
       formData = {
         id: node.id,
         start_time: getTime,
@@ -141,33 +164,32 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
     try {
       if (edit) {
         await dispatch(updateStartTime(formData) as any);
+        resetPhoto();
+        setOpen(false);
       } else {
         await dispatch(createStartTime(formData) as any);
+        resetPhoto();
+        setOpen(false);
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      resetPhoto();
-      setOpen(false);
-      window.location.reload();
     }
   };
 
-  const handleEndTime = async (event) => {
-    event.preventDefault();
-
-    const getTime = dayjs().utc().tz("Asia/Tokyo").toISOString();
-    const endTimePhoto = photo;
-
+  const handleEndTime = async () => {
+    const getTime = time.toISOString();
     let formData;
 
     if (!edit) {
+      const endTimePhoto = photo;
       formData = {
         end_time: getTime,
         end_photo_path: endTimePhoto,
         attendance_id: node.id,
       };
     } else {
+      const endTimePhoto =
+        "https://dummyimage.com/320x240/000/fff&text=編集済み";
       formData = {
         id: node.id,
         end_time: getTime,
@@ -179,20 +201,25 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
     try {
       if (edit) {
         await dispatch(updateEndTime(formData) as any);
+        resetPhoto();
+        setOpen(false);
       } else {
         await dispatch(createEndTime(formData) as any);
+        resetPhoto();
+        setOpen(false);
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      resetPhoto();
-      setOpen(false);
-      window.location.reload();
     }
   };
 
+  console.log("link", link);
+
   return (
-    <div className="flex justify-center items-center mx-auto pt-4 w-full">
+    <div
+      className="flex justify-center items-center mx-auto pt-4 w-full "
+      style={{ flexDirection: "column" }}
+    >
       {isLoading ? (
         <div className="flex justify-center items-center w-full bold text-3xl">
           準備中...
@@ -200,56 +227,58 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
       ) : (
         ""
       )}
-      <form
-        onSubmit={
-          startOrEnd === "出勤" || startOrEnd === "出勤時間と写真を編集"
-            ? handleStartTime
-            : handleEndTime
-        }
-      >
-        {(link === "/attendance_timesStart" && node.start_time) ||
-        (link === "/attendance_timesEnd" && node.end_time) ? (
-          <div className="flex justify-center items-center mb-4">
-            <DateTimeRangePicker value={time} changer={setTime} />
-          </div>
-        ) : (link === "/attendance_timesStart" && !node.start_time) ||
-          (link === "/attendance_timesEnd" && !node.end_time) ? (
-          <div className="flex justify-center items-center mb-4">
-            {showTime}
-            <DateTimeRangePicker value={time} changer={setTime} />
-          </div>
-        ) : (
-          ""
-        )}
+      {/* DateTimePickerの表示式 */}
+      {/* 編集リンクで時間登録がされている時 */}
+      <div className="flex justify-center items-center ">
+        <DateTimeRangePicker value={time} changer={setTime} />
+      </div>
 
-        {!photo ? (
-          <>
-            <div className="flex justify-center items-center text-2xl  my-4">
-              {isLoading ? "" : "本人だと証明できる写真をお願い致します!"}
-            </div>
-            <div className="flex justify-center items-center ">
-              <Webcam
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                width={320}
-                height={320}
-                onUserMedia={handleUserMedia}
-              />
-            </div>
-
+      {/* 写真が登録されていない場合 出勤退勤時 */}
+      {!photo && !edit ? (
+        <div
+          className="flex justify-center items-center text-2xl w-full"
+          style={{ flexDirection: "column" }}
+        >
+          <div className="flex justify-center items-center text-2xl my-4 w-full">
             {isLoading ? (
               ""
             ) : (
-              <div className="flex justify-end">
-                <CameraEnhanceIcon
-                  onClick={handleCapture}
-                  className="text-6xl cursor-pointer hover:text-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300  dark:focus:ring-blue-800"
-                ></CameraEnhanceIcon>
+              <div className="flex justify-center items-center w-full">
+                本人だと証明できる写真をお願い致します!
               </div>
             )}
-          </>
-        ) : photo && link === "/attendanceTimeShots" ? (
+          </div>
+          <div className="flex justify-center items-center ">
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              width={320}
+              height={320}
+              onUserMedia={handleUserMedia}
+            />
+          </div>
+
+          {isLoading ? (
+            ""
+          ) : (
+            <div className="flex justify-end">
+              <CameraEnhanceIcon
+                onClick={handleCapture}
+                className="text-6xl cursor-pointer hover:text-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300  dark:focus:ring-blue-800"
+              ></CameraEnhanceIcon>
+            </div>
+          )}
+        </div>
+      ) : // 写真が登録されていて、出勤、退勤ボタンのリンクの時 撮影した写真を表示
+      photo && link === "/attendanceTimeShots" && !edit ? (
+        <form
+          onSubmit={
+            link === "/attendanceTimeShots" && !edit
+              ? handleStartTime
+              : handleEndTime
+          }
+        >
           <div>
             <div className="flex justify-center items-center mt-4">
               <div className="text-xl mr-4">撮影した写真↓</div>
@@ -259,69 +288,72 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
               <img src={photo} alt="写真がありません" />
             </div>
             <div className="flex justify-between items-center mt-4">
-              <button
+              <span
                 className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-6 py-3 text-center "
                 onClick={resetPhoto}
               >
                 撮り直す
-              </button>
-
-              <PrimaryButton value={startOrEnd + "！"} place="big" />
+              </span>
+              {time && <PrimaryButton value={startOrEnd + "！"} place="big" />}
             </div>
           </div>
-        ) : (photo &&
-            link === "/attendance_timesStart" &&
-            node.start_photo_path &&
-            !edit) ||
-          (photo &&
-            link === "/attendance_timesEnd" &&
-            node.end_photo_path &&
-            !edit) ? (
+        </form>
+      ) : // 写真が登録されていて、編集リンクの時
+      (link === "/attendanceTimeStart" && edit && !editEnd) ||
+        (link === "/attendanceTimeEnd" && edit && !editEnd) ? (
+        <div>
+          {photo && edit ? (
+            <div className="text-xl">保存されていた写真↓</div>
+          ) : !photo && edit ? (
+            <div className="mt-6"></div>
+          ) : (
+            ""
+          )}
+          <img
+            src={
+              !photo
+                ? "https://dummyimage.com/320x240/000/fff&text=未登録"
+                : "http://localhost:8000/attendance_times/images/" + photo
+            }
+            alt="写真がありません"
+          />
+          <div className="flex justify-center items-center mt-4">
+            <button
+              className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-6 py-3 text-center "
+              onClick={editPhoto}
+            >
+              編集済みの写真に変更
+            </button>
+          </div>
+        </div>
+      ) : (link === "/attendanceTimeStart" && edit && editEnd) ||
+        (link === "/attendanceTimeEnd" && edit && editEnd) ? (
+        <form
+          onSubmit={
+            link === "/attendanceTimeStart" && edit && editEnd
+              ? handleStartTime
+              : handleEndTime
+          }
+        >
           <div>
-            <div className="flex justify-between items-center">
-              <div className="text-xl">保存されていた写真↓</div>
-            </div>
-            <img
-              src={"http://localhost:8000/attendance_times/images/" + photo}
-              alt="写真がありません"
-            />
             <div className="flex justify-center items-center mt-4">
-              <button
-                className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-6 py-3 text-center "
-                onClick={resetPhoto}
-              >
-                編集者の写真を撮影してください
-              </button>
+              <img
+                src="https://dummyimage.com/320x240/000/fff&text=編集済み"
+                alt="Dummy Image with Text"
+              />
             </div>
-          </div>
-        ) : (photo &&
-            link === "/attendance_timesStart" &&
-            node.start_photo_path &&
-            edit) ||
-          (photo &&
-            link === "/attendance_timesEnd" &&
-            node.end_photo_path &&
-            edit) ? (
-          <div>
-            <div className="flex justify-between items-center">
-              <div className="text-xl">撮影した写真↓</div>
-            </div>
-            <img src={photo} alt="写真がありません" />
             <div className="flex justify-between items-center mt-4">
-              <button
-                className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-6 py-3 text-center "
-                onClick={resetPhoto}
-              >
-                撮り直す
-              </button>
-
-              <PrimaryButton value={startOrEnd + "！"} place="big" />
+              {time && editEnd && edit ? (
+                <PrimaryButton value={startOrEnd + "！"} place="big" />
+              ) : (
+                ""
+              )}
             </div>
           </div>
-        ) : (
-          ""
-        )}
-      </form>
+        </form>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

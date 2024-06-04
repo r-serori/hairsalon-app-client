@@ -1,6 +1,6 @@
 interface PrimaryButtonProps {
   value: string;
-  onChanger?: () => void;
+  onChanger?: any;
   place?: string;
 }
 

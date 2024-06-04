@@ -61,8 +61,8 @@ const BasicModal: React.FC<BasicModalProps> = ({
   return (
     <>
       {link === "/attendanceTimeShots" ||
-      link === "/attendance_timesStart" ||
-      link === "/attendance_timesEnd" ? (
+      link === "/attendanceTimeStart" ||
+      link === "/attendanceTimeEnd" ? (
         <Button onClick={handleOpenAttendance} className="w-full y-full p-4 ">
           {editValue}
         </Button>
@@ -77,8 +77,8 @@ const BasicModal: React.FC<BasicModalProps> = ({
       )}
 
       {link === "/attendanceTimeShots" ||
-      link === "/attendance_timesStart" ||
-      link === "/attendance_timesEnd" ? (
+      link === "/attendanceTimeStart" ||
+      link === "/attendanceTimeEnd" ? (
         <Modal
           open={openAttendance}
           onClose={handleCloseAttendance}

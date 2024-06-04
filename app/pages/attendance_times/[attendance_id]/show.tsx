@@ -15,22 +15,28 @@ const attendanceTimes = () => {
     (state: RootState) => state.attendance_time.loading
   );
 
+  const message = useSelector(
+    (state: RootState) => state.attendance_time.message
+  );
+
+  const error = useSelector((state: RootState) => state.attendance_time.error);
+
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
+  const attendanceTimes = useSelector(
+    (state: RootState) => state.attendance_time.attendance_times
+  );
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await dispatch(selectGetAttendanceTimes(Number(id)) as any);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        console.log("勤怠情報取得！！");
-      }
-    };
-    if (id) {
-      fetchData();
+    try {
+      if (attendanceTimes.length === 0 && id)
+        dispatch(selectGetAttendanceTimes(Number(id)) as any);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("勤怠情報取得！！");
     }
   }, [id]);
 
@@ -40,10 +46,6 @@ const attendanceTimes = () => {
     )
   );
   console.log(attendance);
-
-  const attendanceTimes = useSelector(
-    (state: RootState) => state.attendance_time.attendance_times
-  );
 
   const searchItems = [
     { key: "start_time", value: "出勤時間" },
@@ -70,6 +72,8 @@ const attendanceTimes = () => {
 
   return (
     <div>
+      {message && <p className="text-blue-700 ml-4 my-4">{message}</p>}
+      {error && <p className="text-red-700 ml-4 my-4">{error}</p>}
       <Link href="/attendance_times/create">新規作成</Link>
       <br />
 

@@ -23,7 +23,11 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
   useEffect(() => {
     try {
       if (year) {
-        dispatch(selectGetSchedules({ year }) as any);
+        console.log("yearです", year);
+        const response = dispatch(selectGetSchedules({ year }) as any);
+        if (response) {
+          return;
+        }
       } else if (update) {
         return;
       } else {
@@ -32,7 +36,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [dispatch, year]);
+  }, [dispatch, year, update]);
 
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -48,19 +52,11 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
 
   const customers = useSelector((state: RootState) => state.customer.customers);
 
-  const customer_schedules = useSelector(
-    (state: RootState) => state.customer_schedules.customer_schedules
-  );
-
   const events = schedules.map((schedule) => {
-    const customer_schedule = customer_schedules.find(
-      (customer_schedule) => schedule.id === customer_schedule.schedules_id
-    );
-    if (customer_schedule) {
+    if (schedule.customers_id) {
       const customer = customers.find(
-        (customer) => customer_schedule.customers_id === customer.id
+        (customer) => schedule.customers_id === customer.id
       );
-
       return {
         id: schedule.id,
         title: customer.customer_name,
@@ -82,9 +78,9 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
   return (
     <div>
       {message ? (
-        <p className="py-4 text-blue-700">{message}</p>
+        <p className="py-4 text-blue-700 ml-4">{message}</p>
       ) : error ? (
-        <p className="py-4 text-red-700">{error}</p>
+        <p className="py-4 text-red-700 mr-4">{error}</p>
       ) : null}
       {loading ? (
         <p>loading...</p>

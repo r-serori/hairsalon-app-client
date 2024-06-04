@@ -201,11 +201,11 @@ export const deleteSchedule = createAsyncThunk(
 export interface ScheduleState {
   // ステートの型
   id: number;
-  title: string;
-  start_time: string;
-  end_time: string;
+  title?: string;
+  start_time?: string;
+  end_time?: string;
   allDay: number;
-  customers_id: number;
+  customers_id?: number;
   created_at: string;
   updated_at: string;
 }
@@ -252,7 +252,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(createSchedule.fulfilled, (state, action) => {
         state.loading = false;
-        state.schedule = [...state.schedule, ...action.payload.schedule];
+        state.schedule = [...state.schedule, action.payload.schedule];
         state.message = "スケジュールの作成に成功しました！";
       })
       .addCase(createSchedule.rejected, (state, action) => {
@@ -266,6 +266,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(createCustomerSchedule.fulfilled, (state, action) => {
         state.loading = false;
+        state.schedule = [...state.schedule, action.payload.schedule];
         state.message = "スケジュールと顧客情報の作成に成功しました！";
       })
       .addCase(createCustomerSchedule.rejected, (state, action) => {
@@ -360,6 +361,23 @@ const scheduleSlice = createSlice({
         state.error = action.error.message;
         state.loading = false;
       });
+
+    builder.addCase(selectGetSchedules.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+
+    builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
+      state.loading = false;
+      state.schedule = [...action.payload.schedules];
+      state.message = "スケジュールの取得に成功しました！";
+    });
+
+    builder.addCase(selectGetSchedules.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 

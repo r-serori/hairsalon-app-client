@@ -6,7 +6,12 @@ import {
   createCustomer,
   updateCustomer,
 } from "../../customers/customerSlice";
-import { getSchedule } from "../../schedules/scheduleSlice";
+import {
+  getSchedule,
+  createCustomerSchedule,
+  updateCustomerOnlySchedule,
+  updateCustomerSchedule,
+} from "../../schedules/scheduleSlice";
 
 export const getMerchandise_customers = createAsyncThunk(
   "merchandise_customers/getMerchandise_customers",
@@ -70,6 +75,41 @@ const merchandise_customersSlice = createSlice({
     });
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.merchandise_customers = [
+        ...state.merchandise_customers.filter(
+          (stateMerchandise_customer) =>
+            !action.payload.merchandise_customers.some(
+              (payloadMerchandise_customer) =>
+                stateMerchandise_customer.customers_id ===
+                payloadMerchandise_customer.customers_id
+            )
+        ),
+        ...action.payload.merchandise_customers,
+      ];
+    });
+
+    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+      state.merchandise_customers = [
+        ...state.merchandise_customers,
+        ...action.payload.merchandise_customers,
+      ];
+    });
+
+    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
+      state.merchandise_customers = [
+        ...state.merchandise_customers.filter(
+          (stateMerchandise_customer) =>
+            !action.payload.merchandise_customers.some(
+              (payloadMerchandise_customer) =>
+                stateMerchandise_customer.customers_id ===
+                payloadMerchandise_customer.customers_id
+            )
+        ),
+        ...action.payload.merchandise_customers,
+      ];
+    });
+
+    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
       state.merchandise_customers = [
         ...state.merchandise_customers.filter(
           (stateMerchandise_customer) =>

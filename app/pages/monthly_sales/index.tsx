@@ -5,10 +5,18 @@ import { useEffect } from "react";
 import { getMonthly_sales } from "../../store/sales/monthly_sales/monthly_saleSlice";
 import { RootState } from "../../redux/store";
 
-const monthly_sales: React.FC = () => {
+interface Monthly_salesProps {
+  update?: boolean;
+}
+
+const monthly_sales: React.FC<Monthly_salesProps> = ({ update }) => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getMonthly_sales({}) as any);
+    if (update) {
+      return;
+    } else {
+      dispatch(getMonthly_sales({}) as any);
+    }
   }, [dispatch]);
   const loading = useSelector(
     (state: RootState) => state.monthly_sales.loading

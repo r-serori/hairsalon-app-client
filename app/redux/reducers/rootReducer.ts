@@ -33,9 +33,6 @@ import hairstyle_customersReducer, {
 import customer_attendancesReducer, {
   Customer_attendancesState,
 } from "../../store/middleTable/customers/customer_attendancesSlice";
-import customer_schedulesReducer, {
-  Customer_schedulesState,
-} from "../../store/middleTable/customers/customer_schedulesSlice";
 import scheduleReducer, {
   ScheduleState,
 } from "../../store/schedules/scheduleSlice";
@@ -77,7 +74,6 @@ const rootReducer = combineReducers({
   option_customers: option_customersReducer,
   hairstyle_customers: hairstyle_customersReducer,
   customer_attendances: customer_attendancesReducer,
-  customer_schedules: customer_schedulesReducer,
   // 他のリデューサーをここに追加する
 });
 

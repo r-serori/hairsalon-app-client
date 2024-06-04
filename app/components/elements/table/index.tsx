@@ -295,7 +295,7 @@ const ComponentTable = ({
                                     ? imgUrl +
                                       "attendance_times/images/" +
                                       propValue
-                                    : "https://via.placeholder.com/150"
+                                    : "https://dummyimage.com/320x240/000/fff&text=未登録"
                                 }
                                 alt="画像"
                                 className="w-36 h-28 object-cover object-fill"
@@ -350,7 +350,7 @@ const ComponentTable = ({
                               editNode={node}
                               link={
                                 link === "/attendance_times"
-                                  ? "/attendance_timesStart"
+                                  ? "/attendanceTimeStart"
                                   : link === "/attendanceTimeShots"
                                   ? "/attendanceTimeShots"
                                   : "/attendance_times"
@@ -389,7 +389,7 @@ const ComponentTable = ({
                               editNode={node}
                               link={
                                 link === "/attendance_times"
-                                  ? "/attendance_timesEnd"
+                                  ? "/attendanceTimeEnd"
                                   : link === "/attendanceTimeShots"
                                   ? "/attendanceTimeShots"
                                   : "/attendance_times"

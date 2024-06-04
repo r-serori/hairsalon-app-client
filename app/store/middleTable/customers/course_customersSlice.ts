@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { courseCustomerApi } from "../../../services/middleTable/customers/course_customersApi";
 import RootState from "../../../redux/reducers/rootReducer";
-import { createCourse } from "../../courses/courseSlice";
 import {
   getCustomer,
   createCustomer,
   updateCustomer,
 } from "../../customers/customerSlice";
-import { getSchedule } from "../../schedules/scheduleSlice";
+import {
+  getSchedule,
+  createCustomerSchedule,
+  updateCustomerOnlySchedule,
+  updateCustomerSchedule,
+} from "../../schedules/scheduleSlice";
 
 export const getCourse_customers = createAsyncThunk(
   "course_customers/getCourse_customers",
@@ -76,6 +80,41 @@ const course_customersSlice = createSlice({
     });
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
+      state.course_customers = [
+        ...state.course_customers.filter(
+          (stateCourse_customer) =>
+            !action.payload.course_customers.some(
+              (payloadCourse_customer) =>
+                stateCourse_customer.customers_id ===
+                payloadCourse_customer.customers_id
+            )
+        ),
+        ...action.payload.course_customers,
+      ];
+    });
+
+    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+      state.course_customers = [
+        ...state.course_customers,
+        ...action.payload.course_customers,
+      ];
+    });
+
+    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
+      state.course_customers = [
+        ...state.course_customers.filter(
+          (stateCourse_customer) =>
+            !action.payload.course_customers.some(
+              (payloadCourse_customer) =>
+                stateCourse_customer.customers_id ===
+                payloadCourse_customer.customers_id
+            )
+        ),
+        ...action.payload.course_customers,
+      ];
+    });
+
+    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
       state.course_customers = [
         ...state.course_customers.filter(
           (stateCourse_customer) =>

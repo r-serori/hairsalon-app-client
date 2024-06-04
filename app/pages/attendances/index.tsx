@@ -8,28 +8,29 @@ import { RootState } from "../../redux/store";
 const Attendances = () => {
   const dispatch = useDispatch();
 
+  const attendances = useSelector(
+    (state: RootState) => state.attendance.attendances
+  );
+  console.log(attendances);
+
   useEffect(() => {
     try {
-      const fetchAttendances = async () => {
-        await dispatch(getAttendance({}) as any);
-      };
-      fetchAttendances();
+      if (attendances.length === 0) {
+        dispatch(getAttendance({}) as any);
+      } else {
+        return;
+      }
     } catch (error) {
       console.log("Error", error);
       return;
     }
-  }, []);
+  }, [dispatch]);
 
   const loading = useSelector((state: RootState) => state.attendance.loading);
 
   const message = useSelector((state: RootState) => state.attendance.message);
 
   const error = useSelector((state: RootState) => state.attendance.error);
-
-  const attendances = useSelector(
-    (state: RootState) => state.attendance.attendances
-  );
-  console.log(attendances);
 
   const searchItems = [
     { key: "attendance_name", value: "名前" },

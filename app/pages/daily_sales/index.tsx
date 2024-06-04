@@ -5,10 +5,18 @@ import { useEffect } from "react";
 import { getDaily_sales } from "../../store/sales/daily_sales/daily_saleSlice";
 import { RootState } from "../../redux/store";
 
-const daily_sales: React.FC = () => {
+interface Daily_salesProps {
+  update?: boolean;
+}
+
+const daily_sales: React.FC<Daily_salesProps> = ({ update }) => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getDaily_sales({}) as any);
+    if (update) {
+      return;
+    } else {
+      dispatch(getDaily_sales({}) as any);
+    }
   }, [dispatch]);
 
   const loading = useSelector((state: RootState) => state.daily_sales.loading);

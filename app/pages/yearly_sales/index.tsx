@@ -5,11 +5,18 @@ import { useEffect } from "react";
 import { getYearly_sales } from "../../store/sales/yearly_sales/yearly_saleSlice";
 import { RootState } from "../../redux/store";
 
-const yearly_sales: React.FC = () => {
+interface Yearly_salesProps {
+  update?: boolean;
+}
+const yearly_sales: React.FC<Yearly_salesProps> = ({ update }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getYearly_sales({}) as any);
+    if (update) {
+      return;
+    } else {
+      dispatch(getYearly_sales({}) as any);
+    }
   }, [dispatch]);
 
   const loading = useSelector((state: RootState) => state.yearly_sales.loading);
