@@ -6,6 +6,7 @@ export const stockApi = {
     product_price: number;
     quantity: number;
     remarks: string;
+    notice: number;
     stock_category_id: number;
   }) => {
     const response = await sendRequest("POST", "/stocks", formData);
@@ -29,6 +30,7 @@ export const stockApi = {
       product_price: number;
       quantity: number;
       remarks: string;
+      notice: number;
       stock_category_id: number;
     }
   ) => {

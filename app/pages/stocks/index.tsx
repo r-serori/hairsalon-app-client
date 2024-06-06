@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { getStock } from "../../store/stocks/stockSlice";
 import { getStockCategory } from "../../store/stocks/stock_categories/stock_categorySlice";
 import { RootState } from "../../redux/store";
+import StockNotice from "../../components/stockNotice/StockNotice";
+import { s } from "@fullcalendar/core/internal-common";
 
 const stocks: React.FC = () => {
   const dispatch = useDispatch();
@@ -20,6 +22,10 @@ const stocks: React.FC = () => {
   }, [dispatch]);
 
   const loading = useSelector((state: RootState) => state.stock.loading);
+
+  const stockCategoryLoading = useSelector(
+    (state: RootState) => state.stock_category.loading
+  );
 
   const message = useSelector((state: RootState) => state.stock.message);
 
@@ -37,9 +43,10 @@ const stocks: React.FC = () => {
     { key: "category_name", value: "在庫カテゴリ" },
     { key: "product_name", value: "商品名" },
     { key: "product_price", value: "価格" },
-    { key: "quantity", value: "数量" },
+    { key: "quantity", value: "在庫数量" },
     { key: "remarks", value: "備考" },
     { key: "supplier", value: "仕入れ先" },
+    { key: "notice", value: "通知" },
   ];
 
   //コースカテゴリをとってきて、nosesPropsに追加する
@@ -48,9 +55,10 @@ const stocks: React.FC = () => {
     "在庫カテゴリ",
     "商品名",
     "価格",
-    "数量",
+    "在庫数量",
     "備考",
     "仕入れ先",
+    "通知",
     "更新日",
     "編集",
     "削除",
@@ -63,7 +71,8 @@ const stocks: React.FC = () => {
     { number: "quantity" },
     { text: "remarks" },
     { text: "supplier" },
-    { date: "updated_at" },
+    { number: "notice" },
+    { string: "updated_at" },
   ];
 
   //stocksのstock_category_idとstockCategoriesのidが一致するものをnodesに追加する
@@ -80,6 +89,7 @@ const stocks: React.FC = () => {
         quantity: stock.quantity,
         remarks: stock.remarks,
         supplier: stock.supplier,
+        notice: stock.notice,
         updated_at: stock.updated_at,
       };
     }),
@@ -93,13 +103,11 @@ const stocks: React.FC = () => {
       ) : error ? (
         <p className="py-4 text-red-700">{error}</p>
       ) : null}
-      <div className="flex space-x-4 mb-4">
+      <div className="flex justify-between space-x-4 mb-4">
         <Link href="/stocks/create">新規作成</Link>
         <Link href="/stock_categories">カテゴリ画面</Link>
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
+      {!loading && !stockCategoryLoading ? (
         <ComponentTable
           nodes={nodes}
           searchItems={searchItems}
@@ -108,6 +116,8 @@ const stocks: React.FC = () => {
           link="/stocks"
           isLoading={loading}
         />
+      ) : (
+        <p>Loading...</p>
       )}
     </div>
   );

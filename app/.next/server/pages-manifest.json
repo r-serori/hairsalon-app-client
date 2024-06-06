@@ -2,7 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/courses": "pages/courses.js",
-  "/attendance_times/[attendance_id]/show": "pages/attendance_times/[attendance_id]/show.js",
-  "/options": "pages/options.js"
+  "/": "pages/index.js",
+  "/stocks": "pages/stocks.js"
 }

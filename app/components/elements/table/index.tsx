@@ -9,7 +9,7 @@ import {
   HeaderCell,
   Cell,
 } from "@table-library/react-table-library/table";
-import { useSearchLogic } from "./search";
+import { useState } from "react";
 import { usePaginationLogic } from "./pagenation";
 import BasicModal from "../modal";
 import { useTheme } from "@table-library/react-table-library/theme";
@@ -19,7 +19,8 @@ import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { Padding } from "@mui/icons-material";
+import StockNotice from "../../stockNotice/StockNotice";
+import usePageReload from "../../Hooks/usePageReload";
 
 const ComponentTable = ({
   nodes,
@@ -29,13 +30,13 @@ const ComponentTable = ({
   link,
   isLoading,
 }) => {
-  const {
-    searchText,
-    searchField,
-    handleSearchTextChange,
-    handleSearchFieldChange,
-  } = useSearchLogic();
+  const [searchText, setSearchText] = useState("");
+  const [searchField, setSearchField] = useState("");
+
   const { pagination, handlePageChange } = usePaginationLogic();
+  // usePageReload(() => {
+  //   setSearchText("");
+  // });
 
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -121,45 +122,53 @@ const ComponentTable = ({
   };
 
   return (
-    <div className="items-center px-2 py-8">
-      <label htmlFor="searchField" className="items-center block mb-2 ">
-        検索対象→:
-        <select
-          id="searchField"
-          name="searchField"
-          value={searchField}
-          onChange={handleSearchFieldChange}
-          className="items-center px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
-        >
-          <option value="">すべて</option>
-          {searchItems.map((searchItem) => {
-            const searchKey = searchItem.key;
-            const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
-            console.log("searchKeyだよ");
-            console.log(searchKey); //名前
+    <div className="items-center px-2">
+      <div className="flex items-end ">
+        <div>
+          <label htmlFor="searchField" className="items-center block ">
+            検索カテゴリ:
+            <select
+              id="searchField"
+              name="searchField"
+              value={searchField}
+              onChange={(e) => setSearchField(e.target.value)}
+              className="items-center pr-16 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
+            >
+              <option value="">すべて</option>
+              {searchItems.map((searchItem) => {
+                const searchKey = searchItem.key;
+                const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
+                console.log("searchKeyだよ");
+                console.log(searchKey); //名前
 
-            return (
-              <option key={searchKey} value={searchKey}>
-                {searchValue}
-              </option>
-            );
-          })}
-        </select>
-      </label>
+                return (
+                  <option key={searchKey} value={searchKey}>
+                    {searchValue}
+                  </option>
+                );
+              })}
+            </select>
+          </label>
 
-      <label htmlFor="searchText" className="items-center block mb-2 mt-4">
-        検索ワード↓:
-      </label>
-      <input
-        type="text"
-        id="searchText"
-        name="searchText"
-        value={searchText}
-        onChange={handleSearchTextChange} // イベントオブジェクトを明示的に渡す
-        placeholder="検索"
-        className="items-center px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 ml-2"
-      />
-
+          <label htmlFor="searchText" className="items-center block mt-4">
+            検索ワード名:
+            <input
+              type="text"
+              id="searchText"
+              name="searchText"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)} // イベントオブジェクトを明示的に渡す
+              placeholder="検索ワード"
+              className="items-center py-2 pl-1 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
+            />
+          </label>
+        </div>
+        <div className="ml-auto">
+          {link === "/stocks" && data && (
+            <StockNotice nodes={nodes} setSearch={setSearchText} />
+          )}
+        </div>
+      </div>
       {isLoading ? (
         <p>Loading...</p>
       ) : (

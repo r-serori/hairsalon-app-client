@@ -33,6 +33,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock }) => {
   const [quantity, setQuantity] = useState(node ? node.quantity : 0);
   const [remarks, setRemark] = useState(node ? node.remarks : "");
   const [supplier, setSupplier] = useState(node ? node.supplier : "");
+  const [notice, setNotice] = useState(node ? node.notice : 0);
   const [stockCategoryIdName, setStockCategoryIdName] = useState(
     node
       ? stockCategories.find(
@@ -50,6 +51,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock }) => {
       quantity: quantity,
       remarks: remarks,
       supplier: supplier,
+      notice: notice,
       stock_category_id: stockCategories.find(
         (category) => category.category === stockCategoryIdName
       )?.id,
@@ -100,6 +102,13 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock }) => {
             placeholder="仕入れ先"
             value={supplier}
             onChange={(e) => setSupplier(e.target.value)}
+          />
+
+          <BasicTextField
+            type="number"
+            placeholder="設定した数量を下回った場合通知します"
+            value={notice}
+            onChange={(e) => setNotice(e.target.value)}
           />
 
           <SingleCheckBox

@@ -38,6 +38,7 @@ export const createStock = createAsyncThunk(
       quantity: number;
       remarks: string;
       supplier: string;
+      notice: number;
       stock_category_id: number;
     },
     { rejectWithValue }
@@ -100,6 +101,7 @@ export const updateStock = createAsyncThunk(
       quantity: number;
       remarks: string;
       supplier: string;
+      notice: number;
       stock_category_id: number;
     },
     { rejectWithValue }
@@ -159,6 +161,7 @@ export interface StockState {
   quantity: number;
   remarks: string;
   supplier: string; //仕入れ先
+  notice: number; //通知
   stock_category_id: number; //在庫カテゴリー、外部キー
   created_at: string;
   updated_at: string;

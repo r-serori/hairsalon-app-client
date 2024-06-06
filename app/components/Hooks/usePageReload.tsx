@@ -1,5 +1,9 @@
 import { useEffect } from "react";
 
+interface PageReloadProps {
+  callback: () => void;
+}
+
 const usePageReload = (callback: () => void) => {
   useEffect(() => {
     const performanceEntries = performance.getEntriesByType(

@@ -274,6 +274,9 @@ const customerSlice = createSlice({
       state.customers = state.customers.filter(
         (customer) => customer.id !== Number(action.payload.deleteId)
       );
+      state.message = action.payload.message
+        ? action.payload.message
+        : "顧客情報を削除しました！";
     });
     builder.addCase(deleteCustomer.rejected, (state, action) => {
       state.loading = false;
