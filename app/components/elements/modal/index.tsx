@@ -101,6 +101,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
               startOrEnd={editValue}
               open={openAttendance}
               setOpen={setOpenAttendance}
+              editValue={editValue}
             />
           </Box>
         </Modal>

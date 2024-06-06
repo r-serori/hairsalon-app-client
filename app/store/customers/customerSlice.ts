@@ -13,11 +13,21 @@ export const getCustomer = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await customerApi.fetchAllCustomers();
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -40,12 +50,21 @@ export const createCustomer = createAsyncThunk(
   ) => {
     const response: any = await customerApi.createCustomer(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -55,11 +74,21 @@ export const getCustomerById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await customerApi.fetchCustomerById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -82,11 +111,21 @@ export const updateCustomer = createAsyncThunk(
   ) => {
     const response: any = await customerApi.updateCustomer(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -96,11 +135,21 @@ export const deleteCustomer = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await customerApi.deleteCustomer(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -149,7 +198,9 @@ const customerSlice = createSlice({
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.loading = false;
       state.customers = [...state.customers, ...action.payload.customers];
-      state.message = "顧客情報を取得しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "顧客情報を取得しました！";
     });
     builder.addCase(getCustomer.rejected, (state, action) => {
       state.loading = false;
@@ -164,7 +215,9 @@ const customerSlice = createSlice({
     builder.addCase(createCustomer.fulfilled, (state, action) => {
       state.loading = false;
       state.customers = [...state.customers, action.payload.customer];
-      state.message = "顧客情報を作成しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "顧客情報を作成しました！";
     });
     builder.addCase(createCustomer.rejected, (state, action) => {
       state.loading = false;
@@ -179,7 +232,9 @@ const customerSlice = createSlice({
     builder.addCase(getCustomerById.fulfilled, (state, action) => {
       state.loading = false;
       state.customers = [...state.customers, action.payload.customer];
-      state.message = "顧客情報を取得しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "顧客情報を取得しました！";
     });
     builder.addCase(getCustomerById.rejected, (state, action) => {
       state.loading = false;
@@ -199,7 +254,9 @@ const customerSlice = createSlice({
           ? { ...customer, ...action.payload.customer }
           : customer
       );
-      state.message = "顧客情報を更新しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "顧客情報を更新しました！";
     });
 
     builder.addCase(updateCustomer.rejected, (state, action) => {
@@ -215,7 +272,7 @@ const customerSlice = createSlice({
     builder.addCase(deleteCustomer.fulfilled, (state, action) => {
       state.loading = false;
       state.customers = state.customers.filter(
-        (customer) => customer.id !== action.payload.deleteId
+        (customer) => customer.id !== Number(action.payload.deleteId)
       );
     });
     builder.addCase(deleteCustomer.rejected, (state, action) => {

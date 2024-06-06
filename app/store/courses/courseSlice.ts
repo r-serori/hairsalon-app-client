@@ -8,14 +8,22 @@ export const getCourse = createAsyncThunk(
   "course/getCourse",
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await courseApi.fetchAllCourses();
-    console.log("courseDataだよ");
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -34,12 +42,21 @@ export const createCourse = createAsyncThunk(
   ) => {
     const response: any = await courseApi.createCourse(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -49,11 +66,21 @@ export const getCourseById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await courseApi.fetchCourseById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -73,11 +100,21 @@ export const updateCourse = createAsyncThunk(
     const { id, ...updateData } = formData;
     const response: any = await courseApi.updateCourse(id, updateData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -87,12 +124,21 @@ export const deleteCourse = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await courseApi.deleteCourse(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -134,7 +180,9 @@ const courseSlice = createSlice({
     });
     builder.addCase(getCourse.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "コースの取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "コースの取得に成功しました！";
       state.course = [...state.course, ...action.payload.courses];
     });
     builder.addCase(getCourse.rejected, (state, action) => {
@@ -149,7 +197,9 @@ const courseSlice = createSlice({
     });
     builder.addCase(createCourse.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "コースの作成に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "コースの作成に成功しました！";
       state.course = [...state.course, action.payload.course];
     });
     builder.addCase(createCourse.rejected, (state, action) => {
@@ -183,7 +233,9 @@ const courseSlice = createSlice({
           ? { ...course, ...action.payload.course }
           : course
       );
-      state.message = "コースの更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "コースの更新に成功しました！";
     });
     builder.addCase(updateCourse.rejected, (state, action) => {
       state.loading = false;
@@ -198,9 +250,12 @@ const courseSlice = createSlice({
     builder.addCase(deleteCourse.fulfilled, (state, action) => {
       state.loading = false;
       state.course = state.course.filter(
-        (course) => course.id !== action.payload.deleteId
+        (course) => course.id !== Number(action.payload.deleteId)
       );
-      state.message = "コースの削除に成功しました！";
+
+      state.message = action.payload.message
+        ? action.payload.message
+        : "コースの削除に成功しました！";
     });
     builder.addCase(deleteCourse.rejected, (state, action) => {
       state.loading = false;

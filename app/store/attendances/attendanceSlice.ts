@@ -13,13 +13,22 @@ export const getAttendance = createAsyncThunk(
   "attendance/getAttendance",
   async (formData: {}, { rejectWithValue }: any) => {
     const response: any = await attendanceApi.fetchAllAttendances();
-    console.log("responseINIT", response);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -42,11 +51,21 @@ export const createAttendance = createAsyncThunk(
   ) => {
     const response: any = await attendanceApi.createAttendance(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -57,11 +76,21 @@ export const getAttendanceById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await attendanceApi.fetchAttendanceById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -85,11 +114,21 @@ export const updateAttendance = createAsyncThunk(
     const { id, ...updateData } = formData; // idを除外する
     const response: any = await attendanceApi.updateAttendance(id, updateData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -100,11 +139,21 @@ export const deleteAttendance = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await attendanceApi.deleteAttendance(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -150,7 +199,9 @@ const attendanceSlice = createSlice({
     });
     builder.addCase(getAttendance.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "スタッフ情報を取得しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "スタッフ情報を取得しました！";
       state.attendances = [...state.attendances, ...action.payload.attendances];
     });
     builder.addCase(getAttendance.rejected, (state, action) => {
@@ -165,7 +216,9 @@ const attendanceSlice = createSlice({
     });
     builder.addCase(createAttendance.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "スタッフ情報を作成しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "スタッフ情報を作成しました！";
       state.attendances = [...state.attendances, action.payload.attendance];
     });
     builder.addCase(createAttendance.rejected, (state, action) => {
@@ -180,7 +233,9 @@ const attendanceSlice = createSlice({
     });
     builder.addCase(getAttendanceById.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "スタッフ情報を取得しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "スタッフ情報を取得しました！";
       state.attendances = [...state.attendances, action.payload.attendance];
     });
     builder.addCase(getAttendanceById.rejected, (state, action) => {
@@ -195,7 +250,9 @@ const attendanceSlice = createSlice({
     });
     builder.addCase(updateAttendance.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "スタッフ情報を更新しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "スタッフ情報を更新しました！";
       state.attendances = state.attendances.map((attendance) =>
         attendance.id === action.payload.attendance.id
           ? { ...attendance, ...action.payload.attendance }
@@ -216,9 +273,11 @@ const attendanceSlice = createSlice({
     builder.addCase(deleteAttendance.fulfilled, (state, action) => {
       state.loading = false;
       state.attendances = state.attendances.filter(
-        (attendance) => attendance.id !== action.payload.deleteId
+        (attendance) => attendance.id !== Number(action.payload.deleteId)
       );
-      state.message = "スタッフ情報を削除しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "スタッフ情報を削除しました！";
     });
     builder.addCase(deleteAttendance.rejected, (state, action) => {
       state.loading = false;

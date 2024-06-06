@@ -8,11 +8,21 @@ export const getStockCategory = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await stockCategoryApi.fetchAllStockCategories(); // APIからデータを取得
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -31,11 +41,21 @@ export const createStockCategory = createAsyncThunk(
   ) => {
     const response: any = await stockCategoryApi.createStockCategory(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -45,11 +65,21 @@ export const getStockCategoryById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await stockCategoryApi.fetchStockCategoryById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -72,11 +102,21 @@ export const updateStockCategory = createAsyncThunk(
       updateData
     );
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -87,11 +127,21 @@ export const deleteStockCategory = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await stockCategoryApi.deleteStockCategory(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -135,7 +185,9 @@ const stock_categorySlice = createSlice({
         ...state.stock_category,
         ...action.payload.stockCategories,
       ];
-      state.message = "在庫カテゴリーの取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫カテゴリーの取得に成功しました！";
     });
     builder.addCase(getStockCategory.rejected, (state, action) => {
       state.loading = false;
@@ -153,7 +205,9 @@ const stock_categorySlice = createSlice({
         ...state.stock_category,
         action.payload.stockCategory,
       ];
-      state.message = "在庫カテゴリーの作成に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫カテゴリーの作成に成功しました！";
     });
     builder.addCase(createStockCategory.rejected, (state, action) => {
       state.error = action.error.message;
@@ -171,7 +225,9 @@ const stock_categorySlice = createSlice({
         action.payload.stockCategory,
       ];
       state.loading = false;
-      state.message = "在庫カテゴリーの取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫カテゴリーの取得に成功しました！";
     });
     builder.addCase(getStockCategoryById.rejected, (state, action) => {
       state.error = action.error.message;
@@ -190,7 +246,9 @@ const stock_categorySlice = createSlice({
           ? { ...stock_category, ...action.payload.stockCategory }
           : stock_category
       );
-      state.message = "在庫カテゴリーの更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫カテゴリーの更新に成功しました！";
     });
     builder.addCase(updateStockCategory.rejected, (state, action) => {
       state.error = action.error.message;
@@ -205,9 +263,12 @@ const stock_categorySlice = createSlice({
     builder.addCase(deleteStockCategory.fulfilled, (state, action) => {
       state.loading = false;
       state.stock_category = state.stock_category.filter(
-        (stock_category) => stock_category.id !== action.payload.deleteId
+        (stock_category) =>
+          stock_category.id !== Number(action.payload.deleteId)
       );
-      state.message = "在庫カテゴリーの削除に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫カテゴリーの削除に成功しました！";
     });
     builder.addCase(deleteStockCategory.rejected, (state, action) => {
       state.error = action.error.message;

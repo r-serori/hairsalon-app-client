@@ -18,12 +18,21 @@ export const getCourse_customers = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await courseCustomerApi.fetchAllCourseCustomers();
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );

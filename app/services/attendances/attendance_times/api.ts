@@ -1,10 +1,13 @@
 import { sendRequest } from "../../requestApi";
 
 export const attendance_timeApi = {
-  selectFetchAttendanceTimes: async (attendance_id: number) => {
+  selectFetchAttendanceTimes: async (formData: {
+    attendance_id: number;
+    yearMonth: string;
+  }) => {
     const response = await sendRequest(
       "GET",
-      `/images/selectedAttendanceTimes/${attendance_id}`
+      `/images/selectedAttendanceTimes/${formData.attendance_id}/${formData.yearMonth} `
     );
     console.log("APIのattendanceTimeDataだよ");
     return response;

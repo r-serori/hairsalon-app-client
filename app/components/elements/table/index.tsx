@@ -108,11 +108,6 @@ const ComponentTable = ({
 
   const router = useRouter();
 
-  // const handleItemClick = (node, nodesProps) => {
-  //   setNode(node);
-  //   setNodesProps(nodesProps);
-  // };
-
   //時間管理画面へ遷移
   const handleTimeManagement = (id) => {
     router.push(`attendance_times/${id}/show?id=${id}`);
@@ -225,7 +220,7 @@ const ComponentTable = ({
                           new Date(propValue).getMinutes().toString();
                         return (
                           <Cell
-                            key={`${propDate} + ${propName} + ${node.id} + ${index}`}
+                            key={`${propDate} + ${propName} + ${node.id} + ${index} `}
                             className="items-center bg-gray-100 text-gray-900 text-sm text-center "
                             style={{
                               cursor: "pointer",
@@ -282,7 +277,11 @@ const ComponentTable = ({
                       ) {
                         return (
                           <Cell
-                            key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
+                            key={
+                              propProp === "start_photo_path"
+                                ? `${propValue} + ${propName} + ${node.id}+ ${index} + start`
+                                : `${propValue} + ${propName} + ${node.id}+ ${index} + end`
+                            }
                             className="items-center bg-gray-100 text-gray-900 text-center pb-1 "
                             style={{
                               cursor: "pointer",
@@ -290,10 +289,25 @@ const ComponentTable = ({
                           >
                             <div className="flex justify-center items-center text-center mx-auto">
                               <img
+                                key={
+                                  propProp === "start_photo_path"
+                                    ? `${propValue} + ${propName} + ${node.id}+ ${index} + start`
+                                    : `${propValue} + ${propName} + ${node.id}+ ${index} + end`
+                                }
                                 src={
-                                  propValue
+                                  propValue === "編集済み"
+                                    ? "https://dummyimage.com/320x240/000/fff&text=編集済み"
+                                    : propValue &&
+                                      propValue !== "編集済み" &&
+                                      propProp === "start_photo_path"
                                     ? imgUrl +
-                                      "attendance_times/images/" +
+                                      "attendance_times/images/startPhotos/" +
+                                      propValue
+                                    : propValue &&
+                                      propValue !== "編集済み" &&
+                                      propProp === "end_photo_path"
+                                    ? imgUrl +
+                                      "attendance_times/images/endPhotos/" +
                                       propValue
                                     : "https://dummyimage.com/320x240/000/fff&text=未登録"
                                 }

@@ -5,19 +5,33 @@ import { AttendanceState } from "../attendanceSlice";
 
 export const selectGetAttendanceTimes = createAsyncThunk(
   "attendance_times/selectGetAttendanceTimes",
-  async (attendance_id: number, { rejectWithValue }) => {
+  async (
+    formData: {
+      attendance_id: number;
+      yearMonth: string;
+    },
+    { rejectWithValue }
+  ) => {
     const response: any = await attendance_timeApi.selectFetchAttendanceTimes(
-      attendance_id
+      formData
     );
     console.log("responseだよ", response);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
       //成功時の処理
       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -38,10 +52,18 @@ export const updateStartTime = createAsyncThunk(
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
       //成功時の処理
       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -62,10 +84,18 @@ export const updateEndTime = createAsyncThunk(
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
       //成功時の処理
       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -85,10 +115,18 @@ export const createStartTime = createAsyncThunk(
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
       //成功時の処理
       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -108,10 +146,18 @@ export const createEndTime = createAsyncThunk(
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
       //成功時の処理
       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -120,15 +166,22 @@ export const deleteAttendanceTime = createAsyncThunk(
   "attendance_times/deleteAttendanceTime",
   async (id: number, { rejectWithValue }) => {
     const response: any = await attendance_timeApi.deleteAttendanceTime(id);
-    console.log("responseだよ", response);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
       //成功時の処理
       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -173,11 +226,10 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "勤怠時間と画像の取得に成功しました！";
-      state.attendance_times = [
-        ...state.attendance_times,
-        ...action.payload.attendanceTimes,
-      ];
+      state.message = action.payload.message
+        ? action.payload.message
+        : "勤怠時間と画像の取得に成功しました！";
+      state.attendance_times = action.payload.attendanceTimes;
     });
     builder.addCase(selectGetAttendanceTimes.rejected, (state, action) => {
       state.loading = false;
@@ -191,7 +243,9 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(updateStartTime.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "出勤時間と画像の更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "出勤時間と画像の更新に成功しました！";
       state.attendance_times = state.attendance_times.map((attendance_time) =>
         attendance_time.id === action.payload.attendanceTime.id
           ? {
@@ -213,7 +267,9 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(updateEndTime.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "退勤時間と画像の更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "退勤時間と画像の更新に成功しました！";
       state.attendance_times = state.attendance_times.map((attendance_time) =>
         attendance_time.id === action.payload.attendanceTime.id
           ? { ...attendance_time, ...action.payload.attendanceTime }
@@ -237,11 +293,16 @@ const attendance_timeSlice = createSlice({
         ...state.attendance_times,
         action.payload.attendanceTime,
       ];
-      state.message = "出勤時間と画像の登録に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "出勤時間と画像の登録に成功しました！";
     });
     builder.addCase(createStartTime.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error =
+        (action.payload as any).resStatus === "error"
+          ? (action.payload as any).message
+          : action.error.message;
     });
 
     builder.addCase(createEndTime.pending, (state) => {
@@ -259,7 +320,9 @@ const attendance_timeSlice = createSlice({
             }
           : attendance_time
       );
-      state.message = "退勤時間と画像の登録に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "退勤時間と画像の登録に成功しました！";
     });
     builder.addCase(createEndTime.rejected, (state, action) => {
       state.loading = false;
@@ -274,9 +337,12 @@ const attendance_timeSlice = createSlice({
     builder.addCase(deleteAttendanceTime.fulfilled, (state, action) => {
       state.loading = false;
       state.attendance_times = state.attendance_times.filter(
-        (attendance_time) => attendance_time.id !== action.payload.deleteId
+        (attendance_time) =>
+          attendance_time.id !== Number(action.payload.deleteId)
       );
-      state.message = "勤怠情報の削除に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "勤怠情報の削除に成功しました！";
     });
 
     builder.addCase(deleteAttendanceTime.rejected, (state, action) => {

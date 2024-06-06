@@ -8,11 +8,21 @@ export const getStock = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await stockApi.fetchAllStocks(); // APIからデータを取得
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -34,11 +44,21 @@ export const createStock = createAsyncThunk(
   ) => {
     const response: any = await stockApi.createStock(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -50,11 +70,21 @@ export const getStockById = createAsyncThunk(
     const response: any = await stockApi.fetchStockById(id);
     console.log("stockShowDataだよ");
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -77,11 +107,21 @@ export const updateStock = createAsyncThunk(
     const { id, ...updateData } = formData; // idを除外する
     const response: any = await stockApi.updateStock(id, updateData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -92,11 +132,21 @@ export const deleteStock = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await stockApi.deleteStock(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -143,7 +193,9 @@ const stockSlice = createSlice({
     builder.addCase(getStock.fulfilled, (state, action) => {
       state.loading = false;
       state.stocks = [...state.stocks, ...action.payload.stocks];
-      state.message = "在庫情報を取得しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫情報を取得しました！";
     });
     builder.addCase(getStock.rejected, (state, action) => {
       state.loading = false;
@@ -158,7 +210,9 @@ const stockSlice = createSlice({
     builder.addCase(createStock.fulfilled, (state, action) => {
       state.loading = false;
       state.stocks = [...state.stocks, action.payload.stock];
-      state.message = "在庫情報を作成しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫情報を作成しました！";
     });
     builder.addCase(createStock.rejected, (state, action) => {
       state.loading = false;
@@ -173,7 +227,9 @@ const stockSlice = createSlice({
     builder.addCase(getStockById.fulfilled, (state, action) => {
       state.loading = false;
       state.stocks = [...state.stocks, action.payload.stock];
-      state.message = "在庫情報を取得しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫情報を取得しました！";
     });
     builder.addCase(getStockById.rejected, (state, action) => {
       state.loading = false;
@@ -192,7 +248,9 @@ const stockSlice = createSlice({
           ? { ...stock, ...action.payload.stock }
           : stock
       );
-      state.message = "在庫情報を更新しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫情報を更新しました！";
     });
     builder.addCase(updateStock.rejected, (state, action) => {
       state.loading = false;
@@ -207,7 +265,7 @@ const stockSlice = createSlice({
     builder.addCase(deleteStock.fulfilled, (state, action) => {
       state.loading = false;
       state.stocks = state.stocks.filter(
-        (stock) => stock.id !== action.payload.deleteId
+        (stock) => stock.id !== Number(action.payload.deleteId)
       );
     });
     builder.addCase(deleteStock.rejected, (state, action) => {

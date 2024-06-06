@@ -11,7 +11,7 @@ interface ControlledCheckboxProps {
 
 const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
   type,
-  checked, // Destructure the checked property from the props
+  checked,
   onChanger,
 }) => {
   const label = { inputProps: { "aria-label": "controlled" } };
@@ -25,7 +25,7 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
       {...label}
       icon={<FavoriteBorder />}
       checkedIcon={<Favorite />}
-      disabled={type === "disabled"}
+      disabled={type === "disabled" || type === "times"} //typeがdisabledの場合はユーザーが変更できないようにする
     />
   );
 };

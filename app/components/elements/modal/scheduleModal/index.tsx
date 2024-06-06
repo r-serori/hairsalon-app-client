@@ -597,7 +597,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       setIsCustomer(newValue);
                       if (!newValue) {
                         setTitle("");
-
                         setNewCustomer(true);
                         setCustomerId(0);
                         setCustomerName("");

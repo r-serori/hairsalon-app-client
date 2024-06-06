@@ -38,7 +38,7 @@ export const sendRequest = async <T>(
 
     console.log(`${method} request to ${url} successful:`);
     console.log("REQUESTAPI.response", response);
-    return response.data as any;
+    return response as any;
   } catch (error) {
     // handleError(error);
     console.error("Failed to send request:", error);

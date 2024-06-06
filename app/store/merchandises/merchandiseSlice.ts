@@ -9,11 +9,21 @@ export const getMerchandise = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await merchandiseApi.fetchAllMerchandises();
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -32,11 +42,21 @@ export const createMerchandise = createAsyncThunk(
   ) => {
     const response: any = await merchandiseApi.createMerchandise(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -46,11 +66,21 @@ export const getMerchandiseById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await merchandiseApi.fetchMerchandiseById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -73,11 +103,21 @@ export const updateMerchandise = createAsyncThunk(
       updateData
     );
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -86,11 +126,21 @@ export const deleteMerchandise = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await merchandiseApi.deleteMerchandise(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -132,7 +182,9 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(getMerchandise.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "物販商品の取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "物販商品の取得に成功しました！";
       state.merchandise = [
         ...state.merchandise,
         ...action.payload.merchandises,
@@ -150,7 +202,9 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(createMerchandise.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "物販商品の作成に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "物販商品の作成に成功しました！";
       state.merchandise = [...state.merchandise, action.payload.merchandise];
     });
     builder.addCase(createMerchandise.rejected, (state, action) => {
@@ -166,7 +220,9 @@ const merchandiseSlice = createSlice({
     builder.addCase(getMerchandiseById.fulfilled, (state, action) => {
       state.loading = false;
       state.merchandise = [...state.merchandise, action.payload.merchandise];
-      state.message = "物販商品の取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "物販商品の取得に成功しました！";
     });
     builder.addCase(getMerchandiseById.rejected, (state, action) => {
       state.loading = false;
@@ -180,7 +236,9 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(updateMerchandise.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = "物販商品の更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "物販商品の更新に成功しました！";
       state.merchandise = state.merchandise.map((merchandise) =>
         merchandise.id === action.payload.merchandise.id
           ? { ...merchandise, ...action.payload.merchandise }
@@ -200,7 +258,7 @@ const merchandiseSlice = createSlice({
     builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
       state.loading = false;
       state.merchandise = state.merchandise.filter(
-        (merchandise) => merchandise.id !== action.payload.deleteId
+        (merchandise) => merchandise.id !== Number(action.payload.deleteId)
       );
     });
     builder.addCase(deleteMerchandise.rejected, (state, action) => {

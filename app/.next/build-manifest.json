@@ -22,20 +22,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/attendanceTimeShots": [
+    "/courses": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/attendanceTimeShots.js"
+      "static/chunks/pages/courses.js"
     ],
-    "/attendance_times/[attendance_id]/show": [
+    "/options": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/attendance_times/[attendance_id]/show.js"
-    ],
-    "/attendances": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/attendances.js"
+      "static/chunks/pages/options.js"
     ]
   },
   "ampFirstPages": []

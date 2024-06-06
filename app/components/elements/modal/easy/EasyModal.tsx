@@ -16,7 +16,8 @@ import timezone from "dayjs/plugin/timezone";
 import PrimaryButton from "../../button/PrimaryButton";
 import DeleteButton from "../../button/DeleteButton";
 import { selectGetSchedules } from "../../../../store/schedules/scheduleSlice";
-import schedules from "../../../../pages/schedules";
+import { selectGetAttendanceTimes } from "../../../../store/attendances/attendance_times/attendance_timesSlice";
+import { ResetTvTwoTone } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -35,9 +36,18 @@ const style = {
 interface EasyModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  whoAreYou?: string;
+  whatIsYourId?: number;
+  setYearMonth?: (yearMonth: string) => void;
 }
 
-const EasyModal: React.FC<EasyModalProps> = ({ open, setOpen }) => {
+const EasyModal: React.FC<EasyModalProps> = ({
+  open,
+  setOpen,
+  whoAreYou,
+  whatIsYourId,
+  setYearMonth,
+}) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -49,22 +59,53 @@ const EasyModal: React.FC<EasyModalProps> = ({ open, setOpen }) => {
     dayjs().utc().tz("Asia/Tokyo")
   );
 
-  let message = "去年以降または再来年以降の年を選択してください。";
+  const [year, setYear] = useState<string>(
+    whoAreYou === "attendanceTimes"
+      ? dayjs().utc().tz("Asia/Tokyo").format("YYYY-MM")
+      : dayjs().utc().tz("Asia/Tokyo").format("YYYY")
+  );
 
-  const year = dayjs(selectDate).utc().tz("Asia/Tokyo").format("YYYY");
+  let message =
+    whoAreYou === "attendanceTimes"
+      ? "去年以前、または来年以降の年を選択してください！"
+      : "去年以前、または再来年以降の年を選択してください！";
+
+  const resetState = () => {
+    setSelectDate(dayjs().utc().tz("Asia/Tokyo"));
+    setYear(
+      whoAreYou === "attendanceTimes"
+        ? dayjs().utc().tz("Asia/Tokyo").format("YYYY-MM")
+        : dayjs().utc().tz("Asia/Tokyo").format("YYYY")
+    );
+  };
 
   const selectSubmit = async () => {
     try {
-      await dispatch(selectGetSchedules({ year }) as any);
-      setOpen(false);
-      router.push({
-        pathname: "/schedules",
-        query: { year },
-      });
+      if (whoAreYou === "attendanceTimes") {
+        dispatch(
+          selectGetAttendanceTimes({
+            attendance_id: whatIsYourId,
+            yearMonth: year,
+          }) as any
+        );
+        resetState();
+        setOpen(false);
+        setYearMonth(year);
+      } else {
+        setOpen(false);
+        resetState();
+        router.push({
+          pathname: "/schedules",
+          query: { year },
+        });
+      }
     } catch (e) {
       console.log(e);
     }
   };
+
+  console.log("yearです", year);
+  console.log("selectDateです", selectDate);
   return (
     <div>
       <Button
@@ -72,7 +113,9 @@ const EasyModal: React.FC<EasyModalProps> = ({ open, setOpen }) => {
         className="text-xl text-gray-900 cursor-pointer hover:bg-gray-400 
         hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
       >
-        去年以前か来年以降の予約を確認,追加
+        {whoAreYou === "attendanceTimes"
+          ? "去年以前か来年以降の勤怠時間を確認,編集"
+          : "去年以前か来年以降の予約を確認,編集"}
       </Button>
       <Modal
         open={open}
@@ -86,23 +129,39 @@ const EasyModal: React.FC<EasyModalProps> = ({ open, setOpen }) => {
             <div className="flex justify-center items-center ">
               <form onSubmit={selectSubmit}>
                 <div className="flex justify-center items-center sm:pt-8 md:pt-12">
-                  <DatePickerValue
-                    value={selectDate}
-                    changer={(newValue) => {
-                      setSelectDate(newValue);
-                    }}
-                    whatSales="過去未来"
-                  />
+                  {whoAreYou === "attendanceTimes" ? (
+                    <DatePickerValue
+                      value={selectDate}
+                      changer={(newValue) => {
+                        setSelectDate(newValue);
+                        setYear(newValue.format("YYYY-MM"));
+                      }}
+                      whatSales="勤怠"
+                    />
+                  ) : (
+                    <DatePickerValue
+                      value={selectDate}
+                      changer={(newValue) => {
+                        setSelectDate(newValue);
+                        setYear(newValue.format("YYYY"));
+                      }}
+                      whatSales="過去未来"
+                    />
+                  )}
                 </div>
 
                 <div className="flex justify-center pt-8">
-                  {year === dayjs().utc().tz("Asia/Tokyo").format("YYYY") ||
-                  year ===
+                  {(year === dayjs().utc().tz("Asia/Tokyo").format("YYYY") &&
+                    whoAreYou !== "attendanceTimes") ||
+                  (year ===
                     dayjs()
                       .utc()
                       .tz("Asia/Tokyo")
                       .add(1, "year")
-                      .format("YYYY") ? (
+                      .format("YYYY") &&
+                    whoAreYou !== "attendanceTimes") ||
+                  (year === dayjs().utc().tz("Asia/Tokyo").format("YYYY-MM") &&
+                    whoAreYou === "attendanceTimes") ? (
                     <>
                       <div className="mr-2 pt-16">
                         <DeleteButton
@@ -114,7 +173,9 @@ const EasyModal: React.FC<EasyModalProps> = ({ open, setOpen }) => {
                         />
                       </div>
                       <p className="text-red-500 text-center mr-12">
-                        今年と来年の予約は既に表示しています。
+                        {whoAreYou === "attendanceTimes"
+                          ? "選択中の勤怠時間は既に表示しています。"
+                          : "今年と来年の予約は既に表示しています。"}
                       </p>
                     </>
                   ) : (

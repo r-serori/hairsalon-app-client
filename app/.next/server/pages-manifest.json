@@ -2,8 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/courses": "pages/courses.js",
   "/attendance_times/[attendance_id]/show": "pages/attendance_times/[attendance_id]/show.js",
-  "/attendances": "pages/attendances.js",
-  "/attendanceTimeShots": "pages/attendanceTimeShots.js",
-  "/login": "pages/login.js"
+  "/options": "pages/options.js"
 }

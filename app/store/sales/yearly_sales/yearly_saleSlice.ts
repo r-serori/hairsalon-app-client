@@ -7,12 +7,21 @@ export const getYearly_sales = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await yearlySaleApi.fetchAllYearlySales();
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -25,12 +34,21 @@ export const createYearly_sales = createAsyncThunk(
   ) => {
     const response: any = await yearlySaleApi.createYearlySales(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -39,12 +57,21 @@ export const getYearly_salesById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await yearlySaleApi.fetchYearlySalesById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -58,12 +85,21 @@ export const updateYearly_sales = createAsyncThunk(
     const { id, ...updateData } = formData;
     const response: any = await yearlySaleApi.updateYearlySales(id, updateData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -73,12 +109,21 @@ export const deleteYearly_sales = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await yearlySaleApi.deleteYearlySales(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
-    }
-    if (response.resStatus === "success") {
-      console.log("response.success", response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -123,7 +168,9 @@ const yearly_salesSlice = createSlice({
         ...state.yearly_sales,
         ...action.payload.yearlySales,
       ];
-      state.message = "年間売上の取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "年間売上の取得に成功しました！";
     });
     builder.addCase(getYearly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -138,7 +185,9 @@ const yearly_salesSlice = createSlice({
     builder.addCase(createYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
       state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
-      state.message = "年間売上の登録に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "年間売上の登録に成功しました！";
     });
     builder.addCase(createYearly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -153,7 +202,9 @@ const yearly_salesSlice = createSlice({
     builder.addCase(getYearly_salesById.fulfilled, (state, action) => {
       state.loading = false;
       state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
-      state.message = "年間売上の取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "年間売上の取得に成功しました！";
     });
     builder.addCase(getYearly_salesById.rejected, (state, action) => {
       state.loading = false;
@@ -172,7 +223,9 @@ const yearly_salesSlice = createSlice({
           ? { ...yearly_sale, ...action.payload.yearlySale }
           : yearly_sale
       );
-      state.message = "年間売上の更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "年間売上の更新に成功しました！";
     });
     builder.addCase(updateYearly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -187,7 +240,7 @@ const yearly_salesSlice = createSlice({
     builder.addCase(deleteYearly_sales.fulfilled, (state, action) => {
       state.loading = false;
       state.yearly_sales = state.yearly_sales.filter(
-        (yearly_sales) => yearly_sales.id !== action.payload.deleteId
+        (yearly_sales) => yearly_sales.id !== Number(action.payload.deleteId)
       );
     });
     builder.addCase(deleteYearly_sales.rejected, (state, action) => {

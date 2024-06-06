@@ -7,11 +7,21 @@ export const getSchedule = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await schedulesApi.fetchAllSchedules();
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -21,11 +31,21 @@ export const selectGetSchedules = createAsyncThunk(
   async (formData: { year: string }, { rejectWithValue }) => {
     const response: any = await schedulesApi.selectGetSchedules(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -43,11 +63,21 @@ export const createSchedule = createAsyncThunk(
   ) => {
     const response: any = await schedulesApi.createSchedule(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -74,11 +104,21 @@ export const createCustomerSchedule = createAsyncThunk(
   ) => {
     const response: any = await schedulesApi.createCustomerSchedule(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -88,11 +128,21 @@ export const getScheduleById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await schedulesApi.fetchScheduleById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -111,11 +161,21 @@ export const updateSchedule = createAsyncThunk(
   ) => {
     const response: any = await schedulesApi.updateSchedule(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -143,11 +203,21 @@ export const updateCustomerSchedule = createAsyncThunk(
   ) => {
     const response: any = await schedulesApi.updateCustomerSchedule(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -175,11 +245,21 @@ export const updateCustomerOnlySchedule = createAsyncThunk(
       formData
     );
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -189,11 +269,21 @@ export const deleteSchedule = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await schedulesApi.deleteSchedule(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -239,7 +329,9 @@ const scheduleSlice = createSlice({
       .addCase(getSchedule.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = [...state.schedule, ...action.payload.schedules];
-        state.message = "スケジュールの取得に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールの取得に成功しました！";
       })
       .addCase(getSchedule.rejected, (state, action) => {
         state.loading = false;
@@ -253,7 +345,9 @@ const scheduleSlice = createSlice({
       .addCase(createSchedule.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = [...state.schedule, action.payload.schedule];
-        state.message = "スケジュールの作成に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールの作成に成功しました！";
       })
       .addCase(createSchedule.rejected, (state, action) => {
         state.loading = false;
@@ -267,7 +361,9 @@ const scheduleSlice = createSlice({
       .addCase(createCustomerSchedule.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = [...state.schedule, action.payload.schedule];
-        state.message = "スケジュールと顧客情報の作成に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールと顧客情報の作成に成功しました！";
       })
       .addCase(createCustomerSchedule.rejected, (state, action) => {
         state.loading = false;
@@ -281,7 +377,9 @@ const scheduleSlice = createSlice({
       .addCase(getScheduleById.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = [...state.schedule, action.payload.schedule];
-        state.message = "スケジュールの取得に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールの取得に成功しました！";
       })
       .addCase(getScheduleById.rejected, (state, action) => {
         state.loading = false;
@@ -302,7 +400,9 @@ const scheduleSlice = createSlice({
               }
             : schedule
         );
-        state.message = "スケジュールの更新に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールの更新に成功しました！";
       })
       .addCase(updateSchedule.rejected, (state, action) => {
         state.loading = false;
@@ -323,7 +423,9 @@ const scheduleSlice = createSlice({
               }
             : schedule
         );
-        state.message = "スケジュールと顧客情報の更新に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールと顧客情報の更新に成功しました！";
       })
       .addCase(updateCustomerSchedule.rejected, (state, action) => {
         state.error = action.error.message;
@@ -338,7 +440,9 @@ const scheduleSlice = createSlice({
       .addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = [...state.schedule, ...action.payload.schedule];
-        state.message = "顧客情報の更新とスケジュールの作成に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "顧客情報の更新とスケジュールの作成に成功しました！";
       })
       .addCase(updateCustomerOnlySchedule.rejected, (state, action) => {
         state.error = action.error.message;
@@ -353,9 +457,11 @@ const scheduleSlice = createSlice({
       .addCase(deleteSchedule.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = state.schedule.filter(
-          (schedule) => schedule.id !== action.payload.deleteId
+          (schedule) => schedule.id !== Number(action.payload.deleteId)
         );
-        state.message = "スケジュールの削除に成功しました！";
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールの削除に成功しました！";
       })
       .addCase(deleteSchedule.rejected, (state, action) => {
         state.error = action.error.message;
@@ -371,7 +477,9 @@ const scheduleSlice = createSlice({
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.loading = false;
       state.schedule = [...action.payload.schedules];
-      state.message = "スケジュールの取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "スケジュールの取得に成功しました！";
     });
 
     builder.addCase(selectGetSchedules.rejected, (state, action) => {

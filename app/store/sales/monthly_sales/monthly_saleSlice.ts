@@ -7,11 +7,21 @@ export const getMonthly_sales = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     const response: any = await monthlySaleApi.fetchAllMonthlySales();
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -24,11 +34,21 @@ export const createMonthly_sales = createAsyncThunk(
   ) => {
     const response: any = await monthlySaleApi.createMonthlySales(formData);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -38,11 +58,21 @@ export const getMonthly_salesById = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await monthlySaleApi.fetchMonthlySalesById(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -63,11 +93,21 @@ export const updateMonthly_sales = createAsyncThunk(
       updateData
     );
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -77,11 +117,21 @@ export const deleteMonthly_sales = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     const response: any = await monthlySaleApi.deleteMonthlySales(id);
     if (response.resStatus === "error") {
-      console.log("response.error", response);
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
       return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
     } else if (response.resStatus === "success") {
-      console.log("response.success", response);
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -127,7 +177,9 @@ const monthly_salesSlice = createSlice({
         ...state.monthly_sales,
         ...action.payload.monthlySales,
       ];
-      state.message = "月次売上の取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "月次売上の取得に成功しました！";
     });
     builder.addCase(getMonthly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -145,7 +197,9 @@ const monthly_salesSlice = createSlice({
         ...state.monthly_sales,
         action.payload.monthlySale,
       ];
-      state.message = "月次売上の作成に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "月次売上の作成に成功しました！";
     });
     builder.addCase(createMonthly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -163,7 +217,9 @@ const monthly_salesSlice = createSlice({
         ...state.monthly_sales,
         action.payload.monthlySale,
       ];
-      state.message = "月次売上の取得に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "月次売上の取得に成功しました！";
     });
     builder.addCase(getMonthly_salesById.rejected, (state, action) => {
       state.loading = false;
@@ -182,7 +238,9 @@ const monthly_salesSlice = createSlice({
           ? { ...monthly_sales, ...action.payload.monthlySale }
           : monthly_sales
       );
-      state.message = "月次売上の更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "月次売上の更新に成功しました！";
     });
     builder.addCase(updateMonthly_sales.rejected, (state, action) => {
       state.loading = false;
@@ -197,9 +255,11 @@ const monthly_salesSlice = createSlice({
     builder.addCase(deleteMonthly_sales.fulfilled, (state, action) => {
       state.loading = false;
       state.monthly_sales = state.monthly_sales.filter(
-        (monthly_sales) => monthly_sales.id !== action.payload.deleteId
+        (monthly_sales) => monthly_sales.id !== Number(action.payload.deleteId)
       );
-      state.message = "月次売上の削除に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "月次売上の削除に成功しました！";
     });
     builder.addCase(deleteMonthly_sales.rejected, (state, action) => {
       state.loading = false;

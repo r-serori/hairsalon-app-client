@@ -38,7 +38,9 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
             ? "日付を選択"
             : whatSales === "月次"
             ? "月を選択"
-            : "年を選択"
+            : whatSales === "年次"
+            ? "年を選択"
+            : "表示したい年月を選択"
         }
         value={dayjs(value).utc().tz("Asia/Tokyo")}
         onChange={(newValue) => {
@@ -47,7 +49,7 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
         views={
           whatSales === "日次"
             ? ["year", "month", "day"]
-            : whatSales === "月次"
+            : whatSales === "月次" || whatSales === "勤怠"
             ? ["year", "month"]
             : ["year"]
         }

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAttendance } from "../../store/attendances/attendanceSlice";
 import { RootState } from "../../redux/store";
-import { time } from "console";
 
 const AttendanceTimeShots = () => {
   const dispatch = useDispatch();
@@ -49,7 +48,6 @@ const AttendanceTimeShots = () => {
   const searchItems = [
     { key: "shotAttendance_name", value: "名前" },
     { key: "shotPosition", value: "役職" },
-    ,
   ];
 
   const tHeaderItems = ["名前", "役職", "勤務中？", "出勤", "退勤"];
