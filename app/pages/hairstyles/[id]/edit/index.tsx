@@ -8,7 +8,7 @@ import {
 } from "../../../../store/hairstyles/hairstyleSlice";
 import { RootState } from "../../../../redux/store";
 import HairstyleForm from "../../../../components/elements/form/hairstyles/HairstyleForm";
-import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../../components/elements/button/RouterButton";
 
 const hairstyleEdit: React.FC = () => {
   const dispatch = useDispatch();

@@ -27,7 +27,7 @@ import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
 import DeleteMan from "../../../DeleteMan/[DeleteMan]/[id]";
-import BackAgainButton from "../../button/BackAgainButton";
+import BackAgainButton from "../../button/RouterButton";
 import ControlledCheckbox from "../../input/checkbox/SimpleCheckBox";
 import { SelectChangeEvent, dividerClasses } from "@mui/material";
 import { useState } from "react";

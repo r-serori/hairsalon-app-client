@@ -4,7 +4,7 @@ import { createStock, getStock } from "../../../store/stocks/stockSlice";
 import { RootState } from "../../../redux/store";
 import StockForm from "../../../components/elements/form/stocks/StockForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../components/elements/button/RouterButton";
 
 const stockCreate: React.FC = () => {
   const dispatch = useDispatch();

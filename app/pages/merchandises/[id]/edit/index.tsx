@@ -8,7 +8,7 @@ import {
 } from "../../../../store/merchandises/merchandiseSlice";
 import { RootState } from "../../../../redux/store";
 import MerchandiseForm from "../../../../components/elements/form/merchandises/MerchandiseForm";
-import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../../components/elements/button/RouterButton";
 
 const merchandiseEdit: React.FC = () => {
   const dispatch = useDispatch();

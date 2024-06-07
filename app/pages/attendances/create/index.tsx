@@ -7,7 +7,7 @@ import {
 import { RootState } from "../../../redux/store";
 import AttendanceForm from "../../../components/elements/form/attendances/AttendanceForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../components/elements/button/RouterButton";
 
 const attendanceCreate: React.FC = () => {
   const dispatch = useDispatch();

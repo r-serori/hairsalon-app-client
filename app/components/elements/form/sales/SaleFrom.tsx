@@ -316,8 +316,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       setSumPrice(result);
     } catch (e) {
-      console.log(e);
-      <div>loading中にエラーが発生しました。</div>;
+      return 0;
     }
   };
 

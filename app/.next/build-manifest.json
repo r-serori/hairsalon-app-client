@@ -22,10 +22,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/attendanceTimeShots": [
+    "/attendance_times/[attendance_id]/show": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/attendanceTimeShots.js"
+      "static/chunks/pages/attendance_times/[attendance_id]/show.js"
     ],
     "/attendances": [
       "static/chunks/webpack.js",

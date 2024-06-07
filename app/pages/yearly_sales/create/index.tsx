@@ -7,7 +7,7 @@ import {
 import { RootState } from "../../../redux/store";
 import YearlySaleForm from "../../../components/elements/form/sales/yearly_sales/Yearly_salesForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../components/elements/button/RouterButton";
 
 const yearlySaleCreate: React.FC = () => {
   const dispatch = useDispatch();

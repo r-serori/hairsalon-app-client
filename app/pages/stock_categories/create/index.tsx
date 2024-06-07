@@ -7,7 +7,7 @@ import {
 import { RootState } from "../../../redux/store";
 import StockCategoryForm from "../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../components/elements/button/RouterButton";
 
 const stockCategoryCreate: React.FC = () => {
   const dispatch = useDispatch();

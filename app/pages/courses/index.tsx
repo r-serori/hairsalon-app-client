@@ -1,17 +1,19 @@
 import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { getCourse } from "../../store/courses/courseSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import { Basic } from "next/font/google";
+import usePageReload from "../../components/Hooks/usePageReload";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const courses: React.FC = () => {
+  const router = useRouter();
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCourse({}) as any);
-  }, [dispatch]);
 
   const loading = useSelector((state: RootState) => state.course.loading);
 
@@ -22,6 +24,20 @@ const courses: React.FC = () => {
   const courses = useSelector((state: RootState) => state.course.course);
   console.log("coursesです");
   console.log(courses);
+
+  useEffect(() => {
+    try {
+      if (courses.length === 0) {
+        dispatch(getCourse({}) as any);
+      } else {
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("コース取得！！");
+    }
+  }, [dispatch]);
 
   const searchItems = [
     { key: "course_name", value: "コース名" },
@@ -39,14 +55,15 @@ const courses: React.FC = () => {
   const nodes = courses;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 ">
-      {message ? (
+    <div className="mx-auto max-w-6xl px-4">
+      {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
-      ) : error ? (
+      )}
+      {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
-      ) : null}
-      <div className="flex space-x-4 mb-4">
-        <Link href="/courses/create">新規作成</Link>
+      )}
+      <div className="flex my-2">
+        <RouterButton link="/courses/create" value="新規作成" />
       </div>
       {loading ? (
         <p>Loading...</p>

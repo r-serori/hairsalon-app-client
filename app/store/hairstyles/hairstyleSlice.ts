@@ -177,7 +177,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(getHairstyle.fulfilled, (state, action) => {
       state.loading = false;
-      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyle];
+      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyles];
       state.message = action.payload.message
         ? action.payload.message
         : "ヘアスタイル情報を取得しました！ ";

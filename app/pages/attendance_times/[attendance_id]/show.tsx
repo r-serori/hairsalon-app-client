@@ -11,6 +11,7 @@ import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
 import usePageReload from "../../../components/Hooks/usePageReload";
 import BasicAlerts from "../../../components/elements/alert/Alert";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const attendanceTimes: React.FC = () => {
   const dispatch = useDispatch();
@@ -110,9 +111,8 @@ const attendanceTimes: React.FC = () => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <Link href="/attendance_times/[attendance_id]?attendance_id=1">
-        全体へ戻る
-      </Link>
+      <RouterButton link="/attendances" value="スタッフ画面へ戻る" />
+
       <EasyModal
         open={attendanceTimeOpen}
         setOpen={setAttendanceTimeOpen}

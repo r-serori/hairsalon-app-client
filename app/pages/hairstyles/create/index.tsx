@@ -7,7 +7,7 @@ import {
 import { RootState } from "../../../redux/store";
 import HairstyleForm from "../../../components/elements/form/hairstyles/HairstyleForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../components/elements/button/RouterButton";
 
 const hairstyleCreate = () => {
   const dispatch = useDispatch();

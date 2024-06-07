@@ -4,7 +4,7 @@ import { createCourse, getCourse } from "../../../store/courses/courseSlice";
 import { RootState } from "../../../redux/store";
 import CourseForm from "../../../components/elements/form/courses/CourseForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../components/elements/button/RouterButton";
 
 const courseCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const courseCreate: React.FC = () => {
 
   return (
     <div className="min-h-full">
-      <BackAgainButton link={"/courses"} />
+      <BackAgainButton link="/courses" />
       {loading ? <p>Loading...</p> : <CourseForm createCourse={handleCreate} />}
     </div>
   );

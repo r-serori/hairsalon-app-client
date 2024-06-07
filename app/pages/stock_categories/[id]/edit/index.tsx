@@ -7,7 +7,7 @@ import {
 } from "../../../../store/stocks/stock_categories/stock_categorySlice";
 import { RootState } from "../../../../redux/store";
 import StockCategoryForm from "../../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
-import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../../components/elements/button/RouterButton";
 
 const stockCategoryEdit: React.FC = () => {
   const dispatch = useDispatch();

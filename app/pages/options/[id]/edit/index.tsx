@@ -8,7 +8,7 @@ import {
 } from "../../../../store/options/optionSlice";
 import { RootState } from "../../../../redux/store";
 import OptionForm from "../../../../components/elements/form/options/OptionForm";
-import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../../components/elements/button/RouterButton";
 
 const optionEdit: React.FC = () => {
   const dispatch = useDispatch();

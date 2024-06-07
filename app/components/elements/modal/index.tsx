@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ModalForm from "../form/ModalForm";
 import AttendanceTimesShotForm from "../form/attendances/attendanceTimeShots/AttendanceTimesShotForm";
-import BackAgainButton from "../button/BackAgainButton";
+import BackAgainButton from "../button/RouterButton";
 
 const style = {
   position: "absolute" as "absolute",

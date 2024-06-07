@@ -8,7 +8,7 @@ import {
 } from "../../../../store/stocks/stockSlice";
 import { RootState } from "../../../../redux/store";
 import StockForm from "../../../../components/elements/form/stocks/StockForm";
-import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../../components/elements/button/RouterButton";
 
 const stockEdit: React.FC = () => {
   const dispatch = useDispatch();

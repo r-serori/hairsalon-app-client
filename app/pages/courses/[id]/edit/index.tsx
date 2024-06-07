@@ -8,7 +8,7 @@ import {
 } from "../../../../store/courses/courseSlice";
 import { RootState } from "../../../../redux/store";
 import CourseForm from "../../../../components/elements/form/courses/CourseForm";
-import BackAgainButton from "../../../../components/elements/button/BackAgainButton";
+import BackAgainButton from "../../../../components/elements/button/RouterButton";
 
 const courseEdit: React.FC = () => {
   const dispatch = useDispatch();
