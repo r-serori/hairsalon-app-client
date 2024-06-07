@@ -33,7 +33,7 @@ export const authApi = {
     password: string;
     created_at: string;
     updated_at: string;
-    // confirmPassword: string;
+    confirmPassword: string;
   }) => {
     const csrfToken = await getCsrfToken();
     if (csrfToken) {

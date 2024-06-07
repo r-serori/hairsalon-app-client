@@ -12,6 +12,7 @@ import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
 interface Schedule {
   year?: string;
@@ -77,11 +78,12 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
 
   return (
     <div>
-      {message ? (
-        <p className="py-4 text-blue-700 ml-4">{message}</p>
-      ) : error ? (
-        <p className="py-4 text-red-700 mr-4">{error}</p>
-      ) : null}
+      {message && (
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      )}
+      {error && (
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      )}
       {loading ? (
         <p>loading...</p>
       ) : (

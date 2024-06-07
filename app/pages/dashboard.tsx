@@ -12,10 +12,37 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import LogoutButton from "../components/elements/button/LogoutButton";
+import LogoutButton from "../components/elements/button/logoutButton";
+import { useRouter } from "next/router";
+import BasicAlerts from "../components/elements/alert/Alert";
 
 const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const hasLaravelSessionCookie = () => {
+      // ブラウザのCookieからlaravel_session Cookieを取得する
+      const cookies = document.cookie;
+      console.log("cookies", cookies);
+
+      if (cookies.startsWith("XSRF-TOKEN")) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    if (hasLaravelSessionCookie()) {
+      console.log("XCSRF存在します");
+      return;
+      // ログイン済みの場合の処理を記述する
+    } else {
+      console.log("XCSRFが存在しません");
+      router.push("/login");
+      // 未ログインの場合の処理を記述する
+    }
+  }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   useEffect(() => {
     function handleResize() {
@@ -36,7 +63,10 @@ const dashboard: React.FC = () => {
 
   return (
     <>
-      {message ? <p>{message}</p> : null}
+      {message && (
+        <BasicAlerts message={message} type="success" space={1} padding={0.6} />
+      )}
+
       <div className="flex justify-end py-4 mr-4 ">
         <LogoutButton className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" />
       </div>

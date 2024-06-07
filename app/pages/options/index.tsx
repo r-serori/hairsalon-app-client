@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getOption } from "../../store/options/optionSlice";
 import { RootState } from "../../redux/store";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
 const options: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,11 +34,14 @@ const options: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-6xl px-4">
-      {message ? (
-        <p className="py-4 text-blue-700">{message}</p>
-      ) : error ? (
-        <p className="py-4 text-red-700">{error}</p>
-      ) : null}
+      {message && (
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      )}
+
+      {error && (
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      )}
+
       <div className="flex space-x-4 mb-4">
         <Link href="/options/create">新規作成</Link>
       </div>

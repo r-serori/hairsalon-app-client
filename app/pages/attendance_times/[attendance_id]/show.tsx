@@ -10,6 +10,7 @@ import { getAttendance } from "../../../store/attendances/attendanceSlice";
 import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
 import usePageReload from "../../../components/Hooks/usePageReload";
+import BasicAlerts from "../../../components/elements/alert/Alert";
 
 const attendanceTimes: React.FC = () => {
   const dispatch = useDispatch();
@@ -103,8 +104,12 @@ const attendanceTimes: React.FC = () => {
 
   return (
     <div>
-      {message && <p className="text-blue-700 ml-4 my-4">{message}</p>}
-      {error && <p className="text-red-700 ml-4 my-4">{error}</p>}
+      {message && (
+        <BasicAlerts type="info" message={message} space={1} padding={0.6} />
+      )}
+      {error && (
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      )}
       <Link href="/attendance_times/[attendance_id]?attendance_id=1">
         全体へ戻る
       </Link>

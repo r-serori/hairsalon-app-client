@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getYearly_sales } from "../../store/sales/yearly_sales/yearly_saleSlice";
 import { RootState } from "../../redux/store";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
 interface Yearly_salesProps {
   update?: boolean;
@@ -46,11 +47,13 @@ const yearly_sales: React.FC<Yearly_salesProps> = ({ update }) => {
 
   return (
     <div className="mx-auto max-w-6xl px-4">
-      {message ? (
-        <p className="py-4 text-blue-700">{message}</p>
-      ) : error ? (
-        <p className="py-4 text-red-700">{error}</p>
-      ) : null}
+      {message && (
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      )}
+
+      {error && (
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      )}
       <div className="flex space-x-4 mb-4">
         <Link href="/yearly_sales/create">新規作成</Link>
         <Link href="/daily_sales">日売上</Link>

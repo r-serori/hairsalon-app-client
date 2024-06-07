@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAttendance } from "../../store/attendances/attendanceSlice";
 import { RootState } from "../../redux/store";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
 const Attendances = () => {
   const dispatch = useDispatch();
@@ -64,12 +65,12 @@ const Attendances = () => {
   return (
     <div className="mx-auto max-w-6xl px-4 ">
       {message ? (
-        <p className="py-4 text-blue-700">{message}</p>
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       ) : error ? (
-        <p className="py-4 text-red-700">{error}</p>
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       ) : null}
 
-      <div className="flex space-x-4 mb-4">
+      <div className="flex space-x-4 my-4">
         <Link href="/attendances/create" className="btn">
           新規作成
         </Link>

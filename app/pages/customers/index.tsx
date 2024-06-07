@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCustomer } from "../../store/customers/customerSlice";
 import { RootState } from "../../redux/store";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
 interface CustomerProps {
   update?: boolean;
@@ -223,9 +224,9 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
   return (
     <div className="mx-auto max-w-8xl px-4">
       {message ? (
-        <p className="py-4 text-blue-700">{message}</p>
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       ) : error ? (
-        <p className="py-4 text-red-700">{error}</p>
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       ) : null}
       <div className="flex space-x-4 mb-4">
         <Link href="/customers/create">新規作成</Link>

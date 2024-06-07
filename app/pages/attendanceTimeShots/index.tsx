@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAttendance } from "../../store/attendances/attendanceSlice";
 import { RootState } from "../../redux/store";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
 const AttendanceTimeShots = () => {
   const dispatch = useDispatch();
@@ -69,11 +70,17 @@ const AttendanceTimeShots = () => {
 
   return (
     <div className="mx-auto max-w-6xl px-4">
-      {timeMessage ? (
-        <p className="py-4 text-blue-700">{timeMessage}</p>
-      ) : timeError ? (
-        <p className="py-4 text-red-700">{timeError}</p>
-      ) : null}
+      {timeMessage && (
+        <BasicAlerts
+          type="success"
+          message={timeMessage}
+          space={1}
+          padding={0.6}
+        />
+      )}
+      {timeError && (
+        <BasicAlerts type="error" message={timeError} space={1} padding={0.6} />
+      )}
       {timeLoading ? (
         <p className="py-4 text-blue-700">Loading...</p>
       ) : (

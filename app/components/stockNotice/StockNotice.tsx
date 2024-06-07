@@ -19,15 +19,14 @@ const StockNotice: React.FC<StockNoticeProps> = ({ nodes, setSearch }) => {
   const stockNotice = nodes.filter((node: any) => node.quantity <= node.notice);
   return (
     <div>
-      {stockNotice.length === 0 && (
+      {stockNotice.length === 0 ? (
         <BasicAlerts
           type="info"
           message="在庫は問題ありません！"
           space={1}
           padding={1}
         />
-      )}
-      {/* {show && stockNotice.length !== 0 && ( */}
+      ):(
       <div>
         <BasicAlerts
           type="warning"
@@ -72,6 +71,7 @@ const StockNotice: React.FC<StockNoticeProps> = ({ nodes, setSearch }) => {
           </Table>
         </TableContainer>
       </div>
+      )}
     </div>
   );
 };

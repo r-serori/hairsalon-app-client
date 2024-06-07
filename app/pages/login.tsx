@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { RootState } from "../redux/store";
 import { login } from "../store/auth/authSlice";
 import { useEffect } from "react";
+import BasicAlerts from "../components/elements/alert/Alert";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -59,7 +60,13 @@ const LoginPage: React.FC = () => {
 
   return (
     <div>
-      {message ? <div className="bg-white">{message}</div> : null}
+      {message && (
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      )}
+
+      {error && (
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      )}
       {isLoading ? (
         <p>Loading...</p>
       ) : (

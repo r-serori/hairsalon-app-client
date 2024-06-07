@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import { getStock } from "../../store/stocks/stockSlice";
 import { getStockCategory } from "../../store/stocks/stock_categories/stock_categorySlice";
 import { RootState } from "../../redux/store";
-import StockNotice from "../../components/stockNotice/StockNotice";
-import { s } from "@fullcalendar/core/internal-common";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
 const stocks: React.FC = () => {
   const dispatch = useDispatch();
@@ -98,11 +97,12 @@ const stocks: React.FC = () => {
   ];
   return (
     <div className="mx-auto max-w-6xl px-4 ">
-      {message ? (
-        <p className="py-4 text-blue-700">{message}</p>
-      ) : error ? (
-        <p className="py-4 text-red-700">{error}</p>
-      ) : null}
+      {message && (
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      )}
+      {error && (
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      )}
       <div className="flex justify-between space-x-4 mb-4">
         <Link href="/stocks/create">新規作成</Link>
         <Link href="/stock_categories">カテゴリ画面</Link>

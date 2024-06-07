@@ -1,6 +1,7 @@
 import * as React from "react";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import { AlertColor } from "@mui/material/Alert";
 
 interface BasicAlertsProps {
   type: string;
@@ -8,8 +9,6 @@ interface BasicAlertsProps {
   space: number;
   padding: number;
 }
-
-import { AlertColor } from "@mui/material/Alert";
 
 const BasicAlerts: React.FC<BasicAlertsProps> = ({
   type,

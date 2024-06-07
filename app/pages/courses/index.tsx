@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCourse } from "../../store/courses/courseSlice";
 import { RootState } from "../../redux/store";
+import BasicAlerts from "../../components/elements/alert/Alert";
+import { Basic } from "next/font/google";
 
 const courses: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,9 +41,9 @@ const courses: React.FC = () => {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 ">
       {message ? (
-        <p className="py-4 text-blue-700">{message}</p>
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       ) : error ? (
-        <p className="py-4 text-red-700">{error}</p>
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       ) : null}
       <div className="flex space-x-4 mb-4">
         <Link href="/courses/create">新規作成</Link>
