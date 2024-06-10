@@ -8,9 +8,14 @@ import { OptionState } from "../../../../store/options/optionSlice";
 interface OptionFormProps {
   node?: OptionState;
   createOption: (formData: OptionState) => void;
+  edit?: boolean;
 }
 
-const optionForm: React.FC<OptionFormProps> = ({ node, createOption }) => {
+const optionForm: React.FC<OptionFormProps> = ({
+  node,
+  createOption,
+  edit,
+}) => {
   const [option_name, setOptionName] = useState(node ? node.option_name : "");
   const [price, setPrice] = useState(node ? node.price : 0);
 
@@ -26,14 +31,14 @@ const optionForm: React.FC<OptionFormProps> = ({ node, createOption }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex items-center justify-center h-full ">
+      <div className="max-w-md w-full ">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            オプション登録
+            {edit ? "オプション情報編集" : "オプション情報新規作成"}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
             type="text"
             placeholder="オプション名"

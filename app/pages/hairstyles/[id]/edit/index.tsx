@@ -9,6 +9,7 @@ import {
 import { RootState } from "../../../../redux/store";
 import HairstyleForm from "../../../../components/elements/form/hairstyles/HairstyleForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import RouterButton from "../../../../components/elements/button/RouterButton";
 
 const hairstyleEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const hairstyleEdit: React.FC = () => {
       } catch (error) {
         console.error(error);
       }
-      await dispatch(getHairstyle() as any);
+      router.push("/hairstyles"); // Redirect to the hairstyle list page after updating a hairstyle
     } catch (error) {
       console.error(error);
     }
@@ -50,11 +51,17 @@ const hairstyleEdit: React.FC = () => {
 
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/hairstyles"} />
+      <div className="mt-4 ml-4">
+        <RouterButton link={"/hairstyles"} value="へスタイル管理画面に戻る" />
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <HairstyleForm node={hairstyle} createHairstyle={handleUpdate} />
+        <HairstyleForm
+          node={hairstyle}
+          createHairstyle={handleUpdate}
+          edit={true}
+        />
       )}
     </div>
   );

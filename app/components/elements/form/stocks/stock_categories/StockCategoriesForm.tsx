@@ -8,11 +8,13 @@ import { Stock_categoryState } from "../../../../../store/stocks/stock_categorie
 interface StockCategoryFormProps {
   node?: Stock_categoryState;
   createStockCategory: (formData: Stock_categoryState) => void;
+  edit?: boolean;
 }
 
 const stockForm: React.FC<StockCategoryFormProps> = ({
   node,
   createStockCategory,
+  edit,
 }) => {
   const [category, setCategory] = useState(node ? node.category : "");
 
@@ -27,14 +29,14 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex items-center justify-center h-full ">
+      <div className="max-w-md w-full ">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            在庫カテゴリー登録
+            {edit ? "在庫カテゴリー情報編集" : "在庫カテゴリー情報新規作成"}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
             type="text"
             placeholder="カテゴリー名"

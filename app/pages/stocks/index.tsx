@@ -6,6 +6,7 @@ import { getStock } from "../../store/stocks/stockSlice";
 import { getStockCategory } from "../../store/stocks/stock_categories/stock_categorySlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const stocks: React.FC = () => {
   const dispatch = useDispatch();
@@ -96,17 +97,19 @@ const stocks: React.FC = () => {
     // 他の行データもここに追加する
   ];
   return (
-    <div className="mx-auto max-w-6xl px-4 ">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <div className="flex justify-between space-x-4 mb-4">
-        <Link href="/stocks/create">新規作成</Link>
-        <Link href="/stock_categories">カテゴリ画面</Link>
+
+      <div className="flex justify-end items-center gap-4 my-4 mr-4">
+        <RouterButton link="/stocks/create" value="在庫画面へ" />
+        <RouterButton link="/stock_categories" value="在庫カテゴリ画面へ" />
       </div>
+
       {!loading && !stockCategoryLoading ? (
         <ComponentTable
           nodes={nodes}

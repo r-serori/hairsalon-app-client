@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { getDaily_sales } from "../../store/sales/daily_sales/daily_saleSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
+import { Router } from "next/router";
 
 interface Daily_salesProps {
   update?: boolean;
@@ -46,32 +48,34 @@ const daily_sales: React.FC<Daily_salesProps> = ({ update }) => {
   const nodes = daily_sales;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 ">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
+
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-
-      <div className="flex space-x-4 mb-4">
-        <Link href="/daily_sales/create">新規作成</Link>
-        <Link href="/daily_sales">日売上</Link>
-        <Link href="/monthly_sales">月売上</Link>
-        <Link href="/yearly_sales">年売上</Link>
+      <div className="mx-8 mt-4">
+        <div className="flex justify-center items-center mb-4">
+          <div className="flex justify-start items-center mb-4 gap-4">
+            <RouterButton link="/monthly_sales" value="月次売上画面へ" />
+            <RouterButton link="/yearly_sales" value="年次売上画面へ" />
+          </div>
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/daily_sales"
+            isLoading={loading}
+          />
+        )}
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/daily_sales"
-          isLoading={loading}
-        />
-      )}
     </div>
   );
 };

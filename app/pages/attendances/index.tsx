@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getAttendance } from "../../store/attendances/attendanceSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const Attendances = () => {
   const dispatch = useDispatch();
@@ -63,33 +64,31 @@ const Attendances = () => {
   const nodes = attendances;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 ">
-      {message ? (
+    <div>
+      {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
-      ) : error ? (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
-      ) : null}
-
-      <div className="flex space-x-4 my-4">
-        <Link href="/attendances/create" className="btn">
-          新規作成
-        </Link>
-        <Link href="/attendances/[id]?id=1" className="btn">
-          詳細
-        </Link>
-      </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/attendances"
-          isLoading={loading}
-        />
       )}
+
+      {error && (
+        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      )}
+      <div className="mx-8 mt-4">
+        <div className="flex my-4 ml-2">
+          <RouterButton link="/attendances/create" value="新規作成" />
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/attendances"
+            isLoading={loading}
+          />
+        )}
+      </div>
     </div>
   );
 };

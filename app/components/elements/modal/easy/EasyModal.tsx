@@ -108,15 +108,21 @@ const EasyModal: React.FC<EasyModalProps> = ({
   console.log("selectDateです", selectDate);
   return (
     <div>
-      <Button
-        onClick={() => setOpen(true)}
-        className="text-xl text-gray-900 cursor-pointer hover:bg-gray-400 
-        hover:text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-      >
-        {whoAreYou === "attendanceTimes"
-          ? "去年以前か来年以降の勤怠時間を確認,編集"
-          : "去年以前か来年以降の予約を確認,編集"}
-      </Button>
+      {whoAreYou === "attendanceTimes" ? (
+        <Button
+          onClick={() => setOpen(true)}
+          className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-lg text-md font-bold px-4 py-2 text-center"
+        >
+          去年以前か来年以降の勤怠時間を確認,編集
+        </Button>
+      ) : (
+        <Button
+          onClick={() => setOpen(true)}
+          className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-lg text-md font-bold px-4 py-2 text-center"
+        >
+          去年以前か来年以降の予約を確認,編集
+        </Button>
+      )}
       <Modal
         open={open}
         onClose={() => setOpen(false)}

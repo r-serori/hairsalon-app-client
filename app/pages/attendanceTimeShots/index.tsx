@@ -69,30 +69,39 @@ const AttendanceTimeShots = () => {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
-      {timeMessage && (
-        <BasicAlerts
-          type="success"
-          message={timeMessage}
-          space={1}
-          padding={0.6}
-        />
-      )}
-      {timeError && (
-        <BasicAlerts type="error" message={timeError} space={1} padding={0.6} />
-      )}
-      {timeLoading ? (
-        <p className="py-4 text-blue-700">Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          tHeaderItems={tHeaderItems}
-          nodesProps={nodesProps}
-          link="/attendanceTimeShots"
-          isLoading={loading}
-        />
-      )}
+    <div>
+      <div>
+        {timeMessage && (
+          <BasicAlerts
+            type="success"
+            message={timeMessage}
+            space={1}
+            padding={0.6}
+          />
+        )}
+        {timeError && (
+          <BasicAlerts
+            type="error"
+            message={timeError}
+            space={1}
+            padding={0.6}
+          />
+        )}
+      </div>
+      <div className="mx-8 mt-4">
+        {timeLoading ? (
+          <p className="py-4 text-blue-700">Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            tHeaderItems={tHeaderItems}
+            nodesProps={nodesProps}
+            link="/attendanceTimeShots"
+            isLoading={loading}
+          />
+        )}
+      </div>
     </div>
   );
 };

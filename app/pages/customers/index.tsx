@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { getCustomer } from "../../store/customers/customerSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
+import { Router } from "next/router";
 
 interface CustomerProps {
   update?: boolean;
@@ -13,11 +15,13 @@ interface CustomerProps {
 const customers: React.FC<CustomerProps> = ({ update }) => {
   const dispatch = useDispatch();
 
+  const customers = useSelector((state: RootState) => state.customer.customers);
+
   useEffect(() => {
-    if (update) {
-      return;
-    } else {
+    if (customers.length === 0) {
       dispatch(getCustomer({}) as any);
+    } else {
+      return;
     }
   }, [dispatch]);
 
@@ -26,8 +30,6 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
   const message = useSelector((state: RootState) => state.customer.message);
 
   const error = useSelector((state: RootState) => state.customer.error);
-
-  const customers = useSelector((state: RootState) => state.customer.customers);
 
   const courses = useSelector((state: RootState) => state.course.course);
 
@@ -222,27 +224,37 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
   ];
 
   return (
-    <div className="mx-auto max-w-8xl px-4">
-      {message ? (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
-      ) : error ? (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
-      ) : null}
-      <div className="flex space-x-4 mb-4">
-        <Link href="/customers/create">新規作成</Link>
+    <div>
+      <div>
+        {message && (
+          <BasicAlerts
+            type="success"
+            message={message}
+            space={1}
+            padding={0.6}
+          />
+        )}
+        {error && (
+          <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+        )}
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/customers"
-          isLoading={loading}
-        />
-      )}
+      <div className="mx-8 mt-4">
+        <div className="flex mb-4 ml-2">
+          <RouterButton link="/customers/create" value="新規作成" />
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/customers"
+            isLoading={loading}
+          />
+        )}
+      </div>
     </div>
   );
 };

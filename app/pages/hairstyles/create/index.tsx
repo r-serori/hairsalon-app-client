@@ -8,6 +8,7 @@ import { RootState } from "../../../redux/store";
 import HairstyleForm from "../../../components/elements/form/hairstyles/HairstyleForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const hairstyleCreate = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,9 @@ const hairstyleCreate = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/hairstyles"} />
+      <div className="mt-4 ml-4">
+        <RouterButton link={"/hairstyles"} value="ヘアスタイル管理画面に戻る" />
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (

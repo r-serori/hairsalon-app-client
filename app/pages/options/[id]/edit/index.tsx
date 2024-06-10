@@ -52,7 +52,7 @@ const optionEdit: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <OptionForm node={option} createOption={handleUpdate} />
+        <OptionForm node={option} createOption={handleUpdate} edit={true} />
       )}
     </div>
   );

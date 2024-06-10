@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getYearly_sales } from "../../store/sales/yearly_sales/yearly_saleSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 interface Yearly_salesProps {
   update?: boolean;
@@ -46,7 +47,7 @@ const yearly_sales: React.FC<Yearly_salesProps> = ({ update }) => {
   const nodes = yearly_sales;
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
@@ -54,24 +55,25 @@ const yearly_sales: React.FC<Yearly_salesProps> = ({ update }) => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <div className="flex space-x-4 mb-4">
-        <Link href="/yearly_sales/create">新規作成</Link>
-        <Link href="/daily_sales">日売上</Link>
-        <Link href="/monthly_sales">月売上</Link>
-        <Link href="/yearly_sales">年売上</Link>
+      <div className="mx-8 mt-4">
+        <div className="flex mb-4 justify-end items-center gap-4">
+          <RouterButton link="/daily_sales" value="日次売上画面へ" />
+          <RouterButton link="/monthly_sales" value="月次売上画面へ" />
+        </div>
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/yearly_sales"
+            isLoading={loading}
+          />
+        )}
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/yearly_sales"
-          isLoading={loading}
-        />
-      )}
     </div>
   );
 };

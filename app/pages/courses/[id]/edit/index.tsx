@@ -52,7 +52,7 @@ const courseEdit: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <CourseForm node={course} createCourse={handleUpdate} />
+        <CourseForm node={course} createCourse={handleUpdate} edit={true} />
       )}
     </div>
   );

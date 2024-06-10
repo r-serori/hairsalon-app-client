@@ -12,11 +12,13 @@ interface AttendanceFormProps {
   node?: AttendanceState;
   // createAttendanceアクションをプロパティとして持つ
   createAttendance: (formData: AttendanceState) => void;
+  edit?: boolean;
 }
 
 const AttendanceForm: React.FC<AttendanceFormProps> = ({
   node,
   createAttendance,
+  edit,
 }) => {
   const [attendance_name, setAttendanceName] = useState(
     node ? node.attendance_name : ""
@@ -46,14 +48,14 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 h-full ">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex items-center justify-center px-4 h-full ">
+      <div className="max-w-md w-full">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            スタッフ登録
+            {edit ? "スタッフ情報編集" : "スタッフ新規作成"}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
             type="text"
             placeholder="スタッフ名"
@@ -83,7 +85,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
             onChange={(e) => setAddress(e.target.value)}
           />
 
-          <PrimaryButton value={"作成"} />
+          <PrimaryButton value={"スタッフ作成"} />
         </form>
       </div>
     </div>

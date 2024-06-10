@@ -38,7 +38,7 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ createSchedule }) => {
             予約登録
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
             type="date"
             placeholder="日付"

@@ -35,6 +35,7 @@ const stockEdit: React.FC = () => {
     quantity: number;
     remarks: string;
     supplier: string;
+    notice: number;
     stock_category_id: number;
     created_at: string;
     updated_at: string;
@@ -45,7 +46,7 @@ const stockEdit: React.FC = () => {
       } catch (error) {
         console.error(error);
       }
-      await dispatch(getStock() as any);
+      router.push("/stocks"); // Redirect to the stock list page after updating a stock
     } catch (error) {
       console.error(error);
     }
@@ -58,7 +59,7 @@ const stockEdit: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <StockForm node={stocks} createStock={handleUpdate} />
+        <StockForm node={stocks} createStock={handleUpdate} edit={true} />
       )}
     </div>
   );

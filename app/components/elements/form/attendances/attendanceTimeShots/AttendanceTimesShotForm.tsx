@@ -295,8 +295,8 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
-              width={320}
-              height={320}
+              width={300}
+              height={200}
               onUserMedia={handleUserMedia}
             />
           </div>

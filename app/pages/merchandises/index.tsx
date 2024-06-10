@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getMerchandise } from "../../store/merchandises/merchandiseSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const merchandises = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const merchandises = () => {
   const nodes = merchandises;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 ">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
@@ -43,21 +44,24 @@ const merchandises = () => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <div className="flex space-x-4 mb-4">
-        <Link href="/merchandises/create">新規作成</Link>
+
+      <div className="mx-4">
+        <div className="flex my-4 ml-2">
+          <RouterButton link="/merchandises/create" value="新規作成" />
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/merchandises"
+            isLoading={loading}
+          />
+        )}
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/merchandises"
-          isLoading={loading}
-        />
-      )}
     </div>
   );
 };

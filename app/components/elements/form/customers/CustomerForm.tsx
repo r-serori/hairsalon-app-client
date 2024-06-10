@@ -11,9 +11,14 @@ import { CustomerState } from "../../../../store/customers/customerSlice";
 interface CustomerFormProps {
   node?: CustomerState;
   onSubmit: (formData: CustomerState) => void;
+  edit?: boolean;
 }
 
-const CustomerForm: React.FC<CustomerFormProps> = ({ node, onSubmit }) => {
+const CustomerForm: React.FC<CustomerFormProps> = ({
+  node,
+  onSubmit,
+  edit,
+}) => {
   const getCoursesState = useSelector(
     (state: RootState) => state.course.course
   );
@@ -180,14 +185,14 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ node, onSubmit }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 h-full ">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex items-center justify-center h-full ">
+      <div className="max-w-md w-full">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            顧客登録
+          <h2 className=" text-center text-3xl font-extrabold text-gray-900">
+            {edit ? "顧客情報編集" : "顧客情報新規作成"}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <BasicTextField
             type="text"
             placeholder="顧客名"

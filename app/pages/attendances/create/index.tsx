@@ -8,6 +8,7 @@ import { RootState } from "../../../redux/store";
 import AttendanceForm from "../../../components/elements/form/attendances/AttendanceForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const attendanceCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,8 +35,10 @@ const attendanceCreate: React.FC = () => {
     }
   };
   return (
-    <div className="min-h-full ">
-      <BackAgainButton link={"/attendances"} />
+    <div className="min-h-full">
+      <div className="mt-4 ml-4">
+        <RouterButton link="/attendances" value="スタッフ画面へ戻る" />
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (

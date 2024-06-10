@@ -80,12 +80,12 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
       ) : (
         // ローディングが終わったらカレンダーを表示する
 
-        <div className="flex justify-center items-center">
-          <div className="mr-auto">
+        <div className="flex justify-center items-center my-4 ">
+          <div className="mr-auto ml-4">
             <EasyModal open={easyOpen} setOpen={setEasyOpen} />
           </div>
 
-          <div className="flex justify-start items-center ">
+          <div className="flex justify-start items-center mr-4 gap-4">
             <SalesModal
               showModal={DailySalesModal}
               setShowModal={setDailySalesModal}

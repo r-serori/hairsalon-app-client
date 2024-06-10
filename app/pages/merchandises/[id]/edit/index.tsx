@@ -42,7 +42,7 @@ const merchandiseEdit: React.FC = () => {
       } catch (error) {
         console.error(error);
       }
-      await dispatch(getMerchandise() as any);
+      router.push("/merchandises"); // Redirect to the merchandise list page after updating a merchandise
     } catch (error) {
       console.error(error);
     } finally {
@@ -56,7 +56,11 @@ const merchandiseEdit: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <MerchandiseForm node={merchandise} createMerchandise={handleUpdate} />
+        <MerchandiseForm
+          node={merchandise}
+          createMerchandise={handleUpdate}
+          edit={true}
+        />
       )}
     </div>
   );

@@ -124,7 +124,7 @@ const customersEdit: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <CustomerForm node={customer} onSubmit={handleUpdate} />
+        <CustomerForm node={customer} onSubmit={handleUpdate} edit={true} />
       )}
     </div>
   );

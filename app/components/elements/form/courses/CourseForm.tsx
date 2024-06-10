@@ -6,9 +6,14 @@ import BasicTextField from "../../input/BasicTextField";
 interface CourseFormProps {
   node?: CourseState;
   createCourse: (formData: CourseState) => void;
+  edit?: boolean;
 }
 
-const CourseForm: React.FC<CourseFormProps> = ({ node, createCourse }) => {
+const CourseForm: React.FC<CourseFormProps> = ({
+  node,
+  createCourse,
+  edit,
+}) => {
   const [course_name, setCourse_name] = useState(node ? node.course_name : "");
   const [price, setPrice] = useState(node ? node.price : 0);
 
@@ -24,14 +29,14 @@ const CourseForm: React.FC<CourseFormProps> = ({ node, createCourse }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 pt-12 py-56 px-4 sm:px-6 lg:px-8 min-h-full ">
-      <div className="max-w-md w-full space-y-8 min-h-full ">
+    <div className="flex items-center justify-center px-4 h-full ">
+      <div className="w-full h-full">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            コース登録
+            {edit ? "コース情報編集" : "コース情報新規作成"}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6 ">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4 ">
           <BasicTextField
             type="text"
             placeholder="コース名"
@@ -46,7 +51,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ node, createCourse }) => {
             onChange={(e) => setPrice(e.target.value)}
           />
 
-          <PrimaryButton value={"作成"} />
+          <PrimaryButton value={"コース新規作成"} />
         </form>
       </div>
     </div>

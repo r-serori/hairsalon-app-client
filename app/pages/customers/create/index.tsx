@@ -38,7 +38,9 @@ const customersCreate = () => {
   };
   return (
     <div className="min-h-full">
-      <BackAgainButton link={"/customers"} />
+      <div className="mt-4 ml-4">
+        <BackAgainButton link={"/customers"} value="顧客管理画面に戻る" />
+      </div>
       {loading ? <p>Loading...</p> : <CustomerForm onSubmit={handleCreate} />}
     </div>
   );

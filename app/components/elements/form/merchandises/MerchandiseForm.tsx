@@ -8,11 +8,13 @@ import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlic
 interface MerchandiseFormProps {
   node?: MerchandiseState;
   createMerchandise: (formData: MerchandiseState) => void;
+  edit?: boolean;
 }
 
 const merchandiseForm: React.FC<MerchandiseFormProps> = ({
   node,
   createMerchandise,
+  edit,
 }) => {
   const [merchandise_name, setMerchandiseName] = useState(
     node ? node.merchandise_name : ""
@@ -31,14 +33,14 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex items-center justify-center h-full ">
+      <div className="max-w-md w-full">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            物販登録
+            {edit ? "物販情報編集" : "物販情報作成"}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
             type="text"
             placeholder="物販名"

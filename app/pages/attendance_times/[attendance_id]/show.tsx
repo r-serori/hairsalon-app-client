@@ -105,32 +105,40 @@ const attendanceTimes: React.FC = () => {
 
   return (
     <div>
-      {message && (
-        <BasicAlerts type="info" message={message} space={1} padding={0.6} />
-      )}
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
-      )}
-
-      <RouterButton link="/attendances" value="スタッフ画面へ戻る" />
-
-      <EasyModal
-        open={attendanceTimeOpen}
-        setOpen={setAttendanceTimeOpen}
-        whoAreYou="attendanceTimes"
-        whatIsYourId={Number(id)}
-        setYearMonth={setYearMonth}
-      />
-      {yearMonth !== "無し" && (
-        <button
-          onClick={() => {
-            nowAttendanceTime();
-          }}
-        >
-          現在の年月に戻す
-        </button>
-      )}
-      <br />
+      <div>
+        {message && (
+          <BasicAlerts type="info" message={message} space={1} padding={0.6} />
+        )}
+        {error && (
+          <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+        )}
+      </div>
+      <div className="flex justify-between my-4 mx-4">
+        <div>
+          <RouterButton link="/attendances" value="スタッフ画面へ戻る" />
+        </div>
+        <div>
+          {yearMonth !== "無し" && (
+            <button
+              className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
+              onClick={() => {
+                nowAttendanceTime();
+              }}
+            >
+              現在の年月に戻す
+            </button>
+          )}
+        </div>
+        <div>
+          <EasyModal
+            open={attendanceTimeOpen}
+            setOpen={setAttendanceTimeOpen}
+            whoAreYou="attendanceTimes"
+            whatIsYourId={Number(id)}
+            setYearMonth={setYearMonth}
+          />
+        </div>
+      </div>
       {loading ? (
         <p>loading...</p>
       ) : (

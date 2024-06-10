@@ -55,28 +55,31 @@ const courses: React.FC = () => {
   const nodes = courses;
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
+
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <div className="flex my-2">
-        <RouterButton link="/courses/create" value="新規作成" />
+      <div className="mx-8 mt-4">
+        <div className="flex my-4 ml-2">
+          <RouterButton link="/courses/create" value="新規作成" />
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/courses"
+            isLoading={loading}
+          />
+        )}
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/courses"
-          isLoading={loading}
-        />
-      )}
     </div>
   );
 };

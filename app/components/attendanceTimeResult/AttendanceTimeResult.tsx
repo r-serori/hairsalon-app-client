@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import BasicAlerts from "../elements/alert/Alert";
 
 interface AttendanceTimeResultProps {
   nodes: any;
@@ -29,13 +30,26 @@ const AttendanceTimeResult: React.FC<AttendanceTimeResultProps> = ({
 
   return (
     <div>
-      今月は
-      {attendanceTimeResult === 0
-        ? "出勤していません"
-        : `${Math.floor(attendanceTimeResult / 60)}時間${String(
-            attendanceTimeResult % 60
-          ).padStart(2, "0")}分`}
-      出勤しました
+      {attendanceTimeResult === 0 ? (
+        <BasicAlerts
+          message="この月は出勤していません"
+          type="warning"
+          space={1}
+          padding={0.8}
+        />
+      ) : (
+        <BasicAlerts
+          type="info"
+          message={`この月は${Math.floor(
+            attendanceTimeResult / 60
+          )}時間${String(attendanceTimeResult % 60).padStart(
+            2,
+            "0"
+          )}分出勤しました!`}
+          space={1}
+          padding={0.8}
+        />
+      )}
     </div>
   );
 };

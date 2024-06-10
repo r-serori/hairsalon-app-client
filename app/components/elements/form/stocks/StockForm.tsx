@@ -10,9 +10,10 @@ import { StockState } from "../../../../store/stocks/stockSlice";
 interface StockFormProps {
   node?: StockState;
   createStock: (formData: StockState) => void;
+  edit?: boolean;
 }
 
-const stockForm: React.FC<StockFormProps> = ({ node, createStock }) => {
+const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
   const stockCategories = useSelector(
     (state: RootState) => state.stock_category.stock_category
   );
@@ -61,14 +62,14 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock }) => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex items-center justify-center h-full ">
+      <div className="max-w-md w-full ">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            在庫登録
+            {edit ? "在庫情報編集" : "在庫情報新規作成"}
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
             type="text"
             placeholder="商品名"

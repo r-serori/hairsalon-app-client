@@ -42,7 +42,7 @@ const stockCategoryEdit: React.FC = () => {
       } catch (error) {
         console.error(error);
       }
-      await dispatch(getStockCategory() as any);
+      router.push("/stock_categories"); // Redirect to the stock_category list page after updating a stock_category
     } catch (error) {
       console.error(error);
     }
@@ -57,6 +57,7 @@ const stockCategoryEdit: React.FC = () => {
         <StockCategoryForm
           node={stockCategory}
           createStockCategory={handleUpdate}
+          edit={true}
         />
       )}
       <h1>StockCategory Edit</h1>

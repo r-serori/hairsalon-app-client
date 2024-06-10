@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getOption } from "../../store/options/optionSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const options: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const options: React.FC = () => {
   const nodes = options;
 
   return (
-    <div className="mx-auto max-w-6xl px-4">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
@@ -42,21 +43,24 @@ const options: React.FC = () => {
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
 
-      <div className="flex space-x-4 mb-4">
-        <Link href="/options/create">新規作成</Link>
+      <div className="mx-4">
+        <div className="flex my-4 ml-2">
+          <RouterButton link="/options/create" value="新規作成" />
+        </div>
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/options"
+            isLoading={loading}
+          />
+        )}
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/options"
-          isLoading={loading}
-        />
-      )}
     </div>
   );
 };

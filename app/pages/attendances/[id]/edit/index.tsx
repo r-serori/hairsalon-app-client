@@ -10,6 +10,7 @@ import { RootState } from "../../../../redux/store";
 import AttendanceForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import RouterButton from "../../../../components/elements/button/RouterButton";
 
 const attenDanceEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,18 +30,13 @@ const attenDanceEdit: React.FC = () => {
   console.log("attendanceだよ");
   console.log(attendance);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     dispatch(getAttendanceById(parseInt(id as string)) as any);
-  //   }
-  // }, [id]);
-
   const handleUpdate = async (formData: {
     id: number;
     attendance_name: string;
     position: string;
     phone_number: string;
     address: string;
+    isAttendance: boolean;
     created_at: string;
     updated_at: string;
   }) => {
@@ -50,7 +46,7 @@ const attenDanceEdit: React.FC = () => {
       } catch (error) {
         console.error(error);
       }
-      await dispatch(getAttendance() as any);
+      router.push("/attendances"); // Redirect to the attendance list page after updating a attendance
     } catch (error) {
       console.error(error);
     } finally {
@@ -60,11 +56,17 @@ const attenDanceEdit: React.FC = () => {
 
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/attendances"} />
+      <div className="mt-4 ml-4">
+        <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <AttendanceForm createAttendance={handleUpdate} node={attendance} />
+        <AttendanceForm
+          createAttendance={handleUpdate}
+          node={attendance}
+          edit={true}
+        />
       )}
     </div>
   );

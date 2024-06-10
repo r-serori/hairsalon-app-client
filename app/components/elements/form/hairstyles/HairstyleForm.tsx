@@ -8,11 +8,13 @@ import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
 interface HairstyleFormProps {
   node?: HairstyleState;
   createHairstyle: (formData: HairstyleState) => void;
+  edit?: boolean;
 }
 
 const hairstyleForm: React.FC<HairstyleFormProps> = ({
   node,
   createHairstyle,
+  edit,
 }) => {
   const [hairstyle_name, setHairstyleName] = useState(
     node ? node.hairstyle_name : ""
@@ -29,22 +31,22 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
-      <div className="max-w-md w-full space-y-8">
+    <div className="flex items-center justify-center h-full ">
+      <div className="max-w-md w-full">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            髪型登録
+            {edit ? "ヘアスタイル情報編集" : "ヘアスタイル情報新規作成"}
           </h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <BasicTextField
             type="text"
-            placeholder="髪型名"
+            placeholder="ヘアスタイル名"
             value={hairstyle_name}
             onChange={(e) => setHairstyleName(e.target.value)}
           />
 
-          <PrimaryButton value={"作成"} />
+          <PrimaryButton value={"ヘアスタイル情報作成"} />
         </form>
       </div>
     </div>

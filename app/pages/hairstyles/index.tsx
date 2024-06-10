@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getHairstyle } from "../../store/hairstyles/hairstyleSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import { Basic } from "next/font/google";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const hairstyles: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const hairstyles: React.FC = () => {
 
   const nodes = hairstyles;
   return (
-    <div className="mx-auto max-w-6xl px-4 ">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
@@ -41,21 +41,24 @@ const hairstyles: React.FC = () => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <div className="flex space-x-4 mb-4">
-        <Link href="/hairstyles/create">新規作成</Link>
+
+      <div className="ml-2">
+        <div className="flex my-4 ml-2">
+          <RouterButton link="/hairstyles/create" value="新規作成" />
+        </div>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/hairstyles"
+            isLoading={loading}
+          />
+        )}
       </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/hairstyles"
-          isLoading={loading}
-        />
-      )}
     </div>
   );
 };
