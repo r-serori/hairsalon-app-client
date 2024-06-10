@@ -111,6 +111,7 @@ const attendanceTimes: React.FC = () => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
+
       <RouterButton link="/attendances" value="スタッフ画面へ戻る" />
 
       <EasyModal

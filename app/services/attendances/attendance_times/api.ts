@@ -5,9 +5,10 @@ export const attendance_timeApi = {
     attendance_id: number;
     yearMonth: string;
   }) => {
+    
     const response = await sendRequest(
       "GET",
-      `/images/selectedAttendanceTimes/${formData.attendance_id}/${formData.yearMonth}`
+    `/images/selectedAttendanceTimes/${formData.attendance_id}/${formData.yearMonth}`
     );
     console.log("APIのattendanceTimeDataだよ");
     return response;

@@ -20,7 +20,7 @@ import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import StockNotice from "../../stockNotice/StockNotice";
-import usePageReload from "../../Hooks/usePageReload";
+import AttendanceTimeResult from "../../attendanceTimeResult/AttendanceTimeResult";
 
 const ComponentTable = ({
   nodes,
@@ -166,6 +166,10 @@ const ComponentTable = ({
         <div className="ml-auto">
           {link === "/stocks" && data && (
             <StockNotice nodes={nodes} setSearch={setSearchText} />
+          )}
+
+          {link === "/attendance_times" && data && (
+            <AttendanceTimeResult nodes={nodes} />
           )}
         </div>
       </div>
