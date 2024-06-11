@@ -6,11 +6,8 @@ export const login = createAsyncThunk(
   "login/auth",
   async (
     formData: {
-      id: number;
-      login_id: string;
+      email: string;
       password: string;
-      created_at: string;
-      updated_at: string;
     },
     { rejectWithValue }
   ) => {
@@ -39,11 +36,10 @@ export const register = createAsyncThunk(
   "register/auth",
   async (
     formData: {
-      id: number;
-      login_id: string;
+      name: string;
+      email: string;
+      role: string;
       password: string;
-      created_at: string;
-      updated_at: string;
     },
     { rejectWithValue }
   ) => {
@@ -95,8 +91,10 @@ export const logout = createAsyncThunk(
 export interface AuthState {
   // ステートの型
   id: number;
-  login_id: string;
+  name: string;
+  email: string;
   password: string;
+  role: string;
   created_at: string;
   updated_at: string;
 }

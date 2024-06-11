@@ -4,11 +4,10 @@ import PrimaryButton from "../../button/PrimaryButton";
 
 interface AuthRegisterFormProps {
   onSubmit: (formData: {
-    id: number;
-    login_id: string;
+    name: string;
+    email: string;
     password: string;
-    created_at: string;
-    updated_at: string;
+    role: string;
     // confirmPassword: string;
   }) => void;
   errorMessage: string;
@@ -18,8 +17,10 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
   onSubmit,
   errorMessage,
 }) => {
-  const [login_id, setLogin_id] = useState("tester");
+  const [name, setName] = useState("tester");
+  const [email, setEmail] = useState("bbb@hairsaron.com");
   const [password, setPassword] = useState("password123");
+  const [role, setRole] = useState("オーナー");
   // const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,11 +31,10 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
     // }
 
     onSubmit({
-      id: 0,
-      login_id: login_id,
+      name: name,
+      email: email,
       password: password,
-      created_at: "",
-      updated_at: "",
+      role: "user",
     });
   };
 
@@ -51,11 +51,19 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
           {errorMessage && (
             <p className="text-red-600 text-center">{errorMessage}</p>
           )}
+
           <BasicTextField
             type="text"
-            placeholder="ログインID"
-            value={login_id}
-            onChange={(e) => setLogin_id(e.target.value)}
+            placeholder="名前"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <BasicTextField
+            type="text"
+            placeholder="メールアドレス"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <BasicTextField
@@ -63,6 +71,13 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
             placeholder="パスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <BasicTextField
+            type="text"
+            placeholder="役職"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
           />
 
           {/* <BasicTextField

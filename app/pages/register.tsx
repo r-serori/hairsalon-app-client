@@ -37,17 +37,16 @@ const LoginPage: React.FC = () => {
   }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleRegister = async (formData: {
-    id: number;
-    login_id: string;
+    name: string;
+    email: string;
+    role: string;
     password: string;
-    created_at: string;
-    updated_at: string;
   }) => {
     console.log(formData);
     try {
       const response = await dispatch(register(formData) as any);
       console.log("Success", response);
-      router.push("/dashboard");
+      router.push("/owner");
     } catch (error) {
       console.log("Error", error);
       return;

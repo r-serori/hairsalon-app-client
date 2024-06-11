@@ -3,13 +3,7 @@ import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
 
 interface AuthLoginFormProps {
-  onSubmit: (formData: {
-    id: number;
-    login_id: string;
-    password: string;
-    created_at: string;
-    updated_at: string;
-  }) => void;
+  onSubmit: (formData: { email: string; password: string }) => void;
   errorMessage: string;
 }
 
@@ -17,17 +11,14 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({
   onSubmit,
   errorMessage,
 }) => {
-  const [login_id, setLogin_id] = useState("tanaka123");
+  const [email, setEmail] = useState("aaaaa@hairmail.com");
   const [password, setPassword] = useState("password123");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit({
-      id: 0,
-      login_id: login_id,
+      email: email,
       password: password,
-      created_at: "",
-      updated_at: "",
     });
   };
 
@@ -45,9 +36,9 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({
         <form onSubmit={handleSubmit}>
           <BasicTextField
             type="text"
-            placeholder="ログインID"
-            value={login_id}
-            onChange={(e) => setLogin_id(e.target.value)}
+            placeholder="メールアドレス"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <BasicTextField

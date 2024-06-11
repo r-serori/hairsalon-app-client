@@ -2,13 +2,7 @@ import { sendRequest } from "../requestApi";
 import getCsrfToken from "../requestApi";
 
 export const authApi = {
-  login: async (formData: {
-    id: number;
-    login_id: string;
-    password: string;
-    created_at: string;
-    updated_at: string;
-  }) => {
+  login: async (formData: { email: string; password: string }) => {
     const csrfToken = await getCsrfToken();
     if (csrfToken) {
       const response = (await sendRequest(
@@ -28,12 +22,10 @@ export const authApi = {
   },
 
   register: async (formData: {
-    id: number;
-    login_id: string;
+    name: string;
+    email: string;
     password: string;
-    created_at: string;
-    updated_at: string;
-    confirmPassword: string;
+    role: string;
   }) => {
     const csrfToken = await getCsrfToken();
     if (csrfToken) {
