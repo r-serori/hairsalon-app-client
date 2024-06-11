@@ -6,6 +6,8 @@ import Modal from "@mui/material/Modal";
 import ModalForm from "../form/ModalForm";
 import AttendanceTimesShotForm from "../form/attendances/attendanceTimeShots/AttendanceTimesShotForm";
 import BackAgainButton from "../button/RouterButton";
+import { firstGetAttendanceTime } from "../../../store/attendances/attendance_times/attendance_timesSlice";
+import { useDispatch } from "react-redux";
 
 const style = {
   position: "absolute" as "absolute",
@@ -49,13 +51,21 @@ const BasicModal: React.FC<BasicModalProps> = ({
   link,
   isLoading,
 }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [openAttendance, setOpenAttendance] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleOpenAttendance = () => setOpenAttendance(true);
+  const handleOpenAttendance = () => {
+    setOpenAttendance(true);
+    if (link === "/attendanceTimeShots") {
+      dispatch(firstGetAttendanceTime(editNode.id as number) as any);
+    } else {
+      return;
+    }
+  };
   const handleCloseAttendance = () => setOpenAttendance(false);
 
   return (

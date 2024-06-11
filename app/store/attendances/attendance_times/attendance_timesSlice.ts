@@ -36,6 +36,63 @@ export const selectGetAttendanceTimes = createAsyncThunk(
   }
 );
 
+export const firstGetAttendanceTime = createAsyncThunk(
+  "attendance_times/firstGetAttendanceTime",
+  async (id:number, { rejectWithValue }) => {
+    const response: any = await attendance_timeApi.firstGetAttendanceTime(id as number);
+    console.log("responseだよ", response);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);  
+
+export const pleaseEditEndTime = createAsyncThunk(
+  "attendance_times/pleaseEditEndTime",
+  async (
+    formData: {
+      id: number;
+      end_time: string;
+      end_photo_path: string;
+      attendance_id: number;
+    },
+    { rejectWithValue }
+  ) => {
+    const response: any = await attendance_timeApi.pleaseEditEndTime(formData);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
 export const updateStartTime = createAsyncThunk(
   "attendance_times/updateStartTime",
   async (
@@ -232,6 +289,50 @@ const attendance_timeSlice = createSlice({
       state.attendance_times = action.payload.attendanceTimes;
     });
     builder.addCase(selectGetAttendanceTimes.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(firstGetAttendanceTime.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+
+    builder.addCase(firstGetAttendanceTime.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+        ? action.payload.message
+        : "最新の勤怠情報を取得しました！";
+      state.attendance_times = action.payload.attendanceTime;
+    });
+
+    builder.addCase(firstGetAttendanceTime.rejected, (state, action) => {
+      state.loading = false;
+      state.error =   (action.payload as any).resStatus === "error"
+      ? (action.payload as any).message
+      : action.error.message;
+    });
+
+    builder.addCase(pleaseEditEndTime.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+
+    builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
+      state.loading = false;
+      state.attendance_times = state.attendance_times.map((attendance_time) =>
+        attendance_time.id === action.payload.attendanceTime.id
+          ? {
+              ...attendance_time,
+              ...action.payload.attendanceTime,
+            }
+          : attendance_time
+      );
+      state.message = action.payload.message
+    });
+    builder.addCase(pleaseEditEndTime.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

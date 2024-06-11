@@ -6,6 +6,7 @@ import { getSchedule } from "../schedules/scheduleSlice";
 import {
   createStartTime,
   createEndTime,
+  pleaseEditEndTime,
 } from "../attendances/attendance_times/attendance_timesSlice";
 
 // APIから出席情報を取得する非同期アクション//get
@@ -301,6 +302,14 @@ const attendanceSlice = createSlice({
     });
 
     builder.addCase(createEndTime.fulfilled, (state, action) => {
+      state.attendances = state.attendances.map((attendance) =>
+        attendance.id === action.payload.attendance.id
+          ? { ...attendance, ...action.payload.attendance }
+          : attendance
+      );
+    });
+    
+    builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
       state.attendances = state.attendances.map((attendance) =>
         attendance.id === action.payload.attendance.id
           ? { ...attendance, ...action.payload.attendance }

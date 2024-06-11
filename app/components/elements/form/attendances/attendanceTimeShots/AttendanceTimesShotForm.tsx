@@ -8,6 +8,7 @@ import {
   createEndTime,
   updateStartTime,
   updateEndTime,
+  pleaseEditEndTime,
 } from "../../../../../store/attendances/attendance_times/attendance_timesSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
@@ -22,6 +23,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
 import { dividerClasses } from "@mui/material";
 import { EditRoad } from "@mui/icons-material";
+import { stat } from "fs";
+import BasicAlerts from "../../../alert/Alert";
 
 interface AttendanceTimesShotFormProps {
   node: any;
@@ -64,6 +67,17 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
   );
   console.log(attendance);
 
+  const attendanceTime = useSelector((state: RootState) => {
+    if (state.attendance_time.attendance_times) {
+      state.attendance_time.attendance_times.filter(
+        (attendance_time) => attendance_time.attendance_id === Number(node.id)
+      );
+    } else {
+      return null;
+    }
+  });
+  console.log("attendanceTime", attendanceTime);
+
   const [isAttendance, setIsAttendance] = useState(
     !loading && attendance.isAttendance ? true : false
   ); //true:出勤中 false:退勤中
@@ -81,16 +95,15 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
 
   const [lateTime, setLateTime] = useState(
     isAttendance &&
-      dayjs(node.start_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD") !==
+      attendanceTime &&
+      dayjs(attendanceTime.start_time)
+        .utc()
+        .tz("Asia/Tokyo")
+        .format("YYYY/MM/DD") !==
         dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD")
       ? true
       : false
   );
-  console.log(
-    "startTime",
-    dayjs(node.start_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD")
-  );
-  console.log("nowDate", dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD"));
   console.log("lateTime", lateTime);
 
   const [shotEdit, setShotEdit] = useState(false);
@@ -267,7 +280,23 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
     }
   };
 
-  console.log("link", link);
+  const pleaseEdit = async () => {
+    let formData;
+
+    if (link === "/attendanceTimeShots") {
+      formData = {
+        id: attendanceTime.id,
+        end_time: "9999-12-31 23:59:59",
+        end_photo_path: "編集済み",
+        attendance_id: node.attendance_id,
+      };
+
+      await dispatch(pleaseEditEndTime(formData) as any);
+      resetPhoto();
+      setLateTime(false);
+      setOpen(false);
+    }
+  };
 
   return (
     <div
@@ -427,7 +456,7 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
               />
             </div>
             <div className="flex justify-center items-center mt-4">
-              {time && editEnd && edit ? (
+              {time && editEnd && edit && !lateTime ? (
                 <PrimaryButton value={startOrEnd + "！"} place="big" />
               ) : (
                 ""
@@ -437,6 +466,19 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
         </form>
       ) : (
         ""
+      )}
+
+      {lateTime && (
+        <div className="flex justify-center items-center mt-4">
+          <BasicAlerts
+            type="warning"
+            message="昨日の退勤時間が登録されていません！編集依頼ボタンを押して、その後出勤ボタンを押してください！"
+            space={1}
+            padding={0.6}
+          />
+
+          <PrimaryButton value="編集依頼" place="big" onChanger={pleaseEdit} />
+        </div>
       )}
     </div>
   );

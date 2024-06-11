@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { getAttendance } from "../../store/attendances/attendanceSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import { firstGetAttendanceTime } from "../../store/attendances/attendance_times/attendance_timesSlice";
+import { start } from "repl";
 
 const AttendanceTimeShots = () => {
   const dispatch = useDispatch();
