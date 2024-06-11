@@ -2,7 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/schedules": "pages/schedules.js",
-  "/merchandises/[id]/edit": "pages/merchandises/[id]/edit.js",
-  "/merchandises": "pages/merchandises.js"
+  "/attendances": "pages/attendances.js",
+  "/dashboard": "pages/dashboard.js",
+  "/attendanceTimeShots": "pages/attendanceTimeShots.js"
 }

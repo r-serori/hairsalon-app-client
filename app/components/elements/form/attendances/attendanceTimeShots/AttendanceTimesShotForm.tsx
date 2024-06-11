@@ -21,6 +21,7 @@ import ControlledCheckbox from "../../../input/checkbox/SimpleCheckBox";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../../redux/store";
 import { dividerClasses } from "@mui/material";
+import { EditRoad } from "@mui/icons-material";
 
 interface AttendanceTimesShotFormProps {
   node: any;
@@ -42,6 +43,7 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
+  console.log("node", node);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -76,6 +78,20 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
       ? true
       : false
   );
+
+  const [lateTime, setLateTime] = useState(
+    isAttendance &&
+      dayjs(node.start_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD") !==
+        dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD")
+      ? true
+      : false
+  );
+  console.log(
+    "startTime",
+    dayjs(node.start_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD")
+  );
+  console.log("nowDate", dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD"));
+  console.log("lateTime", lateTime);
 
   const [shotEdit, setShotEdit] = useState(false);
 
@@ -121,7 +137,7 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
   );
 
   const [isLoading, setIsLoading] = useState(
-    link === "/attendanceTimeShots" ? true : false
+    link !== "/attendanceTimeShots" && !lateTime ? false : true
   );
 
   console.log("edit", edit);
@@ -267,16 +283,16 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
       )}
       {/* DateTimePickerの表示式 */}
       {/* 編集リンクで時間登録がされている時 */}
-      {!notEdit ? (
+      {notEdit && edit ? (
+        "本日の勤怠時間の編集は退勤後にお願いします！"
+      ) : (
         <div className="flex justify-center items-center ">
           <DateTimeRangePicker value={time} changer={setTime} />
         </div>
-      ) : (
-        "本日の勤怠時間の編集は退勤後にお願いします！"
       )}
 
       {/* 写真が登録されていない場合 出勤退勤時 */}
-      {!photo && !edit && !notEdit ? (
+      {!photo && !edit && !notEdit && !lateTime ? (
         <div
           className="flex justify-center items-center text-2xl w-full"
           style={{ flexDirection: "column" }}
@@ -313,7 +329,11 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
           )}
         </div>
       ) : // 写真が登録されていて、出勤、退勤ボタンのリンクの時 撮影した写真を表示
-      photo && link === "/attendanceTimeShots" && !edit && !notEdit ? (
+      photo &&
+        link === "/attendanceTimeShots" &&
+        !edit &&
+        !notEdit &&
+        !lateTime ? (
         <form
           onSubmit={
             link === "/attendanceTimeShots" && !edit && editValue === "出勤"
@@ -343,8 +363,16 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
           </div>
         </form>
       ) : // 写真が登録されていて、編集リンクの時
-      (link === "/attendanceTimeStart" && edit && !editEnd && !notEdit) ||
-        (link === "/attendanceTimeEnd" && edit && !editEnd && !notEdit) ? (
+      (link === "/attendanceTimeStart" &&
+          edit &&
+          !editEnd &&
+          !notEdit &&
+          !lateTime) ||
+        (link === "/attendanceTimeEnd" &&
+          edit &&
+          !editEnd &&
+          !notEdit &&
+          !lateTime) ? (
         <div>
           {photo && edit ? (
             <div className="text-xl">保存されていた写真↓</div>
@@ -370,8 +398,16 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
             </button>
           </div>
         </div>
-      ) : (link === "/attendanceTimeStart" && edit && editEnd && !notEdit) ||
-        (link === "/attendanceTimeEnd" && edit && editEnd && !notEdit) ||
+      ) : (link === "/attendanceTimeStart" &&
+          edit &&
+          editEnd &&
+          !notEdit &&
+          !lateTime) ||
+        (link === "/attendanceTimeEnd" &&
+          edit &&
+          editEnd &&
+          !notEdit &&
+          !lateTime) ||
         node.start_photo_path === "編集済み" ||
         node.end_photo_path === "編集済み" ? (
         <form
@@ -383,13 +419,6 @@ const AttendanceTimesShotForm: React.FC<AttendanceTimesShotFormProps> = ({
               : handleEndTime
           }
         >
-          {/* <div>
-            <ControlledCheckbox
-              type="times"
-              checked={isAttendance}
-              onChanger={() => setIsAttendance(!isAttendance)}
-            />
-          </div> */}
           <div>
             <div className="flex justify-center items-center mt-4">
               <img

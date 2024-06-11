@@ -22,15 +22,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/merchandises": [
+    "/attendanceTimeShots": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/merchandises.js"
+      "static/chunks/pages/attendanceTimeShots.js"
     ],
-    "/merchandises/[id]/edit": [
+    "/attendances": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/merchandises/[id]/edit.js"
+      "static/chunks/pages/attendances.js"
     ]
   },
   "ampFirstPages": []
