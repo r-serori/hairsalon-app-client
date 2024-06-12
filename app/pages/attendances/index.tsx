@@ -75,6 +75,7 @@ const Attendances = () => {
       <div className="mx-8 mt-4">
         <div className="flex my-4 ml-2">
           <RouterButton link="/attendances/create" value="新規作成" />
+          <RouterButton link="/auth/register" value="ユーザー登録" />
         </div>
         {loading ? (
           <p>Loading...</p>

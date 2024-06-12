@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 interface RouterButtonProps {
   link?: string;
-  query?: string;
+  query?: any;
   value?: string;
   onChanger?: () => void;
 }
@@ -12,12 +12,18 @@ const RouterButton: React.FC<RouterButtonProps> = ({
   link,
   onChanger,
   value,
+  query,
 }) => {
   const router = useRouter();
 
   const handleRouter = () => {
     if (link) {
       router.push(link);
+    } else if (query) {
+      router.push({
+        pathname: link,
+        query: query,
+      });
     } else {
       router.push("/dashboard");
     }

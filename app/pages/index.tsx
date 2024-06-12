@@ -1,5 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import RouterButton from "../components/elements/button/RouterButton";
+import { Router } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   return (
@@ -8,10 +9,10 @@ const HomePage: React.FC = () => {
       <nav>
         <ul>
           <li>
-            <Link href="/login">Login</Link>
+            <RouterButton link="auth/register" value="ユーザー登録画面へ" />
           </li>
           <li>
-            <Link href="/register">Register</Link>
+            <RouterButton link="auth/login" value="ログイン画面へ" />
           </li>
         </ul>
       </nav>

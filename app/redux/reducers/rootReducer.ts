@@ -51,6 +51,7 @@ import yearly_salesReducer, {
 } from "../../store/sales/yearly_sales/yearly_saleSlice";
 import authReducer from "../../store/auth/authSlice";
 import ownerReducer from "../../store/auth/ownerSlice";
+import staffReducer from "../../store/auth/staffSlice";
 
 // 他のリデューサーをインポートする
 
@@ -58,6 +59,7 @@ import ownerReducer from "../../store/auth/ownerSlice";
 const rootReducer = combineReducers({
   auth: authReducer,
   owner: ownerReducer,
+  staff: staffReducer,
   attendance: attendanceReducer,
   attendance_time: attendance_timeReducer,
   course: courseReducer,

@@ -45,22 +45,24 @@ export const authApi = {
     }
   },
 
+  secondRegister: async (formData: {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+  }) => {
+    const response = (await sendRequest(
+      "POST",
+      "/secondRegister",
+      formData
+    )) as any;
+    console.log("responseRegisterDataだよ", response);
+    return response;
+  },
+
   logout: async (formData) => {
-    const csrfToken = await getCsrfToken();
-    if (csrfToken) {
-      const response = (await sendRequest(
-        "POST",
-        "/logout",
-        formData,
-        csrfToken
-      )) as any;
-      console.log("responseLogOutDataだよ", response);
-      return response;
-    } else {
-      return {
-        resStatus: "error",
-        message: "やり直してください。",
-      };
-    }
+    const response = (await sendRequest("POST", "/logout", formData)) as any;
+    console.log("responseLogOutDataだよ", response);
+    return response;
   },
 };
