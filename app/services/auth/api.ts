@@ -28,21 +28,26 @@ export const authApi = {
     password: string;
     role: string;
   }) => {
-    const csrfToken = await getCsrfToken();
-    if (csrfToken) {
-      const response = (await sendRequest(
-        "POST",
-        "/register",
-        formData,
-        csrfToken
-      )) as any;
-      console.log("responseRegisterDataだよ", response);
-      return response;
-    } else {
-      return {
-        resStatus: "error",
-        message: "一度ログアウトしてください。",
-      };
+    try {
+      const csrfToken = await getCsrfToken();
+      if (csrfToken) {
+        const response = await sendRequest(
+          "POST",
+          "/register",
+          formData,
+          csrfToken
+        );
+        console.log("responseRegisterDataだよ", response);
+        return response;
+      } else {
+        return {
+          resStatus: "error",
+          message: "一度ログアウトしてください。",
+        };
+      }
+    } catch (error) {
+      console.error("Failed to register:", error);
+      throw error; // エラーを投げるか、適切に処理する
     }
   },
 

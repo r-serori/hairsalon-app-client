@@ -8,24 +8,31 @@ axios.defaults.withCredentials = true; // Cookieを使用するための設定�
 
 const getCsrfToken = async () => {
   try {
-    const response = await axios.get("/sanctum/csrf-cookie");
-    console.log("CSRF token fetched successfully");
-    console.log("responseCSRF", response);
-    return response.data; //responseをreturnしなくても自動的にcoolieに保存される
+    // "/sanctum/csrf-cookie" にGETリクエストを送信してCSRFトークンを取得
+    await axios.get("/sanctum/csrf-cookie");
+    // クッキーからCSRFトークンを取得する
+    const csrfCookie = document.cookie.match(/XSRF-TOKEN=([^;]*)/);
+    const csrfToken = csrfCookie ? csrfCookie[1] : null;
+
+    if (csrfToken) {
+      console.log("CSRFトークンの取得に成功しました", csrfToken);
+      return csrfToken;
+    } else {
+      throw new Error("クッキーからCSRFトークンが見つかりません");
+    }
   } catch (error) {
-    console.error("Failed to fetch CSRF token:", error);
-    throw new Error("Failed to fetch CSRF token");
+    console.error("CSRFトークンの取得に失敗しました:", error);
+    throw new Error("CSRFトークンの取得に失敗しました");
   }
 };
-
 export default getCsrfToken;
 
-export const sendRequest = async <T>(
+export const sendRequest = async (
   method: "GET" | "POST" | "OPTIONS",
   url: string,
   csrfToken?: any,
   data?: any
-): Promise<T> => {
+): Promise<any> => {
   if (!csrfToken) {
     throw new Error("CSRF token not provided");
   }
@@ -36,7 +43,7 @@ export const sendRequest = async <T>(
       data,
       headers: {
         "Content-Type": "application/json",
-        "XSRF-TOKEN": csrfToken,
+        "X-XSRF-TOKEN": csrfToken,
       },
     });
 
