@@ -10,7 +10,6 @@ interface AuthOwnerFormProps {
     store_name: string;
     address: string;
     phone_number: string;
-    contract_info: string;
     user_id: number;
   }) => void;
 }
@@ -21,7 +20,6 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
   const [store_name, setStoreName] = useState("");
   const [address, setAddress] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
-  const [contract_info, setContractInfo] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,7 +30,6 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
       store_name: store_name,
       address: address,
       phone_number: phone_number,
-      contract_info: contract_info,
       user_id: user.id,
     });
   };
@@ -66,13 +63,6 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-
-          <BasicTextField
-            type="text"
-            placeholder="契約情報"
-            value={contract_info}
-            onChange={(e) => setContractInfo(e.target.value)}
           />
 
           <PrimaryButton value="オーナー情報登録" />

@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import AuthRegisterForm from "../../components/elements/form/auth/AuthRegisterForm";
-import { register } from "../../store/auth/authSlice";
+import { register, secondRegister } from "../../store/auth/authSlice";
 import { RootState } from "../../redux/store";
-import { staffRegister } from "../../store/auth/staffSlice";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,20 +46,23 @@ const LoginPage: React.FC = () => {
   const handleRegister = async (formData: {
     name: string;
     email: string;
+    phone_number: string;
     role: string;
     password: string;
   }) => {
     console.log(formData);
     try {
-      const response = await dispatch(register(formData) as any);
-      console.log("Success", response);
-      if (response.payload.role === "オーナー") {
-        router.push("/owner");
+      if (formData.role === "オーナー") {
+        const response = await dispatch(register(formData) as any);
+        console.log("Success", response);
+        // router.push("/auth/owner");
       } else if (
-        response.payload.role === "スタッフ" ||
-        response.payload.role === "マネージャー"
+        formData.role === "スタッフ" ||
+        formData.role === "マネージャー"
       ) {
-        router.push("/attendances");
+        const response = await dispatch(secondRegister(formData) as any);
+        console.log("Success", response);
+        // router.push("/attendances");
       } else {
         router.push("/dashboard");
       }

@@ -7,11 +7,11 @@ import { logout } from "../../../store/auth/authSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
-interface logoutProps {
+interface LogoutProps {
   className?: string;
 }
 
-const LogoutButton: React.FC<logoutProps> = ({ className }) => {
+const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -37,10 +37,10 @@ const LogoutButton: React.FC<logoutProps> = ({ className }) => {
     } else {
       try {
         const response = await dispatch(logout({}) as any);
-        deleteCookie("sanctum_token");
+        deleteCookie("laravel_session");
         deleteCookie("XSRF-TOKEN");
         console.log("responseindex", response);
-        router.push("/login");
+        router.push("/auth/login");
       } catch (error) {
         console.log("Error", error);
         return;

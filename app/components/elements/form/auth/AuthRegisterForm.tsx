@@ -7,6 +7,7 @@ interface AuthRegisterFormProps {
   onSubmit: (formData: {
     name: string;
     email: string;
+    phone_number: string;
     password: string;
     role: string;
     // confirmPassword: string;
@@ -22,8 +23,9 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
 }) => {
   const [name, setName] = useState("tester");
   const [email, setEmail] = useState("bbb@hairsaron.com");
+  const [phone_number, setPhoneNumber] = useState("08012345678");
   const [password, setPassword] = useState("password123");
-  const [role, setRole] = useState(ownerId ? "オーナー" : "スタッフ");
+  const [role, setRole] = useState(ownerId ? "スタッフ" : "オーナー");
   // const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,6 +38,7 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
     onSubmit({
       name: name,
       email: email,
+      phone_number: phone_number,
       password: password,
       role: role,
     });
@@ -43,14 +46,14 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
 
   return (
     <div className="flex items-center justify-center ">
-      <div className="max-w-md w-full space-y-4">
+      <div className="max-w-md w-full space-y-6 mt-4">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             アカウント登録
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {errorMessage && (
             <p className="text-red-600 text-center">{errorMessage}</p>
           )}
@@ -71,17 +74,26 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
 
           <BasicTextField
             type="text"
+            placeholder="電話番号"
+            value={phone_number}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+
+          <BasicTextField
+            type="text"
             placeholder="パスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <SingleCheckBox
-            label="役職"
-            value={role}
-            onChange={(newValue) => setRole(newValue)}
-            getOptions={ownerId ? ["マネージャー", "スタッフ"] : ["オーナー"]}
-          />
+          <div className={ownerId ? "" : "hidden"}>
+            <SingleCheckBox
+              label="役職"
+              value={role}
+              onChange={(newValue) => setRole(newValue)}
+              getOptions={ownerId ? ["マネージャー", "スタッフ"] : ["オーナー"]}
+            />
+          </div>
 
           {/* <BasicTextField
             type="password"

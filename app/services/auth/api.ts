@@ -24,6 +24,7 @@ export const authApi = {
   register: async (formData: {
     name: string;
     email: string;
+    phone_number: string;
     password: string;
     role: string;
   }) => {
@@ -48,6 +49,7 @@ export const authApi = {
   secondRegister: async (formData: {
     name: string;
     email: string;
+    phone_number: string;
     password: string;
     role: string;
   }) => {

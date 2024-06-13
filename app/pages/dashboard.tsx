@@ -12,7 +12,7 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import LogoutButton from "../components/elements/button/logoutButton";
+import LogoutButton from "../components/elements/button/LogoutButton";
 import { useRouter } from "next/router";
 import BasicAlerts from "../components/elements/alert/Alert";
 

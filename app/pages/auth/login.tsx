@@ -35,7 +35,7 @@ const LoginPage: React.FC = () => {
       // ログイン済みの場合の処理を記述する
     } else {
       console.log("XCSRFが存在しません");
-      router.push("/login");
+      router.push("/auth/login");
       // 未ログインの場合の処理を記述する
     }
   }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする

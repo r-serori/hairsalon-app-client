@@ -39,7 +39,6 @@ const OwnerPage = () => {
     store_name: string;
     address: string;
     phone_number: string;
-    contract_info: string;
     user_id: number;
   }) => {
     console.log(formData);

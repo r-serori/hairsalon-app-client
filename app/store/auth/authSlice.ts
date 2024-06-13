@@ -38,6 +38,7 @@ export const register = createAsyncThunk(
     formData: {
       name: string;
       email: string;
+      phone_number: string;
       role: string;
       password: string;
     },
@@ -70,12 +71,13 @@ export const secondRegister = createAsyncThunk(
     formData: {
       name: string;
       email: string;
+      phone_number: string;
       role: string;
       password: string;
     },
     { rejectWithValue }
   ) => {
-    const response = await authApi.register(formData);
+    const response = await authApi.secondRegister(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -125,6 +127,7 @@ export interface AuthState {
   id: number;
   name: string;
   email: string;
+  phone_number: string;
   password: string;
   role: string;
   created_at: string;
@@ -187,6 +190,7 @@ const authSlice = createSlice({
     builder.addCase(secondRegister.fulfilled, (state, action) => {
       state.loading = false;
       state.message = `スタッフの登録に成功しました！ ${action.payload.responseUser.name}さん！`;
+      state.auth = [...state.auth, action.payload.responseUser];
     });
     builder.addCase(secondRegister.rejected, (state, action) => {
       state.loading = false;

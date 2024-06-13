@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import RootState from "../../redux/reducers/rootReducer";
 import { staffApi } from "../../services/auth/staffApi";
+import { secondRegister } from "./authSlice";
 
 export const staffRegister = createAsyncThunk(
   "staff/register",
@@ -65,13 +66,19 @@ const staffSlice = createSlice({
       state.error = null;
     });
     builder.addCase(staffRegister.fulfilled, (state, action) => {
-      state.staff = action.payload.responseUser;
+      state.staff = action.payload.responseStaff;
       state.loading = false;
-      state.message = "登録が完了しました";
+      state.message = "スタッフの登録が完了しました";
     });
     builder.addCase(staffRegister.rejected, (state, action) => {
       state.error = (action.payload as any).message;
       state.loading = false;
+    });
+
+    builder.addCase(secondRegister.fulfilled, (state, action) => {
+      state.staff = [...state.staff, action.payload.responseStaff];
+      state.loading = false;
+      state.message = "スタッフの登録が完了しました";
     });
   },
 });

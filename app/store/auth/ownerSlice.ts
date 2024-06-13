@@ -10,7 +10,7 @@ export const ownerRegister = createAsyncThunk(
       store_name: string;
       address: string;
       phone_number: string;
-      contract_info: string;
+
       user_id: number;
     },
     { rejectWithValue }
@@ -41,7 +41,7 @@ export interface OwnerState {
   store_name: string;
   address: string;
   phone_number: string;
-  contract_info: string;
+
   user_id: number;
 }
 
