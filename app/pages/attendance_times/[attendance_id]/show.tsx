@@ -21,10 +21,6 @@ const attendanceTimes: React.FC = () => {
   console.log("idだよ");
   console.log({ id });
 
-  usePageReload(() => {
-    dispatch(getAttendance({}) as any);
-  });
-
   const [attendanceTimeOpen, setAttendanceTimeOpen] = useState(false);
 
   const loading = useSelector(
@@ -44,7 +40,7 @@ const attendanceTimes: React.FC = () => {
   const nowAttendanceTime = async () => {
     await dispatch(
       selectGetAttendanceTimes({
-        attendance_id: Number(id),
+        user_id: Number(id),
         yearMonth: "無し",
       }) as any
     );
@@ -59,7 +55,7 @@ const attendanceTimes: React.FC = () => {
         setYearMonth("無し");
         dispatch(
           selectGetAttendanceTimes({
-            attendance_id: Number(id),
+            user_id: Number(id),
             yearMonth: yearMonth,
           }) as any
         );
@@ -73,12 +69,10 @@ const attendanceTimes: React.FC = () => {
     }
   }, [id, dispatch]);
 
-  const attendance = useSelector((state: RootState) =>
-    state.attendance.attendances.find(
-      (attendance) => attendance.id === Number(id)
-    )
+  const user = useSelector((state: RootState) =>
+    state.auth.auth.find((auth) => auth.id === Number(id))
   );
-  console.log(attendance);
+  console.log(user);
 
   const searchItems = [
     { key: "start_time", value: "出勤時間" },

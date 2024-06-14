@@ -28,6 +28,14 @@ export const login = createAsyncThunk(
       //成功時の処理
       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
       return response.data;
+    } else if (response.resStatus === "ownerError") {
+      //成功時の処理
+      console.log("response.ownerError", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "ownerError") {
+      //成功時の処理
+      console.log("response.ownerError", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
     }
   }
 );
@@ -41,6 +49,7 @@ export const register = createAsyncThunk(
       phone_number: string;
       role: string;
       password: string;
+      isAttendance: boolean;
     },
     { rejectWithValue }
   ) => {
@@ -72,8 +81,10 @@ export const secondRegister = createAsyncThunk(
       name: string;
       email: string;
       phone_number: string;
-      role: string;
       password: string;
+      role: string;
+      isAttendance: boolean;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -101,7 +112,142 @@ export const secondRegister = createAsyncThunk(
 export const logout = createAsyncThunk(
   "logout/auth",
   async (formData: {}, { rejectWithValue }) => {
-    const response = await authApi.logout(formData);
+    const response = await authApi.logout();
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
+export const getUsers = createAsyncThunk(
+  "auth/getUsers",
+  async (
+    formData: { owner_id: number; user_id: number },
+    { rejectWithValue }
+  ) => {
+    const response = await authApi.getUsers(formData);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
+export const showUser = createAsyncThunk(
+  "auth/showUser",
+  async (user_id: number, { rejectWithValue }) => {
+    const response = await authApi.showUser(user_id);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
+export const updateUserPermission = createAsyncThunk(
+  "auth/updateUserPermission",
+  async (
+    formData: { id: number; role: string; owner_id: number },
+    { rejectWithValue }
+  ) => {
+    const response = await authApi.updateUserPermission(formData);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "auth/updateUser",
+  async (
+    formData: {
+      id: number;
+      name: string;
+      email: string;
+      phone_number: string;
+      password: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const response = await authApi.updateUser(formData);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "auth/deleteUser",
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+    const response = await authApi.deleteUser(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -130,6 +276,7 @@ export interface AuthState {
   phone_number: string;
   password: string;
   role: string;
+  isAttendance: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -162,7 +309,10 @@ const authSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.loading = false;
       state.auth = [...state.auth, action.payload.responseUser];
-      state.message = `お帰りなさい！ ${action.payload.responseUser.name}さん！`;
+      state.message =
+        action.payload.resStatus === "ownerError"
+          ? action.payload.message
+          : `お帰りなさい！ ${action.payload.responseUser.name}さん！`;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
@@ -207,6 +357,87 @@ const authSlice = createSlice({
       state.message = "ログアウトに成功しました！";
     });
     builder.addCase(logout.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    //get系
+    builder.addCase(getUsers.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(getUsers.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = [...state.auth, ...action.payload.responseUser];
+      state.message = "ユーザー情報の取得に成功しました！";
+    });
+
+    builder.addCase(getUsers.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(showUser.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(showUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = [...state.auth, action.payload.responseUser];
+      state.message = "ユーザー情報の取得に成功しました！";
+    });
+    builder.addCase(showUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    //update系
+    builder.addCase(updateUserPermission.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(updateUserPermission.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = [...state.auth, action.payload.responseUser];
+      state.message = "ユーザー情報の更新に成功しました！";
+    });
+    builder.addCase(updateUserPermission.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(updateUser.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = [...state.auth, action.payload.responseUser];
+      state.message = "ユーザー情報の更新に成功しました！";
+    });
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    //delete系
+    builder.addCase(deleteUser.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = state.auth.filter(
+        (auth) => auth.id !== action.payload.deleteId
+      );
+      state.message = "ユーザー情報の削除に成功しました！";
+    });
+    builder.addCase(deleteUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

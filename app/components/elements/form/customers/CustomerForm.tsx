@@ -71,19 +71,15 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getHairstylesNamesだよ");
   console.log(getHairstylesNames);
 
-  const getAttendancesState = useSelector(
-    (state: RootState) => state.attendance.attendances
-  );
+  const getUsersState = useSelector((state: RootState) => state.auth.auth);
 
-  console.log("getAttendancesStateだよ");
-  console.log(getAttendancesState);
+  console.log("getUsersStateだよ");
+  console.log(getUsersState);
 
-  const getAttendancesNames = getAttendancesState.map(
-    (attendance) => attendance.attendance_name
-  );
+  const getUsersNames = getUsersState.map((user) => user.name);
 
-  console.log("getAttendancesNamesだよ");
-  console.log(getAttendancesNames);
+  console.log("getUsersNamesだよ");
+  console.log(getUsersNames);
 
   const [customer_name, setCustomer_Name] = useState(
     node ? node.customer_name : ""
@@ -125,11 +121,11 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
           .map((hairstyle) => hairstyle.hairstyle_name)
       : []
   );
-  const [attendances, setAttendances] = useState(
+  const [users, setUsers] = useState(
     node
-      ? getAttendancesState
-          .filter((attendance) => node.attendances_id.includes(attendance.id))
-          .map((attendance) => attendance.attendance_name)
+      ? getUsersState
+          .filter((user) => node.users_id.includes(user.id))
+          .map((user) => user.name)
       : []
   );
 
@@ -154,11 +150,9 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       hairstyles_id: getHairstylesState
         .filter((hairstyle) => hairstyles.includes(hairstyle.hairstyle_name))
         .map((hairstyle) => hairstyle.id),
-      attendances_id: getAttendancesState
-        .filter((attendance) =>
-          attendances.includes(attendance.attendance_name)
-        )
-        .map((attendance) => attendance.id),
+      users_id: getUsersState
+        .filter((user) => users.includes(user.name))
+        .map((user) => user.id),
       created_at: "",
       updated_at: "",
     });
@@ -180,8 +174,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
     setHairstyles(event.target.value as string[]);
   };
 
-  const handleAttendanceChange = (event: SelectChangeEvent<string[]>) => {
-    setAttendances(event.target.value as string[]);
+  const handleUserChange = (event: SelectChangeEvent<string[]>) => {
+    setUsers(event.target.value as string[]);
   };
 
   return (
@@ -243,10 +237,10 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
           />
 
           <MultiCheckbox
-            getOptions={getAttendancesState}
-            optionName={attendances}
-            nodesProp="attendance"
-            onChanger={handleAttendanceChange}
+            getOptions={getUsersState}
+            optionName={users}
+            nodesProp="user"
+            onChanger={handleUserChange}
           />
 
           <PrimaryButton value={"作成"} />

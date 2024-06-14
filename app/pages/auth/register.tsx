@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import AuthRegisterForm from "../../components/elements/form/auth/AuthRegisterForm";
 import { register, secondRegister } from "../../store/auth/authSlice";
 import { RootState } from "../../redux/store";
+import BasicAlerts from "../../components/elements/alert/Alert";
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -19,6 +20,10 @@ const LoginPage: React.FC = () => {
       return null;
     }
   });
+
+  const ownerError = useSelector((state: RootState) => state.owner.error);
+
+  const ownerMessage = useSelector((state: RootState) => state.owner.message);
 
   // useEffect(() => {
   //   const hasLaravelSessionCookie = () => {
@@ -49,23 +54,33 @@ const LoginPage: React.FC = () => {
     phone_number: string;
     role: string;
     password: string;
+    isAttendance: boolean;
   }) => {
     console.log(formData);
     try {
-      if (formData.role === "オーナー") {
-        const response = await dispatch(register(formData) as any);
-        console.log("Success", response);
-        router.push("/auth/owner");
-      } else if (
-        formData.role === "スタッフ" ||
-        formData.role === "マネージャー"
-      ) {
-        const response = await dispatch(secondRegister(formData) as any);
-        console.log("Success", response);
-        // router.push("/attendances");
-      } else {
-        router.push("/dashboard");
-      }
+      const response = await dispatch(register(formData) as any);
+      console.log("Success", response);
+      router.push("/auth/owner");
+    } catch (error) {
+      console.log("Error", error);
+      return;
+    }
+  };
+
+  const handleSecondRegister = async (formData: {
+    name: string;
+    email: string;
+    phone_number: string;
+    password: string;
+    role: string;
+    isAttendance: boolean;
+    owner_id: number;
+  }) => {
+    console.log(formData);
+    try {
+      const response = await dispatch(secondRegister(formData) as any);
+      console.log("Success", response);
+      router.push("/attendances");
     } catch (error) {
       console.log("Error", error);
       return;
@@ -74,11 +89,25 @@ const LoginPage: React.FC = () => {
 
   return (
     <div>
+      {ownerError && (
+        <BasicAlerts
+          type={error}
+          message={ownerError}
+          space={1}
+          padding={0.6}
+        />
+      )}
+
+      {error && (
+        <BasicAlerts type={error} message={error} space={1} padding={0.6} />
+      )}
+
       {isLoading ? (
         <p>Loading...</p>
       ) : (
         <AuthRegisterForm
-          onSubmit={handleRegister}
+          onSubmitOwner={handleRegister}
+          onSubmitStaff={handleSecondRegister}
           errorMessage={error}
           ownerId={owner ? owner.id : null}
         />
@@ -87,4 +116,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

@@ -1,9 +1,6 @@
 // reducers/rootReducer.ts
 import { combineReducers } from "@reduxjs/toolkit";
 import { AuthState } from "../../store/auth/authSlice";
-import attendanceReducer, {
-  AttendanceState,
-} from "../../store/attendances/attendanceSlice";
 import attendance_timeReducer, {
   Attendance_timeState,
 } from "../../store/attendances/attendance_times/attendance_timesSlice";
@@ -30,9 +27,9 @@ import option_customersReducer, {
 import hairstyle_customersReducer, {
   Hairstyle_customersState,
 } from "../../store/middleTable/customers/hairstyle_customersSlice";
-import customer_attendancesReducer, {
-  Customer_attendancesState,
-} from "../../store/middleTable/customers/customer_attendancesSlice";
+import customer_usersReducer, {
+  Customer_usersState,
+} from "../../store/middleTable/customers/customer_usersSlice";
 import scheduleReducer, {
   ScheduleState,
 } from "../../store/schedules/scheduleSlice";
@@ -60,7 +57,6 @@ const rootReducer = combineReducers({
   auth: authReducer,
   owner: ownerReducer,
   staff: staffReducer,
-  attendance: attendanceReducer,
   attendance_time: attendance_timeReducer,
   course: courseReducer,
   option: optionReducer,
@@ -77,7 +73,7 @@ const rootReducer = combineReducers({
   merchandise_customers: merchandise_customersReducer,
   option_customers: option_customersReducer,
   hairstyle_customers: hairstyle_customersReducer,
-  customer_attendances: customer_attendancesReducer,
+  customer_users: customer_usersReducer,
   // 他のリデューサーをここに追加する
 });
 

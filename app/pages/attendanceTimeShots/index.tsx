@@ -8,18 +8,17 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { firstGetAttendanceTime } from "../../store/attendances/attendance_times/attendance_timesSlice";
 import { start } from "repl";
+import { getUsers } from "../../store/auth/authSlice";
 
 const AttendanceTimeShots = () => {
   const dispatch = useDispatch();
 
-  const attendances = useSelector(
-    (state: RootState) => state.attendance.attendances
-  );
+  const users = useSelector((state: RootState) => state.auth.auth);
 
   useEffect(() => {
     try {
-      if (attendances.length === 0) {
-        dispatch(getAttendance({}) as any);
+      if (users.length === 0) {
+        dispatch(getUsers({}) as any);
       } else {
         return;
       }
@@ -30,9 +29,9 @@ const AttendanceTimeShots = () => {
     }
   }, []);
 
-  const loading = useSelector((state: RootState) => state.attendance.loading);
+  const loading = useSelector((state: RootState) => state.auth.loading);
 
-  const message = useSelector((state: RootState) => state.attendance.message);
+  const message = useSelector((state: RootState) => state.auth.message);
 
   const timeLoading = useSelector(
     (state: RootState) => state.attendance_time.loading
@@ -42,31 +41,23 @@ const AttendanceTimeShots = () => {
     (state: RootState) => state.attendance_time.message
   );
 
-  const error = useSelector((state: RootState) => state.attendance.error);
+  const error = useSelector((state: RootState) => state.auth.error);
 
   const timeError = useSelector(
     (state: RootState) => state.attendance_time.error
   );
 
-  const searchItems = [
-    { key: "shotAttendance_name", value: "名前" },
-    { key: "shotPosition", value: "役職" },
-  ];
+  const searchItems = [{ key: "shotUserName", value: "名前" }];
 
-  const tHeaderItems = ["名前", "役職", "勤務中？", "出勤", "退勤"];
+  const tHeaderItems = ["名前", "勤務中？", "出勤", "退勤"];
 
-  const nodesProps = [
-    { text: "shotAttendance_name" },
-    { text: "shotPosition" },
-    { text: "isAttendance" },
-  ];
+  const nodesProps = [{ text: "shotUserName" }, { text: "isAttendance" }];
 
-  const nodes = attendances.map((attendance) => {
+  const nodes = users.map((user) => {
     return {
-      id: attendance.id,
-      shotAttendance_name: attendance.attendance_name,
-      shotPosition: attendance.position,
-      isAttendance: attendance.isAttendance ? "勤務中" : "退勤中",
+      id: user.id,
+      shotUser_name: user.name,
+      isAttendance: user.isAttendance ? "勤務中" : "退勤中",
     };
   });
 

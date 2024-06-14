@@ -7,7 +7,7 @@ export const selectGetAttendanceTimes = createAsyncThunk(
   "attendance_times/selectGetAttendanceTimes",
   async (
     formData: {
-      attendance_id: number;
+      user_id: number;
       yearMonth: string;
     },
     { rejectWithValue }
@@ -38,8 +38,10 @@ export const selectGetAttendanceTimes = createAsyncThunk(
 
 export const firstGetAttendanceTime = createAsyncThunk(
   "attendance_times/firstGetAttendanceTime",
-  async (id:number, { rejectWithValue }) => {
-    const response: any = await attendance_timeApi.firstGetAttendanceTime(id as number);
+  async (id: number, { rejectWithValue }) => {
+    const response: any = await attendance_timeApi.firstGetAttendanceTime(
+      id as number
+    );
     console.log("responseだよ", response);
     if (response.resStatus === "error") {
       //エラー時の処理
@@ -59,7 +61,7 @@ export const firstGetAttendanceTime = createAsyncThunk(
       return response.data;
     }
   }
-);  
+);
 
 export const pleaseEditEndTime = createAsyncThunk(
   "attendance_times/pleaseEditEndTime",
@@ -68,7 +70,7 @@ export const pleaseEditEndTime = createAsyncThunk(
       id: number;
       end_time: string;
       end_photo_path: string;
-      attendance_id: number;
+      user_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -100,7 +102,7 @@ export const updateStartTime = createAsyncThunk(
       id: number;
       start_time: string;
       start_photo_path: string;
-      attendance_id: number;
+      user_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -132,7 +134,7 @@ export const updateEndTime = createAsyncThunk(
       id: number;
       end_time: string;
       end_photo_path: string;
-      attendance_id: number;
+      user_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -163,7 +165,7 @@ export const createStartTime = createAsyncThunk(
     formData: {
       start_time: string;
       start_photo_path: string;
-      attendance_id: number;
+      user_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -194,7 +196,7 @@ export const createEndTime = createAsyncThunk(
     formData: {
       end_time: string;
       end_photo_path: string;
-      attendance_id: number;
+      user_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -250,7 +252,7 @@ export interface Attendance_timeState {
   end_time: string;
   start_photo_path: string;
   end_photo_path: string;
-  attendance_id: number;
+  user_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -309,9 +311,10 @@ const attendance_timeSlice = createSlice({
 
     builder.addCase(firstGetAttendanceTime.rejected, (state, action) => {
       state.loading = false;
-      state.error =   (action.payload as any).resStatus === "error"
-      ? (action.payload as any).message
-      : action.error.message;
+      state.error =
+        (action.payload as any).resStatus === "error"
+          ? (action.payload as any).message
+          : action.error.message;
     });
 
     builder.addCase(pleaseEditEndTime.pending, (state) => {
@@ -330,7 +333,7 @@ const attendance_timeSlice = createSlice({
             }
           : attendance_time
       );
-      state.message = action.payload.message
+      state.message = action.payload.message;
     });
     builder.addCase(pleaseEditEndTime.rejected, (state, action) => {
       state.loading = false;

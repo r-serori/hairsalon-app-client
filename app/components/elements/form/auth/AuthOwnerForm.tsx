@@ -24,7 +24,7 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) {
-      router.push("/register");
+      router.push("/auth/register");
     }
     onSubmit({
       store_name: store_name,

@@ -43,9 +43,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     (state: RootState) => state.hairstyle.hairstyle
   );
 
-  const attendances = useSelector(
-    (state: RootState) => state.attendance.attendances
-  );
+  const users = useSelector((state: RootState) => state.auth.auth);
 
   const course_customers = useSelector(
     (state: RootState) => state.course_customers.course_customers
@@ -66,8 +64,8 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     (state: RootState) => state.hairstyle_customers.hairstyle_customers
   );
 
-  const customer_attendances = useSelector(
-    (state: RootState) => state.customer_attendances.customer_attendances
+  const customer_users = useSelector(
+    (state: RootState) => state.customer_users.customer_users
   );
 
   const searchItems = [
@@ -81,7 +79,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
       value: "商品名",
     },
     { key: "hairstyle", value: "ヘアスタイル名" },
-    { key: "attendance", value: "担当者名" },
+    { key: "names", value: "担当者名" },
   ];
 
   const tHeaderItems = [
@@ -106,7 +104,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     { text: "option" },
     { text: "merchandise" },
     { text: "hairstyle" },
-    { text: "attendance" },
+    { text: "names" },
     { date: "updated_at" },
   ];
 
@@ -189,22 +187,20 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
       // ショート, ロング
 
       // 顧客に関連する担当者の情報を取得
-      const customerAttendances = customer_attendances.filter(
-        (attendance) => attendance.customers_id === customer.id
+      const customerAttendances = customer_users.filter(
+        (user) => user.customers_id === customer.id
       );
       console.log(customerAttendances);
-      // [{customers_id: 1, attendances_id: 1}]
+      // [{customers_id: 1, users_id: 1}]
 
       // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
-      const attendanceNames = customerAttendances
-        .map((attendance) => {
-          const attendanceInfo = attendances.find(
-            (a) => a.id === attendance.attendances_id
-          );
-          return attendanceInfo ? attendanceInfo.attendance_name : ""; // 担当者名が見つかった場合のみ取得
+      const userNames = customerAttendances
+        .map((user) => {
+          const userInfo = users.find((a) => a.id === user.users_id);
+          return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
         })
         .join(", "); // 担当者名をカンマ区切りの文字列に変換
-      console.log(attendanceNames);
+      console.log(userNames);
       // 田中店長
 
       // 顧客情報を返す
@@ -217,7 +213,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
         option: optionNames,
         merchandise: merchandiseNames,
         hairstyle: hairstyleNames,
-        attendance: attendanceNames,
+        names: userNames,
         updated_at: customer.updated_at,
       };
     }),

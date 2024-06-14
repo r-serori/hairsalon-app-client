@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -10,14 +9,11 @@ import RouterButton from "../../components/elements/button/RouterButton";
 const Attendances = () => {
   const dispatch = useDispatch();
 
-  const attendances = useSelector(
-    (state: RootState) => state.attendance.attendances
-  );
-  console.log(attendances);
+  const users = useSelector((state: RootState) => state.auth.auth);
 
   useEffect(() => {
     try {
-      if (attendances.length === 0) {
+      if (users.length === 0) {
         dispatch(getAttendance({}) as any);
       } else {
         return;
@@ -35,33 +31,33 @@ const Attendances = () => {
   const error = useSelector((state: RootState) => state.attendance.error);
 
   const searchItems = [
-    { key: "attendance_name", value: "名前" },
+    { key: "name", value: "名前" },
+    { key: "email", value: "メールアドレス" },
     { key: "phone_number", value: "電話番号" },
-    { key: "position", value: "役職" },
-    { key: "address", value: "住所" },
+    { key: "role", value: "役職" },
   ];
 
   const tHeaderItems = [
     "名前",
+    "メールアドレス",
     "電話番号",
     "役職",
-    "住所",
     "更新日",
     "編集",
     "削除",
-    "時間管理",
+    "勤怠時間管理",
   ];
 
   const nodesProps = [
-    { text: "attendance_name" },
+    { text: "name" },
+    { text: "email" },
     { number: "phone_number" },
-    { text: "position" },
-    { text: "address" },
+    { text: "role" },
     { date: "updated_at" },
   ];
 
-  // nodesにattendancesをマップして処理
-  const nodes = attendances;
+  // nodesにusersをマップして処理
+  const nodes = users;
 
   return (
     <div>
@@ -74,7 +70,6 @@ const Attendances = () => {
       )}
       <div className="mx-8 mt-4">
         <div className="flex my-4 ml-2">
-          <RouterButton link="/attendances/create" value="新規作成" />
           <RouterButton link="/auth/register" value="ユーザー登録" />
         </div>
         {loading ? (

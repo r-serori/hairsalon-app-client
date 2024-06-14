@@ -250,8 +250,7 @@ const ComponentTable = ({
                         propProp === "monthly_sales" ||
                         propProp === "year" ||
                         propProp === "yearly_sales" ||
-                        propProp === "shotAttendance_name" ||
-                        propProp === "shotPosition" ||
+                        propProp === "shotUserName" ||
                         propProp === "isAttendance"
                       ) {
                         return (

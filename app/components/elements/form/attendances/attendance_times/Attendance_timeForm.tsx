@@ -18,7 +18,7 @@ const ScheduleForm: React.FC<ScheduleFormProps> = ({ createSchedule }) => {
     e.preventDefault();
     createSchedule({
       id: 0,
-      date: date,
+
       start_time: start_time,
       end_time: end_time,
       break_time: break_time,

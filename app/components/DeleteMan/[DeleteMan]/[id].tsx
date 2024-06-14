@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { deleteAttendance } from "../../../store/attendances/attendanceSlice";
+// import { deleteAttendance } from "../../../store/attendances/attendanceSlice";
 import { deleteAttendanceTime } from "../../../store/attendances/attendance_times/attendance_timesSlice";
 import { deleteCourse } from "../../../store/courses/courseSlice";
 import { deleteCustomer } from "../../../store/customers/customerSlice";
@@ -50,9 +50,6 @@ const DeleteMan: React.FC<DeleteManProps> = ({ id, link }) => {
   const handleDeleteMan = async () => {
     // 適切な link によって条件分岐して削除処理を行う
     switch (link) {
-      case "/attendances":
-        await dispatch(deleteAttendance(id) as any);
-        break;
       case "/attendance_times" ||
         "/attendanceTimeShots" ||
         "/attendanceTimeStart" ||

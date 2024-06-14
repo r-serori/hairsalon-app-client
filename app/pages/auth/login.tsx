@@ -45,7 +45,11 @@ const LoginPage: React.FC = () => {
     try {
       const response = await dispatch(login(formData) as any);
       console.log("Success", response);
-      router.push("/dashboard");
+      if (response.payload.resStatus === "ownerError") {
+        router.push("/auth/owner");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error) {
       console.log("Error", error);
       return;

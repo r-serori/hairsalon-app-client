@@ -44,7 +44,7 @@ export const createCustomer = createAsyncThunk(
       options_id: number[];
       merchandises_id: number[];
       hairstyles_id: number[];
-      attendances_id: number[];
+      users_id: number[];
     },
     { rejectWithValue }
   ) => {
@@ -105,7 +105,7 @@ export const updateCustomer = createAsyncThunk(
       options_id: number[];
       merchandises_id: number[];
       hairstyles_id: number[];
-      attendances_id: number[];
+      users_id: number[];
     },
     { rejectWithValue }
   ) => {
@@ -164,7 +164,7 @@ export interface CustomerState {
   options_id?: number[];
   merchandises_id?: number[];
   hairstyles_id?: number[];
-  attendances_id?: number[];
+  users_id?: number[];
   created_at: string;
   updated_at: string;
 }

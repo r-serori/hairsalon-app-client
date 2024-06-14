@@ -16,25 +16,6 @@ const OwnerPage = () => {
 
   const error = useSelector((state: RootState) => state.auth.error);
 
-  //   const handleOwnerRegister = async (formData: {
-  //     store_name: string;
-  //     address: string;
-  //     phone_number: string;
-  //     contract_info: string;
-  //     user_id: number;
-  //   }) => {
-  //     console.log(formData);
-  //     try {
-  //       const response = await dispatch(ownerRegister(formData) as any);
-  //       console.log("Success", response);
-  //       router.push("/owner");
-  //     } catch (error) {
-  //       console.log("Error", error);
-  //       return;
-  //     }
-
-  //     }
-
   const ownerSubmit = async (formData: {
     store_name: string;
     address: string;

@@ -1,48 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import {
-  getAttendance,
-  updateAttendance,
-  getAttendanceById,
-  AttendanceState,
-} from "../../../../store/attendances/attendanceSlice";
 import { RootState } from "../../../../redux/store";
 import AttendanceForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import RouterButton from "../../../../components/elements/button/RouterButton";
+import { updateUserPermission } from "../../../../store/auth/authSlice";
 
 const attenDanceEdit: React.FC = () => {
   const dispatch = useDispatch();
-  const loading = useSelector((state: RootState) => state.attendance.loading);
+  const loading = useSelector((state: RootState) => state.auth.loading);
   const router = useRouter();
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const attendance = useSelector((state: RootState) =>
-    state.attendance.attendances.find(
-      (attendance: AttendanceState) => attendance.id === parseInt(id as string)
-    )
+  const user = useSelector((state: RootState) =>
+    state.auth.auth.find((auth) => auth.id === Number(id))
   );
 
-  console.log("attendanceだよ");
-  console.log(attendance);
+  console.log("userだよ");
+  console.log(user);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    attendance_name: string;
-    position: string;
-    phone_number: string;
-    address: string;
-    isAttendance: boolean;
-    created_at: string;
-    updated_at: string;
-  }) => {
+  const handleUpdate = async (formData: { id: number; role: string }) => {
     try {
       try {
-        await dispatch(updateAttendance(formData) as any);
+        await dispatch(updateUserPermission(formData) as any);
       } catch (error) {
         console.error(error);
       }
@@ -62,11 +46,7 @@ const attenDanceEdit: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <AttendanceForm
-          createAttendance={handleUpdate}
-          node={attendance}
-          edit={true}
-        />
+        <AttendanceForm onSubmit={handleUpdate} node={user} />
       )}
     </div>
   );

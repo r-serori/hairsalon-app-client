@@ -4,12 +4,23 @@ import PrimaryButton from "../../button/PrimaryButton";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 
 interface AuthRegisterFormProps {
-  onSubmit: (formData: {
+  onSubmitOwner?: (formData: {
     name: string;
     email: string;
     phone_number: string;
     password: string;
     role: string;
+    isAttendance: boolean;
+    // confirmPassword: string;
+  }) => void;
+  onSubmitStaff?: (formData: {
+    name: string;
+    email: string;
+    phone_number: string;
+    password: string;
+    role: string;
+    isAttendance: boolean;
+    owner_id: number;
     // confirmPassword: string;
   }) => void;
   errorMessage: string;
@@ -17,7 +28,8 @@ interface AuthRegisterFormProps {
 }
 
 const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
-  onSubmit,
+  onSubmitOwner,
+  onSubmitStaff,
   errorMessage,
   ownerId,
 }) => {
@@ -26,21 +38,39 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
   const [phone_number, setPhoneNumber] = useState("08012345678");
   const [password, setPassword] = useState("password123");
   const [role, setRole] = useState(ownerId ? "スタッフ" : "オーナー");
+
   // const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitOwner = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // if (password !== confirmPassword) {
     //   alert("パスワードが一致しません");
     //   return;
     // }
-
-    onSubmit({
+    onSubmitOwner({
       name: name,
       email: email,
       phone_number: phone_number,
       password: password,
       role: role,
+      isAttendance: false,
+    });
+  };
+
+  const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // if (password !== confirmPassword) {
+    //   alert("パスワードが一致しません");
+    //   return;
+    // }
+    onSubmitStaff({
+      name: name,
+      email: email,
+      phone_number: phone_number,
+      password: password,
+      role: role,
+      isAttendance: false,
+      owner_id: ownerId,
     });
   };
 
@@ -49,11 +79,14 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
       <div className="max-w-md w-full space-y-6 mt-4">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            アカウント登録
+            {ownerId ? "スタッフ登録" : "オーナー登録"}
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form
+          onSubmit={ownerId ? handleSubmitStaff : handleSubmitOwner}
+          className="mt-8 space-y-6"
+        >
           {errorMessage && (
             <p className="text-red-600 text-center">{errorMessage}</p>
           )}

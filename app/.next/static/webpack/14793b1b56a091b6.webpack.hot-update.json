@@ -1,1 +1,0 @@
-{"c":["pages/auth/register","webpack"],"r":["pages/auth/login"],"m":["../node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=%2FApplications%2FMAMP%2Fhtdocs%2Fhairsalon-app%2Fclient%2Fapp%2Fpages%2Fauth%2Flogin.tsx&page=%2Fauth%2Flogin!","./components/elements/form/auth/AuthLoginForm.tsx","./pages/auth/login.tsx"]}

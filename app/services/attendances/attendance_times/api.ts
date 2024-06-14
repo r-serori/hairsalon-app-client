@@ -2,13 +2,12 @@ import { sendRequest } from "../../requestApi";
 
 export const attendance_timeApi = {
   selectFetchAttendanceTimes: async (formData: {
-    attendance_id: number;
+    user_id: number;
     yearMonth: string;
   }) => {
-    
     const response = await sendRequest(
       "GET",
-    `/images/selectedAttendanceTimes/${formData.attendance_id}/${formData.yearMonth}`
+      `/images/selectedAttendanceTimes/${formData.user_id}/${formData.yearMonth}`
     );
     console.log("APIのattendanceTimeDataだよ");
     return response;
@@ -23,13 +22,12 @@ export const attendance_timeApi = {
     return response;
   },
 
-  pleaseEditEndTime: async (formData:{
+  pleaseEditEndTime: async (formData: {
     id: number;
     end_time: string;
     end_photo_path: string;
-    attendance_id: number;
-  }
-  ) => { 
+    user_id: number;
+  }) => {
     const response = await sendRequest(
       "POST",
       `/attendance_times/pleaseEditEndTime`,
@@ -42,7 +40,7 @@ export const attendance_timeApi = {
   createStartTime: async (formData: {
     start_time: string;
     start_photo_path: string;
-    attendance_id: number;
+    user_id: number;
   }) => {
     const response = await sendRequest(
       "POST",
@@ -56,7 +54,7 @@ export const attendance_timeApi = {
   createEndTime: async (formData: {
     end_time: string;
     end_photo_path: string;
-    attendance_id: number;
+    user_id: number;
   }) => {
     const response = await sendRequest(
       "POST",
@@ -71,7 +69,7 @@ export const attendance_timeApi = {
     id: number;
     start_time: string;
     start_photo_path: string;
-    attendance_id: number;
+    user_id: number;
   }) => {
     const response = await sendRequest(
       "POST",
@@ -86,7 +84,7 @@ export const attendance_timeApi = {
     id: number;
     end_time: string;
     end_photo_path: string;
-    attendance_id: number;
+    user_id: number;
   }) => {
     const response = await sendRequest(
       "POST",

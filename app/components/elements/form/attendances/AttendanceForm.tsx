@@ -2,65 +2,43 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
-import rootReducer from "../../../../redux/reducers/rootReducer";
-import {
-  AttendanceState,
-  RootState,
-} from "../../../../store/attendances/attendanceSlice";
+import { AuthState } from "../../../../store/auth/authSlice";
 
-interface AttendanceFormProps {
-  node?: AttendanceState;
-  // createAttendanceアクションをプロパティとして持つ
-  createAttendance: (formData: AttendanceState) => void;
-  edit?: boolean;
+interface UserUpdateFormProps {
+  onSubmit: (formData: { id: number; role: string }) => void;
+  node: AuthState;
 }
 
-const AttendanceForm: React.FC<AttendanceFormProps> = ({
-  node,
-  createAttendance,
-  edit,
-}) => {
-  const [attendance_name, setAttendanceName] = useState(
-    node ? node.attendance_name : ""
-  );
-  const [position, setPosition] = useState(node ? node.position : "オーナー");
-  const [phone_number, setPhoneNumber] = useState(
-    node ? node.phone_number : ""
-  );
-  const [address, setAddress] = useState(node ? node.address : "");
+const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
+  const [name, setName] = useState(node.name);
+  const [phone_number, setPhoneNumber] = useState(node.phone_number);
+  const [role, setRole] = useState(node.role);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createAttendance({
-      id: node ? node.id : 0,
-      attendance_name: attendance_name,
-      position: position,
-      phone_number: phone_number,
-      address: address,
-      isAttendance: false,
-      created_at: "",
-      updated_at: "",
+
+    onSubmit({
+      id: node.id,
+      role: role,
     });
   };
 
-  const handleChange = (newValue) => {
-    setPosition(newValue);
-  };
-
   return (
-    <div className="flex items-center justify-center px-4 h-full ">
-      <div className="max-w-md w-full">
+    <div className="flex items-center justify-center ">
+      <div className="max-w-md w-full space-y-6 mt-4">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {edit ? "スタッフ情報編集" : "スタッフ新規作成"}
+            ユーザー情報編集
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <BasicTextField
             type="text"
-            placeholder="スタッフ名"
-            value={attendance_name}
-            onChange={(e) => setAttendanceName(e.target.value)}
+            placeholder="名前"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={true}
           />
 
           <BasicTextField
@@ -68,28 +46,21 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
+            disabled={true}
           />
 
           <SingleCheckBox
-            label={"役職"}
-            value={position}
-            getOptions={["オーナー", "マネージャー", "社員"]}
-            onChange={handleChange}
-            nodeId={"position"}
+            label="役職"
+            value={role}
+            onChange={(newValue) => setRole(newValue)}
+            getOptions={["マネージャー", "スタッフ"]}
           />
 
-          <BasicTextField
-            type="text"
-            placeholder="住所"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-
-          <PrimaryButton value={"スタッフ作成"} />
+          <PrimaryButton value="スタッフ情報更新" />
         </form>
       </div>
     </div>
   );
 };
 
-export default AttendanceForm;
+export default UserUpdateForm;

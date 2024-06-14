@@ -76,17 +76,16 @@ const customersEdit: React.FC = () => {
   console.log("hairstyle_customersだよ");
   console.log(hairstyle_customers);
 
-  const customer_attendances = useSelector((state: RootState) =>
-    state.customer_attendances.customer_attendances
+  const customer_users = useSelector((state: RootState) =>
+    state.customer_users.customer_users
       .filter(
-        (customer_attendance) =>
-          customer_attendance.customers_id === parseInt(id as string)
+        (customer_user) => customer_user.customers_id === parseInt(id as string)
       )
-      .map((customer_attendance) => customer_attendance.attendances_id)
+      .map((customer_user) => customer_user.users_id)
   );
 
-  console.log("customer_attendancesだよ");
-  console.log(customer_attendances);
+  console.log("customer_usersだよ");
+  console.log(customer_users);
 
   const customer = {
     ...getCustomer,
@@ -94,7 +93,7 @@ const customersEdit: React.FC = () => {
     options_id: option_customers,
     merchandises_id: merchandise_customers,
     hairstyles_id: hairstyle_customers,
-    attendances_id: customer_attendances,
+    users_id: customer_users,
   };
 
   const handleUpdate = async (formData: {
@@ -107,7 +106,7 @@ const customersEdit: React.FC = () => {
     options_id: number[];
     merchandises_id: number[];
     hairstyles_id: number[];
-    attendances_id: number[];
+    users_id: number[];
     created_at: string;
     updated_at: string;
   }) => {

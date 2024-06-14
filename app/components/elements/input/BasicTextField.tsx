@@ -3,7 +3,21 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-const BasicTextField = ({ placeholder, value, type, onChange }) => {
+interface BasicTextFieldProps {
+  placeholder: string;
+  value: string;
+  type: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+}
+
+const BasicTextField: React.FC<BasicTextFieldProps> = ({
+  placeholder,
+  value,
+  type,
+  onChange,
+  disabled,
+}) => {
   return (
     <Box
       sx={{
@@ -18,6 +32,7 @@ const BasicTextField = ({ placeholder, value, type, onChange }) => {
         onChange={onChange}
         value={value}
         variant="outlined"
+        disabled={disabled ? true : false}
       />
     </Box>
   );
