@@ -55,7 +55,7 @@ const LoginPage: React.FC = () => {
       if (formData.role === "オーナー") {
         const response = await dispatch(register(formData) as any);
         console.log("Success", response);
-        // router.push("/auth/owner");
+        router.push("/auth/owner");
       } else if (
         formData.role === "スタッフ" ||
         formData.role === "マネージャー"
