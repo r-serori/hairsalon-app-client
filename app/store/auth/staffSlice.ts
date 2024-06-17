@@ -1,38 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import RootState from "../../redux/reducers/rootReducer";
-import { staffApi } from "../../services/auth/staffApi";
-import { secondRegister } from "./authSlice";
-
-export const staffRegister = createAsyncThunk(
-  "staff/register",
-  async (
-    formData: {
-      position: string;
-      user_id: number;
-      owner_id: number;
-    },
-    { rejectWithValue }
-  ) => {
-    const response = await staffApi.staffRegister(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
-    }
-  }
-);
+import { staffRegister } from "./authSlice";
 
 export interface StaffState {
   id: number;
@@ -60,25 +28,10 @@ const staffSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(staffRegister.pending, (state, action) => {
-      state.loading = true;
-      state.message = null;
-      state.error = null;
-    });
     builder.addCase(staffRegister.fulfilled, (state, action) => {
       state.staff = action.payload.responseStaff;
       state.loading = false;
-      state.message = "スタッフの登録が完了しました";
-    });
-    builder.addCase(staffRegister.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
-      state.loading = false;
-    });
-
-    builder.addCase(secondRegister.fulfilled, (state, action) => {
-      state.staff = [...state.staff, action.payload.responseStaff];
-      state.loading = false;
-      state.message = "スタッフの登録が完了しました";
+      state.message = "スタッフの登録が完了しました!";
     });
   },
 });

@@ -19,13 +19,13 @@ export const authApi = {
   }) => {
     await getCsrfToken();
     console.log("requestDataRegisterだよ", formData);
-    const response = await sendRequest("POST", "/api/register", formData);
+    const response = await sendRequest("POST", "api/register", formData);
     console.log("responseRegisterDataだよ", response);
     return response;
   },
 
   //staffの登録
-  secondRegister: async (formData: {
+  staffRegister: async (formData: {
     name: string;
     email: string;
     phone_number: string;
@@ -36,7 +36,7 @@ export const authApi = {
   }) => {
     const response = (await sendRequest(
       "POST",
-      `api/user/${formData.owner_id}/secondRegister`,
+      `api/user/${formData.owner_id}/staffRegister`,
       formData
     )) as any;
     console.log("responseRegisterDataだよ", response);

@@ -75,8 +75,8 @@ export const register = createAsyncThunk(
   }
 );
 
-export const secondRegister = createAsyncThunk(
-  "secondRegister/auth",
+export const staffRegister = createAsyncThunk(
+  "staffRegister/auth",
   async (
     formData: {
       name: string;
@@ -89,7 +89,7 @@ export const secondRegister = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response = await authApi.secondRegister(formData);
+    const response = await authApi.staffRegister(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -333,17 +333,17 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
-    builder.addCase(secondRegister.pending, (state) => {
+    builder.addCase(staffRegister.pending, (state) => {
       state.loading = true;
       state.message = null;
       state.error = null;
     });
-    builder.addCase(secondRegister.fulfilled, (state, action) => {
+    builder.addCase(staffRegister.fulfilled, (state, action) => {
       state.loading = false;
       state.message = `スタッフの登録に成功しました！ ${action.payload.responseUser.name}さん！`;
       state.auth = [...state.auth, action.payload.responseUser];
     });
-    builder.addCase(secondRegister.rejected, (state, action) => {
+    builder.addCase(staffRegister.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
@@ -371,7 +371,7 @@ const authSlice = createSlice({
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.loading = false;
       state.auth = [...state.auth, ...action.payload.responseUsers];
-      state.message = "ユーザー情報の取得に成功しました！";
+      state.message = action.payload.message;
     });
 
     builder.addCase(getUsers.rejected, (state, action) => {

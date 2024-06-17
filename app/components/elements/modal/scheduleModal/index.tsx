@@ -89,9 +89,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     (state: RootState) => state.hairstyle.hairstyle
   );
 
-  const attendances = useSelector(
-    (state: RootState) => state.attendance.attendances
-  );
+  const users = useSelector((state: RootState) => state.auth.auth);
 
   const course_customers = useSelector(
     (state: RootState) => state.course_customers.course_customers
@@ -112,8 +110,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     (state: RootState) => state.hairstyle_customers.hairstyle_customers
   );
 
-  const customer_attendances = useSelector(
-    (state: RootState) => state.customer_attendances.customer_attendances
+  const customer_users = useSelector(
+    (state: RootState) => state.customer_users.customer_users
   );
 
   const nodes = [
@@ -179,18 +177,18 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
       // 顧客に関連する担当者の情報を取得
 
-      const customerAttendances = customer_attendances
-        .filter((attendance) => attendance.customers_id === customer.id)
-        .map((attendance) => attendance.attendances_id);
+      const customerUsers = customer_users
+        .filter((user) => user.customers_id === customer.id)
+        .map((user) => user.users_id);
 
-      console.log(customerAttendances);
+      console.log(customerUsers);
 
-      const attendanceNames = attendances
-        .filter((attendance) => customerAttendances.includes(attendance.id))
-        .map((attendance) => attendance.attendance_name);
+      const userNames = users
+        .filter((user) => customerUsers.includes(user.id))
+        .map((user) => user.name);
 
-      console.log("attendanceNamesだよ");
-      console.log(attendanceNames);
+      console.log("userNamesだよ");
+      console.log(userNames);
 
       // 顧客情報を返す
       return {
@@ -202,7 +200,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         option: optionNames,
         merchandise: merchandiseNames,
         hairstyle: hairstyleNames,
-        attendance: attendanceNames,
+        user: userNames,
         updated_at: customer.updated_at,
       };
     }),
@@ -270,8 +268,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     !newCustomer ? initialCustomer.hairstyle : []
   );
 
-  const [attendanceNames, setAttendanceNames] = useState(
-    !newCustomer ? initialCustomer.attendance : []
+  const [userNames, setUserNames] = useState(
+    !newCustomer ? initialCustomer.user : []
   );
 
   const [Sid, setSid] = useState(
@@ -315,8 +313,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setOptionNames(useCustomerState.option || []);
     setMerchandiseNames(useCustomerState.merchandise || []);
     setHairstyleNames(useCustomerState.hairstyle || []);
-    setAttendanceNames(useCustomerState.attendance);
-    setAttendanceNames(useCustomerState.attendance || []);
+    setUserNames(useCustomerState.user);
+    setUserNames(useCustomerState.user || []);
   };
 
   const clearStates = () => {
@@ -327,7 +325,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setOptionNames([]);
     setMerchandiseNames([]);
     setHairstyleNames([]);
-    setAttendanceNames([]);
+    setUserNames([]);
   };
 
   //MultiCheckboxを使用する際の配列の値を変更していってくれる関数。
@@ -347,8 +345,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setHairstyleNames(event.target.value as string[]);
   };
 
-  const handleAttendanceChange = (event: SelectChangeEvent<string[]>) => {
-    setAttendanceNames(event.target.value as string[]);
+  const handleUserChange = (event: SelectChangeEvent<string[]>) => {
+    setUserNames(event.target.value as string[]);
   };
 
   const handleOpen = () => {
@@ -370,7 +368,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       options_id: number[];
       merchandises_id: number[];
       hairstyles_id: number[];
-      attendances_id: number[];
+      users_id: number[];
       Sid: number;
       title: string;
       start_time: string;
@@ -464,11 +462,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
             hairstyleNames.includes(hairstyle.hairstyle_name)
           )
           .map((hairstyle) => hairstyle.id),
-        attendances_id: attendances
-          .filter((attendance) =>
-            attendanceNames.includes(attendance.attendance_name)
-          )
-          .map((attendance) => attendance.id),
+        users_id: users
+          .filter((user) => userNames.includes(user.name))
+          .map((user) => user.id),
         Sid: Sid ? Sid : 0,
         title: title ? title : "",
         start_time: startTime,
@@ -491,7 +487,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setOptionNames([]);
     setMerchandiseNames([]);
     setHairstyleNames([]);
-    setAttendanceNames([]);
+    setUserNames([]);
     setAllDay(0);
     setTitle("");
     setShowModal(false);
@@ -606,7 +602,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         setOptionNames([]);
                         setMerchandiseNames([]);
                         setHairstyleNames([]);
-                        setAttendanceNames([]);
+                        setUserNames([]);
                       } else if (newValue) {
                         setNewCustomer(false);
                         setCustomerName(initialCustomer.customer_name);
@@ -720,10 +716,10 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                         <div className="w-32 mr-1">担当者名:</div>
                         <MultiCheckbox
-                          nodesProp="attendance"
-                          optionName={attendanceNames}
-                          onChanger={handleAttendanceChange}
-                          getOptions={attendances}
+                          nodesProp="user"
+                          optionName={userNames}
+                          onChanger={handleUserChange}
+                          getOptions={users}
                         />
                       </div>
                     </div>
@@ -798,10 +794,10 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                         <div className="w-32 mr-1">担当者:</div>
                         <MultiCheckbox
-                          nodesProp="attendance"
-                          optionName={attendanceNames}
-                          onChanger={handleAttendanceChange}
-                          getOptions={attendances}
+                          nodesProp="user"
+                          optionName={userNames}
+                          onChanger={handleUserChange}
+                          getOptions={users}
                         />
                       </div>
                     </>

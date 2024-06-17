@@ -5,22 +5,34 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { getUsers } from "../../store/auth/authSlice";
+import { useState } from "react";
 
 const Attendances = () => {
   const dispatch = useDispatch();
 
+  // 初回のみデータ取得を行うためのフラグ
+  const [firstRender, setFirstRender] = useState(true);
+
   useEffect(() => {
     try {
-      const userId = localStorage.getItem("user_id");
-      const ownerId = localStorage.getItem("owner_id");
-      dispatch(
-        getUsers({ owner_id: Number(ownerId), user_id: Number(userId) }) as any
-      );
+      if (firstRender) {
+        const userId = localStorage.getItem("user_id");
+        const ownerId = localStorage.getItem("owner_id");
+        dispatch(
+          getUsers({
+            owner_id: Number(ownerId),
+            user_id: Number(userId),
+          }) as any
+        );
+      } else {
+        return;
+      }
     } catch (error) {
       console.log("Error", error);
       return;
     }
-  }, [dispatch]);
+    setFirstRender(false);
+  }, [firstRender]);
 
   const { auth, loading, error, message } = useSelector(
     (state: RootState) => state.auth
@@ -50,15 +62,18 @@ const Attendances = () => {
   ];
 
   // nodesにusersをマップして処理
-  const nodes = auth.map((user: any) => {
-    return {
-      id: user.id,
-      name: user.name,
-      phone_number: user.phone_number,
-      role: user.role,
-      updated_at: user.updated_at,
-    };
+  const nodes = auth.filter((user: any) => {
+    return user.role !== "オーナー";
   });
+  // .map((user: any) => {
+  //   return {
+  //     id: user.id,
+  //     name: user.name,
+  //     phone_number: user.phone_number,
+  //     role: user.role,
+  //     updated_at: user.updated_at,
+  //   };
+  // });
 
   return (
     <div>
@@ -71,7 +86,7 @@ const Attendances = () => {
       )}
       <div className="mx-8 mt-4">
         <div className="flex my-4 ml-2">
-          <RouterButton link="/auth/register" value="ユーザー登録" />
+          <RouterButton link="/auth/staffRegister" value="ユーザー登録" />
         </div>
         {loading ? (
           <p>Loading...</p>

@@ -51,9 +51,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
     (state: RootState) => state.hairstyle.hairstyle
   );
 
-  const attendances = useSelector(
-    (state: RootState) => state.attendance.attendances
-  );
+  const users = useSelector((state: RootState) => state.auth.auth);
 
   const course_customers = useSelector(
     (state: RootState) => state.course_customers.course_customers
@@ -74,8 +72,8 @@ const SaleForm: React.FC<SaleFormProps> = ({
     (state: RootState) => state.hairstyle_customers.hairstyle_customers
   );
 
-  const customer_attendances = useSelector(
-    (state: RootState) => state.customer_attendances.customer_attendances
+  const customer_users = useSelector(
+    (state: RootState) => state.customer_users.customer_users
   );
 
   const nodes = [
@@ -141,18 +139,18 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       // 顧客に関連する担当者の情報を取得
 
-      const customerAttendances = customer_attendances
-        .filter((attendance) => attendance.customers_id === customer.id)
-        .map((attendance) => attendance.attendances_id);
+      const customerUsers = customer_users
+        .filter((user) => user.customers_id === customer.id)
+        .map((user) => user.users_id);
 
-      console.log(customerAttendances);
+      console.log(customerUsers);
 
-      const attendanceNames = attendances
-        .filter((attendance) => customerAttendances.includes(attendance.id))
-        .map((attendance) => attendance.attendance_name);
+      const userNames = users
+        .filter((user) => customerUsers.includes(user.id))
+        .map((user) => user.name);
 
-      console.log("attendanceNamesだよ");
-      console.log(attendanceNames);
+      console.log("userNamesだよ");
+      console.log(userNames);
 
       // 顧客情報を返す
       return {
@@ -164,7 +162,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         option: optionNames,
         merchandise: merchandiseNames,
         hairstyle: hairstyleNames,
-        attendance: attendanceNames,
+        user: userNames,
         updated_at: customer.updated_at,
       };
     }),

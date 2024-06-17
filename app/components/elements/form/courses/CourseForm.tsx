@@ -47,8 +47,8 @@ const CourseForm: React.FC<CourseFormProps> = ({
           <BasicTextField
             type="number"
             placeholder="価格"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={String(price)}
+            onChange={(e) => setPrice(Number(e.target.value))}
           />
 
           <PrimaryButton value={"コース新規作成"} />

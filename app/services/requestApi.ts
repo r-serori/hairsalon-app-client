@@ -38,7 +38,7 @@ export const sendRequest = async (
       withXSRFToken: true, // 追記
       xsrfHeaderName: "X-XSRF-TOKEN", // 追記
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json; charset=utf-8; ",
       },
     });
 

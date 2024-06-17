@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { selectGetAttendanceTimes } from "../../../store/attendances/attendance_times/attendance_timesSlice";
-import { getAttendance } from "../../../store/attendances/attendanceSlice";
 import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
 import usePageReload from "../../../components/Hooks/usePageReload";
@@ -20,6 +19,9 @@ const attendanceTimes: React.FC = () => {
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
+
+  // 初回のみデータ取得を行うためのフラグ
+  const [firstRender, setFirstRender] = useState(true);
 
   const [attendanceTimeOpen, setAttendanceTimeOpen] = useState(false);
 
@@ -37,6 +39,8 @@ const attendanceTimes: React.FC = () => {
     (state: RootState) => state.attendance_time.attendance_times
   );
 
+  const [yearMonth, setYearMonth] = useState("無し");
+
   const nowAttendanceTime = async () => {
     await dispatch(
       selectGetAttendanceTimes({
@@ -46,8 +50,6 @@ const attendanceTimes: React.FC = () => {
     );
     setYearMonth("無し");
   };
-
-  const [yearMonth, setYearMonth] = useState("無し");
 
   useEffect(() => {
     try {

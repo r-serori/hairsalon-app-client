@@ -80,15 +80,15 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
           <BasicTextField
             type="number"
             placeholder="価格"
-            value={product_price}
-            onChange={(e) => setProductPrice(e.target.value)}
+            value={String(product_price)}
+            onChange={(e) => setProductPrice(Number(e.target.value))}
           />
 
           <BasicTextField
             type="number"
             placeholder="数量"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            value={String(quantity)}
+            onChange={(e) => setQuantity(Number(e.target.value))}
           />
 
           <BasicTextField
@@ -108,8 +108,8 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
           <BasicTextField
             type="number"
             placeholder="設定した数量を下回った場合通知します"
-            value={notice}
-            onChange={(e) => setNotice(e.target.value)}
+            value={String(notice)}
+            onChange={(e) => setNotice(Number(e.target.value))}
           />
 
           <SingleCheckBox

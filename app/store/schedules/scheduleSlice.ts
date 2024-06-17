@@ -93,7 +93,7 @@ export const createCustomerSchedule = createAsyncThunk(
       options_id: number[];
       merchandises_id: number[];
       hairstyles_id: number[];
-      attendances_id: number[];
+      users_id: number[];
       title: string;
       start_time: string;
       end_time: string;
@@ -192,7 +192,7 @@ export const updateCustomerSchedule = createAsyncThunk(
       options_id: number[];
       merchandises_id: number[];
       hairstyles_id: number[];
-      attendances_id: number[];
+      users_id: number[];
       title: string;
       start_time: string;
       end_time: string;
@@ -232,7 +232,7 @@ export const updateCustomerOnlySchedule = createAsyncThunk(
       options_id: number[];
       merchandises_id: number[];
       hairstyles_id: number[];
-      attendances_id: number[];
+      users_id: number[];
       title: string;
       start_time: string;
       end_time: string;

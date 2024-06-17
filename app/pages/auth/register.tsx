@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import AuthRegisterForm from "../../components/elements/form/auth/AuthRegisterForm";
-import { register, secondRegister } from "../../store/auth/authSlice";
+import { register } from "../../store/auth/authSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 
@@ -64,26 +64,6 @@ const RegisterPage: React.FC = () => {
     }
   };
 
-  const handleSecondRegister = async (formData: {
-    name: string;
-    email: string;
-    phone_number: string;
-    password: string;
-    role: string;
-    isAttendance: boolean;
-    owner_id: number;
-  }) => {
-    console.log(formData);
-    try {
-      const response = await dispatch(secondRegister(formData) as any);
-      console.log("Success", response);
-      router.push("/attendances");
-    } catch (error) {
-      console.log("Error", error);
-      return;
-    }
-  };
-
   return (
     <div>
       {ownerError && (
@@ -102,11 +82,7 @@ const RegisterPage: React.FC = () => {
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <AuthRegisterForm
-          onSubmitOwner={handleRegister}
-          onSubmitStaff={handleSecondRegister}
-          errorMessage={error}
-        />
+        <AuthRegisterForm onSubmitOwner={handleRegister} errorMessage={error} />
       )}
     </div>
   );
