@@ -1,5 +1,4 @@
 import { sendRequest } from "../requestApi";
-import getCsrfToken from "../requestApi";
 
 export const ownerApi = {
   ownerRegister: async (formData: {
@@ -10,7 +9,7 @@ export const ownerApi = {
   }) => {
     const response = (await sendRequest(
       "POST",
-      "/ownerRegister",
+      `api/user/ownerRegister`,
       formData
     )) as any;
     console.log("responseRegisterDataだよ", response);

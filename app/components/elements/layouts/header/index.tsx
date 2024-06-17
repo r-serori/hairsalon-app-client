@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import LogoutButton from "../../button/LogoutButton";
+import LogoutButton from "../../button/logoutButton";
 
 const navigation = [
   { name: "一覧画面", href: "/dashboard", current: false },

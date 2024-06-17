@@ -13,13 +13,7 @@ const RegisterPage: React.FC = () => {
 
   const error = useSelector((state: RootState) => state.auth.error);
 
-  const owner = useSelector((state: RootState) => {
-    if (state.owner.owner) {
-      return state.owner.owner[0];
-    } else {
-      return null;
-    }
-  });
+  const owner = useSelector((state: RootState) => state.owner.owner);
 
   const ownerError = useSelector((state: RootState) => state.owner.error);
 
@@ -55,10 +49,13 @@ const RegisterPage: React.FC = () => {
     role: string;
     password: string;
     isAttendance: boolean;
+    password_confirmation: string;
   }) => {
     console.log(formData);
     try {
       const response = await dispatch(register(formData) as any);
+      const userId = response.payload.responseUser.id;
+      localStorage.setItem("user_id", userId);
       console.log("Success", response);
       router.push("/auth/owner");
     } catch (error) {
@@ -109,7 +106,6 @@ const RegisterPage: React.FC = () => {
           onSubmitOwner={handleRegister}
           onSubmitStaff={handleSecondRegister}
           errorMessage={error}
-          ownerId={owner ? owner.id : null}
         />
       )}
     </div>

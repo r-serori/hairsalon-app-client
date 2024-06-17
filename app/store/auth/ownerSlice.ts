@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { ownerApi } from "../../services/auth/ownerApi";
 import RootState from "../../redux/reducers/rootReducer";
-import { number } from "yup";
+import { login } from "./authSlice";
 
 export const ownerRegister = createAsyncThunk(
   "owner/register",
@@ -76,6 +76,12 @@ const ownerSlice = createSlice({
     builder.addCase(ownerRegister.rejected, (state, action) => {
       state.loading = false;
       state.error = (action.payload as any).message;
+    });
+
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.loading = false;
+      state.owner = [...state.owner, action.payload.responseOwnerId];
+      state.message = "ログインしました。";
     });
   },
 });

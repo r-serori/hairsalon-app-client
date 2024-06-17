@@ -11,7 +11,7 @@ interface AuthRegisterFormProps {
     password: string;
     role: string;
     isAttendance: boolean;
-    // confirmPassword: string;
+    password_confirmation: string;
   }) => void;
   onSubmitStaff?: (formData: {
     name: string;
@@ -24,20 +24,22 @@ interface AuthRegisterFormProps {
     // confirmPassword: string;
   }) => void;
   errorMessage: string;
-  ownerId: number | null;
 }
 
 const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
   onSubmitOwner,
   onSubmitStaff,
   errorMessage,
-  ownerId,
 }) => {
+  const ownerId = localStorage.getItem("owner_id")
+    ? localStorage.getItem("owner_id")
+    : null;
   const [name, setName] = useState("tester");
   const [email, setEmail] = useState("bbb@hairsaron.com");
   const [phone_number, setPhoneNumber] = useState("08012345678");
   const [password, setPassword] = useState("password123");
   const [role, setRole] = useState(ownerId ? "スタッフ" : "オーナー");
+  const [confirmPassword, setConfirmPassword] = useState("password123");
 
   // const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -54,6 +56,7 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
       password: password,
       role: role,
       isAttendance: false,
+      password_confirmation: confirmPassword,
     });
   };
 
@@ -70,7 +73,7 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
       password: password,
       role: role,
       isAttendance: false,
-      owner_id: ownerId,
+      owner_id: Number(ownerId),
     });
   };
 
@@ -119,6 +122,13 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
             onChange={(e) => setPassword(e.target.value)}
           />
 
+          <BasicTextField
+            type="text"
+            placeholder="パスワード確認"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
           <div className={ownerId ? "" : "hidden"}>
             <SingleCheckBox
               label="役職"
@@ -127,13 +137,6 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
               getOptions={ownerId ? ["マネージャー", "スタッフ"] : ["オーナー"]}
             />
           </div>
-
-          {/* <BasicTextField
-            type="password"
-            placeholder="確認用Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          /> */}
 
           <PrimaryButton value="登録" />
         </form>

@@ -15,22 +15,21 @@ interface AuthOwnerFormProps {
 }
 
 const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
-  const user = useSelector((state: RootState) => state.auth.auth[0]);
-
   const [store_name, setStoreName] = useState("");
   const [address, setAddress] = useState("");
   const [phone_number, setPhoneNumber] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const userId = localStorage.getItem("user_id");
     e.preventDefault();
-    if (!user) {
+    if (!userId) {
       router.push("/auth/register");
     }
     onSubmit({
       store_name: store_name,
       address: address,
       phone_number: phone_number,
-      user_id: user.id,
+      user_id: Number(userId),
     });
   };
 

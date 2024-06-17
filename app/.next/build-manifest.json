@@ -22,6 +22,11 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/attendances": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/attendances.js"
+    ],
     "/auth/register": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

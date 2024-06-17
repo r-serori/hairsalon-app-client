@@ -11,7 +11,7 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({
   onSubmit,
   errorMessage,
 }) => {
-  const [email, setEmail] = useState("aaaaa@hairmail.com");
+  const [email, setEmail] = useState("owner@hairmail.com");
   const [password, setPassword] = useState("password123");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -3,11 +3,8 @@ import { useState } from "react";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAttendance } from "../../store/attendances/attendanceSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import { firstGetAttendanceTime } from "../../store/attendances/attendance_times/attendance_timesSlice";
-import { start } from "repl";
 import { getUsers } from "../../store/auth/authSlice";
 
 const AttendanceTimeShots = () => {
@@ -18,7 +15,14 @@ const AttendanceTimeShots = () => {
   useEffect(() => {
     try {
       if (users.length === 0) {
-        dispatch(getUsers({}) as any);
+        const userId = Number(localStorage.getItem("user_id"));
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(
+          getUsers({
+            user_id: userId,
+            owner_id: ownerId,
+          }) as any
+        );
       } else {
         return;
       }

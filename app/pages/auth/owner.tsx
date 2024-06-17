@@ -26,6 +26,8 @@ const OwnerPage = () => {
     try {
       const response = await dispatch(ownerRegister(formData) as any);
       console.log("Success", response);
+      const ownerId = response.payload.responseOwner.id;
+      localStorage.setItem("owner_id", ownerId);
       router.push("/dashboard");
     } catch (error) {
       console.log("Error", error);

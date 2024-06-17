@@ -12,7 +12,7 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import LogoutButton from "../components/elements/button/LogoutButton";
+import LogoutButton from "../components/elements/button/logoutButton";
 import { useRouter } from "next/router";
 import BasicAlerts from "../components/elements/alert/Alert";
 
@@ -33,13 +33,13 @@ const dashboard: React.FC = () => {
       }
     };
 
-    if (hasLaravelSessionCookie()) {
+    if (hasLaravelSessionCookie() && localStorage.getItem("user_id")) {
       console.log("XCSRF存在します");
       return;
       // ログイン済みの場合の処理を記述する
     } else {
       console.log("XCSRFが存在しません");
-      router.push("/login");
+      router.push("/auth/login");
       // 未ログインの場合の処理を記述する
     }
   }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする

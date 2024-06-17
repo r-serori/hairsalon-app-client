@@ -6,68 +6,112 @@ const BASE_URL = "http://localhost:8000";
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.withCredentials = true; // Cookieを使用するための設定を有効にする
 
-const getCsrfToken = async () => {
+// // CSRFトークンの取得
+export const getCsrfToken = async () => {
   try {
-    // "/sanctum/csrf-cookie" にGETリクエストを送信してCSRFトークンを取得
     await axios.get("/sanctum/csrf-cookie");
-    // クッキーからCSRFトークンを取得する
-    const csrfCookie = document.cookie.match(/XSRF-TOKEN=([^;]*)/);
-    const csrfToken = csrfCookie ? csrfCookie[1] : null;
-
-    if (csrfToken) {
-      console.log("CSRFトークンの取得に成功しました", csrfToken);
-      return csrfToken;
-    } else {
-      throw new Error("クッキーからCSRFトークンが見つかりません");
-    }
+    // CSRFトークンを取得
+    const csrfToken = document.cookie.replace(
+      /(?:(?:^|.*;\s*)XSRF-TOKEN\s*=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    axios.defaults.headers.common["X-XSRF-TOKEN"] = csrfToken;
+    console.log("CSRFトークン取得成功:", csrfToken);
+    return csrfToken;
   } catch (error) {
     console.error("CSRFトークンの取得に失敗しました:", error);
     throw new Error("CSRFトークンの取得に失敗しました");
   }
 };
-export default getCsrfToken;
 
 export const sendRequest = async (
   method: "GET" | "POST" | "OPTIONS",
   url: string,
-  csrfToken?: any,
   data?: any
 ): Promise<any> => {
-  if (!csrfToken) {
-    throw new Error("CSRF token not provided");
-  }
+  console.log("送信するデータ:", data);
   try {
-    const response: AxiosResponse<any> = await axios.request({
+    const response = await axios.request({
       method,
       url,
       data,
+      withXSRFToken: true, // 追記
+      xsrfHeaderName: "X-XSRF-TOKEN", // 追記
       headers: {
         "Content-Type": "application/json",
-        "X-XSRF-TOKEN": csrfToken,
       },
     });
 
     console.log(`${method} request to ${url} successful:`);
-    console.log("REQUESTAPI.response", response);
-    return response as any;
+    console.log("RESPONSE", response);
+    return response;
   } catch (error) {
-    // handleError(error);
     console.error("Failed to send request:", error);
-    return error.response as any;
+    return error.response;
   }
+
+  // ここでCSRFトークンの再取得を試みる
+  //   if (error.response?.status === 419) {
+  //     console.error("CSRFトークンのエラーが発生しました。再取得を試みます。");
+
+  //     try {
+  //       await axios.get("api/sanctum/csrf-cookie"); // CSRFトークンを再取得
+  //       const retryResponse = await axios.request({
+  //         method,
+  //         url,
+  //         data,
+  //       });
+
+  //       console.log(`${method} request to ${url} successful on retry:`);
+  //       console.log("RESPONSE", retryResponse);
+  //       return retryResponse;
+  //     } catch (retryError) {
+  //       console.error("Failed to send request on retry:", retryError);
+  //       return retryError.response;
+  //     }
+  //   } else {
+  //     console.error("Failed to send request:", error);
+  //     return error.response;
+  //   }
+  // }
 };
 
-// const handleError = (error: AxiosError) => {
-//   if (error.response) {
-//     // レスポンスがある場合のエラー
-//     console.log("error.responseだよ", error.response);
-//     const { status, data } = error.response;
-//     throw new Error(`Request failed with status ${status}: ${data}`);
-//   } else if (error.request) {
-//     // リクエストが送信されたがレスポンスがない場合のエラー
-//     throw new Error("No response from server");
-//   } else {
-//     // リクエストが送信されなかった場合のエラー
-//     throw new Error(error.message);
+// import axios from "axios";
+
+// const BASE_URL = "http://localhost:8000";
+// axios.defaults.baseURL = BASE_URL;
+// axios.defaults.withCredentials = true;
+
+// // CSRFトークンの取得
+// export const getCsrfToken = async () => {
+//   try {
+//     await axios.get("/sanctum/csrf-cookie");
+//     // CSRFトークンを取得
+//     const csrfToken = document.cookie.replace(
+//       /(?:(?:^|.*;\s*)XSRF-TOKEN\s*=\s*([^;]*).*$)|^.*$/,
+//       "$1"
+//     );
+//     axios.defaults.headers.common["X-XSRF-TOKEN"] = csrfToken;
+//     return csrfToken;
+//   } catch (error) {
+//     console.error("CSRFトークンの取得に失敗しました:", error);
+//     throw new Error("CSRFトークンの取得に失敗しました");
+//   }
+// };
+
+// // リクエストの送信
+// export const sendRequest = async (method, url, data) => {
+//   try {
+//     const response = await axios.request({
+//       method,
+//       url,
+//       data,
+//     });
+//     console.log(`${method} request to ${url} successful:`);
+//     console.log("RESPONSE", response);
+//     return response;
+//   } catch (error) {
+//     console.error("Failed to send request:", error);
+//     return error.response;
 //   }
 // };

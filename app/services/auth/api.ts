@@ -1,25 +1,11 @@
-import { get } from "http";
-import { sendRequest } from "../requestApi";
-import getCsrfToken from "../requestApi";
+import { sendRequest, getCsrfToken } from "../requestApi";
 
 export const authApi = {
   login: async (formData: { email: string; password: string }) => {
-    const csrfToken = await getCsrfToken();
-    if (csrfToken) {
-      const response = (await sendRequest(
-        "POST",
-        "/login",
-        formData,
-        csrfToken
-      )) as any;
-      console.log("responseLoginDataだよ", response);
-      return response;
-    } else {
-      return {
-        resStatus: "error",
-        message: "一度ログアウトしてください。",
-      };
-    }
+    await getCsrfToken();
+    const response = (await sendRequest("POST", "api/login", formData)) as any;
+    console.log("responseLoginDataだよ", response);
+    return response;
   },
 
   register: async (formData: {
@@ -29,29 +15,13 @@ export const authApi = {
     password: string;
     role: string;
     isAttendance: boolean;
+    password_confirmation: string;
   }) => {
-    try {
-      const csrfToken = await getCsrfToken();
-      console.log("requestDataRegisterだよ", formData);
-      if (csrfToken) {
-        const response = await sendRequest(
-          "POST",
-          "/register",
-          formData,
-          csrfToken
-        );
-        console.log("responseRegisterDataだよ", response);
-        return response;
-      } else {
-        return {
-          resStatus: "error",
-          message: "一度ログアウトしてください。",
-        };
-      }
-    } catch (error) {
-      console.error("Failed to register:", error);
-      throw error; // エラーを投げるか、適切に処理する
-    }
+    await getCsrfToken();
+    console.log("requestDataRegisterだよ", formData);
+    const response = await sendRequest("POST", "/api/register", formData);
+    console.log("responseRegisterDataだよ", response);
+    return response;
   },
 
   //staffの登録
@@ -66,7 +36,7 @@ export const authApi = {
   }) => {
     const response = (await sendRequest(
       "POST",
-      `/user/${formData.owner_id}/secondRegister`,
+      `api/user/${formData.owner_id}/secondRegister`,
       formData
     )) as any;
     console.log("responseRegisterDataだよ", response);
@@ -74,7 +44,7 @@ export const authApi = {
   },
 
   logout: async () => {
-    const response = (await sendRequest("POST", `/user/logout`)) as any;
+    const response = (await sendRequest("POST", `api/user/logout`)) as any;
     console.log("responseLogOutDataだよ", response);
     return response;
   },
@@ -83,7 +53,7 @@ export const authApi = {
   getUsers: async (formData: { owner_id: number; user_id: number }) => {
     const response = (await sendRequest(
       "GET",
-      `user/${formData.owner_id}/getUsers/${formData.user_id}`
+      `api/user/${formData.owner_id}/getUsers/${formData.user_id}`
     )) as any;
     return response;
   },
@@ -130,7 +100,7 @@ export const authApi = {
   deleteUser: async (formData: { id: number; owner_id: number }) => {
     const response = (await sendRequest(
       "POST",
-      `/user/${formData.owner_id}/deleteUser/${formData.id}`
+      `api/user/${formData.owner_id}/deleteUser/${formData.id}`
     )) as any;
     return response;
   },

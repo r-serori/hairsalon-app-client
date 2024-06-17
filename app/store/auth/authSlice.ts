@@ -50,6 +50,7 @@ export const register = createAsyncThunk(
       role: string;
       password: string;
       isAttendance: boolean;
+      password_confirmation: string;
     },
     { rejectWithValue }
   ) => {
@@ -369,7 +370,7 @@ const authSlice = createSlice({
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth = [...state.auth, ...action.payload.responseUser];
+      state.auth = [...state.auth, ...action.payload.responseUsers];
       state.message = "ユーザー情報の取得に成功しました！";
     });
 
