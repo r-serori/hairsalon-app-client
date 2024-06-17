@@ -1,3 +1,4 @@
+import { updateUser } from "../../store/auth/authSlice";
 import { sendRequest, getCsrfToken } from "../requestApi";
 
 export const authApi = {
@@ -62,7 +63,7 @@ export const authApi = {
   showUser: async (user_id: number) => {
     const response = (await sendRequest(
       "GET",
-      `/user/${user_id}/showUser`
+      `api/user/showUser${user_id}/`
     )) as any;
     return response;
   },
@@ -73,11 +74,23 @@ export const authApi = {
     name: string;
     email: string;
     phone_number: string;
+  }) => {
+    const response = (await sendRequest(
+      "POST",
+      `api/user/updateUser/${formData.id}`
+    )) as any;
+    return response;
+  },
+
+  updateUserPassword: async (formData: {
+    id: number; //user_id
+    current_password: string;
     password: string;
   }) => {
     const response = (await sendRequest(
       "POST",
-      `/user/${formData.id}/updateUser`
+      `api/user/updateUserPassword/${formData.id}`,
+      formData
     )) as any;
     return response;
   },
@@ -90,7 +103,7 @@ export const authApi = {
   }) => {
     const response = (await sendRequest(
       "POST",
-      `/user/${formData.owner_id}/updatePermission/${formData.id}`,
+      `api/user/${formData.owner_id}/updatePermission/${formData.id}`,
       formData
     )) as any;
     return response;
