@@ -19,7 +19,12 @@ const options: React.FC = () => {
   console.log(options);
 
   useEffect(() => {
-    dispatch(getOption({}) as any);
+    if (options.length === 0) {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getOption(ownerId) as any);
+    } else {
+      return;
+    }
   }, [dispatch]);
 
   const searchItems = [

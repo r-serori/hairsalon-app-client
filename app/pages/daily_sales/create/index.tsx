@@ -19,6 +19,7 @@ const dailySaleCreate: React.FC = () => {
     id: number;
     date: string;
     daily_sales: number;
+    owner_id: number;
     created_at: string;
     updated_at: string;
   }) => {
@@ -28,7 +29,6 @@ const dailySaleCreate: React.FC = () => {
       } catch (error) {
         console.error(error);
       }
-      await dispatch(getDaily_sales() as any);
     } catch (error) {
       console.error(error);
     }

@@ -48,13 +48,16 @@ const LoginPage: React.FC = () => {
       const response = await dispatch(login(formData) as any);
       console.log("Success", response);
       const userId = response.payload.responseUser.id;
-      const ownerId = response.payload.ownerId.id;
+      const ownerId = response.payload.responseOwnerId.id;
+      const role = response.payload.responseUser.role;
       if (ownerId) {
         localStorage.setItem("user_id", userId);
         localStorage.setItem("owner_id", ownerId);
+        localStorage.setItem("role", role);
         router.push("/dashboard");
-      } else if (!ownerId) {
+      } else if (ownerId === null) {
         localStorage.setItem("user_id", userId);
+        localStorage.setItem("role", role);
         router.push("/auth/owner");
       } else {
         throw new Error("ログイン処理に失敗しました！");

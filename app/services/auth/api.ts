@@ -1,7 +1,7 @@
-import { updateUser } from "../../store/auth/authSlice";
 import { sendRequest, getCsrfToken } from "../requestApi";
 
 export const authApi = {
+  //ログイン処理
   login: async (formData: { email: string; password: string }) => {
     await getCsrfToken();
     const response = (await sendRequest("POST", "api/login", formData)) as any;
@@ -9,6 +9,7 @@ export const authApi = {
     return response;
   },
 
+  //購入者ownerがuser登録するときの処理
   register: async (formData: {
     name: string;
     email: string;
@@ -25,7 +26,7 @@ export const authApi = {
     return response;
   },
 
-  //staffの登録
+  //オーナーがスタッフを登録 Gate,OWNER
   staffRegister: async (formData: {
     name: string;
     email: string;
@@ -33,33 +34,33 @@ export const authApi = {
     password: string;
     role: string;
     isAttendance: boolean;
-    owner_id: number;
   }) => {
     const response = (await sendRequest(
       "POST",
-      `api/user/${formData.owner_id}/staffRegister`,
+      `api/user/staffRegister`,
       formData
     )) as any;
     console.log("responseRegisterDataだよ", response);
     return response;
   },
 
+  //ログアウト処理 Gate,ALL
   logout: async () => {
     const response = (await sendRequest("POST", `api/user/logout`)) as any;
     console.log("responseLogOutDataだよ", response);
     return response;
   },
 
-  // ownerがstaff権限変更時に使用
-  getUsers: async (formData: { owner_id: number; user_id: number }) => {
+  //オーナーがスタッフの情報を取得 Gate,OWNER
+  getUsers: async (owner_id: number) => {
     const response = (await sendRequest(
       "GET",
-      `api/user/${formData.owner_id}/getUsers/${formData.user_id}`
+      `api/user/getUsers/${owner_id}`
     )) as any;
     return response;
   },
 
-  // 各スタッフが自分の個人情報を変更するときに使用
+  //各スタッフが自分の情報を取得 Gate,ALL
   showUser: async (user_id: number) => {
     const response = (await sendRequest(
       "GET",
@@ -68,7 +69,7 @@ export const authApi = {
     return response;
   },
 
-  // 各スタッフが自分の個人情報を変更するときに使用
+  //ユーザーが自分の個人情報を変更 Gate,ALL
   updateUser: async (formData: {
     id: number; //user_id
     name: string;
@@ -77,11 +78,13 @@ export const authApi = {
   }) => {
     const response = (await sendRequest(
       "POST",
-      `api/user/updateUser/${formData.id}`
+      `api/user/updateUser`,
+      formData
     )) as any;
     return response;
   },
 
+  //ユーザーが自分のパスワードを変更 Gate,ALL
   updateUserPassword: async (formData: {
     id: number; //user_id
     current_password: string;
@@ -89,7 +92,7 @@ export const authApi = {
   }) => {
     const response = (await sendRequest(
       "POST",
-      `api/user/updateUserPassword/${formData.id}`,
+      `api/user/updateUserPassword`,
       formData
     )) as any;
     return response;
@@ -99,22 +102,20 @@ export const authApi = {
   updateUserPermission: async (formData: {
     id: number; //user_id
     role: string;
-    owner_id: number;
   }) => {
     const response = (await sendRequest(
       "POST",
-      `api/user/${formData.owner_id}/updatePermission/${formData.id}`,
+      `api/user/updatePermission`,
       formData
     )) as any;
     return response;
   },
 
   //ownerがstaffを削除するときに使用
-  deleteUser: async (formData: { id: number; owner_id: number }) => {
-    const response = (await sendRequest(
-      "POST",
-      `api/user/${formData.owner_id}/deleteUser/${formData.id}`
-    )) as any;
+  deleteUser: async (id: number) => {
+    const response = (await sendRequest("POST", `api/user/deleteUser`, {
+      id: id,
+    })) as any;
     return response;
   },
 };

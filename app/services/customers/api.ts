@@ -10,23 +10,24 @@ export const customerApi = {
     merchandises_id: number[];
     hairstyles_id: number[];
     users_id: number[];
+    owner_id: number;
   }) => {
     const response = await sendRequest("POST", "/customers", formData);
     console.log("APIのcustomerDataだよ");
     return response;
   },
 
-  fetchAllCustomers: async () => {
-    const response = await sendRequest("GET", "/customers");
+  fetchAllCustomers: async (owner_id: number) => {
+    const response = await sendRequest("GET", `/customers/${owner_id}`);
     console.log("customers fetched");
     return response;
   },
 
-  fetchCustomerById: async (id: number) => {
-    const response = await sendRequest("GET", `/customers/${id}`);
-    console.log("customer fetched");
-    return response;
-  },
+  // fetchCustomerById: async (id: number) => {
+  //   const response = await sendRequest("GET", `/customers/${id}`);
+  //   console.log("customer fetched");
+  //   return response;
+  // },
 
   updateCustomer: async (formData: {
     id: number;
@@ -38,19 +39,16 @@ export const customerApi = {
     merchandises_id: number[];
     hairstyles_id: number[];
     users_id: number[];
+    owner_id: number;
   }) => {
     console.log("formDataだよ", formData);
-    const response = await sendRequest(
-      "POST",
-      `/customers/${formData.id}/update`,
-      formData
-    );
+    const response = await sendRequest("POST", `/customers/update`, formData);
     console.log("APIのcustomerDataだよ");
     return response;
   },
 
   deleteCustomer: async (id: number) => {
-    const response = await sendRequest("POST", `/customers/${id}/delete`);
+    const response = await sendRequest("POST", `/customers/delete`, { id: id });
     console.log("APIのcustomerDataだよ");
     return response;
   },

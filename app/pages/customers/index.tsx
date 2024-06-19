@@ -19,7 +19,8 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
 
   useEffect(() => {
     if (customers.length === 0) {
-      dispatch(getCustomer({}) as any);
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getCustomer(ownerId) as any);
     } else {
       return;
     }

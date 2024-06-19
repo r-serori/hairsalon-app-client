@@ -4,8 +4,8 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getMonthly_sales = createAsyncThunk(
   "monthly_sales/getMonthly_sales",
-  async (formData: {}, { rejectWithValue }) => {
-    const response: any = await monthlySaleApi.fetchAllMonthlySales();
+  async (owner_id: number, { rejectWithValue }) => {
+    const response: any = await monthlySaleApi.fetchAllMonthlySales(owner_id);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -29,7 +29,7 @@ export const getMonthly_sales = createAsyncThunk(
 export const createMonthly_sales = createAsyncThunk(
   "monthly_sales/createMonthly_sales",
   async (
-    formData: { year_month: string; monthly_sales: number },
+    formData: { year_month: string; monthly_sales: number; owner_id: number },
     { rejectWithValue }
   ) => {
     const response: any = await monthlySaleApi.createMonthlySales(formData);
@@ -53,29 +53,29 @@ export const createMonthly_sales = createAsyncThunk(
   }
 );
 
-export const getMonthly_salesById = createAsyncThunk(
-  "monthly_sales/getMonthly_salesById",
-  async (id: number, { rejectWithValue }) => {
-    const response: any = await monthlySaleApi.fetchMonthlySalesById(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
-    }
-  }
-);
+// export const getMonthly_salesById = createAsyncThunk(
+//   "monthly_sales/getMonthly_salesById",
+//   async (id: number, { rejectWithValue }) => {
+//     const response: any = await monthlySaleApi.fetchMonthlySalesById(id);
+//     if (response.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response);
+//     } else if (response.data.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response.data);
+//     } else if (response.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response;
+//     } else if (response.data.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response.data;
+//     }
+//   }
+// );
 
 export const updateMonthly_sales = createAsyncThunk(
   "monthly_sales/updateMonthly_sales",
@@ -87,11 +87,7 @@ export const updateMonthly_sales = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const { id, ...updateData } = formData;
-    const response: any = await monthlySaleApi.updateMonthlySales(
-      id,
-      updateData
-    );
+    const response: any = await monthlySaleApi.updateMonthlySales(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -142,6 +138,7 @@ export interface Monthly_salesState {
   year: number;
   month: number;
   monthly_sales: number;
+  owner_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -206,25 +203,25 @@ const monthly_salesSlice = createSlice({
       state.error = action.error.message;
     });
 
-    builder.addCase(getMonthly_salesById.pending, (state, action) => {
-      state.loading = true;
-      state.error = null;
-      state.message = null;
-    });
-    builder.addCase(getMonthly_salesById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.monthly_sales = [
-        ...state.monthly_sales,
-        action.payload.monthlySale,
-      ];
-      state.message = action.payload.message
-        ? action.payload.message
-        : "月次売上の取得に成功しました！";
-    });
-    builder.addCase(getMonthly_salesById.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+    // builder.addCase(getMonthly_salesById.pending, (state, action) => {
+    //   state.loading = true;
+    //   state.error = null;
+    //   state.message = null;
+    // });
+    // builder.addCase(getMonthly_salesById.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.monthly_sales = [
+    //     ...state.monthly_sales,
+    //     action.payload.monthlySale,
+    //   ];
+    //   state.message = action.payload.message
+    //     ? action.payload.message
+    //     : "月次売上の取得に成功しました！";
+    // });
+    // builder.addCase(getMonthly_salesById.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error.message;
+    // });
 
     builder.addCase(updateMonthly_sales.pending, (state, action) => {
       state.loading = true;

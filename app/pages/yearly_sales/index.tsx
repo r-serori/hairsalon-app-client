@@ -7,17 +7,15 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 
-interface Yearly_salesProps {
-  update?: boolean;
-}
-const yearly_sales: React.FC<Yearly_salesProps> = ({ update }) => {
+const yearly_sales: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (update) {
-      return;
+    if (yearly_sales.length === 0) {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getYearly_sales(ownerId) as any);
     } else {
-      dispatch(getYearly_sales({}) as any);
+      return;
     }
   }, [dispatch]);
 

@@ -10,10 +10,24 @@ import RouterButton from "../../components/elements/button/RouterButton";
 
 const stocks: React.FC = () => {
   const dispatch = useDispatch();
+
+  const stocks = useSelector((state: RootState) => state.stock.stocks);
+  console.log(stocks);
+
+  const stockCategories = useSelector(
+    (state: RootState) => state.stock_category.stock_category
+  );
+  console.log(stockCategories);
+
   useEffect(() => {
     try {
-      dispatch(getStock({}) as any);
-      dispatch(getStockCategory({}) as any);
+      if (stocks.length === 0) {
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(getStock(ownerId) as any);
+        dispatch(getStockCategory(ownerId) as any);
+      } else {
+        return;
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -30,14 +44,6 @@ const stocks: React.FC = () => {
   const message = useSelector((state: RootState) => state.stock.message);
 
   const error = useSelector((state: RootState) => state.stock.error);
-
-  const stocks = useSelector((state: RootState) => state.stock.stocks);
-  console.log(stocks);
-
-  const stockCategories = useSelector(
-    (state: RootState) => state.stock_category.stock_category
-  );
-  console.log(stockCategories);
 
   const searchItems = [
     { key: "category_name", value: "在庫カテゴリ" },

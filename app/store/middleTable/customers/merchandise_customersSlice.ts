@@ -41,6 +41,7 @@ export interface Merchandise_customersState {
   // ステートの型
   merchandises_id: number;
   customers_id: number;
+  owner_id: number;
 }
 
 export interface RootState {

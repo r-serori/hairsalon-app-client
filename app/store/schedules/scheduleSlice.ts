@@ -4,8 +4,8 @@ import RootState from "../../redux/reducers/rootReducer";
 
 export const getSchedule = createAsyncThunk(
   "schedule/getSchedule",
-  async (formData: {}, { rejectWithValue }) => {
-    const response: any = await schedulesApi.fetchAllSchedules();
+  async (owner_id: number, { rejectWithValue }) => {
+    const response: any = await schedulesApi.fetchAllSchedules(owner_id);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -28,7 +28,7 @@ export const getSchedule = createAsyncThunk(
 
 export const selectGetSchedules = createAsyncThunk(
   "schedule/selectGetSchedules",
-  async (formData: { year: string }, { rejectWithValue }) => {
+  async (formData: { owner_id: number; year: string }, { rejectWithValue }) => {
     const response: any = await schedulesApi.selectGetSchedules(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
@@ -58,6 +58,7 @@ export const createSchedule = createAsyncThunk(
       start_time: string;
       end_time: string;
       allDay: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -99,6 +100,7 @@ export const createCustomerSchedule = createAsyncThunk(
       end_time: string;
       allDay: number;
       customers_id: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -123,29 +125,29 @@ export const createCustomerSchedule = createAsyncThunk(
   }
 );
 
-export const getScheduleById = createAsyncThunk(
-  "schedule/getScheduleById",
-  async (id: number, { rejectWithValue }) => {
-    const response: any = await schedulesApi.fetchScheduleById(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
-    }
-  }
-);
+// export const getScheduleById = createAsyncThunk(
+//   "schedule/getScheduleById",
+//   async (id: number, { rejectWithValue }) => {
+//     const response: any = await schedulesApi.fetchScheduleById(id);
+//     if (response.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response);
+//     } else if (response.data.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response.data);
+//     } else if (response.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response;
+//     } else if (response.data.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response.data;
+//     }
+//   }
+// );
 
 export const updateSchedule = createAsyncThunk(
   "schedule/updateSchedule",
@@ -238,6 +240,7 @@ export const updateCustomerOnlySchedule = createAsyncThunk(
       end_time: string;
       allDay: number;
       customers_id: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -296,6 +299,7 @@ export interface ScheduleState {
   end_time?: string;
   allDay: number;
   customers_id?: number;
+  owner_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -369,22 +373,22 @@ const scheduleSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getScheduleById.pending, (state) => {
-        state.loading = true;
-        state.message = null;
-        state.error = null;
-      })
-      .addCase(getScheduleById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.schedule = [...state.schedule, action.payload.schedule];
-        state.message = action.payload.message
-          ? action.payload.message
-          : "スケジュールの取得に成功しました！";
-      })
-      .addCase(getScheduleById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      // .addCase(getScheduleById.pending, (state) => {
+      //   state.loading = true;
+      //   state.message = null;
+      //   state.error = null;
+      // })
+      // .addCase(getScheduleById.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.schedule = [...state.schedule, action.payload.schedule];
+      //   state.message = action.payload.message
+      //     ? action.payload.message
+      //     : "スケジュールの取得に成功しました！";
+      // })
+      // .addCase(getScheduleById.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.error = action.error.message;
+      // })
       .addCase(updateSchedule.pending, (state) => {
         state.loading = true;
         state.message = null;

@@ -40,6 +40,7 @@ export interface Option_customersState {
   // ステートの型
   options_id: number;
   customers_id: number;
+  owner_id: number;
 }
 
 export interface RootState {

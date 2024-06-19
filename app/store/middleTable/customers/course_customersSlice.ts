@@ -40,6 +40,7 @@ export interface Course_customersState {
   // ステートの型
   courses_id: number;
   customers_id: number;
+  owner_id: number;
 }
 
 export interface RootState {

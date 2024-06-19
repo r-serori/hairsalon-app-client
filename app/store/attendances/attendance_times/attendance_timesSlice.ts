@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { attendance_timeApi } from "../../../services/attendances/attendance_times/api";
 import RootState from "../../../redux/reducers/rootReducer";
-import { AttendanceState } from "../attendanceSlice";
 
 export const selectGetAttendanceTimes = createAsyncThunk(
   "attendance_times/selectGetAttendanceTimes",

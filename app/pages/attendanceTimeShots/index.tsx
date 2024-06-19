@@ -14,18 +14,8 @@ const AttendanceTimeShots = () => {
 
   useEffect(() => {
     try {
-      if (users.length === 0) {
-        const userId = Number(localStorage.getItem("user_id"));
-        const ownerId = Number(localStorage.getItem("owner_id"));
-        dispatch(
-          getUsers({
-            user_id: userId,
-            owner_id: ownerId,
-          }) as any
-        );
-      } else {
-        return;
-      }
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getUsers(ownerId) as any);
     } catch (error) {
       console.log(error);
     } finally {

@@ -25,14 +25,18 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
     try {
       if (year) {
         console.log("yearです", year);
-        const response = dispatch(selectGetSchedules({ year }) as any);
-        if (response) {
-          return;
-        }
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        const response = dispatch(
+          selectGetSchedules({
+            owner_id: ownerId,
+            year: year,
+          }) as any
+        );
       } else if (update) {
         return;
       } else {
-        dispatch(getSchedule({}) as any);
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(getSchedule(ownerId) as any);
       }
     } catch (error) {
       console.log(error);

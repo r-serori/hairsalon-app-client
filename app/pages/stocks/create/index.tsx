@@ -19,7 +19,9 @@ const stockCreate: React.FC = () => {
     quantity: number;
     remarks: string;
     supplier: string;
+    notice: number;
     stock_category_id: number;
+    owner_id: number;
     created_at: string;
     updated_at: string;
   }) => {

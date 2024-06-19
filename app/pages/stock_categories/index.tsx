@@ -24,7 +24,12 @@ const stock_categories = () => {
   console.log(stockCategories);
 
   useEffect(() => {
-    dispatch(getStockCategory({}) as any);
+    if (stockCategories.length === 0) {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getStockCategory(ownerId) as any);
+    } else {
+      return;
+    }
   }, [dispatch]);
 
   const searchItems = [{ key: "category", value: "在庫カテゴリ名" }];

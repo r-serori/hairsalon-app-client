@@ -15,6 +15,7 @@ export const schedulesApi = {
     end_time: string;
     allDay: number;
     customers_id: number;
+    owner_id: number;
   }) => {
     const response = await sendRequest(
       "POST",
@@ -29,29 +30,29 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     allDay: number;
+    owner_id: number;
   }) => {
     const response = await sendRequest("POST", "/schedules", formData);
     return response;
   },
 
-  fetchAllSchedules: async () => {
-    const response = await sendRequest("GET", "/schedules");
+  fetchAllSchedules: async (id: number) => {
+    const response = await sendRequest("GET", `/schedules/${id}`);
     return response;
   },
 
-  selectGetSchedules: async (formData: { year: string }) => {
+  selectGetSchedules: async (formData: { owner_id: number; year: string }) => {
     const response = await sendRequest(
       "GET",
-      "/schedules/customers/selectGetYear",
-      formData
+      `/schedules/customers/selectGetYear/${formData.owner_id}/${formData.year}`
     );
     return response;
   },
 
-  fetchScheduleById: async (id: number) => {
-    const response = await sendRequest("GET", `/schedules/${id}`);
-    return response;
-  },
+  // fetchScheduleById: async (id: number) => {
+  //   const response = await sendRequest("GET", `/schedules/${id}`);
+  //   return response;
+  // },
 
   updateSchedule: async (formData: {
     Sid: number;
@@ -61,11 +62,7 @@ export const schedulesApi = {
     allDay: number;
   }) => {
     console.log("updateScheduleの中だよ", formData);
-    const response = await sendRequest(
-      "POST",
-      `/schedules/${formData.Sid}/update`,
-      formData
-    );
+    const response = await sendRequest("POST", `/schedules/update`, formData);
     return response;
   },
 
@@ -87,14 +84,14 @@ export const schedulesApi = {
   }) => {
     const response = await sendRequest(
       "POST",
-      `/schedules/${formData.Sid}/customers/doubleUpdate`,
+      `/schedules/customers/doubleUpdate`,
       formData
     );
     return response;
   },
 
   deleteSchedule: async (id: number) => {
-    const response = await sendRequest("POST", `/schedules/${id}/delete`);
+    const response = await sendRequest("POST", `/schedules/delete`, { id: id });
     return response;
   },
 
@@ -112,10 +109,11 @@ export const schedulesApi = {
     end_time: string;
     allDay: number;
     customers_id: number;
+    owner_id: number;
   }) => {
     const response = await sendRequest(
       "POST",
-      `schedules/${formData.customers_id}/customers/customerOnlyUpdate`,
+      `schedules/customers/customerOnlyUpdate`,
       formData
     );
     return response;

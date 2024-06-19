@@ -16,14 +16,8 @@ const Attendances = () => {
   useEffect(() => {
     try {
       if (firstRender) {
-        const userId = localStorage.getItem("user_id");
         const ownerId = localStorage.getItem("owner_id");
-        dispatch(
-          getUsers({
-            owner_id: Number(ownerId),
-            user_id: Number(userId),
-          }) as any
-        );
+        dispatch(getUsers(Number(ownerId)) as any);
       } else {
         return;
       }

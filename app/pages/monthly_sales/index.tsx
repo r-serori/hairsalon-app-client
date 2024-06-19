@@ -7,17 +7,19 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 
-interface Monthly_salesProps {
-  update?: boolean;
-}
-
-const monthly_sales: React.FC<Monthly_salesProps> = ({ update }) => {
+const monthly_sales: React.FC = () => {
   const dispatch = useDispatch();
+
+  const monthly_sales = useSelector(
+    (state: RootState) => state.monthly_sales.monthly_sales
+  );
+
   useEffect(() => {
-    if (update) {
-      return;
+    if (monthly_sales.length === 0) {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getMonthly_sales(ownerId) as any);
     } else {
-      dispatch(getMonthly_sales({}) as any);
+      return;
     }
   }, [dispatch]);
   const loading = useSelector(
@@ -29,10 +31,6 @@ const monthly_sales: React.FC<Monthly_salesProps> = ({ update }) => {
   );
 
   const error = useSelector((state: RootState) => state.monthly_sales.error);
-
-  const monthly_sales = useSelector(
-    (state: RootState) => state.monthly_sales.monthly_sales
-  );
 
   const searchItems = [
     { key: "year_month", value: "年-月" },

@@ -6,8 +6,8 @@ import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getOption = createAsyncThunk(
   "option/getOption",
-  async (formData: {}, { rejectWithValue }) => {
-    const response: any = await optionApi.fetchAllOptions();
+  async (owner_id: number, { rejectWithValue }) => {
+    const response: any = await optionApi.fetchAllOptions(owner_id);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -31,7 +31,12 @@ export const getOption = createAsyncThunk(
 export const createOption = createAsyncThunk(
   "option/createOption",
   async (
-    formData: { id: number; option_name: string; price: number },
+    formData: {
+      id: number;
+      option_name: string;
+      price: number;
+      owner_id: number;
+    },
     { rejectWithValue }
   ) => {
     const response: any = await optionApi.createOption(formData);
@@ -55,29 +60,29 @@ export const createOption = createAsyncThunk(
   }
 );
 
-export const getOptionById = createAsyncThunk(
-  "option/getOptionById",
-  async (id: number, { rejectWithValue }) => {
-    const response: any = await optionApi.fetchOptionById(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
-    }
-  }
-);
+// export const getOptionById = createAsyncThunk(
+//   "option/getOptionById",
+//   async (id: number, { rejectWithValue }) => {
+//     const response: any = await optionApi.fetchOptionById(id);
+//     if (response.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response);
+//     } else if (response.data.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response.data);
+//     } else if (response.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response;
+//     } else if (response.data.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response.data;
+//     }
+//   }
+// );
 
 export const updateOption = createAsyncThunk(
   "option/updateOption",
@@ -85,8 +90,7 @@ export const updateOption = createAsyncThunk(
     formData: { id: number; option_name: string; price: number },
     { rejectWithValue }
   ) => {
-    const { id, ...updateData } = formData;
-    const response: any = await optionApi.updateOption(id, updateData);
+    const response: any = await optionApi.updateOption(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -136,6 +140,7 @@ export interface OptionState {
   id: number;
   option_name: string;
   price: number;
+  owner_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -193,22 +198,22 @@ const optionSlice = createSlice({
       state.loading = false;
     });
 
-    builder.addCase(getOptionById.pending, (state) => {
-      state.loading = true;
-      state.message = null;
-      state.error = null;
-    });
-    builder.addCase(getOptionById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.option = [...state.option, action.payload.option];
-      state.message = action.payload.message
-        ? action.payload.message
-        : "オプション情報を取得しました！";
-    });
-    builder.addCase(getOptionById.rejected, (state, action) => {
-      state.error = action.error.message!;
-      state.loading = false;
-    });
+    // builder.addCase(getOptionById.pending, (state) => {
+    //   state.loading = true;
+    //   state.message = null;
+    //   state.error = null;
+    // });
+    // builder.addCase(getOptionById.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.option = [...state.option, action.payload.option];
+    //   state.message = action.payload.message
+    //     ? action.payload.message
+    //     : "オプション情報を取得しました！";
+    // });
+    // builder.addCase(getOptionById.rejected, (state, action) => {
+    //   state.error = action.error.message!;
+    //   state.loading = false;
+    // });
 
     builder.addCase(updateOption.pending, (state) => {
       state.loading = true;

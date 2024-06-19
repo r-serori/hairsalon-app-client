@@ -4,8 +4,8 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getYearly_sales = createAsyncThunk(
   "yearly_sales/getYearly_sales",
-  async (formData: {}, { rejectWithValue }) => {
-    const response: any = await yearlySaleApi.fetchAllYearlySales();
+  async (owner_id: number, { rejectWithValue }) => {
+    const response: any = await yearlySaleApi.fetchAllYearlySales(owner_id);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -29,7 +29,7 @@ export const getYearly_sales = createAsyncThunk(
 export const createYearly_sales = createAsyncThunk(
   "yearly_sales/createYearly_sales",
   async (
-    formData: { year: string; yearly_sales: number },
+    formData: { year: string; yearly_sales: number; owner_id: number },
     { rejectWithValue }
   ) => {
     const response: any = await yearlySaleApi.createYearlySales(formData);
@@ -52,29 +52,29 @@ export const createYearly_sales = createAsyncThunk(
     }
   }
 );
-export const getYearly_salesById = createAsyncThunk(
-  "yearly_sales/getYearly_salesById",
-  async (id: number, { rejectWithValue }) => {
-    const response: any = await yearlySaleApi.fetchYearlySalesById(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
-    }
-  }
-);
+// export const getYearly_salesById = createAsyncThunk(
+//   "yearly_sales/getYearly_salesById",
+//   async (id: number, { rejectWithValue }) => {
+//     const response: any = await yearlySaleApi.fetchYearlySalesById(id);
+//     if (response.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response);
+//     } else if (response.data.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response.data);
+//     } else if (response.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response;
+//     } else if (response.data.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response.data;
+//     }
+//   }
+// );
 
 export const updateYearly_sales = createAsyncThunk(
   "yearly_sales/updateYearly_sales",
@@ -82,8 +82,7 @@ export const updateYearly_sales = createAsyncThunk(
     formData: { id: number; year: string; yearly_sales: number },
     { rejectWithValue }
   ) => {
-    const { id, ...updateData } = formData;
-    const response: any = await yearlySaleApi.updateYearlySales(id, updateData);
+    const response: any = await yearlySaleApi.updateYearlySales(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -133,6 +132,7 @@ export interface Yearly_salesState {
   id: number;
   year: string;
   yearly_sales: number;
+  owner_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -194,22 +194,22 @@ const yearly_salesSlice = createSlice({
       state.error = action.error.message;
     });
 
-    builder.addCase(getYearly_salesById.pending, (state, action) => {
-      state.loading = true;
-      state.error = null;
-      state.message = null;
-    });
-    builder.addCase(getYearly_salesById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
-      state.message = action.payload.message
-        ? action.payload.message
-        : "年間売上の取得に成功しました！";
-    });
-    builder.addCase(getYearly_salesById.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+    // builder.addCase(getYearly_salesById.pending, (state, action) => {
+    //   state.loading = true;
+    //   state.error = null;
+    //   state.message = null;
+    // });
+    // builder.addCase(getYearly_salesById.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
+    //   state.message = action.payload.message
+    //     ? action.payload.message
+    //     : "年間売上の取得に成功しました！";
+    // });
+    // builder.addCase(getYearly_salesById.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error.message;
+    // });
 
     builder.addCase(updateYearly_sales.pending, (state, action) => {
       state.loading = true;

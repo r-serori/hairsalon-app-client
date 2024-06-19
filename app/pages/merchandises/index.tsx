@@ -9,8 +9,19 @@ import RouterButton from "../../components/elements/button/RouterButton";
 
 const merchandises = () => {
   const dispatch = useDispatch();
+
+  const merchandises = useSelector(
+    (state: RootState) => state.merchandise.merchandise
+  );
+  console.log(merchandises);
+
   useEffect(() => {
-    dispatch(getMerchandise({}) as any);
+    if (merchandises.length === 0) {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getMerchandise(ownerId) as any);
+    } else {
+      return;
+    }
   }, [dispatch]);
 
   const loading = useSelector((state: RootState) => state.merchandise.loading);
@@ -18,11 +29,6 @@ const merchandises = () => {
   const message = useSelector((state: RootState) => state.merchandise.message);
 
   const error = useSelector((state: RootState) => state.merchandise.error);
-
-  const merchandises = useSelector(
-    (state: RootState) => state.merchandise.merchandise
-  );
-  console.log(merchandises);
 
   const searchItems = [
     { key: "merchandise_name", value: "物販名" },

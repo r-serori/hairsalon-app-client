@@ -1,41 +1,37 @@
 import { sendRequest } from "../requestApi";
-import getCsrfToken from "../requestApi";
 
 export const stockCategoryApi = {
-  createStockCategory: async (formData: { category: string }) => {
+  createStockCategory: async (formData: {
+    category: string;
+    owner_id: number;
+  }) => {
     const response = await sendRequest("POST", "/stock_categories", formData);
     return response;
   },
 
-  fetchAllStockCategories: async () => {
-    const response = await sendRequest("GET", "/stock_categories");
+  fetchAllStockCategories: async (owner_id: number) => {
+    const response = await sendRequest("GET", `/stock_categories/${owner_id}`);
     return response;
   },
 
-  fetchStockCategoryById: async (id: number) => {
-    const response = await sendRequest("GET", `/stock_categories/${id}`);
-    return response;
-  },
+  // fetchStockCategoryById: async (id: number) => {
+  //   const response = await sendRequest("GET", `/stock_categories/${id}`);
+  //   return response;
+  // },
 
-  updateStockCategory: async (
-    id: number,
-    formData: {
-      category: string;
-    }
-  ) => {
+  updateStockCategory: async (formData: { id: number; category: string }) => {
     const response = await sendRequest(
       "POST",
-      `/stock_categories/${id}/update`,
+      `/stock_categories/update`,
       formData
     );
     return response;
   },
 
   deleteStockCategory: async (id: number) => {
-    const response = await sendRequest(
-      "POST",
-      `/stock_categories/${id}/delete`
-    );
+    const response = await sendRequest("POST", `/stock_categories/delete`, {
+      id: id,
+    });
     return response;
   },
 };

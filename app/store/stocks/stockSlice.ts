@@ -5,8 +5,8 @@ import RootState from "../../redux/reducers/rootReducer";
 // APIから在庫情報を取得する非同期アクション//get
 export const getStock = createAsyncThunk(
   "stock/getStock",
-  async (formData: {}, { rejectWithValue }) => {
-    const response: any = await stockApi.fetchAllStocks(); // APIからデータを取得
+  async (owner_id: number, { rejectWithValue }) => {
+    const response: any = await stockApi.fetchAllStocks(owner_id); // APIからデータを取得
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -40,6 +40,7 @@ export const createStock = createAsyncThunk(
       supplier: string;
       notice: number;
       stock_category_id: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -65,30 +66,30 @@ export const createStock = createAsyncThunk(
 );
 
 // 在庫情報を取得する非同期アクション//show
-export const getStockById = createAsyncThunk(
-  "stock/getStockById",
-  async (id: number, { rejectWithValue }) => {
-    const response: any = await stockApi.fetchStockById(id);
-    console.log("stockShowDataだよ");
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
-    }
-  }
-);
+// export const getStockById = createAsyncThunk(
+//   "stock/getStockById",
+//   async (id: number, { rejectWithValue }) => {
+//     const response: any = await stockApi.fetchStockById(id);
+//     console.log("stockShowDataだよ");
+//     if (response.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response);
+//     } else if (response.data.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response.data);
+//     } else if (response.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response;
+//     } else if (response.data.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response.data;
+//     }
+//   }
+// );
 
 // 在庫情報を更新する非同期アクション,put,update
 export const updateStock = createAsyncThunk(
@@ -106,8 +107,7 @@ export const updateStock = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const { id, ...updateData } = formData; // idを除外する
-    const response: any = await stockApi.updateStock(id, updateData);
+    const response: any = await stockApi.updateStock(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -163,6 +163,7 @@ export interface StockState {
   supplier: string; //仕入れ先
   notice: number; //通知
   stock_category_id: number; //在庫カテゴリー、外部キー
+  owner_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -222,22 +223,22 @@ const stockSlice = createSlice({
       state.error = action.error.message;
     });
 
-    builder.addCase(getStockById.pending, (state) => {
-      state.loading = true;
-      state.message = null;
-      state.error = null;
-    });
-    builder.addCase(getStockById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.stocks = [...state.stocks, action.payload.stock];
-      state.message = action.payload.message
-        ? action.payload.message
-        : "在庫情報を取得しました！";
-    });
-    builder.addCase(getStockById.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
+    // builder.addCase(getStockById.pending, (state) => {
+    //   state.loading = true;
+    //   state.message = null;
+    //   state.error = null;
+    // });
+    // builder.addCase(getStockById.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.stocks = [...state.stocks, action.payload.stock];
+    //   state.message = action.payload.message
+    //     ? action.payload.message
+    //     : "在庫情報を取得しました！";
+    // });
+    // builder.addCase(getStockById.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error.message;
+    // });
 
     builder.addCase(updateStock.pending, (state) => {
       state.loading = true;

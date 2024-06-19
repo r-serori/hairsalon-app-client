@@ -16,6 +16,7 @@ const optionCreate: React.FC = () => {
     id: number;
     option_name: string;
     price: number;
+    owner_id: number;
     created_at: string;
     updated_at: string;
   }) => {

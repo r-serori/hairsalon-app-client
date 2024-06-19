@@ -41,6 +41,7 @@ export interface Hairstyle_customersState {
   // ステートの型
   hairstyles_id: number;
   customers_id: number;
+  owner_id: number;
 }
 
 export interface RootState {

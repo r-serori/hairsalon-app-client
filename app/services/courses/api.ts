@@ -1,39 +1,40 @@
 import { sendRequest } from "../requestApi";
 
 export const courseApi = {
-  createCourse: async (formData: { course_name: string; price: number }) => {
+  createCourse: async (formData: {
+    course_name: string;
+    price: number;
+    owner_id: number;
+  }) => {
     const response = await sendRequest("POST", "/courses", formData);
     console.log("APIのcourseDataだよ");
     return response;
   },
 
-  fetchAllCourses: async () => {
-    const response = await sendRequest("GET", "/courses");
+  fetchAllCourses: async (owner_id: number) => {
+    const response = await sendRequest("GET", `/courses/${owner_id}`);
     console.log("courses fetched");
     return response;
   },
 
-  fetchCourseById: async (id: number) => {
-    const response = await sendRequest("GET", `/courses/${id}`);
-    console.log("course fetched");
-    return response;
-  },
+  // fetchCourseById: async (id: number) => {
+  //   const response = await sendRequest("GET", `/courses/${id}`);
+  //   console.log("course fetched");
+  //   return response;
+  // },
 
-  updateCourse: async (
-    id: number,
-    formData: { course_name: string; price: number }
-  ) => {
-    const response = await sendRequest(
-      "POST",
-      `/courses/${id}/update`,
-      formData
-    );
+  updateCourse: async (formData: {
+    id: number;
+    course_name: string;
+    price: number;
+  }) => {
+    const response = await sendRequest("POST", `/courses/update`, formData);
     console.log("APIのcourseDataだよ");
     return response;
   },
 
   deleteCourse: async (id: number) => {
-    const response = await sendRequest("POST", `/courses/${id}/delete`);
+    const response = await sendRequest("POST", `/courses/delete`, { id: id });
     console.log("APIのcourseDataだよ");
     return response;
   },

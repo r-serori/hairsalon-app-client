@@ -55,7 +55,9 @@ const RegisterPage: React.FC = () => {
     try {
       const response = await dispatch(register(formData) as any);
       const userId = response.payload.responseUser.id;
+      const role = response.payload.responseUser.role;
       localStorage.setItem("user_id", userId);
+      localStorage.setItem("role", role);
       console.log("Success", response);
       router.push("/auth/owner");
     } catch (error) {

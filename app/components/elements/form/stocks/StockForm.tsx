@@ -56,6 +56,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
       stock_category_id: stockCategories.find(
         (category) => category.category === stockCategoryIdName
       )?.id,
+      owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
       created_at: "",
       updated_at: "",
     });

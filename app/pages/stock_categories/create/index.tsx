@@ -20,6 +20,7 @@ const stockCategoryCreate: React.FC = () => {
   const handleCreate = async (formData: {
     id: number;
     category: string;
+    owner_id: number;
     created_at: string;
     updated_at: string;
   }) => {

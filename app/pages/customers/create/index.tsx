@@ -25,6 +25,7 @@ const customersCreate = () => {
     merchandises_id: number[];
     hairstyles_id: number[];
     users_id: number[];
+    owner_id: number;
     created_at: string;
     updated_at: string;
   }) => {

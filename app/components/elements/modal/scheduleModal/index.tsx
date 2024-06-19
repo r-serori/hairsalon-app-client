@@ -375,6 +375,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       end_time: string;
       allDay: number;
       customers_id: number;
+      owner_id: number;
     },
     newCustomer
   ) => {
@@ -471,6 +472,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         end_time: endTime,
         allDay: allDay,
         customers_id: customerId,
+        owner_id: Number(localStorage.getItem("owner_id")),
       },
       newCustomer
     );

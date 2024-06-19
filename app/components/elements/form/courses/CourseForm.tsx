@@ -19,12 +19,14 @@ const CourseForm: React.FC<CourseFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     createCourse({
       id: node ? node.id : 0,
       course_name: course_name,
       price: price,
-      created_at: "",
-      updated_at: "",
+      owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
+      created_at: node ? node.created_at : "",
+      updated_at: node ? node.updated_at : "",
     });
   };
 

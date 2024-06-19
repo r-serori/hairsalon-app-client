@@ -8,17 +8,17 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { Router } from "next/router";
 
-interface Daily_salesProps {
-  update?: boolean;
-}
-
-const daily_sales: React.FC<Daily_salesProps> = ({ update }) => {
+const daily_sales: React.FC = () => {
   const dispatch = useDispatch();
+  const daily_sales = useSelector(
+    (state: RootState) => state.daily_sales.daily_sales
+  );
   useEffect(() => {
-    if (update) {
-      return;
+    if (daily_sales.length === 0) {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getDaily_sales(ownerId) as any);
     } else {
-      dispatch(getDaily_sales({}) as any);
+      return;
     }
   }, [dispatch]);
 
@@ -27,10 +27,6 @@ const daily_sales: React.FC<Daily_salesProps> = ({ update }) => {
   const message = useSelector((state: RootState) => state.daily_sales.message);
 
   const error = useSelector((state: RootState) => state.daily_sales.error);
-
-  const daily_sales = useSelector(
-    (state: RootState) => state.daily_sales.daily_sales
-  );
 
   const searchItems = [
     { key: "date", value: "日付" },

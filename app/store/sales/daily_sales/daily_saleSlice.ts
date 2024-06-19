@@ -4,8 +4,8 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getDaily_sales = createAsyncThunk(
   "daily_sales/getDaily_sales",
-  async (formData: {}, { rejectWithValue }) => {
-    const response: any = await dailySaleApi.fetchAllDailySales();
+  async (owner_id: number, { rejectWithValue }) => {
+    const response: any = await dailySaleApi.fetchAllDailySales(owner_id);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -29,7 +29,7 @@ export const getDaily_sales = createAsyncThunk(
 export const createDaily_sales = createAsyncThunk(
   "daily_sales/createDaily_sales",
   async (
-    formData: { date: string; daily_sales: number },
+    formData: { date: string; daily_sales: number; owner_id: number },
     { rejectWithValue }
   ) => {
     const response: any = await dailySaleApi.createDailySales(formData);
@@ -52,29 +52,29 @@ export const createDaily_sales = createAsyncThunk(
     }
   }
 );
-export const getDaily_salesById = createAsyncThunk(
-  "daily_sales/getDaily_salesById",
-  async (id: number, { rejectWithValue }) => {
-    const response: any = await dailySaleApi.fetchDailySalesById(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
-    }
-  }
-);
+// export const getDaily_salesById = createAsyncThunk(
+//   "daily_sales/getDaily_salesById",
+//   async (id: number, { rejectWithValue }) => {
+//     const response: any = await dailySaleApi.fetchDailySalesById(id);
+//     if (response.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response);
+//     } else if (response.data.resStatus === "error") {
+//       //エラー時の処理
+//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//       return rejectWithValue(response.data);
+//     } else if (response.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response;
+//     } else if (response.data.resStatus === "success") {
+//       //成功時の処理
+//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//       return response.data;
+//     }
+//   }
+// );
 
 export const updateDaily_sales = createAsyncThunk(
   "daily_sales/updateDaily_sales",
@@ -82,8 +82,7 @@ export const updateDaily_sales = createAsyncThunk(
     formData: { id: number; date: string; daily_sales: number },
     { rejectWithValue }
   ) => {
-    const { id, ...updateData } = formData;
-    const response: any = await dailySaleApi.updateDailySales(id, updateData);
+    const response: any = await dailySaleApi.updateDailySales(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -133,6 +132,7 @@ export interface Daily_salesState {
   id: number;
   date: string;
   daily_sales: number;
+  owner_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -192,22 +192,22 @@ const daily_salesSlice = createSlice({
       state.loading = false;
     });
 
-    builder.addCase(getDaily_salesById.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-      state.message = null;
-    });
-    builder.addCase(getDaily_salesById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.daily_sales = [...state.daily_sales, action.payload.dailySale];
-      state.message = action.payload.message
-        ? action.payload.message
-        : "日次売上の取得に成功しました！";
-    });
-    builder.addCase(getDaily_salesById.rejected, (state, action) => {
-      state.error = action.error.message;
-      state.loading = false;
-    });
+    // builder.addCase(getDaily_salesById.pending, (state) => {
+    //   state.loading = true;
+    //   state.error = null;
+    //   state.message = null;
+    // });
+    // builder.addCase(getDaily_salesById.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.daily_sales = [...state.daily_sales, action.payload.dailySale];
+    //   state.message = action.payload.message
+    //     ? action.payload.message
+    //     : "日次売上の取得に成功しました！";
+    // });
+    // builder.addCase(getDaily_salesById.rejected, (state, action) => {
+    //   state.error = action.error.message;
+    //   state.loading = false;
+    // });
 
     builder.addCase(updateDaily_sales.pending, (state) => {
       state.loading = true;

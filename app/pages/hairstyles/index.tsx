@@ -10,8 +10,18 @@ import RouterButton from "../../components/elements/button/RouterButton";
 const hairstyles: React.FC = () => {
   const dispatch = useDispatch();
 
+  const hairstyles = useSelector(
+    (state: RootState) => state.hairstyle.hairstyle
+  );
+  console.log(hairstyles);
+
   useEffect(() => {
-    dispatch(getHairstyle({}) as any);
+    if (hairstyles.length === 0) {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      dispatch(getHairstyle(ownerId) as any);
+    } else {
+      return;
+    }
   }, [dispatch]);
 
   const loading = useSelector((state: RootState) => state.hairstyle.loading);
@@ -19,11 +29,6 @@ const hairstyles: React.FC = () => {
   const message = useSelector((state: RootState) => state.hairstyle.message);
 
   const error = useSelector((state: RootState) => state.hairstyle.error);
-
-  const hairstyles = useSelector(
-    (state: RootState) => state.hairstyle.hairstyle
-  );
-  console.log(hairstyles);
 
   const searchItems = [{ key: "hairstyle_name", value: "髪型" }];
 

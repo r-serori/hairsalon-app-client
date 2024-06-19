@@ -19,6 +19,7 @@ const hairstyleCreate = () => {
   const handleCreate = async (formData: {
     id: number;
     hairstyle_name: string;
+    owner_id: number;
     created_at: string;
     updated_at: string;
   }) => {

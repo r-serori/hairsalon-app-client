@@ -28,7 +28,8 @@ const courses: React.FC = () => {
   useEffect(() => {
     try {
       if (courses.length === 0) {
-        dispatch(getCourse({}) as any);
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(getCourse(ownerId) as any);
       } else {
         return;
       }
