@@ -6,7 +6,7 @@ export const dailySaleApi = {
     daily_sales: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/daily_sales", formData);
+    const response = await sendRequest("POST", "/daily_sales/store", formData);
     return response;
   },
 

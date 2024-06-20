@@ -39,6 +39,9 @@ const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
         const response = await dispatch(logout({}) as any);
         deleteCookie("laravel_session");
         deleteCookie("XSRF-TOKEN");
+        localStorage.removeItem("owner_id");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("role");
         console.log("responseindex", response);
         router.push("/auth/login");
       } catch (error) {

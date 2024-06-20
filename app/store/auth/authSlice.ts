@@ -356,6 +356,7 @@ const authSlice = createSlice({
     builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      action.error.message;
     });
     builder.addCase(staffRegister.pending, (state) => {
       state.loading = true;

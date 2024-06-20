@@ -35,7 +35,9 @@ const stockCategoryCreate: React.FC = () => {
 
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/stock_categories"} />
+      <div className="ml-4 mt-4 ">
+        <BackAgainButton link={"/stock_categories"} />
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (

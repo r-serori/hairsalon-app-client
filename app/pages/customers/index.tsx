@@ -236,7 +236,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
         )}
       </div>
       <div className="mx-8 mt-4">
-        <div className="flex mb-4 ml-2">
+        <div className=" mb-4 ">
           <RouterButton link="/customers/create" value="新規作成" />
         </div>
         {loading ? (

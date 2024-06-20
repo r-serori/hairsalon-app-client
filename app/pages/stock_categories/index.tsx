@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getStockCategory } from "../../store/stocks/stock_categories/stock_categorySlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const stock_categories = () => {
   const dispatch = useDispatch();
@@ -41,16 +42,19 @@ const stock_categories = () => {
   const nodes = stockCategories;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 ">
+    <div className="mx-4">
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <div className="flex space-x-4 mb-4">
-        <Link href="/stock_categories/create">新規作成</Link>
-        <Link href="/stocks">在庫画面</Link>
+      <div className="flex mb-4">
+        <RouterButton
+          link="/stock_categories/create"
+          value="在庫カテゴリ新規作成"
+        />
+        <RouterButton link="/stocks" value="在庫画面に戻る" />
       </div>
       {loading ? (
         <p>Loading...</p>

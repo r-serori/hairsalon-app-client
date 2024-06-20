@@ -5,7 +5,11 @@ export const stockCategoryApi = {
     category: string;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/stock_categories", formData);
+    const response = await sendRequest(
+      "POST",
+      "/stock_categories/store",
+      formData
+    );
     return response;
   },
 

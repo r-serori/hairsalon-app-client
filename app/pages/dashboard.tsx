@@ -12,7 +12,7 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import LogoutButton from "../components/elements/button/logoutButton";
+import LogoutButton from "../components/elements/button/LogoutButton";
 import { useRouter } from "next/router";
 import BasicAlerts from "../components/elements/alert/Alert";
 
@@ -71,11 +71,9 @@ const dashboard: React.FC = () => {
         <LogoutButton className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" />
       </div>
       <div className="h-full flex justify-center items-center">
-        <nav className={`h-full  ${isFullScreen ? "my-12" : "my-4"}`}>
+        <nav className={`h-full mt-4`}>
           <ul
-            className={`flex flex-wrap justify-center  h-full  ${
-              isFullScreen ? "p-20" : ""
-            }
+            className={`flex flex-wrap justify-center h-full
             ${isFullScreen ? "gap-16" : "gap-4"}`}
           >
             <NavLink

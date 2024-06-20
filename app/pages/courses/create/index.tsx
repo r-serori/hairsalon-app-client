@@ -33,7 +33,9 @@ const courseCreate: React.FC = () => {
 
   return (
     <div className="min-h-full">
-      <RouterButton link="/courses" value="コース新規作成" />
+      <div className="ml-4 mt-4 ">
+        <RouterButton link="/courses" value="コース画面へ戻る" />
+      </div>
       {loading ? <p>Loading...</p> : <CourseForm createCourse={handleCreate} />}
     </div>
   );

@@ -181,7 +181,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
 
   return (
     <div className="flex items-center justify-center h-full ">
-      <div className="max-w-md w-full">
+      <div className="max-w-md w-full ">
         <div>
           <h2 className=" text-center text-3xl font-extrabold text-gray-900">
             {edit ? "顧客情報編集" : "顧客情報新規作成"}

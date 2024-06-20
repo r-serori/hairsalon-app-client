@@ -6,7 +6,7 @@ export const yearlySaleApi = {
     yearly_sales: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/yearly_sales", formData);
+    const response = await sendRequest("POST", "/yearly_sales/store", formData);
     return response;
   },
 

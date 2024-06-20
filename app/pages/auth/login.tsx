@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
       const response = await dispatch(login(formData) as any);
       console.log("Success", response);
       const userId = response.payload.responseUser.id;
-      const ownerId = response.payload.responseOwnerId.id;
+      const ownerId = response.payload.responseOwnerId;
       const role = response.payload.responseUser.role;
       if (ownerId) {
         localStorage.setItem("user_id", userId);

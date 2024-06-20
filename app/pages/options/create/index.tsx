@@ -29,7 +29,9 @@ const optionCreate: React.FC = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/options"} />
+      <div className="ml-4 mt-4 ">
+        <BackAgainButton link={"/options"} />
+      </div>
       {loading ? <p>Loading...</p> : <OptionForm createOption={handleCreate} />}
     </div>
   );

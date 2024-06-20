@@ -6,7 +6,7 @@ export const optionApi = {
     price: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/options", formData);
+    const response = await sendRequest("POST", "/options/store", formData);
     return response;
   },
 

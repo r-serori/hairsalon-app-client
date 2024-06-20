@@ -6,7 +6,7 @@ export const courseApi = {
     price: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/courses", formData);
+    const response = await sendRequest("POST", "/courses/store", formData);
     console.log("APIのcourseDataだよ");
     return response;
   },

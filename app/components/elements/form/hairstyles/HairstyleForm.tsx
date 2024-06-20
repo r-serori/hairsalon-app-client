@@ -33,7 +33,7 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
 
   return (
     <div className="flex items-center justify-center h-full ">
-      <div className="max-w-md w-full">
+      <div className="max-w-md w-full ">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {edit ? "ヘアスタイル情報編集" : "ヘアスタイル情報新規作成"}

@@ -31,8 +31,10 @@ const merchandiseCreate: React.FC = () => {
     router.push("/merchandises"); // Redirect to the merchandise list page after creating a merchandise
   };
   return (
-    <div className="min-h-full ">
-      <BackAgainButton link={"/merchandises"} />
+    <div className="min-h-full">
+      <div className="ml-4 mt-4">
+        <BackAgainButton link={"/merchandises"} />
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (

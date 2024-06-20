@@ -47,9 +47,9 @@ const hairstyles: React.FC = () => {
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
 
-      <div className="ml-2">
-        <div className="flex my-4 ml-2">
-          <RouterButton link="/hairstyles/create" value="新規作成" />
+      <div>
+        <div className="my-4 ml-4">
+          <RouterButton link="/hairstyles/create" value="顧客情報新規作成" />
         </div>
         {loading ? (
           <p>Loading...</p>

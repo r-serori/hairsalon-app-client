@@ -5,7 +5,7 @@ export const hairstyleApi = {
     hairstyle_name: string;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/hairstyles", formData);
+    const response = await sendRequest("POST", "/hairstyles/store", formData);
     console.log("APIのhairstyleDataだよ");
     return response;
   },

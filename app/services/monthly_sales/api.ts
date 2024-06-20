@@ -6,7 +6,11 @@ export const monthlySaleApi = {
     monthly_sales: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/monthly_sales", formData);
+    const response = await sendRequest(
+      "POST",
+      "/monthly_sales/store",
+      formData
+    );
     return response;
   },
 

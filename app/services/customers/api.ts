@@ -12,7 +12,7 @@ export const customerApi = {
     users_id: number[];
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/customers", formData);
+    const response = await sendRequest("POST", "/customers/post", formData);
     console.log("APIのcustomerDataだよ");
     return response;
   },

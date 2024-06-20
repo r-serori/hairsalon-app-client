@@ -35,7 +35,7 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
 
   return (
     <div className="flex items-center justify-center h-full ">
-      <div className="max-w-md w-full">
+      <div className="max-w-md w-full ">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {edit ? "物販情報編集" : "物販情報作成"}

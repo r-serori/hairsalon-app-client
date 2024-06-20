@@ -6,7 +6,7 @@ export const merchandiseApi = {
     price: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/merchandises", formData);
+    const response = await sendRequest("POST", "/merchandises/store", formData);
     return response;
   },
 

@@ -9,7 +9,7 @@ export const ownerApi = {
   }) => {
     const response = (await sendRequest(
       "POST",
-      `api/user/ownerRegister`,
+      `/ownerRegister`,
       formData
     )) as any;
     console.log("responseRegisterDataだよ", response);

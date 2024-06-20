@@ -49,7 +49,7 @@ const options: React.FC = () => {
       )}
 
       <div className="mx-4">
-        <div className="flex my-4 ml-2">
+        <div className="flex my-4">
           <RouterButton link="/options/create" value="新規作成" />
         </div>
 

@@ -22,7 +22,7 @@ axios.defaults.withCredentials = true;
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <div className="min-h-screen overflow-x-auto">
+      <div className="min-h-screen overflow-x-auto  overflow-y-auto">
         <Header></Header>
         <Component {...pageProps} />
       </div>

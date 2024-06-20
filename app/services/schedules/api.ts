@@ -32,7 +32,7 @@ export const schedulesApi = {
     allDay: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/schedules", formData);
+    const response = await sendRequest("POST", "/schedules/store", formData);
     return response;
   },
 

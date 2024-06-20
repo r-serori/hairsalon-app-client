@@ -36,7 +36,9 @@ const dailySaleCreate: React.FC = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/daily_sales"} />
+      <div className="ml-4 mt-4">
+        <BackAgainButton link={"/daily_sales"} />
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (

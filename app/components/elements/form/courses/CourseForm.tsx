@@ -31,8 +31,8 @@ const CourseForm: React.FC<CourseFormProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center px-4 h-full ">
-      <div className="w-full h-full">
+    <div className="flex items-center justify-center h-full ">
+      <div className="max-w-md w-full ">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {edit ? "コース情報編集" : "コース情報新規作成"}
