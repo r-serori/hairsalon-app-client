@@ -55,7 +55,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
       });
       fieldName.push("ヘアスタイル名");
       break;
-    case "user":
+    case "names":
       getOptions.map((option) => {
         names.push(option.name);
       });

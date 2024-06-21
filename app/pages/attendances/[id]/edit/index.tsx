@@ -5,8 +5,14 @@ import AttendanceForm from "../../../../components/elements/form/attendances/Att
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import { updateUserPermission } from "../../../../store/auth/authSlice";
+import {
+  updateUserPermission,
+  deleteUser,
+  showUser,
+} from "../../../../store/auth/authSlice";
 import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
+import DeleteButton from "../../../../components/elements/button/DeleteButton";
+import { useState } from "react";
 
 const attenDanceEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,16 +23,39 @@ const attenDanceEdit: React.FC = () => {
   console.log("idだよ");
   console.log({ id });
 
-  const user = useSelector((state: RootState) =>
-    state.auth.auth.find((auth) => auth.id === Number(id))
+  let user = useSelector((state: RootState) =>
+    state.auth.auth.find((user) => user.id === Number(id))
   );
 
-  console.log("userだよ");
-  console.log(user);
+  const [dispatchLoading, setDispatchLoading] = useState<boolean>(false);
+  useEffect(() => {
+    setDispatchLoading(true);
+    try {
+      if (!user) {
+        const response = dispatch(showUser(Number(id)) as any);
+        user = response.payload.responseUser;
+      } else {
+        console.log("user", user);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDispatchLoading(false);
+    }
+  }, [user, id, dispatch]);
 
   const handleUpdate = async (formData: { id: number; role: string }) => {
     try {
       await dispatch(updateUserPermission(formData) as any);
+    } catch (error) {
+      console.error(error);
+    }
+    router.push("/attendances");
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      await dispatch(deleteUser(user.id) as any);
     } catch (error) {
       console.error(error);
     }
@@ -38,10 +67,15 @@ const attenDanceEdit: React.FC = () => {
       <div className="mt-4 ml-4">
         <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
       </div>
-      {loading ? (
+      <div>
+        <DeleteButton value="退職する" onClicker={handleDeleteUser} />
+      </div>
+      {loading || dispatchLoading || !user ? (
         <p>Loading...</p>
       ) : (
-        <UserUpdateForm onSubmit={handleUpdate} node={user} />
+        <div>
+          <UserUpdateForm onSubmit={handleUpdate} node={user} />
+        </div>
       )}
     </div>
   );

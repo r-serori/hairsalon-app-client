@@ -251,7 +251,10 @@ const ComponentTable = ({
                         propProp === "year" ||
                         propProp === "yearly_sales" ||
                         propProp === "shotUserName" ||
-                        propProp === "isAttendance"
+                        propProp === "isAttendance" ||
+                        propProp === "name" ||
+                        propProp === "staff_phone_number" ||
+                        propProp === "role"
                       ) {
                         return (
                           <Cell
@@ -468,7 +471,7 @@ const ComponentTable = ({
                     )}
 
                     {/* tHeaderItemsに"時間管理"が含まれていたら作成 */}
-                    {tHeaderItems.includes("時間管理") && (
+                    {tHeaderItems.includes("勤怠時間管理") && (
                       <Cell
                         className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
                         style={{
@@ -481,7 +484,7 @@ const ComponentTable = ({
                             onClick={() => handleTimeManagement(node.id)}
                             className="items-center text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
                           >
-                            時間管理
+                            勤怠時間管理
                           </button>
                         </div>
                       </Cell>

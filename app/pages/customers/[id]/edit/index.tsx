@@ -81,7 +81,7 @@ const customersEdit: React.FC = () => {
       .filter(
         (customer_user) => customer_user.customers_id === parseInt(id as string)
       )
-      .map((customer_user) => customer_user.users_id)
+      .map((customer_user) => customer_user.user_id)
   );
 
   console.log("customer_usersだよ");
@@ -93,7 +93,7 @@ const customersEdit: React.FC = () => {
     options_id: option_customers,
     merchandises_id: merchandise_customers,
     hairstyles_id: hairstyle_customers,
-    users_id: customer_users,
+    user_id: customer_users,
   };
 
   const handleUpdate = async (formData: {
@@ -106,7 +106,8 @@ const customersEdit: React.FC = () => {
     options_id: number[];
     merchandises_id: number[];
     hairstyles_id: number[];
-    users_id: number[];
+    user_id: number[];
+    owner_id: number;
     created_at: string;
     updated_at: string;
   }) => {

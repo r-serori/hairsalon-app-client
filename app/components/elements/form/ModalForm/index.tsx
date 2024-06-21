@@ -129,12 +129,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
   console.log("getHairstylesStateだよ");
   console.log(getHairstylesState);
 
-  const getAttendancesState = useSelector(
-    (state: RootState) => state.auth.auth
-  );
+  const getUsersState = useSelector((state: RootState) => state.auth.auth);
 
-  console.log("getAttendancesStateだよ");
-  console.log(getAttendancesState);
+  console.log("getUsersStateだよ");
+  console.log(getUsersState);
 
   const getCourse_customers = useSelector(
     (state: RootState) => state.course_customers.course_customers
@@ -260,26 +258,26 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log("defaultChangeHairstyles_idだよ");
     console.log(defaultChangeHairstyles_id());
 
-    const changeAttendances_id = () => {
-      const users_id = getAttendancesState
+    const changeUsers_id = () => {
+      const user_id = getUsersState
         .filter((user) => checkName.includes(user.name))
         .map((user) => user.id);
-      return users_id;
+      return user_id;
     };
 
-    console.log("changeAttendances_idだよ");
-    console.log(changeAttendances_id());
+    console.log("changeUsers_idだよ");
+    console.log(changeUsers_id());
 
-    const defaultChangeAttendances_id = () => {
-      const users = EditNode.user.split(", ");
-      const users_id = getAttendancesState
+    const defaultChangeUsers_id = () => {
+      const users = EditNode.names.split(", ");
+      const user_id = getUsersState
         .filter((user) => users.includes(user.name))
         .map((user) => user.id);
-      return users_id;
+      return user_id;
     };
 
-    console.log("defaultChangeAttendances_idだよ");
-    console.log(defaultChangeAttendances_id());
+    console.log("defaultChangeUsers_idだよ");
+    console.log(defaultChangeUsers_id());
 
     return {
       changeCourses_id,
@@ -290,8 +288,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
       defaultChangeMerchandises_id,
       changeHairstyles_id,
       defaultChangeHairstyles_id,
-      changeAttendances_id,
-      defaultChangeAttendances_id,
+      changeUsers_id,
+      defaultChangeUsers_id,
     };
   };
 
@@ -368,7 +366,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const options_id = changeMan().defaultChangeOptions_id();
             const merchandises_id = changeMan().defaultChangeMerchandises_id();
             const hairstyles_id = changeMan().defaultChangeHairstyles_id();
-            const users_id = changeMan().defaultChangeAttendances_id();
+            const user_id = changeMan().defaultChangeUsers_id();
             const {
               course,
               option,
@@ -383,7 +381,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               options_id: options_id,
               merchandises_id: merchandises_id,
               hairstyles_id: hairstyles_id,
-              users_id: users_id,
+              user_id: user_id,
             };
             console.log("superUpdatedNodeだよ");
             console.log(superUpdatedNode);
@@ -398,7 +396,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const options_id = changeMan().changeOptions_id();
             const merchandises_id = changeMan().defaultChangeMerchandises_id();
             const hairstyles_id = changeMan().defaultChangeHairstyles_id();
-            const users_id = changeMan().defaultChangeAttendances_id();
+            const user_id = changeMan().defaultChangeUsers_id();
             const {
               course,
               option,
@@ -413,7 +411,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               options_id: options_id,
               merchandises_id: merchandises_id,
               hairstyles_id: hairstyles_id,
-              users_id: users_id,
+              user_id: user_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
             router.push({
@@ -425,7 +423,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const options_id = changeMan().defaultChangeOptions_id();
             const merchandises_id = changeMan().changeMerchandises_id();
             const hairstyles_id = changeMan().defaultChangeHairstyles_id();
-            const users_id = changeMan().defaultChangeAttendances_id();
+            const user_id = changeMan().defaultChangeUsers_id();
             const {
               course,
               option,
@@ -440,7 +438,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               options_id: options_id,
               merchandises_id: merchandises_id,
               hairstyles_id: hairstyles_id,
-              users_id: users_id,
+              user_id: user_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
             router.push({
@@ -452,7 +450,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const options_id = changeMan().defaultChangeOptions_id();
             const merchandises_id = changeMan().defaultChangeMerchandises_id();
             const hairstyles_id = changeMan().changeHairstyles_id();
-            const users_id = changeMan().defaultChangeAttendances_id();
+            const user_id = changeMan().defaultChangeUsers_id();
             const {
               course,
               option,
@@ -467,7 +465,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               options_id: options_id,
               merchandises_id: merchandises_id,
               hairstyles_id: hairstyles_id,
-              users_id: users_id,
+              user_id: user_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
             router.push({
@@ -479,7 +477,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const options_id = changeMan().defaultChangeOptions_id();
             const merchandises_id = changeMan().defaultChangeMerchandises_id();
             const hairstyles_id = changeMan().defaultChangeHairstyles_id();
-            const users_id = changeMan().changeAttendances_id();
+            const user_id = changeMan().changeUsers_id();
             const {
               course,
               option,
@@ -494,7 +492,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               options_id: options_id,
               merchandises_id: merchandises_id,
               hairstyles_id: hairstyles_id,
-              users_id: users_id,
+              user_id: user_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
             router.push({
@@ -506,7 +504,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const options_id = changeMan().defaultChangeOptions_id();
             const merchandises_id = changeMan().defaultChangeMerchandises_id();
             const hairstyles_id = changeMan().defaultChangeHairstyles_id();
-            const users_id = changeMan().defaultChangeAttendances_id();
+            const user_id = changeMan().defaultChangeUsers_id();
             const {
               course,
               option,
@@ -521,7 +519,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               options_id: options_id,
               merchandises_id: merchandises_id,
               hairstyles_id: hairstyles_id,
-              users_id: users_id,
+              user_id: user_id,
             };
             await dispatch(updateCustomer(superUpdatedNode) as any);
             router.push({
@@ -656,7 +654,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
       case "names":
         return (
           <MultiCheckbox
-            getOptions={getAttendancesState}
+            getOptions={getUsersState}
             optionName={checkName}
             onChanger={handleCheckChange}
             nodesProp={NodesProp}

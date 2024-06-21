@@ -4,6 +4,7 @@ import AuthStaffRegisterForm from "../../components/elements/form/auth/AuthStaff
 import { staffRegister } from "../../store/auth/authSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const StaffRegisterPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -63,7 +64,7 @@ const StaffRegisterPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-full ">
       {ownerError && (
         <BasicAlerts
           type={error}
@@ -76,6 +77,10 @@ const StaffRegisterPage: React.FC = () => {
       {error && (
         <BasicAlerts type={error} message={error} space={1} padding={0.6} />
       )}
+
+      <div className="mt-4 ml-4">
+        <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
+      </div>
 
       {isLoading ? (
         <p>Loading...</p>

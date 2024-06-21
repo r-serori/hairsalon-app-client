@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import { getUsers } from "../../store/auth/authSlice";
+import { getAttendanceUsers } from "../../store/auth/authSlice";
 
 const AttendanceTimeShots = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const AttendanceTimeShots = () => {
   useEffect(() => {
     try {
       const ownerId = Number(localStorage.getItem("owner_id"));
-      dispatch(getUsers(ownerId) as any);
+      dispatch(getAttendanceUsers(ownerId) as any);
     } catch (error) {
       console.log(error);
     } finally {
@@ -50,8 +50,8 @@ const AttendanceTimeShots = () => {
   const nodes = users.map((user) => {
     return {
       id: user.id,
-      shotUser_name: user.name,
-      isAttendance: user.isAttendance ? "勤務中" : "退勤中",
+      shotUserName: user.name,
+      isAttendance: user.isAttendance ? "勤務中" : "休憩中",
     };
   });
 
@@ -76,7 +76,7 @@ const AttendanceTimeShots = () => {
         )}
       </div>
       <div className="mx-8 mt-4">
-        {timeLoading ? (
+        {timeLoading || !nodes ? (
           <p className="py-4 text-blue-700">Loading...</p>
         ) : (
           <ComponentTable

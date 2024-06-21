@@ -124,7 +124,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   const [users, setUsers] = useState(
     node
       ? getUsersState
-          .filter((user) => node.users_id.includes(user.id))
+          .filter((user) => node.user_id.includes(user.id))
           .map((user) => user.name)
       : []
   );
@@ -150,10 +150,10 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       hairstyles_id: getHairstylesState
         .filter((hairstyle) => hairstyles.includes(hairstyle.hairstyle_name))
         .map((hairstyle) => hairstyle.id),
-      users_id: getUsersState
+      user_id: getUsersState
         .filter((user) => users.includes(user.name))
         .map((user) => user.id),
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
+      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
       created_at: "",
       updated_at: "",
     });
@@ -240,7 +240,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
           <MultiCheckbox
             getOptions={getUsersState}
             optionName={users}
-            nodesProp="user"
+            nodesProp="names"
             onChanger={handleUserChange}
           />
 

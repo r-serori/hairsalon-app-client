@@ -9,10 +9,10 @@ export const customerApi = {
     options_id: number[];
     merchandises_id: number[];
     hairstyles_id: number[];
-    users_id: number[];
+    user_id: number[];
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/customers/post", formData);
+    const response = await sendRequest("POST", "/customers/store", formData);
     console.log("APIのcustomerDataだよ");
     return response;
   },
@@ -38,7 +38,7 @@ export const customerApi = {
     options_id: number[];
     merchandises_id: number[];
     hairstyles_id: number[];
-    users_id: number[];
+    user_id: number[];
     owner_id: number;
   }) => {
     console.log("formDataだよ", formData);

@@ -60,9 +60,20 @@ export const authApi = {
     return response;
   },
 
+  getAttendanceUsers: async (owner_id: number) => {
+    const response = (await sendRequest(
+      "GET",
+      `api/user/getAttendanceUsers/${owner_id}`
+    )) as any;
+    return response;
+  },
+
   //各スタッフが自分の情報を取得 Gate,ALL
-  showUser: async () => {
-    const response = (await sendRequest("GET", `api/user/showUser`)) as any;
+  showUser: async (id: number) => {
+    const response = (await sendRequest(
+      "GET",
+      `api/user/showUser/${id}`
+    )) as any;
     return response;
   },
 

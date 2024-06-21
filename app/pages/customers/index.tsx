@@ -188,16 +188,16 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
       // ショート, ロング
 
       // 顧客に関連する担当者の情報を取得
-      const customerAttendances = customer_users.filter(
+      const customerUsers = customer_users.filter(
         (user) => user.customers_id === customer.id
       );
-      console.log(customerAttendances);
-      // [{customers_id: 1, users_id: 1}]
+      console.log(customerUsers);
+      // [{customers_id: 1, user_id: 1}]
 
       // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
-      const userNames = customerAttendances
+      const userNames = customerUsers
         .map((user) => {
-          const userInfo = users.find((a) => a.id === user.users_id);
+          const userInfo = users.find((a) => a.id === user.user_id);
           return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
         })
         .join(", "); // 担当者名をカンマ区切りの文字列に変換

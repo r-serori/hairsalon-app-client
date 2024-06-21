@@ -176,10 +176,10 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       console.log(hairstyleNames);
 
       // 顧客に関連する担当者の情報を取得
-
+      //user_idを配列にしている
       const customerUsers = customer_users
         .filter((user) => user.customers_id === customer.id)
-        .map((user) => user.users_id);
+        .map((user) => user.user_id);
 
       console.log(customerUsers);
 
@@ -200,7 +200,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         option: optionNames,
         merchandise: merchandiseNames,
         hairstyle: hairstyleNames,
-        user: userNames,
+        names: userNames,
         updated_at: customer.updated_at,
       };
     }),
@@ -269,7 +269,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [userNames, setUserNames] = useState(
-    !newCustomer ? initialCustomer.user : []
+    !newCustomer ? initialCustomer.names : []
   );
 
   const [Sid, setSid] = useState(
@@ -313,8 +313,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setOptionNames(useCustomerState.option || []);
     setMerchandiseNames(useCustomerState.merchandise || []);
     setHairstyleNames(useCustomerState.hairstyle || []);
-    setUserNames(useCustomerState.user);
-    setUserNames(useCustomerState.user || []);
+    setUserNames(useCustomerState.names || []);
   };
 
   const clearStates = () => {
@@ -368,7 +367,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       options_id: number[];
       merchandises_id: number[];
       hairstyles_id: number[];
-      users_id: number[];
+      user_id: number[];
       Sid: number;
       title: string;
       start_time: string;
@@ -463,7 +462,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
             hairstyleNames.includes(hairstyle.hairstyle_name)
           )
           .map((hairstyle) => hairstyle.id),
-        users_id: users
+        user_id: users
           .filter((user) => userNames.includes(user.name))
           .map((user) => user.id),
         Sid: Sid ? Sid : 0,
@@ -718,7 +717,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                         <div className="w-32 mr-1">担当者名:</div>
                         <MultiCheckbox
-                          nodesProp="user"
+                          nodesProp="names"
                           optionName={userNames}
                           onChanger={handleUserChange}
                           getOptions={users}
@@ -796,7 +795,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                         <div className="w-32 mr-1">担当者:</div>
                         <MultiCheckbox
-                          nodesProp="user"
+                          nodesProp="names"
                           optionName={userNames}
                           onChanger={handleUserChange}
                           getOptions={users}

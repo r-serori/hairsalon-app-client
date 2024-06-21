@@ -16,7 +16,7 @@ export const attendance_timeApi = {
   firstGetAttendanceTime: async (id) => {
     const response = await sendRequest(
       "GET",
-      `/attendance_times/${id}/firstGet`
+      `/firstAttendanceTimes/firstGet/${id}`
     );
     console.log("APIのattendanceTimeDataだよ");
     return response;

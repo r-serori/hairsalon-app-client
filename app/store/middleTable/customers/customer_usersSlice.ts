@@ -40,7 +40,7 @@ export const getCustomer_users = createAsyncThunk(
 export interface Customer_usersState {
   // ステートの型
   customers_id: number;
-  users_id: number;
+  user_id: number;
   owner_id: number;
 }
 

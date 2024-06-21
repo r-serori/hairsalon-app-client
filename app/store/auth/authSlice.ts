@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { authApi } from "../../services/auth/api";
 import RootState from "../../redux/reducers/rootReducer";
+import { getCustomer } from "../../store/customers/customerSlice";
+import {
+  getSchedule,
+  selectGetSchedules,
+} from "../../store/schedules/scheduleSlice";
 
 export const login = createAsyncThunk(
   "login/auth",
@@ -133,6 +138,30 @@ export const logout = createAsyncThunk(
   }
 );
 
+export const getAttendanceUsers = createAsyncThunk(
+  "auth/getAttendanceUser",
+  async (owner_id: number, { rejectWithValue }) => {
+    const response = await authApi.getAttendanceUsers(owner_id);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
 export const getUsers = createAsyncThunk(
   "auth/getUsers",
   async (owner_id: number, { rejectWithValue }) => {
@@ -159,8 +188,8 @@ export const getUsers = createAsyncThunk(
 
 export const showUser = createAsyncThunk(
   "auth/showUser",
-  async (formData: {}, { rejectWithValue }) => {
-    const response = await authApi.showUser();
+  async (id: number, { rejectWithValue }) => {
+    const response = await authApi.showUser(id);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -416,11 +445,26 @@ const authSlice = createSlice({
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth = [...state.auth, ...action.payload.responseUsers];
+      state.auth = action.payload.responseUsers;
       state.message = action.payload.message;
     });
 
     builder.addCase(getUsers.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(getAttendanceUsers.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = action.payload.responseUsers;
+      state.message = action.payload.message;
+    });
+    builder.addCase(getAttendanceUsers.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
@@ -487,6 +531,54 @@ const authSlice = createSlice({
     builder.addCase(deleteUser.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+    });
+
+    builder.addCase(updateUserPassword.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(updateUserPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = [...state.auth, action.payload.responseUser];
+      state.message = "パスワードの更新に成功しました！";
+    });
+    builder.addCase(updateUserPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(resetPassword.pending, (state) => {
+      state.loading = true;
+      state.message = null;
+      state.error = null;
+    });
+    builder.addCase(resetPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = [...state.auth, action.payload.responseUser];
+      state.message = "パスワードのリセットに成功しました！";
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = action.payload.responseUsers;
+      state.message = action.payload.message;
+    });
+
+    builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = action.payload.responseUsers;
+      state.message = action.payload.message;
+    });
+
+    builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = action.payload.responseUsers;
+      state.message = action.payload.message;
     });
   },
 });

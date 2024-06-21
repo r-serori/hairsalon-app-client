@@ -9,7 +9,7 @@ export const schedulesApi = {
     options_id: number[];
     merchandises_id: number[];
     hairstyles_id: number[];
-    users_id: number[];
+    user_id: number[];
     title: string;
     start_time: string;
     end_time: string;
@@ -75,7 +75,7 @@ export const schedulesApi = {
     options_id: number[];
     merchandises_id: number[];
     hairstyles_id: number[];
-    users_id: number[];
+    user_id: number[];
     title: string;
     start_time: string;
     end_time: string;
@@ -103,7 +103,7 @@ export const schedulesApi = {
     options_id: number[];
     merchandises_id: number[];
     hairstyles_id: number[];
-    users_id: number[];
+    user_id: number[];
     title: string;
     start_time: string;
     end_time: string;

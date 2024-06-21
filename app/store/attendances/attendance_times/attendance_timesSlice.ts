@@ -310,10 +310,7 @@ const attendance_timeSlice = createSlice({
 
     builder.addCase(firstGetAttendanceTime.rejected, (state, action) => {
       state.loading = false;
-      state.error =
-        (action.payload as any).resStatus === "error"
-          ? (action.payload as any).message
-          : action.error.message;
+      state.error = action.error.message;
     });
 
     builder.addCase(pleaseEditEndTime.pending, (state) => {

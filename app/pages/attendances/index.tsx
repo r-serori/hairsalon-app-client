@@ -9,48 +9,42 @@ import { useState } from "react";
 
 const Attendances = () => {
   const dispatch = useDispatch();
-
-  // 初回のみデータ取得を行うためのフラグ
-  const [firstRender, setFirstRender] = useState(true);
+  const auth = useSelector((state: RootState) => state.auth.auth);
 
   useEffect(() => {
     try {
-      if (firstRender) {
-        const ownerId = localStorage.getItem("owner_id");
-        dispatch(getUsers(Number(ownerId)) as any);
-      } else {
-        return;
-      }
+      const ownerId = localStorage.getItem("owner_id");
+      dispatch(getUsers(Number(ownerId)) as any);
     } catch (error) {
       console.log("Error", error);
       return;
     }
-    setFirstRender(false);
-  }, [firstRender]);
+  }, []);
 
-  const { auth, loading, error, message } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const loading = useSelector((state: RootState) => state.auth.loading);
+
+  const message = useSelector((state: RootState) => state.auth.message);
+
+  const error = useSelector((state: RootState) => state.auth.error);
 
   const searchItems = [
     { key: "name", value: "名前" },
-    { key: "phone_number", value: "電話番号" },
+    { key: "staff_phone_number", value: "スタッフ電話番号" },
     { key: "role", value: "役職" },
   ];
 
   const tHeaderItems = [
     "名前",
-    "電話番号",
+    "スタッフ電話番号",
     "役職",
     "更新日",
     "編集",
-    "削除",
     "勤怠時間管理",
   ];
 
   const nodesProps = [
     { text: "name" },
-    { number: "phone_number" },
+    { number: "staff_phone_number" },
     { text: "role" },
     { date: "updated_at" },
   ];

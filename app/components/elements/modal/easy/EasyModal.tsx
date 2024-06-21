@@ -196,7 +196,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
                         />
                       </div>
                       <div className="md:ml-32 sm:ml-16">
-                        <PrimaryButton value={"表示"} />　
+                        <PrimaryButton value={"表示"} />
                       </div>
                     </div>
                   )}
