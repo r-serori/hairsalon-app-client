@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import RouterButton from "../../../../components/elements/button/RouterButton";
 import { updateUserPermission } from "../../../../store/auth/authSlice";
+import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
 
 const attenDanceEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,17 +26,11 @@ const attenDanceEdit: React.FC = () => {
 
   const handleUpdate = async (formData: { id: number; role: string }) => {
     try {
-      try {
-        await dispatch(updateUserPermission(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      router.push("/attendances"); // Redirect to the attendance list page after updating a attendance
+      await dispatch(updateUserPermission(formData) as any);
     } catch (error) {
       console.error(error);
-    } finally {
-      router.push("/attendances"); // Redirect to the attendance list page after updating a attendance
     }
+    router.push("/attendances");
   };
 
   return (
@@ -46,7 +41,7 @@ const attenDanceEdit: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <AttendanceForm onSubmit={handleUpdate} node={user} />
+        <UserUpdateForm onSubmit={handleUpdate} node={user} />
       )}
     </div>
   );

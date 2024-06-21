@@ -40,7 +40,6 @@ export interface OwnerState {
   store_name: string;
   address: string;
   phone_number: string;
-
   user_id: number;
 }
 

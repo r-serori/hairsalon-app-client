@@ -61,17 +61,13 @@ export const authApi = {
   },
 
   //各スタッフが自分の情報を取得 Gate,ALL
-  showUser: async (user_id: number) => {
-    const response = (await sendRequest(
-      "GET",
-      `api/user/showUser${user_id}/`
-    )) as any;
+  showUser: async () => {
+    const response = (await sendRequest("GET", `api/user/showUser`)) as any;
     return response;
   },
 
   //ユーザーが自分の個人情報を変更 Gate,ALL
   updateUser: async (formData: {
-    id: number; //user_id
     name: string;
     email: string;
     phone_number: string;
@@ -86,13 +82,21 @@ export const authApi = {
 
   //ユーザーが自分のパスワードを変更 Gate,ALL
   updateUserPassword: async (formData: {
-    id: number; //user_id
     current_password: string;
     password: string;
   }) => {
     const response = (await sendRequest(
       "POST",
       `api/user/updateUserPassword`,
+      formData
+    )) as any;
+    return response;
+  },
+
+  resetPassword: async (formData: { password: string }) => {
+    const response = (await sendRequest(
+      "POST",
+      `api/user/resetPassword`,
       formData
     )) as any;
     return response;

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootState } from "../../redux/store";
 import { login } from "../../store/auth/authSlice";
-import { useEffect } from "react";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import { useState } from "react";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
 
   const error = useSelector((state: RootState) => state.auth.error);
 
-  let dispatchError;
+  const [dispatchError, setDispatchError] = useState<string>("");
 
   // useEffect(() => {
   //   const hasLaravelSessionCookie = () => {
@@ -64,17 +64,13 @@ const LoginPage: React.FC = () => {
       }
     } catch (error) {
       console.log("Error", error);
-      dispatchError = error;
+      setDispatchError("ログインに失敗しました。もう一度お試しください。");
       return;
     }
   };
 
   return (
     <div>
-      {message && (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
-      )}
-
       {dispatchError && (
         <BasicAlerts
           type="error"
@@ -87,6 +83,11 @@ const LoginPage: React.FC = () => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
+
+      {message && (
+        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      )}
+
       {isLoading ? (
         <p>Loading...</p>
       ) : (

@@ -159,8 +159,8 @@ export const getUsers = createAsyncThunk(
 
 export const showUser = createAsyncThunk(
   "auth/showUser",
-  async (user_id: number, { rejectWithValue }) => {
-    const response = await authApi.showUser(user_id);
+  async (formData: {}, { rejectWithValue }) => {
+    const response = await authApi.showUser();
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -185,7 +185,6 @@ export const updateUserPassword = createAsyncThunk(
   "auth/updateUserPassword",
   async (
     formData: {
-      id: number;
       current_password: string;
       password: string;
     },
@@ -240,15 +239,37 @@ export const updateUser = createAsyncThunk(
   "auth/updateUser",
   async (
     formData: {
-      id: number;
       name: string;
       email: string;
       phone_number: string;
-      password: string;
     },
     { rejectWithValue }
   ) => {
     const response = await authApi.updateUser(formData);
+    if (response.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response);
+    } else if (response.data.resStatus === "error") {
+      //エラー時の処理
+      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+      return rejectWithValue(response.data);
+    } else if (response.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response;
+    } else if (response.data.resStatus === "success") {
+      //成功時の処理
+      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+      return response.data;
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (formData: { password: string }, { rejectWithValue }) => {
+    const response = await authApi.resetPassword(formData);
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
