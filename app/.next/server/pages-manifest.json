@@ -2,7 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/customers/create": "pages/customers/create.js",
-  "/stocks": "pages/stocks.js",
   "/schedules": "pages/schedules.js"
 }

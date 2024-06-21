@@ -774,6 +774,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                           getOptions={options}
                         />
                       </div>
+
                       <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                         <div className="w-32 mr-1">商品:</div>
                         <MultiCheckbox
