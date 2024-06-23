@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { attendance_timeApi } from "../../../services/attendances/attendance_times/api";
 import RootState from "../../../redux/reducers/rootReducer";
+import { getAttendanceUsers } from "../../auth/authSlice";
 
 export const selectGetAttendanceTimes = createAsyncThunk(
   "attendance_times/selectGetAttendanceTimes",
@@ -448,6 +449,15 @@ const attendance_timeSlice = createSlice({
     builder.addCase(deleteAttendanceTime.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+    });
+
+    builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.attendance_times = [
+        ...state.attendance_times,
+        ...action.payload.attendanceTimes,
+      ];
     });
   },
 });

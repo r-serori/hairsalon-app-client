@@ -60,11 +60,11 @@ const BasicModal: React.FC<BasicModalProps> = ({
 
   const handleOpenAttendance = () => {
     setOpenAttendance(true);
-    if (link === "/attendanceTimeShots") {
-      dispatch(firstGetAttendanceTime(editNode.id as number) as any);
-    } else {
-      return;
-    }
+    // if (link === "/attendanceTimeShots") {
+    //   dispatch(firstGetAttendanceTime(editNode.id as number) as any);
+    // } else {
+    //   return;
+    // }
   };
   const handleCloseAttendance = () => setOpenAttendance(false);
 

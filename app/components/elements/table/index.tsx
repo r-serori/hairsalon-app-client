@@ -217,6 +217,9 @@ const ComponentTable = ({
 
                       const imgUrl = "http://localhost:8000/";
 
+                      // const imgDecode = decodeURIComponent(propValue);
+                      // console.log("imgDecodeだよ", imgDecode);
+
                       if (
                         propProp === "created_at" ||
                         propProp === "updated_at"
@@ -317,13 +320,13 @@ const ComponentTable = ({
                                       propProp === "start_photo_path"
                                     ? imgUrl +
                                       "attendance_times/images/startPhotos/" +
-                                      propValue
+                                      decodeURIComponent(propValue)
                                     : propValue &&
                                       propValue !== "編集済み" &&
                                       propProp === "end_photo_path"
                                     ? imgUrl +
                                       "attendance_times/images/endPhotos/" +
-                                      propValue
+                                      decodeURIComponent(propValue)
                                     : "https://dummyimage.com/320x240/000/fff&text=未登録"
                                 }
                                 alt="画像"

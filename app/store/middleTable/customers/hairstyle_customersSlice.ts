@@ -8,9 +8,9 @@ import {
 } from "../../customers/customerSlice";
 import {
   getSchedule,
-  createCustomerSchedule,
-  updateCustomerOnlySchedule,
-  updateCustomerSchedule,
+  createCustomerAndSchedule,
+  updateCustomerAndSchedule,
+  updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
 
 export const getHairstyle_customers = createAsyncThunk(
@@ -98,28 +98,31 @@ const hairstyle_customersSlice = createSlice({
       ];
     });
 
-    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+    builder.addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
       state.hairstyle_customers = [
         ...state.hairstyle_customers,
         ...action.payload.hairstyle_customers,
       ];
     });
 
-    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
-      state.hairstyle_customers = [
-        ...state.hairstyle_customers.filter(
-          (stateHairstyleCustomer) =>
-            !action.payload.hairstyle_customers.some(
-              (payloadHairstyleCustomer) =>
-                stateHairstyleCustomer.customers_id ===
-                payloadHairstyleCustomer.customers_id
-            )
-        ),
-        ...action.payload.hairstyle_customers,
-      ];
-    });
+    builder.addCase(
+      updateCustomerAndScheduleCreate.fulfilled,
+      (state, action) => {
+        state.hairstyle_customers = [
+          ...state.hairstyle_customers.filter(
+            (stateHairstyleCustomer) =>
+              !action.payload.hairstyle_customers.some(
+                (payloadHairstyleCustomer) =>
+                  stateHairstyleCustomer.customers_id ===
+                  payloadHairstyleCustomer.customers_id
+              )
+          ),
+          ...action.payload.hairstyle_customers,
+        ];
+      }
+    );
 
-    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
+    builder.addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
       state.hairstyle_customers = [
         ...state.hairstyle_customers.filter(
           (stateHairstyleCustomer) =>

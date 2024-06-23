@@ -98,6 +98,7 @@ const attendanceTimes: React.FC = () => {
   ];
 
   const nodes = attendanceTimes;
+  console.log("nodes", nodes);
 
   return (
     <div>

@@ -8,9 +8,9 @@ import {
 } from "../../customers/customerSlice";
 import {
   getSchedule,
-  createCustomerSchedule,
-  updateCustomerOnlySchedule,
-  updateCustomerSchedule,
+  createCustomerAndSchedule,
+  updateCustomerAndSchedule,
+  updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
 
 export const getOption_customers = createAsyncThunk(
@@ -103,28 +103,31 @@ const option_customersSlice = createSlice({
       ];
     });
 
-    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+    builder.addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
       state.option_customers = [
         ...state.option_customers,
         ...action.payload.option_customers,
       ];
     });
 
-    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
-      state.option_customers = [
-        ...state.option_customers.filter(
-          (stateOptionCustomers) =>
-            !action.payload.option_customers.some(
-              (payloadOptionCustomers) =>
-                stateOptionCustomers.customers_id ===
-                payloadOptionCustomers.customers_id
-            )
-        ),
-        ...action.payload.option_customers,
-      ];
-    });
+    builder.addCase(
+      updateCustomerAndScheduleCreate.fulfilled,
+      (state, action) => {
+        state.option_customers = [
+          ...state.option_customers.filter(
+            (stateOptionCustomers) =>
+              !action.payload.option_customers.some(
+                (payloadOptionCustomers) =>
+                  stateOptionCustomers.customers_id ===
+                  payloadOptionCustomers.customers_id
+              )
+          ),
+          ...action.payload.option_customers,
+        ];
+      }
+    );
 
-    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
+    builder.addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
       state.option_customers = [
         ...state.option_customers.filter(
           (stateOptionCustomers) =>

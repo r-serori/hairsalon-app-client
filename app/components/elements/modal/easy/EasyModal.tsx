@@ -39,6 +39,7 @@ interface EasyModalProps {
   whoAreYou?: string;
   whatIsYourId?: number;
   setYearMonth?: (yearMonth: string) => void;
+  setScheduleYear?: (year: string) => void;
 }
 
 const EasyModal: React.FC<EasyModalProps> = ({
@@ -47,6 +48,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
   whoAreYou,
   whatIsYourId,
   setYearMonth,
+  setScheduleYear,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -81,6 +83,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
 
   const selectSubmit = async () => {
     try {
+      const ownerId = Number(localStorage.getItem("owner_id"));
       if (whoAreYou === "attendanceTimes") {
         dispatch(
           selectGetAttendanceTimes({
@@ -88,16 +91,18 @@ const EasyModal: React.FC<EasyModalProps> = ({
             yearMonth: year,
           }) as any
         );
-        resetState();
+
         setOpen(false);
         setYearMonth(year);
       } else {
+        const response = dispatch(
+          selectGetSchedules({
+            owner_id: ownerId,
+            year: year,
+          }) as any
+        );
+        localStorage.setItem("year", year);
         setOpen(false);
-        resetState();
-        router.push({
-          pathname: "/schedules",
-          query: { year },
-        });
       }
     } catch (e) {
       console.log(e);
@@ -110,7 +115,10 @@ const EasyModal: React.FC<EasyModalProps> = ({
     <div>
       {whoAreYou === "attendanceTimes" ? (
         <Button
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true);
+            resetState();
+          }}
           className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-lg text-md font-bold px-4 py-2 text-center"
         >
           去年以前か来年以降の勤怠時間を確認,編集

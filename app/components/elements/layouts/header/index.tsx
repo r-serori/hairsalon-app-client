@@ -37,14 +37,15 @@ export default function Header() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // useEffect(() => {
-  //   const loggedIn = localStorage.getItem("user_id") ? true : false;
-  //   setIsLoggedIn(loggedIn);
-  //   if (!isLoggedIn) {
-  //     router.push("/");
-  //     setIsLoggedIn(false);
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("user_id") ? true : false;
+    setIsLoggedIn(loggedIn);
+
+    if (!loggedIn) {
+      router.push("/");
+      setIsLoggedIn(false);
+    }
+  }, [isLoggedIn]);
 
   return (
     <>

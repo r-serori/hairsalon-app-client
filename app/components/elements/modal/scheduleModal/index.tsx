@@ -13,11 +13,11 @@ import {
 import {
   getSchedule,
   createSchedule,
-  createCustomerSchedule,
+  createCustomerAndSchedule,
   updateSchedule,
-  updateCustomerSchedule,
+  updateCustomerAndSchedule,
   deleteSchedule,
-  updateCustomerOnlySchedule,
+  updateCustomerAndScheduleCreate,
 } from "../../../../store/schedules/scheduleSlice";
 import { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
@@ -52,68 +52,84 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 interface ScheduleModalProps {
   showModal: boolean;
   selectedEvent: any;
   whoIsEvent: string;
+  setWhoIsEvent: (value: string) => void;
   setShowModal: (value: boolean) => void;
   setSelectedEvent: (value: any) => void;
+  isCustomer: boolean;
+  setIsCustomer: (value: boolean) => void;
 }
 
 const ScheduleModal: React.FC<ScheduleModalProps> = ({
   showModal,
   selectedEvent,
   whoIsEvent,
+  setWhoIsEvent,
   setShowModal,
   setSelectedEvent,
+  isCustomer,
+  setIsCustomer,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
   const uniqueId = uuidv4();
 
+  // 顧客情報を取得
   const customers = useSelector((state: RootState) => state.customer.customers);
 
+  // コース情報を取得
   const courses = useSelector((state: RootState) => state.course.course);
 
+  // オプション情報を取得
   const options = useSelector((state: RootState) => state.option.option);
 
+  // 商品情報を取得
   const merchandises = useSelector(
     (state: RootState) => state.merchandise.merchandise
   );
 
+  // ヘアスタイル情報を取得
   const hairstyles = useSelector(
     (state: RootState) => state.hairstyle.hairstyle
   );
 
+  // 担当者情報を取得
   const users = useSelector((state: RootState) => state.auth.auth);
 
+  // 中間テーブルの情報を取得
   const course_customers = useSelector(
     (state: RootState) => state.course_customers.course_customers
   );
 
   console.log("course_customersだよ");
   console.log(course_customers);
-
+  // 中間テーブルの情報を取得
   const option_customers = useSelector(
     (state: RootState) => state.option_customers.option_customers
   );
-
+  // 中間テーブルの情報を取得
   const merchandise_customers = useSelector(
     (state: RootState) => state.merchandise_customers.merchandise_customers
   );
-
+  // 中間テーブルの情報を取得
   const hairstyle_customers = useSelector(
     (state: RootState) => state.hairstyle_customers.hairstyle_customers
   );
-
+  // 中間テーブルの情報を取得
   const customer_users = useSelector(
     (state: RootState) => state.customer_users.customer_users
   );
 
+  // 顧客情報を取得　上記の情報を元に顧客情報を取得
   const nodes = [
     ...customers.map((customer) => {
       // customerは一回一番下まで行く。その後、次のcustomerに行く。
@@ -206,38 +222,42 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     }),
   ];
 
+  // 顧客名のみを取得
   const customersNames = nodes.map((node) => node.customer_name);
 
+  //編集時に顧客名を検索し、存在していればtrueを返す
   const searchCustomer =
-    whoIsEvent === "イベントクリック"
+    whoIsEvent === "編集"
       ? customersNames.includes(selectedEvent.title)
       : false;
 
   console.log("searchCustomerだよ", searchCustomer);
 
+  const [newReservation, setNewReservation] = useState<boolean>(
+    whoIsEvent === "編集" ? false : true
+  );
+
+  //trueは新規顧客、falseは既存顧客 顧客予約の場合はfalse　最初は既存顧客を表示
+  const [newCustomer, setNewCustomer] = useState(isCustomer ? false : true);
+
+  //新規予約の場合、初期値として最初の顧客情報を取得
   const initialCustomer = nodes[0];
 
-  const [isCustomer, setIsCustomer] = useState(true);
-  //trueは顧客、falseはそれ以外
-
-  const [newCustomer, setNewCustomer] = useState(isCustomer ? false : true);
-  //trueは新規、falseは既存
-
-  const [newReservation, setNewReservation] = useState(
-    whoIsEvent === "イベントクリック" ? false : true
-  );
-  //trueは新規予約、falseは現在の予約を編集
-
+  // 既存顧客で新規予約の場合、初期値として最初の顧客情報を取得
   const [customerId, setCustomerId] = useState(
     !newCustomer ? initialCustomer.id : 0
   );
 
+  //
   const [customerName, setCustomerName] = useState(
-    !newCustomer && whoIsEvent !== "イベントクリック"
+    //新規顧客、新規予約の場合は初期値としてnode[0]の顧客名を設定
+    !newCustomer && whoIsEvent !== "編集"
       ? initialCustomer.customer_name
-      : "" || (whoIsEvent === "イベントクリック" && searchCustomer)
+      : //編集の場合は選択したイベントの顧客名を設定
+      "" || (whoIsEvent === "編集" && searchCustomer)
       ? selectedEvent.title
-      : "" || (selectedEvent.allDay && !searchCustomer)
+      : //終日予約で顧客名がない場合は空文字を設定
+      "" || (selectedEvent.allDay && !searchCustomer)
       ? ""
       : ""
   );
@@ -272,29 +292,40 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     !newCustomer ? initialCustomer.names : []
   );
 
-  const [Sid, setSid] = useState(
-    whoIsEvent === "イベントクリック" ? selectedEvent.id : 0
-  );
+  //編集時に選択したイベントのIDを取得  新規予約の場合は0 scheduleテーブルのID
+  const [Sid, setSid] = useState(whoIsEvent === "編集" ? selectedEvent.id : 0);
 
+  //終日予約か時間指定予約かを判定
   const [allDay, setAllDay] = useState(selectedEvent.allDay ? 1 : 0);
 
+  //顧客以外の予約の場合、タイトルを設定
   const [title, setTitle] = useState(
-    !searchCustomer ? selectedEvent.title : ""
+    !isCustomer && whoIsEvent === "編集" ? selectedEvent.title : ""
+  );
+  //開始時間を設定
+  const [startTime, setStartTime] = useState<Dayjs | null>(
+    allDay && whoIsEvent === "クリック"
+      ? dayjs(selectedEvent.dateStr).utc().tz("Asia/Tokyo")
+      : dayjs(selectedEvent.startStr).utc().tz("Asia/Tokyo")
+  );
+  //終了時間を設定
+  const [endTime, setEndTime] = useState<Dayjs | null>(
+    allDay && whoIsEvent === "クリック"
+      ? dayjs(selectedEvent.dateStr).add(1, "day").utc().tz("Asia/Tokyo")
+      : dayjs(selectedEvent.endStr).utc().tz("Asia/Tokyo")
   );
 
-  const [startTime, setStartTime] = useState(selectedEvent.startStr);
-
-  const [endTime, setEndTime] = useState(selectedEvent.endStr);
-
+  //顧客名を変更する際に、顧客情報を取得
   useEffect(() => {
-    if (whoIsEvent === "イベントクリック") {
+    if (whoIsEvent === "編集") {
       changeCustomerState(selectedEvent.title);
+    } else {
+      return;
     }
   }, [whoIsEvent]);
 
   const changeCustomerState = (newValue) => {
-    setCustomerName(newValue);
-
+    //編集時に選択した顧客情報を取得
     const useCustomerState = nodes.find(
       (node) => node.customer_name === newValue
     );
@@ -303,10 +334,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     console.log(useCustomerState);
 
     if (!useCustomerState) {
+      setIsCustomer(false);
       return;
     }
 
+    // useCustomerStateが存在する場合、顧客情報を設定
+    setIsCustomer(true);
     setCustomerId(useCustomerState.id);
+    setCustomerName(newValue);
     setPhoneNumber(useCustomerState.phone_number || "");
     setRemarks(useCustomerState.remarks || "");
     setCourseNames(useCustomerState.course || []);
@@ -316,7 +351,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setUserNames(useCustomerState.names || []);
   };
 
+  //顧客情報をクリアする関数
   const clearStates = () => {
+    setCustomerId(0);
     setCustomerName("");
     setPhoneNumber("");
     setRemarks("");
@@ -328,6 +365,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   };
 
   //MultiCheckboxを使用する際の配列の値を変更していってくれる関数。
+  //MultiCheckboxでは、選択した値を配列に格納していくため、
   const handleCourseChange = (event: SelectChangeEvent<string[]>) => {
     setCourseNames(event.target.value as string[]);
   };
@@ -381,51 +419,47 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     try {
       if (
         //新規予約、新規顧客、タイトルなし
-        newReservation &&
+        whoIsEvent !== "編集" &&
         newCustomer &&
         !title
       ) {
         await dispatch(
-          createCustomerSchedule(scheduleAndCustomerFormData) as any
+          createCustomerAndSchedule(scheduleAndCustomerFormData) as any
         );
-        const update = "true";
-        router.push({
-          pathname: "/schedules",
-          query: { update },
-        });
+        // const update = "true";
+        // router.push({
+        //   pathname: "/schedules",
+        //   query: { update },
+        // });
       } else if (
-        //新規予約、既存顧客、タイトルなし,イベントクリック以外
-        newReservation &&
+        //新規予約、既存顧客、タイトルなし
         !newCustomer &&
-        whoIsEvent !== "イベントクリック" &&
+        whoIsEvent !== "編集" &&
         !title
       ) {
         await dispatch(
-          updateCustomerOnlySchedule(scheduleAndCustomerFormData) as any
+          updateCustomerAndScheduleCreate(scheduleAndCustomerFormData) as any
         );
       } else if (
-        //予約編集、既存顧客、タイトルなし、イベントクリック
-        !newReservation &&
+        //予約編集、既存顧客、タイトルなし
         !newCustomer &&
-        whoIsEvent === "イベントクリック" &&
+        whoIsEvent === "編集" &&
         !title
       ) {
         await dispatch(
-          updateCustomerSchedule(scheduleAndCustomerFormData) as any
+          updateCustomerAndSchedule(scheduleAndCustomerFormData) as any
         );
       } else if (
         //新規予約、顧客以外、タイトルあり
-        newReservation &&
         !isCustomer &&
-        whoIsEvent !== "イベントクリック" &&
+        whoIsEvent !== "編集" &&
         title
       ) {
         await dispatch(createSchedule(scheduleAndCustomerFormData) as any);
       } else if (
-        //予約編集、顧客以外、タイトルあり,イベントクリック
-        !newReservation &&
+        //予約編集、顧客以外、タイトルあり,編集
         !isCustomer &&
-        whoIsEvent === "イベントクリック" &&
+        whoIsEvent === "編集" &&
         title
       ) {
         await dispatch(updateSchedule(scheduleAndCustomerFormData) as any);
@@ -439,7 +473,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     customerAndScheduleCreate(
       {
         id: !newCustomer ? customerId : 0,
@@ -467,10 +500,16 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
           .map((user) => user.id),
         Sid: Sid ? Sid : 0,
         title: title ? title : "",
-        start_time: startTime,
-        end_time: endTime,
+        start_time: dayjs(startTime)
+          .utc()
+          .tz("Asia/Tokyo")
+          .format("YYYY-MM-DD hh:mm:ss"),
+        end_time: dayjs(endTime)
+          .utc()
+          .tz("Asia/Tokyo")
+          .format("YYYY-MM-DD hh:mm:ss"),
         allDay: allDay,
-        customers_id: customerId,
+        customers_id: !newCustomer ? customerId : 0,
         owner_id: Number(localStorage.getItem("owner_id")),
       },
       newCustomer
@@ -478,8 +517,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   };
 
   const BackAgain = () => {
+    setWhoIsEvent("");
     setIsCustomer(true);
-    setNewCustomer(true);
+    setNewCustomer(false);
     setCustomerId(0);
     setCustomerName("");
     setPhoneNumber("");
@@ -491,17 +531,21 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setUserNames([]);
     setAllDay(0);
     setTitle("");
+    setStartTime(null);
+    setEndTime(null);
+    setNewReservation(false);
     setShowModal(false);
+    setSelectedEvent(null);
   };
 
   const startTimeChange = (e) => {
-    console.log("eFです", dayjs(e).utc().tz("Asia/Tokyo").format());
-    setStartTime(dayjs(e).utc().tz("Asia/Tokyo").format());
+    console.log("eFです", dayjs(e).utc().tz("Asia/Tokyo"));
+    setStartTime(dayjs(e).utc().tz("Asia/Tokyo"));
   };
   console.log("startTimeです", startTime);
 
   const endTimeChange = (e) => {
-    setEndTime(dayjs(e).utc().tz("Asia/Tokyo").format());
+    setEndTime(dayjs(e).utc().tz("Asia/Tokyo"));
   };
 
   console.log("endTimeです", endTime);
@@ -525,7 +569,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} className="rounded-xl">
-          {whoIsEvent === "イベントクリック" && !newReservation ? (
+          {whoIsEvent === "編集" ? (
             <div className="flex justify-between items-center ml-2">
               <DeleteMan id={Sid} link={"/schedules"} />
               <button
@@ -573,68 +617,87 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
               <div className="pt-4 flex justify-center items-center ml-4 mr-4 ">
                 <div className="flex justify-center items-center ">
-                  {whoIsEvent === "イベントクリック" ? (
-                    <div className="flex justify-center items-center mr-4">
-                      <div>{newReservation ? "新規予約" : "予約編集"}:</div>
+                  {whoIsEvent === "編集" && (
+                    <div
+                      className={`flex justify-center items-center ml-4 ${
+                        newReservation ? "" : "opacity-40"
+                      } `}
+                    >
                       <ControlledCheckbox
-                        checked={newReservation}
+                        label="            現在の予約を編集"
+                        checked={newReservation ? true : false}
                         onChanger={(newValue) => {
-                          setNewReservation(newValue);
+                          setNewReservation(newValue ? true : false);
                         }}
                       />
                     </div>
-                  ) : (
-                    ""
                   )}
 
-                  <div>{isCustomer ? "顧客" : "その他"}:</div>
-                  <ControlledCheckbox
-                    checked={isCustomer}
-                    onChanger={(newValue) => {
-                      setIsCustomer(newValue);
-                      if (!newValue) {
-                        setTitle("");
-                        setNewCustomer(true);
-                        setCustomerId(0);
-                        setCustomerName("");
-                        setPhoneNumber("");
-                        setRemarks("");
-                        setCourseNames([]);
-                        setOptionNames([]);
-                        setMerchandiseNames([]);
-                        setHairstyleNames([]);
-                        setUserNames([]);
-                      } else if (newValue) {
-                        setNewCustomer(false);
-                        setCustomerName(initialCustomer.customer_name);
-                        changeCustomerState(initialCustomer.customer_name);
-                      }
-                    }}
-                    type={whoIsEvent === "イベントクリック" ? "disabled" : ""}
-                  />
+                  {whoIsEvent === "編集" && (
+                    <div
+                      className={` flex justify-center items-center ml-4 ${
+                        !newReservation ? "" : "opacity-40"
+                      } `}
+                    >
+                      <ControlledCheckbox
+                        label="選択中の時間に新規予約を追加"
+                        checked={newReservation ? false : true}
+                        onChanger={(newValue) => {
+                          setNewReservation(newValue ? false : true);
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {/* 顧客の場合 */}
+                  {isCustomer && (
+                    <div
+                      className={` flex justify-center items-center ml-4 ${
+                        newCustomer ? "" : "opacity-40"
+                      } `}
+                    >
+                      <ControlledCheckbox
+                        label="新規顧客:"
+                        checked={newCustomer ? true : false}
+                        onChanger={(newValue) => {
+                          setNewCustomer(newValue ? true : false);
+                          if (newValue === true) {
+                            clearStates();
+                          } else if (newValue === false) {
+                            setCustomerName(initialCustomer.customer_name);
+                            changeCustomerState(initialCustomer.customer_name);
+                          }
+                        }}
+                        // type={!newCustomer ? "disabled" : ""}
+                      />
+                    </div>
+                  )}
+                  {isCustomer && (
+                    <div
+                      className={` flex justify-center items-center ml-4 ${
+                        !newCustomer ? "" : "opacity-40"
+                      } `}
+                    >
+                      <ControlledCheckbox
+                        label="既存顧客:"
+                        checked={newCustomer ? false : true}
+                        onChanger={(newValue) => {
+                          setNewCustomer(newValue ? false : true);
+                          if (newValue === false) {
+                            clearStates();
+                          } else if (newValue === true) {
+                            setCustomerName(initialCustomer.customer_name);
+                            changeCustomerState(initialCustomer.customer_name);
+                          }
+                        }}
+                        // type={whoIsEvent === "編集" ? "disabled" : ""}
+                      />
+                    </div>
+                  )}
                 </div>
-                {isCustomer ? (
-                  <div className="flex justify-center items-center ml-4">
-                    <div>{newCustomer ? "新規" : "既存"}:</div>
-                    <ControlledCheckbox
-                      checked={newCustomer}
-                      onChanger={(newValue) => {
-                        setNewCustomer(newValue);
-                        if (newValue) {
-                          clearStates();
-                        } else if (!newValue) {
-                          setCustomerName(initialCustomer.customer_name);
-                          changeCustomerState(initialCustomer.customer_name);
-                        }
-                      }}
-                      type={!newReservation ? "disabled" : ""}
-                    />
-                  </div>
-                ) : (
-                  ""
-                )}
               </div>
-              {!isCustomer ? (
+
+              {!isCustomer && (
                 <div className="pt-4 flex justify-center items-center ml-4 mr-4">
                   <div className="w-32 mr-1">タイトル:</div>
                   <BasicTextField
@@ -644,176 +707,171 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
-              ) : (
-                <div>
-                  {!newCustomer ? (
-                    <div className="pt-4 ">
-                      <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">顧客名:</div>
-                        <SingleCheckBox
-                          label="顧客名"
-                          onChange={(newValue) => {
-                            changeCustomerState(newValue);
-                          }}
-                          nodeId={customerId + uniqueId}
-                          getOptions={customersNames}
-                          value={customerName}
-                        />
-                      </div>
-                      <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                        <span className="w-32 flex items-left">電話番号:</span>
-                        <BasicTextField
-                          type="number"
-                          placeholder="電話番号"
-                          value={phone_number}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">備考:</div>
-                        <BasicTextField
-                          type="text"
-                          placeholder="備考"
-                          value={remarks}
-                          onChange={(e) => setRemarks(e.target.value)}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">コース名:</div>
-                        <MultiCheckbox
-                          nodesProp="course"
-                          optionName={courseNames}
-                          onChanger={handleCourseChange}
-                          getOptions={courses}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">オプション名:</div>
-                        <MultiCheckbox
-                          nodesProp="option"
-                          optionName={optionNames}
-                          onChanger={handleOptionChange}
-                          getOptions={options}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">商品名:</div>
-                        <MultiCheckbox
-                          nodesProp="merchandise"
-                          optionName={merchandiseNames}
-                          onChanger={handleMerchandiseChange}
-                          getOptions={merchandises}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">ヘアスタイル名:</div>
-                        <MultiCheckbox
-                          nodesProp="hairstyle"
-                          optionName={hairstyleNames}
-                          onChanger={handleHairstyleChange}
-                          getOptions={hairstyles}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">担当者名:</div>
-                        <MultiCheckbox
-                          nodesProp="names"
-                          optionName={userNames}
-                          onChanger={handleUserChange}
-                          getOptions={users}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                        <span className="w-32 flex items-left">顧客名:</span>
-                        <BasicTextField
-                          type="text"
-                          placeholder="顧客名"
-                          value={customerName}
-                          onChange={(e) => setCustomerName(e.target.value)}
-                        />
-                      </div>
+              )}
 
-                      <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                        <span className="w-32 flex items-left">電話番号:</span>
-                        <BasicTextField
-                          type="number"
-                          placeholder="電話番号"
-                          value={phone_number}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                        />
-                      </div>
-
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <span className="w-32 flex items-left">備考:</span>
-                        <BasicTextField
-                          type="text"
-                          placeholder="備考"
-                          value={remarks}
-                          onChange={(e) => setRemarks(e.target.value)}
-                        />
-                      </div>
-
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">コース:</div>
-                        <MultiCheckbox
-                          nodesProp="course"
-                          optionName={courseNames}
-                          onChanger={handleCourseChange}
-                          getOptions={courses}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">オプション:</div>
-                        <MultiCheckbox
-                          nodesProp="option"
-                          optionName={optionNames}
-                          onChanger={handleOptionChange}
-                          getOptions={options}
-                        />
-                      </div>
-
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">商品:</div>
-                        <MultiCheckbox
-                          nodesProp="merchandise"
-                          optionName={merchandiseNames}
-                          onChanger={handleMerchandiseChange}
-                          getOptions={merchandises}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">髪型:</div>
-                        <MultiCheckbox
-                          nodesProp="hairstyle"
-                          optionName={hairstyleNames}
-                          onChanger={handleHairstyleChange}
-                          getOptions={hairstyles}
-                        />
-                      </div>
-                      <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                        <div className="w-32 mr-1">担当者:</div>
-                        <MultiCheckbox
-                          nodesProp="names"
-                          optionName={userNames}
-                          onChanger={handleUserChange}
-                          getOptions={users}
-                        />
-                      </div>
-                    </>
-                  )}
+              {!newCustomer && isCustomer && (
+                <div className="pt-4 ">
+                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">顧客名:</div>
+                    <SingleCheckBox
+                      label="顧客名"
+                      onChange={(newValue) => {
+                        changeCustomerState(newValue);
+                      }}
+                      nodeId={customerId + uniqueId}
+                      getOptions={customersNames}
+                      value={customerName}
+                    />
+                  </div>
+                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                    <span className="w-32 flex items-left">電話番号:</span>
+                    <BasicTextField
+                      type="number"
+                      placeholder="電話番号"
+                      value={phone_number}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">備考:</div>
+                    <BasicTextField
+                      type="text"
+                      placeholder="備考"
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">コース名:</div>
+                    <MultiCheckbox
+                      nodesProp="course"
+                      optionName={courseNames}
+                      onChanger={handleCourseChange}
+                      getOptions={courses}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">オプション名:</div>
+                    <MultiCheckbox
+                      nodesProp="option"
+                      optionName={optionNames}
+                      onChanger={handleOptionChange}
+                      getOptions={options}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">商品名:</div>
+                    <MultiCheckbox
+                      nodesProp="merchandise"
+                      optionName={merchandiseNames}
+                      onChanger={handleMerchandiseChange}
+                      getOptions={merchandises}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">ヘアスタイル名:</div>
+                    <MultiCheckbox
+                      nodesProp="hairstyle"
+                      optionName={hairstyleNames}
+                      onChanger={handleHairstyleChange}
+                      getOptions={hairstyles}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">担当者名:</div>
+                    <MultiCheckbox
+                      nodesProp="names"
+                      optionName={userNames}
+                      onChanger={handleUserChange}
+                      getOptions={users}
+                    />
+                  </div>
                 </div>
+              )}
+              {newCustomer && isCustomer && (
+                <>
+                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                    <span className="w-32 flex items-left">顧客名:</span>
+                    <BasicTextField
+                      type="text"
+                      placeholder="顧客名"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                    <span className="w-32 flex items-left">電話番号:</span>
+                    <BasicTextField
+                      type="number"
+                      placeholder="電話番号"
+                      value={phone_number}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <span className="w-32 flex items-left">備考:</span>
+                    <BasicTextField
+                      type="text"
+                      placeholder="備考"
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">コース:</div>
+                    <MultiCheckbox
+                      nodesProp="course"
+                      optionName={courseNames}
+                      onChanger={handleCourseChange}
+                      getOptions={courses}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">オプション:</div>
+                    <MultiCheckbox
+                      nodesProp="option"
+                      optionName={optionNames}
+                      onChanger={handleOptionChange}
+                      getOptions={options}
+                    />
+                  </div>
+
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">商品:</div>
+                    <MultiCheckbox
+                      nodesProp="merchandise"
+                      optionName={merchandiseNames}
+                      onChanger={handleMerchandiseChange}
+                      getOptions={merchandises}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">髪型:</div>
+                    <MultiCheckbox
+                      nodesProp="hairstyle"
+                      optionName={hairstyleNames}
+                      onChanger={handleHairstyleChange}
+                      getOptions={hairstyles}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-1">担当者:</div>
+                    <MultiCheckbox
+                      nodesProp="names"
+                      optionName={userNames}
+                      onChanger={handleUserChange}
+                      getOptions={users}
+                    />
+                  </div>
+                </>
               )}
 
               <div className="flex mt-6 justify-end items-center mr-2">
                 <PrimaryButton
-                  value={
-                    whoIsEvent === "イベントクリック" && !newReservation
-                      ? "更新"
-                      : "作成"
-                  }
+                  value={whoIsEvent === "編集" ? "更新" : "作成"}
                 />
               </div>
             </form>

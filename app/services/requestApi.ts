@@ -15,8 +15,8 @@ export const getCsrfToken = async () => {
       /(?:(?:^|.*;\s*)XSRF-TOKEN\s*=\s*([^;]*).*$)|^.*$/,
       "$1"
     );
-    axios.defaults.headers.common["X-XSRF-TOKEN"] = csrfToken;
     console.log("CSRFトークン取得成功:", csrfToken);
+    axios.defaults.headers.common["X-XSRF-TOKEN"] = csrfToken;
     return csrfToken;
   } catch (error) {
     console.error("CSRFトークンの取得に失敗しました:", error);
@@ -39,7 +39,9 @@ export const sendRequest = async (
       xsrfHeaderName: "X-XSRF-TOKEN", // 追記
       withCredentials: true,
       headers: {
-        "Content-Type": "application/json; charset=utf-8; ",
+        "Content-Type": "application/json; charset=utf-8",
+        // CSRF トークンが必要な場合に備えて追加します
+        "X-XSRF-TOKEN": axios.defaults.headers.common["X-XSRF-TOKEN"],
       },
     });
 

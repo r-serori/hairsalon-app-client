@@ -64,12 +64,14 @@ const attenDanceEdit: React.FC = () => {
 
   return (
     <div className="min-h-full ">
-      <div className="mt-4 ml-4">
-        <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
-      </div>
       <div>
-        <DeleteButton value="退職する" onClicker={handleDeleteUser} />
+        <div className="flex justify-between mt-4 mx-4">
+          <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
+
+          <DeleteButton value="退職する" onClicker={handleDeleteUser} />
+        </div>
       </div>
+
       {loading || dispatchLoading || !user ? (
         <p>Loading...</p>
       ) : (

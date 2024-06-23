@@ -1,20 +1,20 @@
 import { sendRequest } from "../requestApi";
 
 export const schedulesApi = {
-  createCustomerSchedule: async (formData: {
+  //両方作成します
+  createCustomerAndSchedule: async (formData: {
     customer_name: string;
-    phone_number: string;
-    remarks: string;
-    courses_id: number[];
-    options_id: number[];
-    merchandises_id: number[];
-    hairstyles_id: number[];
-    user_id: number[];
+    phone_number: string | null;
+    remarks: string | null;
+    courses_id: number[] | null;
+    options_id: number[] | null;
+    merchandises_id: number[] | null;
+    hairstyles_id: number[] | null;
+    user_id: number[] | null;
     title: string;
     start_time: string;
     end_time: string;
     allDay: number;
-    customers_id: number;
     owner_id: number;
   }) => {
     const response = await sendRequest(
@@ -66,21 +66,23 @@ export const schedulesApi = {
     return response;
   },
 
-  updateCustomerSchedule: async (formData: {
-    Sid: number;
+  // 両方更新します
+  updateCustomerAndSchedule: async (formData: {
+    customers_id: number; // customer_id
     customer_name: string;
-    phone_number: string;
-    remarks: string;
-    courses_id: number[];
-    options_id: number[];
-    merchandises_id: number[];
-    hairstyles_id: number[];
-    user_id: number[];
+    phone_number: string | null;
+    remarks: string | null;
+    courses_id: number[] | null;
+    options_id: number[] | null;
+    merchandises_id: number[] | null;
+    hairstyles_id: number[] | null;
+    user_id: number[] | null;
+    Sid: number; // schedule_id
     title: string;
     start_time: string;
     end_time: string;
     allDay: number;
-    customers_id: number;
+    owner_id: number;
   }) => {
     const response = await sendRequest(
       "POST",
@@ -95,15 +97,15 @@ export const schedulesApi = {
     return response;
   },
 
-  updateCustomerOnlySchedule: async (formData: {
+  updateCustomerAndScheduleCreate: async (formData: {
     customer_name: string;
-    phone_number: string;
-    remarks: string;
-    courses_id: number[];
-    options_id: number[];
-    merchandises_id: number[];
-    hairstyles_id: number[];
-    user_id: number[];
+    phone_number: string | null;
+    remarks: string | null;
+    courses_id: number[] | null;
+    options_id: number[] | null;
+    merchandises_id: number[] | null;
+    hairstyles_id: number[] | null;
+    user_id: number[] | null;
     title: string;
     start_time: string;
     end_time: string;

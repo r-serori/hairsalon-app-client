@@ -18,8 +18,6 @@ dayjs.locale("ja");
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-axios.defaults.withCredentials = true;
-
 // クッキーを取得する関数
 // function getCookie(name: string) {
 //   if (typeof document !== "undefined") {
@@ -31,7 +29,7 @@ axios.defaults.withCredentials = true;
 // }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
+  // const router = useRouter();
 
   // useEffect(() => {
   //   // ページロード時に 'laravel_session' クッキーをチェックし、LocalStorage をクリアする

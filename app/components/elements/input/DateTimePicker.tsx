@@ -17,7 +17,7 @@ interface DateTimeRangePickerProps {
 const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   value,
   changer,
-  isAllDay = false,
+  isAllDay,
 }) => {
   // const [value, setValue] = React.useState<Dayjs | null>(
   //   dayjs("2022-04-17T15:30")

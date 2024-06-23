@@ -8,9 +8,9 @@ import {
 } from "../../customers/customerSlice";
 import {
   getSchedule,
-  createCustomerSchedule,
-  updateCustomerOnlySchedule,
-  updateCustomerSchedule,
+  createCustomerAndSchedule,
+  updateCustomerAndSchedule,
+  updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
 
 export const getMerchandise_customers = createAsyncThunk(
@@ -98,28 +98,31 @@ const merchandise_customersSlice = createSlice({
       ];
     });
 
-    builder.addCase(createCustomerSchedule.fulfilled, (state, action) => {
+    builder.addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
       state.merchandise_customers = [
         ...state.merchandise_customers,
         ...action.payload.merchandise_customers,
       ];
     });
 
-    builder.addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
-      state.merchandise_customers = [
-        ...state.merchandise_customers.filter(
-          (stateMerchandise_customer) =>
-            !action.payload.merchandise_customers.some(
-              (payloadMerchandise_customer) =>
-                stateMerchandise_customer.customers_id ===
-                payloadMerchandise_customer.customers_id
-            )
-        ),
-        ...action.payload.merchandise_customers,
-      ];
-    });
+    builder.addCase(
+      updateCustomerAndScheduleCreate.fulfilled,
+      (state, action) => {
+        state.merchandise_customers = [
+          ...state.merchandise_customers.filter(
+            (stateMerchandise_customer) =>
+              !action.payload.merchandise_customers.some(
+                (payloadMerchandise_customer) =>
+                  stateMerchandise_customer.customers_id ===
+                  payloadMerchandise_customer.customers_id
+              )
+          ),
+          ...action.payload.merchandise_customers,
+        ];
+      }
+    );
 
-    builder.addCase(updateCustomerSchedule.fulfilled, (state, action) => {
+    builder.addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
       state.merchandise_customers = [
         ...state.merchandise_customers.filter(
           (stateMerchandise_customer) =>

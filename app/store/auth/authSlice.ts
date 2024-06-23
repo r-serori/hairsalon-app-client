@@ -6,6 +6,11 @@ import {
   getSchedule,
   selectGetSchedules,
 } from "../../store/schedules/scheduleSlice";
+import {
+  pleaseEditEndTime,
+  createStartTime,
+  createEndTime,
+} from "../attendances/attendance_times/attendance_timesSlice";
 
 export const login = createAsyncThunk(
   "login/auth",
@@ -461,7 +466,7 @@ const authSlice = createSlice({
     });
     builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth = action.payload.responseUsers;
+      state.auth = [...state.auth, ...action.payload.responseUsers];
       state.message = action.payload.message;
     });
     builder.addCase(getAttendanceUsers.rejected, (state, action) => {
@@ -565,19 +570,49 @@ const authSlice = createSlice({
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth = action.payload.responseUsers;
+      state.auth = [...state.auth, ...action.payload.responseUsers];
       state.message = action.payload.message;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth = action.payload.responseUsers;
+      state.auth = [...state.auth, action.payload.responseUsers];
       state.message = action.payload.message;
     });
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth = action.payload.responseUsers;
+      state.auth = [...state.auth, ...action.payload.responseUsers];
+      state.message = action.payload.message;
+    });
+
+    builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = state.auth.map((auth) =>
+        auth.id === action.payload.responseUser.id
+          ? { ...auth, ...action.payload.responseUser }
+          : auth
+      );
+      state.message = action.payload.message;
+    });
+
+    builder.addCase(createStartTime.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = state.auth.map((auth) =>
+        auth.id === action.payload.responseUser.id
+          ? { ...auth, ...action.payload.responseUser }
+          : auth
+      );
+      state.message = action.payload.message;
+    });
+
+    builder.addCase(createEndTime.fulfilled, (state, action) => {
+      state.loading = false;
+      state.auth = state.auth.map((auth) =>
+        auth.id === action.payload.responseUser.id
+          ? { ...auth, ...action.payload.responseUser }
+          : auth
+      );
       state.message = action.payload.message;
     });
   },

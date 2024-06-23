@@ -8,13 +8,15 @@ import FullCalendar from "@fullcalendar/react";
 import ScheduleModal from "../modal/scheduleModal";
 import SalesModal from "../modal/sales/SalesModal";
 import EasyModal from "../modal/easy/EasyModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import ButtonModal from "../buttonModal/ButtonModal";
+import { el } from "@fullcalendar/core/internal-common";
 
 interface Event {
   id: number;
@@ -26,10 +28,9 @@ interface Event {
 
 interface OpenCalendarProps {
   events: Event[];
-  year?: string | null;
 }
 
-const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
+const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -45,19 +46,43 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
 
   const eventBorderColor = "#333";
 
-  const [showModal, setShowModal] = useState(false);
+  const [scheduleYear, setScheduleYear] = useState<string>("");
+
+  useEffect(() => {
+    const localYear = localStorage.getItem("year");
+    if (localYear) {
+      setScheduleYear(localYear);
+    } else {
+      setScheduleYear("");
+    }
+  }, [scheduleYear]);
+
+  //予約内容を作成するためのstate
+  const [showModal, setShowModal] = useState<boolean>(false);
+  //顧客か顧客以外かを判定するためのstate
+  const [showButtonModal, setShowButtonModal] = useState<boolean>(false);
+
+  // ButtonModalで使用するstate, 顧客or顧客以外の判定を行う
+  const [isCustomer, setIsCustomer] = useState<boolean>(false);
+
+  //カレンダーのイベントをクリックした際に選択したイベントを格納するstate
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // イベントをクリックした際にどのようなイベントをクリックしたかを格納するstate
   const [whoIsEvent, setWhoIsEvent] = useState("");
 
+  // 日次、月次、年次の売上を表示するためのstate
   const [DailySalesModal, setDailySalesModal] = useState(false);
   const [monthlySalesModal, setMonthlySalesModal] = useState(false);
   const [yearlySalesModal, setYearlySalesModal] = useState(false);
 
+  // EasyModalを表示するためのstate　表示する予約の年を選択する
   const [easyOpen, setEasyOpen] = useState(false);
 
   const handleEventClick = (e) => {
     setSelectedEvent(e);
-    setShowModal(true);
+    setShowButtonModal(true);
+    // setShowModal(true);
   };
 
   const handleCloseModal = () => {
@@ -65,14 +90,16 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
     setSelectedEvent(null);
   };
 
-  const currentYear = year
-    ? year
+  const currentYear = scheduleYear
+    ? scheduleYear
     : dayjs().utc().tz("Asia/Tokyo").format("YYYY");
 
-  const nextYear = year
+  console.log("currentYear", currentYear);
+  const nextYear = scheduleYear
     ? currentYear
     : dayjs(currentYear).add(1, "year").format("YYYY");
 
+  console.log("nextYear", nextYear);
   return (
     <>
       {loading ? (
@@ -81,9 +108,24 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
         // ローディングが終わったらカレンダーを表示する
 
         <div className="flex justify-center items-center my-4 ">
-          <div className="mr-auto ml-4">
-            <EasyModal open={easyOpen} setOpen={setEasyOpen} />
-          </div>
+          {scheduleYear ? (
+            <button
+              onClick={() => {
+                setScheduleYear(dayjs().utc().tz("Asia/Tokyo").format("YYYY"));
+                localStorage.removeItem("year");
+              }}
+            >
+              現在の年の予約を表示
+            </button>
+          ) : (
+            <div className="mr-auto ml-4">
+              <EasyModal
+                open={easyOpen}
+                setOpen={setEasyOpen}
+                setScheduleYear={setScheduleYear}
+              />
+            </div>
+          )}
 
           <div className="flex justify-start items-center mr-4 gap-4">
             <SalesModal
@@ -158,9 +200,9 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
               setWhoIsEvent("選択");
             },
             eventClick: function (info) {
-              console.log("info.eventだよ", info.event);
-              handleEventClick(info.event);
-              setWhoIsEvent("イベントクリック");
+              setWhoIsEvent("編集");
+              setSelectedEvent(info.event);
+              setShowModal(true);
             },
           },
           multiMonth: {
@@ -202,13 +244,26 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, year }) => {
         eventBorderColor={eventBorderColor} // ボーダーの色を指定
       />
 
-      {showModal && selectedEvent && (
+      {showModal && selectedEvent && !showButtonModal && (
         <ScheduleModal
           showModal={showModal}
           selectedEvent={selectedEvent}
           setShowModal={setShowModal}
           setSelectedEvent={setSelectedEvent}
           whoIsEvent={whoIsEvent}
+          setWhoIsEvent={setWhoIsEvent}
+          isCustomer={isCustomer}
+          setIsCustomer={setIsCustomer}
+        />
+      )}
+      {showButtonModal && selectedEvent && whoIsEvent !== "編集" && (
+        <ButtonModal
+          showButtonModal={showButtonModal}
+          setShowButtonModal={setShowButtonModal}
+          isCustomer={isCustomer}
+          whoIsEvent={whoIsEvent}
+          setIsCustomer={setIsCustomer}
+          setShowModal={setShowModal}
         />
       )}
     </>

@@ -21,27 +21,21 @@ interface Schedule {
 
 const schedules: React.FC<Schedule> = ({ year, update }) => {
   const dispatch = useDispatch();
+
+  const schedules = useSelector((state: RootState) => state.schedule.schedule);
+
   useEffect(() => {
     try {
-      if (year) {
-        console.log("yearです", year);
-        const ownerId = Number(localStorage.getItem("owner_id"));
-        const response = dispatch(
-          selectGetSchedules({
-            owner_id: ownerId,
-            year: year,
-          }) as any
-        );
-      } else if (update) {
-        return;
-      } else {
+      if (schedules.length === 0) {
         const ownerId = Number(localStorage.getItem("owner_id"));
         dispatch(getSchedule(ownerId) as any);
+      } else {
+        return;
       }
     } catch (error) {
       console.log(error);
     }
-  }, [dispatch, year, update]);
+  }, [dispatch]);
 
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -52,8 +46,6 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
   const message = useSelector((state: RootState) => state.schedule.message);
 
   const error = useSelector((state: RootState) => state.schedule.error);
-
-  const schedules = useSelector((state: RootState) => state.schedule.schedule);
 
   const customers = useSelector((state: RootState) => state.customer.customers);
 
@@ -88,11 +80,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      {loading ? (
-        <p>loading...</p>
-      ) : (
-        <MyCalendar events={events} year={year ? year : null} />
-      )}
+      {loading ? <p>loading...</p> : <MyCalendar events={events} />}
     </div>
   );
 };

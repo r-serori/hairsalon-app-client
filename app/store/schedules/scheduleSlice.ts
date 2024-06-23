@@ -83,28 +83,29 @@ export const createSchedule = createAsyncThunk(
   }
 );
 
-export const createCustomerSchedule = createAsyncThunk(
-  "schedule/customer/createSchedule",
+export const createCustomerAndSchedule = createAsyncThunk(
+  "schedule/customer/doubleCreate",
   async (
     formData: {
       customer_name: string;
-      phone_number: string;
-      remarks: string;
-      courses_id: number[];
-      options_id: number[];
-      merchandises_id: number[];
-      hairstyles_id: number[];
-      user_id: number[];
+      phone_number: string | null;
+      remarks: string | null;
+      courses_id: number[] | null;
+      options_id: number[] | null;
+      merchandises_id: number[] | null;
+      hairstyles_id: number[] | null;
+      user_id: number[] | null;
       title: string;
       start_time: string;
       end_time: string;
       allDay: number;
-      customers_id: number;
       owner_id: number;
     },
     { rejectWithValue }
   ) => {
-    const response: any = await schedulesApi.createCustomerSchedule(formData);
+    const response: any = await schedulesApi.createCustomerAndSchedule(
+      formData
+    );
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -158,6 +159,7 @@ export const updateSchedule = createAsyncThunk(
       start_time: string;
       end_time: string;
       allDay: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -182,28 +184,31 @@ export const updateSchedule = createAsyncThunk(
   }
 );
 
-export const updateCustomerSchedule = createAsyncThunk(
-  "schedule/updateCustomerSchedule",
+export const updateCustomerAndSchedule = createAsyncThunk(
+  "schedule/customer/doubleUpdate",
   async (
     formData: {
-      Sid: number;
+      customers_id: number; // customer_id
       customer_name: string;
-      phone_number: string;
-      remarks: string;
-      courses_id: number[];
-      options_id: number[];
-      merchandises_id: number[];
-      hairstyles_id: number[];
-      user_id: number[];
+      phone_number: string | null;
+      remarks: string | null;
+      courses_id: number[] | null;
+      options_id: number[] | null;
+      merchandises_id: number[] | null;
+      hairstyles_id: number[] | null;
+      user_id: number[] | null;
+      Sid: number; // schedule_id
       title: string;
       start_time: string;
       end_time: string;
       allDay: number;
-      customers_id: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
-    const response: any = await schedulesApi.updateCustomerSchedule(formData);
+    const response: any = await schedulesApi.updateCustomerAndSchedule(
+      formData
+    );
     if (response.resStatus === "error") {
       //エラー時の処理
       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -223,18 +228,18 @@ export const updateCustomerSchedule = createAsyncThunk(
     }
   }
 );
-export const updateCustomerOnlySchedule = createAsyncThunk(
-  "schedule/updateCustomerOnlySchedule",
+export const updateCustomerAndScheduleCreate = createAsyncThunk(
+  "schedule/customer/updateCustomerAndScheduleCreate",
   async (
     formData: {
       customer_name: string;
-      phone_number: string;
-      remarks: string;
-      courses_id: number[];
-      options_id: number[];
-      merchandises_id: number[];
-      hairstyles_id: number[];
-      user_id: number[];
+      phone_number: string | null;
+      remarks: string | null;
+      courses_id: number[] | null;
+      options_id: number[] | null;
+      merchandises_id: number[] | null;
+      hairstyles_id: number[] | null;
+      user_id: number[] | null;
       title: string;
       start_time: string;
       end_time: string;
@@ -244,7 +249,7 @@ export const updateCustomerOnlySchedule = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await schedulesApi.updateCustomerOnlySchedule(
+    const response: any = await schedulesApi.updateCustomerAndScheduleCreate(
       formData
     );
     if (response.resStatus === "error") {
@@ -294,11 +299,11 @@ export const deleteSchedule = createAsyncThunk(
 export interface ScheduleState {
   // ステートの型
   id: number;
-  title?: string;
-  start_time?: string;
-  end_time?: string;
+  title: string | null;
+  start_time: string | null;
+  end_time: string | null;
   allDay: number;
-  customers_id?: number;
+  customers_id: number | null;
   owner_id: number;
   created_at: string;
   updated_at: string;
@@ -357,19 +362,19 @@ const scheduleSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(createCustomerSchedule.pending, (state) => {
+      .addCase(createCustomerAndSchedule.pending, (state) => {
         state.loading = true;
         state.message = null;
         state.error = null;
       })
-      .addCase(createCustomerSchedule.fulfilled, (state, action) => {
+      .addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = [...state.schedule, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールと顧客情報の作成に成功しました！";
       })
-      .addCase(createCustomerSchedule.rejected, (state, action) => {
+      .addCase(createCustomerAndSchedule.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
@@ -412,12 +417,12 @@ const scheduleSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(updateCustomerSchedule.pending, (state) => {
+      .addCase(updateCustomerAndSchedule.pending, (state) => {
         state.loading = true;
         state.message = null;
         state.error = null;
       })
-      .addCase(updateCustomerSchedule.fulfilled, (state, action) => {
+      .addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
         state.loading = false;
         state.schedule = state.schedule.map((schedule) =>
           schedule.id === action.payload.schedule.id
@@ -431,24 +436,24 @@ const scheduleSlice = createSlice({
           ? action.payload.message
           : "スケジュールと顧客情報の更新に成功しました！";
       })
-      .addCase(updateCustomerSchedule.rejected, (state, action) => {
+      .addCase(updateCustomerAndSchedule.rejected, (state, action) => {
         state.error = action.error.message;
         state.loading = false;
       })
 
-      .addCase(updateCustomerOnlySchedule.pending, (state) => {
+      .addCase(updateCustomerAndScheduleCreate.pending, (state) => {
         state.loading = true;
         state.message = null;
         state.error = null;
       })
-      .addCase(updateCustomerOnlySchedule.fulfilled, (state, action) => {
+      .addCase(updateCustomerAndScheduleCreate.fulfilled, (state, action) => {
         state.loading = false;
-        state.schedule = [...state.schedule, ...action.payload.schedule];
+        state.schedule = [...state.schedule, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
           : "顧客情報の更新とスケジュールの作成に成功しました！";
       })
-      .addCase(updateCustomerOnlySchedule.rejected, (state, action) => {
+      .addCase(updateCustomerAndScheduleCreate.rejected, (state, action) => {
         state.error = action.error.message;
         state.loading = false;
       })
@@ -480,7 +485,7 @@ const scheduleSlice = createSlice({
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.loading = false;
-      state.schedule = [...action.payload.schedules];
+      state.schedule = [...state.schedule, ...action.payload.schedules];
       state.message = action.payload.message
         ? action.payload.message
         : "スケジュールの取得に成功しました！";

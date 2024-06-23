@@ -11,6 +11,8 @@ const AttendanceTimeShots = () => {
   const dispatch = useDispatch();
 
   const users = useSelector((state: RootState) => state.auth.auth);
+  console.log("users", users);
+  const loading = useSelector((state: RootState) => state.auth.loading);
 
   useEffect(() => {
     try {
@@ -21,9 +23,7 @@ const AttendanceTimeShots = () => {
     } finally {
       console.log("出席情報取得！！");
     }
-  }, []);
-
-  const loading = useSelector((state: RootState) => state.auth.loading);
+  }, [dispatch]);
 
   const message = useSelector((state: RootState) => state.auth.message);
 
@@ -51,9 +51,10 @@ const AttendanceTimeShots = () => {
     return {
       id: user.id,
       shotUserName: user.name,
-      isAttendance: user.isAttendance ? "勤務中" : "休憩中",
+      isAttendance: user.isAttendance ? "勤務中" : "退勤中",
     };
   });
+  console.log("nodes", nodes);
 
   return (
     <div>

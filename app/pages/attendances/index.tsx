@@ -50,18 +50,19 @@ const Attendances = () => {
   ];
 
   // nodesにusersをマップして処理
-  const nodes = auth.filter((user: any) => {
-    return user.role !== "オーナー";
-  });
-  // .map((user: any) => {
-  //   return {
-  //     id: user.id,
-  //     name: user.name,
-  //     phone_number: user.phone_number,
-  //     role: user.role,
-  //     updated_at: user.updated_at,
-  //   };
-  // });
+  const nodes = auth
+    .filter((user: any) => {
+      return user.role !== "オーナー";
+    })
+    .map((user: any) => {
+      return {
+        id: user.id,
+        name: user.name,
+        staff_phone_number: user.phone_number,
+        role: user.role,
+        updated_at: user.updated_at,
+      };
+    });
 
   return (
     <div>
