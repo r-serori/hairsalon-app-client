@@ -5,10 +5,12 @@ import { staffRegister } from "../../store/auth/authSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { OwnerPermission } from "../../components/Hooks/Permission";
+import { OwnerPermission } from "../../components/Hooks/OwnerPermission";
+import { useState } from "react";
 
 const StaffRegisterPage: React.FC = () => {
-  OwnerPermission();
+  const [role, setRole] = useState<string>("");
+  OwnerPermission(setRole);
   const dispatch = useDispatch();
   const router = useRouter();
 

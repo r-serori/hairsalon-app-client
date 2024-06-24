@@ -22,6 +22,16 @@ import timezone from "dayjs/plugin/timezone";
 import StockNotice from "../../stockNotice/StockNotice";
 import AttendanceTimeResult from "../../attendanceTimeResult/AttendanceTimeResult";
 
+interface ComponentTableProps {
+  nodes: any;
+  searchItems: any;
+  nodesProps: any;
+  tHeaderItems: any;
+  link: string;
+  isLoading: boolean;
+  role: string;
+}
+
 const ComponentTable = ({
   nodes,
   searchItems,
@@ -29,6 +39,7 @@ const ComponentTable = ({
   tHeaderItems,
   link,
   isLoading,
+  role,
 }) => {
   const [searchText, setSearchText] = useState("");
   const [searchField, setSearchField] = useState("");
@@ -257,7 +268,8 @@ const ComponentTable = ({
                         propProp === "attendanceNow" ||
                         propProp === "name" ||
                         propProp === "staff_phone_number" ||
-                        propProp === "role"
+                        propProp === "role" ||
+                        role === "スタッフ"
                       ) {
                         return (
                           <Cell

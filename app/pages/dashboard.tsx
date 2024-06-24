@@ -18,19 +18,16 @@ import BasicAlerts from "../components/elements/alert/Alert";
 
 const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const [role, setRole] = useState<string>("");
   const router = useRouter();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   useEffect(() => {
-    const loggedIn = localStorage.getItem("user_id") ? true : false;
-    setIsLoggedIn(loggedIn);
-
-    // if (!loggedIn) {
-    //   router.push("/");
-    //   setIsLoggedIn(false);
-    // }
-  }, [isLoggedIn]);
+    const UserPermission = () => {
+      const role = localStorage.getItem("role");
+      setRole(role);
+    };
+    UserPermission();
+  }, []);
 
   useEffect(() => {
     const hasLaravelSessionCookie = () => {
@@ -88,12 +85,14 @@ const dashboard: React.FC = () => {
             className={`flex flex-wrap justify-center h-full
             ${isFullScreen ? "gap-16" : "gap-4"}`}
           >
-            <NavLink
-              IconName={ManageAccountsIcon}
-              href="/attendances"
-              iconSrc="#"
-              label="スタッフ管理"
-            />
+            {role === "オーナー" && (
+              <NavLink
+                IconName={ManageAccountsIcon}
+                href="/attendances"
+                iconSrc="#"
+                label="スタッフ管理"
+              />
+            )}
             {/* <NavLink
               IconName={ManageAccountsIcon}
               href="/attendance_times"
@@ -142,24 +141,30 @@ const dashboard: React.FC = () => {
               iconSrc="#"
               label="髪型"
             />
-            <NavLink
-              IconName={CurrencyYenIcon}
-              href="/daily_sales"
-              iconSrc="#"
-              label="日次売上"
-            />
-            <NavLink
-              IconName={CurrencyYenIcon}
-              href="/monthly_sales"
-              iconSrc="#"
-              label="月次売上"
-            />
-            <NavLink
-              IconName={CurrencyYenIcon}
-              href="/yearly_sales"
-              iconSrc="#"
-              label="年次売上"
-            />
+            {role === "オーナー" && (
+              <NavLink
+                IconName={CurrencyYenIcon}
+                href="/daily_sales"
+                iconSrc="#"
+                label="日次売上"
+              />
+            )}
+            {role === "オーナー" && (
+              <NavLink
+                IconName={CurrencyYenIcon}
+                href="/monthly_sales"
+                iconSrc="#"
+                label="月次売上"
+              />
+            )}
+            {role === "オーナー" && (
+              <NavLink
+                IconName={CurrencyYenIcon}
+                href="/yearly_sales"
+                iconSrc="#"
+                label="年次売上"
+              />
+            )}
           </ul>
         </nav>
       </div>

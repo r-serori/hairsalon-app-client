@@ -9,6 +9,7 @@ interface ControlledCheckboxProps {
   checked: boolean;
   onChanger: (newValue: boolean) => void;
   label: string; // ラベルの追加
+  role?: string;
 }
 
 const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
@@ -16,6 +17,7 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
   checked,
   onChanger,
   label, // ラベルの追加
+  role,
 }) => {
   return (
     <FormControlLabel
@@ -28,7 +30,9 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
           }}
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}
-          disabled={type === "disabled" || type === "times"} // typeがdisabledの場合はユーザーが変更できないようにする
+          disabled={
+            type === "disabled" || type === "times" || role === "スタッフ"
+          } // typeがdisabledの場合はユーザーが変更できないようにする
         />
       }
       label={label} // ラベルを設定

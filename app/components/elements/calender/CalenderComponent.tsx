@@ -28,9 +28,10 @@ interface Event {
 
 interface OpenCalendarProps {
   events: Event[];
+  role: string;
 }
 
-const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
+const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -127,28 +128,30 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
             </div>
           )}
 
-          <div className="flex justify-start items-center mr-4 gap-4">
-            <SalesModal
-              showModal={DailySalesModal}
-              setShowModal={setDailySalesModal}
-              events={eventInputs}
-              whatSales="日次"
-            />
+          {role === "オーナー" && (
+            <div className="flex justify-start items-center mr-4 gap-4">
+              <SalesModal
+                showModal={DailySalesModal}
+                setShowModal={setDailySalesModal}
+                events={eventInputs}
+                whatSales="日次"
+              />
 
-            <SalesModal
-              showModal={monthlySalesModal}
-              setShowModal={setMonthlySalesModal}
-              events={eventInputs}
-              whatSales="月次"
-            />
+              <SalesModal
+                showModal={monthlySalesModal}
+                setShowModal={setMonthlySalesModal}
+                events={eventInputs}
+                whatSales="月次"
+              />
 
-            <SalesModal
-              showModal={yearlySalesModal}
-              setShowModal={setYearlySalesModal}
-              events={eventInputs}
-              whatSales="年次"
-            />
-          </div>
+              <SalesModal
+                showModal={yearlySalesModal}
+                setShowModal={setYearlySalesModal}
+                events={eventInputs}
+                whatSales="年次"
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -192,12 +195,20 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
             selectable: true, //カレンダーの時間をクリックした際にイベントを追加することができるように設定している
             selectMirror: true, //カレンダーの時間をクリックした際にイベントを追加する際にマウスで選択した時間を表示するかどうかを設定している
             dateClick: function (info) {
-              handleEventClick(info);
-              setWhoIsEvent("クリック");
+              if (role === "オーナー" || role === "マネージャー") {
+                handleEventClick(info);
+                setWhoIsEvent("クリック");
+              } else {
+                return;
+              }
             },
             select: function (info) {
-              handleEventClick(info);
-              setWhoIsEvent("選択");
+              if (role === "オーナー" || role === "マネージャー") {
+                handleEventClick(info);
+                setWhoIsEvent("選択");
+              } else {
+                return;
+              }
             },
             eventClick: function (info) {
               setWhoIsEvent("編集");
@@ -254,6 +265,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
           setWhoIsEvent={setWhoIsEvent}
           isCustomer={isCustomer}
           setIsCustomer={setIsCustomer}
+          role={role}
         />
       )}
       {showButtonModal && selectedEvent && whoIsEvent !== "編集" && (

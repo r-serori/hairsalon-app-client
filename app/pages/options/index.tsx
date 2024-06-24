@@ -6,10 +6,14 @@ import { getOption } from "../../store/options/optionSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const options: React.FC = () => {
-  UserPermission();
+  const router = useRouter();
+  const [role, setRole] = useState<string>("");
+
   const dispatch = useDispatch();
 
   const loading = useSelector((state: RootState) => state.option.loading);
@@ -22,7 +26,16 @@ const options: React.FC = () => {
   console.log(options);
 
   useEffect(() => {
-    if (options.length === 0) {
+    const role = localStorage.getItem("role");
+    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (
+      options.length === 0 &&
+      (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+    ) {
       const ownerId = Number(localStorage.getItem("owner_id"));
       dispatch(getOption(ownerId) as any);
     } else {
@@ -35,9 +48,18 @@ const options: React.FC = () => {
     { key: "price", value: "価格" },
   ];
 
-  const tHeaderItems = ["オプション名", "価格", "編集", "削除"];
+  const tHeaderItems =
+    role === "オーナー"
+      ? ["オプション名", "価格", "更新日", "編集", "削除"]
+      : role === "マネージャー"
+      ? ["オプション名", "価格", "更新日", "編集"]
+      : ["オプション名", "価格", "更新日"];
 
-  const nodesProps = [{ text: "option_name" }, { number: "price" }];
+  const nodesProps = [
+    { text: "option_name" },
+    { number: "price" },
+    { date: "updated_at" },
+  ];
 
   const nodes = options;
 
@@ -66,6 +88,7 @@ const options: React.FC = () => {
             tHeaderItems={tHeaderItems}
             link="/options"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

@@ -6,10 +6,13 @@ import { getMerchandise } from "../../store/merchandises/merchandiseSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const merchandises = () => {
-  UserPermission();
+  const router = useRouter();
+  const [role, setRole] = useState<string>("");
   const dispatch = useDispatch();
 
   const merchandises = useSelector(
@@ -18,7 +21,16 @@ const merchandises = () => {
   console.log(merchandises);
 
   useEffect(() => {
-    if (merchandises.length === 0) {
+    const role = localStorage.getItem("role");
+    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (
+      merchandises.length === 0 &&
+      (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+    ) {
       const ownerId = Number(localStorage.getItem("owner_id"));
       dispatch(getMerchandise(ownerId) as any);
     } else {
@@ -37,9 +49,18 @@ const merchandises = () => {
     { key: "price", value: "価格" },
   ];
 
-  const tHeaderItems = ["物販名", "価格", "編集", "削除"];
+  const tHeaderItems =
+    role === "オーナー"
+      ? ["物販名", "価格", "更新日", "編集", "削除"]
+      : role === "マネージャー"
+      ? ["物販名", "価格", "更新日", "編集"]
+      : ["物販名", "価格", "更新日"];
 
-  const nodesProps = [{ text: "merchandise_name" }, { number: "price" }];
+  const nodesProps = [
+    { text: "merchandise_name" },
+    { number: "price" },
+    { date: "updated_at" },
+  ];
 
   const nodes = merchandises;
 
@@ -67,6 +88,7 @@ const merchandises = () => {
             tHeaderItems={tHeaderItems}
             link="/merchandises"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

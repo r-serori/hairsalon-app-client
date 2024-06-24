@@ -5,10 +5,9 @@ import { updateOption, getOption } from "../../../../store/options/optionSlice";
 import { RootState } from "../../../../redux/store";
 import OptionForm from "../../../../components/elements/form/options/OptionForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../../components/Hooks/Permission";
 
 const optionEdit: React.FC = () => {
-  ManagerPermission();
+  const [role, setRole] = React.useState<string>("");
   const dispatch = useDispatch();
   const router = useRouter();
 

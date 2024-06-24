@@ -11,11 +11,10 @@ import { useState } from "react";
 import usePageReload from "../../../components/Hooks/usePageReload";
 import BasicAlerts from "../../../components/elements/alert/Alert";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import { OwnerPermission } from "../../../components/Hooks/Permission";
+import { OwnerPermission } from "../../../components/Hooks/OwnerPermission";
 
 const attendanceTimes: React.FC = () => {
   const [role, setRole] = useState<string>("");
-  OwnerPermission(setRole);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -24,8 +23,6 @@ const attendanceTimes: React.FC = () => {
   console.log({ id });
 
   // 初回のみデータ取得を行うためのフラグ
-  const [firstRender, setFirstRender] = useState(true);
-
   const [attendanceTimeOpen, setAttendanceTimeOpen] = useState(false);
 
   const loading = useSelector(
@@ -56,7 +53,13 @@ const attendanceTimes: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (attendanceTimes.length === 0 && id) {
+      const role = localStorage.getItem("role");
+      if (role === "オーナー") {
+        setRole(role);
+      } else {
+        router.push("/dashboard");
+      }
+      if (attendanceTimes.length === 0 && id && role === "オーナー") {
         setYearMonth("無し");
         dispatch(
           selectGetAttendanceTimes({
@@ -93,6 +96,7 @@ const attendanceTimes: React.FC = () => {
     "退勤時間と写真を編集",
     "削除",
   ];
+
   const nodesProps = [
     { string: "start_time" },
     { string: "start_photo_path" },
@@ -149,6 +153,7 @@ const attendanceTimes: React.FC = () => {
           tHeaderItems={tHeaderItems}
           link="/attendance_times"
           isLoading={loading}
+          role={role}
         />
       )}
     </div>

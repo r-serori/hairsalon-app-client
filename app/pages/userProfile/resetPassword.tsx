@@ -6,19 +6,29 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import ResetPasswordForm from "../../components/elements/form/userProfile/ResetPasswordForm";
 import { useEffect } from "react";
 import { useState } from "react";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
 
 const resetPasswordPage: React.FC = () => {
-  UserPermission();
+  const [role, setRole] = useState<string>("");
   const dispatch = useDispatch();
   const router = useRouter();
 
   const [user, setUser] = useState<any>();
 
   useEffect(() => {
-    const userId = Number(localStorage.getItem("user_id"));
-    const response = dispatch(showUser(userId) as any);
-    setUser(response.payload.responseUser);
+    const role = localStorage.getItem("role");
+    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (role === "オーナー" || role === "マネージャー" || role === "スタッフ") {
+      const userId = Number(localStorage.getItem("user_id"));
+      const response = dispatch(showUser(userId) as any);
+      setUser(response.payload.responseUser);
+    } else {
+      router.push("/");
+    }
   }, [user]);
 
   const isLoading = useSelector((state: RootState) => state.auth.loading);

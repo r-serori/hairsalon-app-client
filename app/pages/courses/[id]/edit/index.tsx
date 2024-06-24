@@ -5,12 +5,10 @@ import { updateCourse, getCourse } from "../../../../store/courses/courseSlice";
 import { RootState } from "../../../../redux/store";
 import CourseForm from "../../../../components/elements/form/courses/CourseForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../../components/Hooks/Permission";
+import { ManagerPermission } from "../../../../components/Hooks/ManagerPermission";
 import { useState } from "react";
 
 const courseEdit: React.FC = () => {
-  const [role, setRole] = useState<string>("");
-  ManagerPermission(setRole);
   const dispatch = useDispatch();
   const router = useRouter();
 

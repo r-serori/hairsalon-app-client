@@ -9,6 +9,7 @@ interface SingleCheckBoxProps {
   onChange: (newValue: string) => void;
   getOptions: string[];
   nodeId?: string;
+  role?: string;
 }
 
 const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
@@ -17,6 +18,7 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
   onChange,
   getOptions,
   nodeId,
+  role,
 }) => {
   // labelに応じてoptionsを設定
   let options = [];
@@ -45,6 +47,7 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
         value={value}
         onChange={(event, newValue) => onChange(newValue)} // オプションが選択されたときにonChangeを呼び出す
         renderInput={(params) => <TextField {...params} label={`${value}`} />}
+        disabled={role === "スタッフ" ? true : false}
       />
     </div>
   );

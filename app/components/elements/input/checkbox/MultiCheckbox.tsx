@@ -18,6 +18,7 @@ interface MultiCheckboxProps {
   optionName?: any;
   onChanger: (event: SelectChangeEvent<string[]>) => void;
   nodesProp: string;
+  role?: string;
 }
 
 const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
@@ -25,6 +26,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
   optionName,
   onChanger,
   nodesProp,
+  role,
 }) => {
   const names = [];
 
@@ -79,6 +81,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
         input={<OutlinedInput label={fieldName[0]} />}
         renderValue={(selected) => selected.join(", ")}
         MenuProps={MenuProps}
+        disabled={role === "スタッフ" ? true : false}
       >
         {names.map((name, index) => (
           <MenuItem key={index} value={name}>

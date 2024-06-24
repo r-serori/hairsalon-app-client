@@ -9,6 +9,7 @@ interface BasicTextFieldProps {
   type: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  role?: string;
 }
 
 const BasicTextField: React.FC<BasicTextFieldProps> = ({
@@ -17,6 +18,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
   type,
   onChange,
   disabled,
+  role,
 }) => {
   return (
     <Box
@@ -32,7 +34,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
         onChange={onChange}
         value={value}
         variant="outlined"
-        disabled={disabled ? true : false}
+        disabled={disabled || role === "スタッフ" ? true : false}
       />
     </Box>
   );

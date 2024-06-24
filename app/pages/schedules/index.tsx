@@ -13,7 +13,9 @@ import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 interface Schedule {
   year?: string;
@@ -21,14 +23,28 @@ interface Schedule {
 }
 
 const schedules: React.FC<Schedule> = ({ year, update }) => {
-  UserPermission();
+  const [role, setRole] = useState<string>("");
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const schedules = useSelector((state: RootState) => state.schedule.schedule);
 
   useEffect(() => {
     try {
-      if (schedules.length === 0) {
+      const role = localStorage.getItem("role");
+      if (
+        role === "スタッフ" ||
+        role === "マネージャー" ||
+        role === "オーナー"
+      ) {
+        setRole(role);
+      } else {
+        router.push("/dashboard");
+      }
+      if (
+        schedules.length === 0 &&
+        (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+      ) {
         const ownerId = Number(localStorage.getItem("owner_id"));
         dispatch(getSchedule(ownerId) as any);
       } else {
@@ -82,7 +98,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      {loading ? <p>loading...</p> : <MyCalendar events={events} />}
+      {loading ? <p>loading...</p> : <MyCalendar events={events} role={role} />}
     </div>
   );
 };

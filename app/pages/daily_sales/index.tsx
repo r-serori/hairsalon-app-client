@@ -7,17 +7,26 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { Router } from "next/router";
-import { OwnerPermission } from "../../components/Hooks/Permission";
+import { OwnerPermission } from "../../components/Hooks/OwnerPermission";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const daily_sales: React.FC = () => {
-  OwnerPermission();
+  const router = useRouter();
+  const [role, setRole] = useState<string>("");
   const dispatch = useDispatch();
 
   const daily_sales = useSelector(
     (state: RootState) => state.daily_sales.daily_sales
   );
   useEffect(() => {
-    if (daily_sales.length === 0) {
+    const role = localStorage.getItem("role");
+    if (role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (daily_sales.length === 0 && role === "オーナー") {
       const ownerId = Number(localStorage.getItem("owner_id"));
       dispatch(getDaily_sales(ownerId) as any);
     } else {
@@ -72,6 +81,7 @@ const daily_sales: React.FC = () => {
             tHeaderItems={tHeaderItems}
             link="/daily_sales"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

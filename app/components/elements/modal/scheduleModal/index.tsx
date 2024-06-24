@@ -62,6 +62,7 @@ interface ScheduleModalProps {
   setSelectedEvent: (value: any) => void;
   isCustomer: boolean;
   setIsCustomer: (value: boolean) => void;
+  role: string;
 }
 
 const ScheduleModal: React.FC<ScheduleModalProps> = ({
@@ -73,6 +74,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   setSelectedEvent,
   isCustomer,
   setIsCustomer,
+  role,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -104,6 +106,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
   // 担当者情報を取得
   const users = useSelector((state: RootState) => state.auth.auth);
+  console.log("userです", users);
 
   // 中間テーブルの情報を取得
   const course_customers = useSelector(
@@ -181,7 +184,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         .filter((hairstyle) => hairstyle.customers_id === customer.id)
         .map((hairstyle) => hairstyle.hairstyles_id);
 
-      console.log(customerHairstyles);
+      console.log("cusHair", customerHairstyles);
+
+      console.log("hairstylesだよ", hairstyles);
 
       const hairstyleNames = hairstyles
         .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
@@ -197,14 +202,15 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         .filter((user) => user.customers_id === customer.id)
         .map((user) => user.user_id);
 
-      console.log(customerUsers);
+      console.log("customerUsers", customerUsers);
+
+      console.log("users前", users);
 
       const userNames = users
         .filter((user) => customerUsers.includes(user.id))
         .map((user) => user.name);
 
-      console.log("userNamesだよ");
-      console.log(userNames);
+      console.log("userNames", userNames);
 
       // 顧客情報を返す
       return {
@@ -221,6 +227,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       };
     }),
   ];
+
+  console.log("nodes", nodes);
 
   // 顧客名のみを取得
   const customersNames = nodes.map((node) => node.customer_name);
@@ -571,7 +579,10 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         <Box sx={style} className="rounded-xl">
           {whoIsEvent === "編集" ? (
             <div className="flex justify-between items-center ml-2">
-              <DeleteMan id={Sid} link={"/schedules"} />
+              {role === "オーナー" ||
+                (role === "マネージャー" && (
+                  <DeleteMan id={Sid} link={"/schedules"} />
+                ))}
               <button
                 onClick={BackAgain}
                 className="md:w-auto text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-4 py-2 text-center cursor-pointer mr-2"
@@ -603,6 +614,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     value={startTime}
                     changer={startTimeChange}
                     isAllDay={allDay === 1 ? true : false}
+                    role={role}
                   />
                 </div>
                 <div className="flex justify-center items-center pt-6 gap-4">
@@ -611,6 +623,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     value={endTime}
                     changer={endTimeChange}
                     isAllDay={allDay === 1 ? true : false}
+                    role={role}
                   />
                 </div>
               </div>
@@ -624,11 +637,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       } `}
                     >
                       <ControlledCheckbox
-                        label="            現在の予約を編集"
+                        label="現在の予約を編集"
                         checked={newReservation ? true : false}
                         onChanger={(newValue) => {
                           setNewReservation(newValue ? true : false);
                         }}
+                        role={role}
                       />
                     </div>
                   )}
@@ -645,6 +659,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         onChanger={(newValue) => {
                           setNewReservation(newValue ? false : true);
                         }}
+                        role={role}
                       />
                     </div>
                   )}
@@ -669,6 +684,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                           }
                         }}
                         // type={!newCustomer ? "disabled" : ""}
+                        role={role}
                       />
                     </div>
                   )}
@@ -690,6 +706,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             changeCustomerState(initialCustomer.customer_name);
                           }
                         }}
+                        role={role}
                         // type={whoIsEvent === "編集" ? "disabled" : ""}
                       />
                     </div>
@@ -705,6 +722,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     placeholder="タイトル"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    role={role}
                   />
                 </div>
               )}
@@ -721,6 +739,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       nodeId={customerId + uniqueId}
                       getOptions={customersNames}
                       value={customerName}
+                      role={role}
                     />
                   </div>
                   <div className="pt-4 flex justify-center items-center ml-4 mr-4">
@@ -730,6 +749,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       placeholder="電話番号"
                       value={phone_number}
                       onChange={(e) => setPhoneNumber(e.target.value)}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -739,6 +759,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       placeholder="備考"
                       value={remarks}
                       onChange={(e) => setRemarks(e.target.value)}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -748,6 +769,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={courseNames}
                       onChanger={handleCourseChange}
                       getOptions={courses}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -757,6 +779,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={optionNames}
                       onChanger={handleOptionChange}
                       getOptions={options}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -766,6 +789,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={merchandiseNames}
                       onChanger={handleMerchandiseChange}
                       getOptions={merchandises}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -775,6 +799,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={hairstyleNames}
                       onChanger={handleHairstyleChange}
                       getOptions={hairstyles}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -784,6 +809,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={userNames}
                       onChanger={handleUserChange}
                       getOptions={users}
+                      role={role}
                     />
                   </div>
                 </div>
@@ -797,6 +823,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       placeholder="顧客名"
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
+                      role={role}
                     />
                   </div>
 
@@ -807,6 +834,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       placeholder="電話番号"
                       value={phone_number}
                       onChange={(e) => setPhoneNumber(e.target.value)}
+                      role={role}
                     />
                   </div>
 
@@ -817,6 +845,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       placeholder="備考"
                       value={remarks}
                       onChange={(e) => setRemarks(e.target.value)}
+                      role={role}
                     />
                   </div>
 
@@ -827,6 +856,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={courseNames}
                       onChanger={handleCourseChange}
                       getOptions={courses}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -836,6 +866,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={optionNames}
                       onChanger={handleOptionChange}
                       getOptions={options}
+                      role={role}
                     />
                   </div>
 
@@ -846,6 +877,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={merchandiseNames}
                       onChanger={handleMerchandiseChange}
                       getOptions={merchandises}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -855,6 +887,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={hairstyleNames}
                       onChanger={handleHairstyleChange}
                       getOptions={hairstyles}
+                      role={role}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -864,16 +897,19 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       optionName={userNames}
                       onChanger={handleUserChange}
                       getOptions={users}
+                      role={role}
                     />
                   </div>
                 </>
               )}
-
-              <div className="flex mt-6 justify-end items-center mr-2">
-                <PrimaryButton
-                  value={whoIsEvent === "編集" ? "更新" : "作成"}
-                />
-              </div>
+              {role === "オーナー" ||
+                (role === "マネージャー" && (
+                  <div className="flex mt-6 justify-end items-center mr-2">
+                    <PrimaryButton
+                      value={whoIsEvent === "編集" ? "更新" : "作成"}
+                    />
+                  </div>
+                ))}
             </form>
           </Typography>
           {/* モーダルの内容 */}

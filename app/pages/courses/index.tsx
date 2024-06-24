@@ -9,11 +9,10 @@ import usePageReload from "../../components/Hooks/usePageReload";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
 
 const courses: React.FC = () => {
   const [role, setRole] = useState<string>("");
-  UserPermission(setRole);
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -30,7 +29,20 @@ const courses: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (courses.length === 0) {
+      const role = localStorage.getItem("role");
+      if (
+        role === "スタッフ" ||
+        role === "マネージャー" ||
+        role === "オーナー"
+      ) {
+        setRole(role);
+      } else {
+        router.push("/dashboard");
+      }
+      if (
+        courses.length === 0 &&
+        (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+      ) {
         const ownerId = Number(localStorage.getItem("owner_id"));
         dispatch(getCourse(ownerId) as any);
       } else {
@@ -86,6 +98,7 @@ const courses: React.FC = () => {
             tHeaderItems={tHeaderItems}
             link="/courses"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

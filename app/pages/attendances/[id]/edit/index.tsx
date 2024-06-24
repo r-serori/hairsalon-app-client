@@ -13,11 +13,11 @@ import {
 import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import DeleteButton from "../../../../components/elements/button/DeleteButton";
 import { useState } from "react";
-import { OwnerPermission } from "../../../../components/Hooks/Permission";
+import { OwnerPermission } from "../../../../components/Hooks/OwnerPermission";
 
 const attenDanceEdit: React.FC = () => {
   const [role, setRole] = useState<string>("");
-  OwnerPermission(setRole);
+
   const dispatch = useDispatch();
 
   const loading = useSelector((state: RootState) => state.auth.loading);
@@ -34,8 +34,14 @@ const attenDanceEdit: React.FC = () => {
   const [dispatchLoading, setDispatchLoading] = useState<boolean>(false);
   useEffect(() => {
     setDispatchLoading(true);
+    const role = localStorage.getItem("role");
+    if (role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
     try {
-      if (!user) {
+      if (!user && role === "オーナー") {
         const response = dispatch(showUser(Number(id)) as any);
         user = response.payload.responseUser;
       } else {

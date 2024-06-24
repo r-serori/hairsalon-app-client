@@ -5,15 +5,19 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { getUsers } from "../../store/auth/authSlice";
-import { OwnerPermission } from "../../components/Hooks/Permission";
+import { OwnerPermission } from "../../components/Hooks/OwnerPermission";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const Attendances = () => {
+  const router = useRouter();
   const [role, setRole] = useState<string>("");
-  OwnerPermission(setRole);
+
+  const [firstRender, setFirstRender] = useState(true);
   const dispatch = useDispatch();
 
   const auth = useSelector((state: RootState) => state.auth.auth);
+  console.log("auth", auth.length);
 
   useEffect(() => {
     const getStaffs = async () => {
@@ -22,16 +26,32 @@ const Attendances = () => {
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
     };
+
     try {
+      const role = localStorage.getItem("role");
+      if (role === "オーナー") {
+        setRole(role);
+      } else {
+        router.push("/dashboard");
+      }
       const userCount = localStorage.getItem("userCount");
-      if (!userCount || auth.length < Number(userCount)) {
+      if (
+        (role === "オーナー" && !userCount) ||
+        (role === "オーナー" && userCount === undefined) ||
+        (role === "オーナー" && userCount === null) ||
+        (role === "オーナー" && userCount === "") ||
+        (role === "オーナー" && userCount === "undefined") ||
+        (auth.length < Number(userCount) && role === "オーナー" && firstRender)
+      ) {
         getStaffs();
       }
     } catch (error) {
       console.log("Error", error);
       return;
+    } finally {
+      setFirstRender(false);
     }
-  }, []);
+  }, [firstRender]);
 
   const loading = useSelector((state: RootState) => state.auth.loading);
 
@@ -100,6 +120,7 @@ const Attendances = () => {
             tHeaderItems={tHeaderItems}
             link="/attendances"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

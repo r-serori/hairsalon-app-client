@@ -7,20 +7,32 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { Router } from "next/router";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 interface CustomerProps {
   update?: boolean;
 }
 
 const customers: React.FC<CustomerProps> = ({ update }) => {
-  UserPermission();
+  const router = useRouter();
+  const [role, setRole] = useState<string>("");
   const dispatch = useDispatch();
 
   const customers = useSelector((state: RootState) => state.customer.customers);
 
   useEffect(() => {
-    if (customers.length === 0) {
+    const role = localStorage.getItem("role");
+    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (
+      customers.length === 0 &&
+      (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+    ) {
       const ownerId = Number(localStorage.getItem("owner_id"));
       dispatch(getCustomer(ownerId) as any);
     } else {
@@ -85,19 +97,45 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     { key: "names", value: "担当者名" },
   ];
 
-  const tHeaderItems = [
-    "顧客名",
-    "電話番号",
-    "備考",
-    "コース名",
-    "オプション名",
-    "商品名",
-    "ヘアスタイル名",
-    "担当者名",
-    "更新日",
-    "編集",
-    "削除",
-  ];
+  const tHeaderItems =
+    role === "オーナー"
+      ? [
+          "顧客名",
+          "電話番号",
+          "備考",
+          "コース名",
+          "オプション名",
+          "商品名",
+          "ヘアスタイル名",
+          "担当者名",
+          "更新日",
+          "編集",
+          "削除",
+        ]
+      : role === "マネージャー"
+      ? [
+          "顧客名",
+          "電話番号",
+          "備考",
+          "コース名",
+          "オプション名",
+          "商品名",
+          "ヘアスタイル名",
+          "担当者名",
+          "更新日",
+          "編集",
+        ]
+      : [
+          "顧客名",
+          "電話番号",
+          "備考",
+          "コース名",
+          "オプション名",
+          "商品名",
+          "ヘアスタイル名",
+          "担当者名",
+          "更新日",
+        ];
 
   const nodesProps = [
     { text: "customer_name" },
@@ -251,6 +289,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
             tHeaderItems={tHeaderItems}
             link="/customers"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

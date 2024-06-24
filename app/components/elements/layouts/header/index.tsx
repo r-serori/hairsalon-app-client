@@ -9,33 +9,12 @@ import { useRouter } from "next/router";
 import { isLogin } from "../../../../store/auth/isLoginSlice";
 import { useDispatch } from "react-redux";
 
-const navigation = [
-  { name: "一覧画面", href: "/dashboard", current: false },
-  { name: "スタッフ管理", href: "/attendances", current: false },
-  { name: "勤怠管理", href: "/attendanceTimeShots", current: false },
-  { name: "顧客管理", href: "/customers", current: false },
-  { name: "予約表", href: "/schedules", current: false },
-  { name: "在庫管理", href: "/stocks", current: false },
-  { name: "コース", href: "/courses", current: false },
-  { name: "オプション", href: "/options", current: false },
-  { name: "物販", href: "/merchandises", current: false },
-  { name: "髪型", href: "/hairstyles", current: false },
-  { name: "日次売上", href: "/daily_sales", current: false },
-  { name: "月次売上", href: "/monthly_sales", current: false },
-  { name: "年次売上", href: "/yearly_sales", current: false },
-];
-
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
+  const [role, setRole] = useState<string>("");
   const router = useRouter();
   const dispatch = useDispatch();
   const loginNow = useSelector((state: RootState) => state.loginNow.loginNow);
@@ -49,7 +28,45 @@ export default function Header() {
         router.push("/");
       }
     }
+    const UserPermission = () => {
+      const role = localStorage.getItem("role");
+      setRole(role);
+    };
+    UserPermission();
   }, [loginNow]);
+
+  const navigation =
+    role === "オーナー"
+      ? [
+          { name: "一覧画面", href: "/dashboard", current: false },
+          { name: "スタッフ管理", href: "/attendances", current: false },
+          { name: "勤怠管理", href: "/attendanceTimeShots", current: false },
+          { name: "顧客管理", href: "/customers", current: false },
+          { name: "予約表", href: "/schedules", current: false },
+          { name: "在庫管理", href: "/stocks", current: false },
+          { name: "コース", href: "/courses", current: false },
+          { name: "オプション", href: "/options", current: false },
+          { name: "物販", href: "/merchandises", current: false },
+          { name: "髪型", href: "/hairstyles", current: false },
+          { name: "日次売上", href: "/daily_sales", current: false },
+          { name: "月次売上", href: "/monthly_sales", current: false },
+          { name: "年次売上", href: "/yearly_sales", current: false },
+        ]
+      : [
+          { name: "一覧画面", href: "/dashboard", current: false },
+          { name: "勤怠管理", href: "/attendanceTimeShots", current: false },
+          { name: "顧客管理", href: "/customers", current: false },
+          { name: "予約表", href: "/schedules", current: false },
+          { name: "在庫管理", href: "/stocks", current: false },
+          { name: "コース", href: "/courses", current: false },
+          { name: "オプション", href: "/options", current: false },
+          { name: "物販", href: "/merchandises", current: false },
+          { name: "髪型", href: "/hairstyles", current: false },
+        ];
+
+  const userNavigation = [
+    { name: "Your Profile", href: "/userProfile/updateUserInformation" },
+  ];
 
   return (
     <>

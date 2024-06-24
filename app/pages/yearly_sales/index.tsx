@@ -8,16 +8,20 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { OwnerPermission } from "../../components/Hooks/Permission";
 
 const yearly_sales: React.FC = () => {
-  const role = localStorage.getItem("role");
-  OwnerPermission();
+  const [role, setRole] = useState<string>("");
   const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    if (yearly_sales.length === 0) {
+    const role = localStorage.getItem("role");
+    if (role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (yearly_sales.length === 0 && role === "オーナー") {
       const ownerId = Number(localStorage.getItem("owner_id"));
       dispatch(getYearly_sales(ownerId) as any);
     } else {
@@ -75,6 +79,7 @@ const yearly_sales: React.FC = () => {
             tHeaderItems={tHeaderItems}
             link="/yearly_sales"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

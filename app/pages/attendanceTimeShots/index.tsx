@@ -6,11 +6,13 @@ import { useEffect } from "react";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { getAttendanceUsers } from "../../store/auth/authSlice";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
+import { useRouter } from "next/router";
 
 const AttendanceTimeShots = () => {
-  const [role, setRole] = useState<string>("");
-  UserPermission(setRole);
+  const [role, setRole] = useState(null);
+  const router = useRouter();
+
   const dispatch = useDispatch();
 
   const users = useSelector((state: RootState) => state.auth.auth);
@@ -19,8 +21,28 @@ const AttendanceTimeShots = () => {
 
   useEffect(() => {
     try {
+      const role = localStorage.getItem("role");
+      if (
+        role === "スタッフ" ||
+        role === "マネージャー" ||
+        role === "オーナー"
+      ) {
+        setRole(role);
+      } else {
+        router.push("/dashboard");
+      }
+
       const ownerId = Number(localStorage.getItem("owner_id"));
-      dispatch(getAttendanceUsers(ownerId) as any);
+      console.log("role", role);
+      if (
+        role === "オーナー" ||
+        role === "マネージャー" ||
+        role === "スタッフ"
+      ) {
+        dispatch(getAttendanceUsers(ownerId) as any);
+      } else {
+        return;
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -91,6 +113,7 @@ const AttendanceTimeShots = () => {
             nodesProps={nodesProps}
             link="/attendanceTimeShots"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

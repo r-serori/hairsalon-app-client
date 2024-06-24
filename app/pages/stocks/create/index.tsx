@@ -5,10 +5,9 @@ import { RootState } from "../../../redux/store";
 import StockForm from "../../../components/elements/form/stocks/StockForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../components/Hooks/Permission";
+import { ManagerPermission } from "../../../components/Hooks/ManagerPermission";
 
 const stockCreate: React.FC = () => {
-  ManagerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

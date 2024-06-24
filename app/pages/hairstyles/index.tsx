@@ -6,10 +6,13 @@ import { getHairstyle } from "../../store/hairstyles/hairstyleSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const hairstyles: React.FC = () => {
-  UserPermission();
+  const router = useRouter();
+  const [role, setRole] = useState<string>("");
   const dispatch = useDispatch();
 
   const hairstyles = useSelector(
@@ -18,7 +21,16 @@ const hairstyles: React.FC = () => {
   console.log(hairstyles);
 
   useEffect(() => {
-    if (hairstyles.length === 0) {
+    const role = localStorage.getItem("role");
+    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (
+      hairstyles.length === 0 &&
+      (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+    ) {
       const ownerId = Number(localStorage.getItem("owner_id"));
       dispatch(getHairstyle(ownerId) as any);
     } else {
@@ -34,9 +46,14 @@ const hairstyles: React.FC = () => {
 
   const searchItems = [{ key: "hairstyle_name", value: "髪型" }];
 
-  const tHeaderItems = ["髪型", "編集", "削除"];
+  const tHeaderItems =
+    role === "オーナー"
+      ? ["髪型", "更新日", "編集", "削除"]
+      : role === "マネージャー"
+      ? ["髪型", "更新日", "編集"]
+      : ["髪型", "更新日"];
 
-  const nodesProps = [{ text: "hairstyle_name" }];
+  const nodesProps = [{ text: "hairstyle_name" }, { date: "updated_at" }];
 
   const nodes = hairstyles;
   return (
@@ -63,6 +80,7 @@ const hairstyles: React.FC = () => {
             tHeaderItems={tHeaderItems}
             link="/hairstyles"
             isLoading={loading}
+            role={role}
           />
         )}
       </div>

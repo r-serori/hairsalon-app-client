@@ -8,10 +8,9 @@ import { RootState } from "../../../redux/store";
 import MerchandiseForm from "../../../components/elements/form/merchandises/MerchandiseForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../components/Hooks/Permission";
+import { ManagerPermission } from "../../../components/Hooks/ManagerPermission";
 
 const merchandiseCreate: React.FC = () => {
-  ManagerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

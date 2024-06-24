@@ -7,10 +7,14 @@ import { getStockCategory } from "../../store/stocks/stock_categories/stock_cate
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/Permission";
+import { UserPermission } from "../../components/Hooks/UserPermission";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const stocks: React.FC = () => {
-  UserPermission();
+  const router = useRouter();
+  const [role, setRole] = useState<string>("");
+
   const dispatch = useDispatch();
 
   const stocks = useSelector((state: RootState) => state.stock.stocks);
@@ -23,7 +27,20 @@ const stocks: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (stocks.length === 0) {
+      const role = localStorage.getItem("role");
+      if (
+        role === "スタッフ" ||
+        role === "マネージャー" ||
+        role === "オーナー"
+      ) {
+        setRole(role);
+      } else {
+        router.push("/dashboard");
+      }
+      if (
+        stocks.length === 0 &&
+        (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+      ) {
         const ownerId = Number(localStorage.getItem("owner_id"));
         dispatch(getStock(ownerId) as any);
         dispatch(getStockCategory(ownerId) as any);
@@ -59,18 +76,42 @@ const stocks: React.FC = () => {
 
   //コースカテゴリをとってきて、nosesPropsに追加する
 
-  const tHeaderItems = [
-    "在庫カテゴリ",
-    "商品名",
-    "価格",
-    "在庫数量",
-    "備考",
-    "仕入れ先",
-    "通知",
-    "更新日",
-    "編集",
-    "削除",
-  ];
+  const tHeaderItems =
+    role === "オーナー"
+      ? [
+          "在庫カテゴリ",
+          "商品名",
+          "価格",
+          "在庫数量",
+          "備考",
+          "仕入れ先",
+          "通知",
+          "更新日",
+          "編集",
+          "削除",
+        ]
+      : role === "マネージャー"
+      ? [
+          "在庫カテゴリ",
+          "商品名",
+          "価格",
+          "在庫数量",
+          "備考",
+          "仕入れ先",
+          "通知",
+          "更新日",
+          "編集",
+        ]
+      : [
+          "在庫カテゴリ",
+          "商品名",
+          "価格",
+          "在庫数量",
+          "備考",
+          "仕入れ先",
+          "通知",
+          "更新日",
+        ];
 
   const nodesProps = [
     { text: "category_name" },
@@ -126,6 +167,7 @@ const stocks: React.FC = () => {
           tHeaderItems={tHeaderItems}
           link="/stocks"
           isLoading={loading}
+          role={role}
         />
       ) : (
         <p>Loading...</p>

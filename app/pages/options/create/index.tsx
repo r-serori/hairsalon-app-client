@@ -5,11 +5,11 @@ import { RootState } from "../../../redux/store";
 import OptionForm from "../../../components/elements/form/options/OptionForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../components/Hooks/Permission";
+import { ManagerPermission } from "../../../components/Hooks/ManagerPermission";
 
 const optionCreate: React.FC = () => {
-  ManagerPermission();
   const dispatch = useDispatch();
+
   const router = useRouter();
 
   const loading = useSelector((state: RootState) => state.option.loading);
