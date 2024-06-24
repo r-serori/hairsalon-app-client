@@ -20,6 +20,18 @@ const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const router = useRouter();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("user_id") ? true : false;
+    setIsLoggedIn(loggedIn);
+
+    // if (!loggedIn) {
+    //   router.push("/");
+    //   setIsLoggedIn(false);
+    // }
+  }, [isLoggedIn]);
+
   useEffect(() => {
     const hasLaravelSessionCookie = () => {
       // ブラウザのCookieからlaravel_session Cookieを取得する

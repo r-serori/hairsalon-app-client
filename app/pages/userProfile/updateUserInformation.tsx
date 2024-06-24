@@ -4,8 +4,12 @@ import { updateUser } from "../../store/auth/authSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import UpdateInformationForm from "../../components/elements/form/userProfile/UpdateInformationForm";
+import { useEffect } from "react";
+import { useState } from "react";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const UpdateUserInformationPage: React.FC = () => {
+  UserPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

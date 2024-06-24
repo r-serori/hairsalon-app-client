@@ -7,8 +7,10 @@ import { getStockCategory } from "../../store/stocks/stock_categories/stock_cate
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const stocks: React.FC = () => {
+  UserPermission();
   const dispatch = useDispatch();
 
   const stocks = useSelector((state: RootState) => state.stock.stocks);

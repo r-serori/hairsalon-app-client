@@ -6,8 +6,11 @@ import { useEffect } from "react";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { getAttendanceUsers } from "../../store/auth/authSlice";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const AttendanceTimeShots = () => {
+  const [role, setRole] = useState<string>("");
+  UserPermission(setRole);
   const dispatch = useDispatch();
 
   const users = useSelector((state: RootState) => state.auth.auth);
@@ -45,13 +48,14 @@ const AttendanceTimeShots = () => {
 
   const tHeaderItems = ["名前", "勤務中？", "出勤", "退勤"];
 
-  const nodesProps = [{ text: "shotUserName" }, { text: "isAttendance" }];
+  const nodesProps = [{ text: "shotUserName" }, { text: "attendanceNow" }];
 
   const nodes = users.map((user) => {
     return {
       id: user.id,
       shotUserName: user.name,
-      isAttendance: user.isAttendance ? "勤務中" : "退勤中",
+      attendanceNow: user.isAttendance ? "勤務中" : "退勤中",
+      isAttendance: user.isAttendance,
     };
   });
   console.log("nodes", nodes);

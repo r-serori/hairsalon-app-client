@@ -65,26 +65,26 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const loading = useSelector((state: RootState) => state.auth.loading);
 
   //ボタンを押したユーザーの情報を取得
-  const user = useSelector((state: RootState) =>
-    state.auth.auth.find((user) => user.id === Number(node.id))
-  );
-  console.log(user);
+  const user = useSelector((state: RootState) => {
+    const userId = link === "/attendanceTimeShots" ? node.id : node.user_id;
+    return state.auth.auth.find((user) => user.id === Number(userId));
+  });
+  console.log("user", user);
 
   // 編集する時のユーザーが持っている出勤時間、退勤時間の情報を取得
   const attendanceTime = useSelector((state: RootState) => {
-    if (state.attendance_time.attendance_times) {
-      const myAttendanceTimes = state.attendance_time.attendance_times.filter(
-        (attendance_time) => attendance_time.user_id === Number(node.id)
-      );
-      myAttendanceTimes.reduce((latest, current) => {
-        const latestTime = dayjs(latest.start_time).utc().tz("Asia/Tokyo");
-        const currentTime = dayjs(current.start_time).utc().tz("Asia/Tokyo");
-
-        return latestTime.isAfter(currentTime) ? latest : current;
-      }, myAttendanceTimes[0]);
-      return myAttendanceTimes[0];
+    const userAttendanceTimes = state.attendance_time.attendance_times.filter(
+      (time) => time.user_id === node.user_id
+    );
+    if (userAttendanceTimes.length > 0) {
+      const latestAttendanceTime =
+        userAttendanceTimes[userAttendanceTimes.length - 1];
+      return latestAttendanceTime;
     }
+
+    return null;
   });
+
   console.log("attendanceTime", attendanceTime);
 
   //出勤中か退勤中かの判定
@@ -106,7 +106,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       : false
   );
   console.log("notEdit", notEdit);
-  console.log("node.start_time", attendanceTime.start_time);
+  // console.log("node.start_time", attendanceTime.start_time);
 
   //出勤する時に、昨日の退勤時間が登録されていない時　true　編集依頼を出すため
   const [lateTime, setLateTime] = useState(

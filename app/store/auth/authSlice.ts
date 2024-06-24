@@ -450,7 +450,7 @@ const authSlice = createSlice({
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.loading = false;
-      state.auth = action.payload.responseUsers;
+      state.auth = [...state.auth, ...action.payload.responseUsers];
       state.message = action.payload.message;
     });
 

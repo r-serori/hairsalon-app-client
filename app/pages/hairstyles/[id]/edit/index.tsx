@@ -10,8 +10,10 @@ import { RootState } from "../../../../redux/store";
 import HairstyleForm from "../../../../components/elements/form/hairstyles/HairstyleForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import RouterButton from "../../../../components/elements/button/RouterButton";
+import { ManagerPermission } from "../../../../components/Hooks/Permission";
 
 const hairstyleEdit: React.FC = () => {
+  ManagerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

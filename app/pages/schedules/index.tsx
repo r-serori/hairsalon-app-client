@@ -13,6 +13,7 @@ import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 interface Schedule {
   year?: string;
@@ -20,6 +21,7 @@ interface Schedule {
 }
 
 const schedules: React.FC<Schedule> = ({ year, update }) => {
+  UserPermission();
   const dispatch = useDispatch();
 
   const schedules = useSelector((state: RootState) => state.schedule.schedule);

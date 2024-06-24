@@ -9,8 +9,10 @@ import HairstyleForm from "../../../components/elements/form/hairstyles/Hairstyl
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import RouterButton from "../../../components/elements/button/RouterButton";
+import { ManagerPermission } from "../../../components/Hooks/Permission";
 
 const hairstyleCreate = () => {
+  ManagerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

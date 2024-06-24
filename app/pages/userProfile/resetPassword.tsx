@@ -6,14 +6,18 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import ResetPasswordForm from "../../components/elements/form/userProfile/ResetPasswordForm";
 import { useEffect } from "react";
 import { useState } from "react";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const resetPasswordPage: React.FC = () => {
+  UserPermission();
   const dispatch = useDispatch();
   const router = useRouter();
+
   const [user, setUser] = useState<any>();
 
   useEffect(() => {
-    const response = dispatch(showUser({}) as any);
+    const userId = Number(localStorage.getItem("user_id"));
+    const response = dispatch(showUser(userId) as any);
     setUser(response.payload.responseUser);
   }, [user]);
 

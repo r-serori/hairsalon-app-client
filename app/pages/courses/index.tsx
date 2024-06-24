@@ -9,8 +9,11 @@ import usePageReload from "../../components/Hooks/usePageReload";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const courses: React.FC = () => {
+  const [role, setRole] = useState<string>("");
+  UserPermission(setRole);
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -45,7 +48,12 @@ const courses: React.FC = () => {
     { key: "price", value: "価格" },
   ];
 
-  const tHeaderItems = ["コース名", "価格", "更新日", "編集", "削除"];
+  const tHeaderItems =
+    role === "オーナー"
+      ? ["コース名", "価格", "更新日", "編集", "削除"]
+      : role === "マネージャー"
+      ? ["コース名", "価格", "更新日", "編集"]
+      : ["コース名", "価格", "更新日"];
 
   const nodesProps = [
     { text: "course_name" },

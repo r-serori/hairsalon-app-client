@@ -8,8 +8,10 @@ import {
 import { RootState } from "../../../../redux/store";
 import StockCategoryForm from "../../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import { ManagerPermission } from "../../../../components/Hooks/Permission";
 
 const stockCategoryEdit: React.FC = () => {
+  ManagerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

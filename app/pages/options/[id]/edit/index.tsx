@@ -1,16 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import {
-  updateOption,
-  getOptionById,
-  getOption,
-} from "../../../../store/options/optionSlice";
+import { updateOption, getOption } from "../../../../store/options/optionSlice";
 import { RootState } from "../../../../redux/store";
 import OptionForm from "../../../../components/elements/form/options/OptionForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import { ManagerPermission } from "../../../../components/Hooks/Permission";
 
 const optionEdit: React.FC = () => {
+  ManagerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

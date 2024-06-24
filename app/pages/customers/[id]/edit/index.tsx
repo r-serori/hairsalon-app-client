@@ -8,8 +8,10 @@ import {
 import { RootState } from "../../../../redux/store";
 import CustomerForm from "../../../../components/elements/form/customers/CustomerForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import { ManagerPermission } from "../../../../components/Hooks/Permission";
 
 const customersEdit: React.FC = () => {
+  ManagerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

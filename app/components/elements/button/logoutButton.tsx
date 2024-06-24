@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { logout } from "../../../store/auth/authSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { isLogout } from "../../../store/auth/isLoginSlice";
 
 interface LogoutProps {
   className?: string;
@@ -42,6 +43,8 @@ const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
         localStorage.removeItem("owner_id");
         localStorage.removeItem("user_id");
         localStorage.removeItem("role");
+        localStorage.removeItem("isLogin");
+        dispatch(isLogout());
         console.log("responseindex", response);
         router.push("/auth/login");
       } catch (error) {

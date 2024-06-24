@@ -49,11 +49,11 @@ import yearly_salesReducer, {
 import authReducer from "../../store/auth/authSlice";
 import ownerReducer from "../../store/auth/ownerSlice";
 import staffReducer from "../../store/auth/staffSlice";
-
-// 他のリデューサーをインポートする
+import { loginNowReducer } from "../../store/auth/isLoginSlice";
 
 // 他のリデューサーをインポートする
 const rootReducer = combineReducers({
+  loginNow: loginNowReducer,
   auth: authReducer,
   owner: ownerReducer,
   staff: staffReducer,

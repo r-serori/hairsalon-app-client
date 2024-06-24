@@ -215,10 +215,10 @@ const ComponentTable = ({
 
                       const propProp = nodesProp[propName];
 
-                      const imgUrl = "http://localhost:8000/";
+                      const imgUrl = "http://localhost:8000/storage/";
 
-                      // const imgDecode = decodeURIComponent(propValue);
-                      // console.log("imgDecodeだよ", imgDecode);
+                      const imgDecode = decodeURIComponent(propValue);
+                      console.log("imgDecodeだよ", imgDecode);
 
                       if (
                         propProp === "created_at" ||
@@ -254,7 +254,7 @@ const ComponentTable = ({
                         propProp === "year" ||
                         propProp === "yearly_sales" ||
                         propProp === "shotUserName" ||
-                        propProp === "isAttendance" ||
+                        propProp === "attendanceNow" ||
                         propProp === "name" ||
                         propProp === "staff_phone_number" ||
                         propProp === "role"
@@ -365,7 +365,7 @@ const ComponentTable = ({
                           whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                         }}
                       >
-                        {node.isAttendance === "勤務中" ? (
+                        {node.attendanceNow === "勤務中" ? (
                           <div className="w-full y-full p-4 ">
                             今日も１日頑張りましょう！！
                           </div>
@@ -404,7 +404,7 @@ const ComponentTable = ({
                           whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
                         }}
                       >
-                        {node.isAttendance === "退勤中" ? (
+                        {node.attendanceNow === "退勤中" ? (
                           <div className="w-full y-full p-4  ">
                             今日も１日お疲れ様でした！！
                           </div>

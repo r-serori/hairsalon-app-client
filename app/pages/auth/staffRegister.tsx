@@ -5,8 +5,10 @@ import { staffRegister } from "../../store/auth/authSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { OwnerPermission } from "../../components/Hooks/Permission";
 
 const StaffRegisterPage: React.FC = () => {
+  OwnerPermission();
   const dispatch = useDispatch();
   const router = useRouter();
 

@@ -7,9 +7,12 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { Router } from "next/router";
+import { OwnerPermission } from "../../components/Hooks/Permission";
 
 const daily_sales: React.FC = () => {
+  OwnerPermission();
   const dispatch = useDispatch();
+
   const daily_sales = useSelector(
     (state: RootState) => state.daily_sales.daily_sales
   );

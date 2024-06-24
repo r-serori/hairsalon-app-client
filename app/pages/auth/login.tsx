@@ -5,6 +5,7 @@ import { RootState } from "../../redux/store";
 import { login } from "../../store/auth/authSlice";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { useState } from "react";
+import { isLogin } from "../../store/auth/isLoginSlice";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -54,10 +55,14 @@ const LoginPage: React.FC = () => {
         localStorage.setItem("user_id", userId);
         localStorage.setItem("owner_id", ownerId);
         localStorage.setItem("role", role);
+        localStorage.setItem("isLogin", "true");
+        dispatch(isLogin());
         router.push("/dashboard");
       } else if (ownerId === null) {
         localStorage.setItem("user_id", userId);
         localStorage.setItem("role", role);
+        localStorage.setItem("isLogin", "true");
+        dispatch(isLogin());
         router.push("/auth/owner");
       } else {
         throw new Error("ログイン処理に失敗しました！");

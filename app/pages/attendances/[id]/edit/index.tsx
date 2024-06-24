@@ -13,9 +13,13 @@ import {
 import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import DeleteButton from "../../../../components/elements/button/DeleteButton";
 import { useState } from "react";
+import { OwnerPermission } from "../../../../components/Hooks/Permission";
 
 const attenDanceEdit: React.FC = () => {
+  const [role, setRole] = useState<string>("");
+  OwnerPermission(setRole);
   const dispatch = useDispatch();
+
   const loading = useSelector((state: RootState) => state.auth.loading);
   const router = useRouter();
 

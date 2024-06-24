@@ -6,8 +6,12 @@ import CourseForm from "../../../components/elements/form/courses/CourseForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import RouterButton from "../../../components/elements/button/RouterButton";
+import { ManagerPermission } from "../../../components/Hooks/Permission";
+import { useState } from "react";
 
 const courseCreate: React.FC = () => {
+  const [role, setRole] = useState<string>("");
+  ManagerPermission(setRole);
   const dispatch = useDispatch();
   const router = useRouter();
 

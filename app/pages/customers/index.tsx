@@ -7,12 +7,14 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { Router } from "next/router";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 interface CustomerProps {
   update?: boolean;
 }
 
 const customers: React.FC<CustomerProps> = ({ update }) => {
+  UserPermission();
   const dispatch = useDispatch();
 
   const customers = useSelector((state: RootState) => state.customer.customers);

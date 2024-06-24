@@ -6,9 +6,12 @@ import { getOption } from "../../store/options/optionSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const options: React.FC = () => {
+  UserPermission();
   const dispatch = useDispatch();
+
   const loading = useSelector((state: RootState) => state.option.loading);
 
   const message = useSelector((state: RootState) => state.option.message);

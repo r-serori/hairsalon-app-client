@@ -6,9 +6,15 @@ import { getYearly_sales } from "../../store/sales/yearly_sales/yearly_saleSlice
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { OwnerPermission } from "../../components/Hooks/Permission";
 
 const yearly_sales: React.FC = () => {
+  const role = localStorage.getItem("role");
+  OwnerPermission();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     if (yearly_sales.length === 0) {

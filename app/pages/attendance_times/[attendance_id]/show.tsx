@@ -11,8 +11,11 @@ import { useState } from "react";
 import usePageReload from "../../../components/Hooks/usePageReload";
 import BasicAlerts from "../../../components/elements/alert/Alert";
 import RouterButton from "../../../components/elements/button/RouterButton";
+import { OwnerPermission } from "../../../components/Hooks/Permission";
 
 const attendanceTimes: React.FC = () => {
+  const [role, setRole] = useState<string>("");
+  OwnerPermission(setRole);
   const dispatch = useDispatch();
   const router = useRouter();
 

@@ -6,8 +6,10 @@ import { getMerchandise } from "../../store/merchandises/merchandiseSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const merchandises = () => {
+  UserPermission();
   const dispatch = useDispatch();
 
   const merchandises = useSelector(

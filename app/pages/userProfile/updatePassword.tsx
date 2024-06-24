@@ -6,14 +6,18 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import UpdatePasswordForm from "../../components/elements/form/userProfile/UpdatePasswordForm";
 import { useEffect } from "react";
 import { useState } from "react";
+import { UserPermission } from "../../components/Hooks/Permission";
 
 const updatePasswordPage: React.FC = () => {
+  UserPermission();
   const dispatch = useDispatch();
   const router = useRouter();
+
   const [user, setUser] = useState<any>();
 
   useEffect(() => {
-    const response = dispatch(showUser({}) as any);
+    const userId = Number(localStorage.getItem("user_id"));
+    const response = dispatch(showUser(userId) as any);
     setUser(response.payload.responseUser);
   }, [user]);
 

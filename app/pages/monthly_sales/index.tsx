@@ -6,8 +6,10 @@ import { getMonthly_sales } from "../../store/sales/monthly_sales/monthly_saleSl
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { OwnerPermission } from "../../components/Hooks/Permission";
 
 const monthly_sales: React.FC = () => {
+  OwnerPermission();
   const dispatch = useDispatch();
 
   const monthly_sales = useSelector(
