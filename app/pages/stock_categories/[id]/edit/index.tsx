@@ -15,7 +15,7 @@ const stockCategoryEdit: React.FC = () => {
   const router = useRouter();
 
   const loading = useSelector(
-    (state: RootState) => state.stock_category.loading
+    (state: RootState) => state.stock_category.status
   );
 
   const { id } = router.query; // idを取得
@@ -47,7 +47,7 @@ const stockCategoryEdit: React.FC = () => {
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/stock_categories"} />
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <StockCategoryForm

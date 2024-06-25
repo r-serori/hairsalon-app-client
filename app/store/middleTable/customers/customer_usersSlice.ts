@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { customerUserApi } from "../../../services/middleTable/customers/customer_usersApi";
+// import { customerUserApi } from "../../../services/middleTable/customers/customer_usersApi";
 import RootState from "../../../redux/reducers/rootReducer";
 import {
   getCustomer,
@@ -13,37 +13,37 @@ import {
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
 
-export const getCustomer_users = createAsyncThunk(
-  "customer_users/getCustomer_users",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await customerUserApi.fetchAllCustomerUsers();
+// export const getCustomer_users = createAsyncThunk(
+//   "customer_users/getCustomer_users",
+//   async (formData: {}, { rejectWithValue }) => {
+//     try {
+//       const response: any = await customerUserApi.fetchAllCustomerUsers();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
-    } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
-    }
-  }
-);
+//       if (response.status >= 200 && response.status < 300) {
+//         // 成功時の処理
+//         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//         return response.data; // response.dataを返すことで、必要なデータのみを返す
+//       } else if (response.status >= 400 && response.status < 500) {
+//         // クライアントエラー時の処理
+//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+//       } else if (response.status >= 500) {
+//         // サーバーエラー時の処理
+//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+//       } else {
+//         return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+//       }
+//     } catch (err) {
+//       console.log("errだよ", err);
+//       return rejectWithValue(
+//         err.response
+//           ? err.response.data
+//           : { message: "予期しないエラーが発生しました" }
+//       );
+//     }
+//   }
+// );
 
 export interface Customer_usersState {
   // ステートの型

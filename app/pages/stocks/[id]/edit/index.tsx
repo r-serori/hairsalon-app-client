@@ -15,7 +15,7 @@ const stockEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.stock.loading);
+  const loading = useSelector((state: RootState) => state.stock.status);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -52,7 +52,7 @@ const stockEdit: React.FC = () => {
   return (
     <div className="min-h-full">
       <BackAgainButton link={"/stocks"} />
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <StockForm node={stocks} createStock={handleUpdate} edit={true} />

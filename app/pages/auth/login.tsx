@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isLoading = useSelector((state: RootState) => state.auth.loading);
+  const isLoading = useSelector((state: RootState) => state.auth.status);
 
   const message = useSelector((state: RootState) => state.auth.message);
 
@@ -52,17 +52,18 @@ const LoginPage: React.FC = () => {
       const ownerId = response.payload.responseOwnerId;
       const role = response.payload.responseUser.role;
       if (ownerId) {
+        dispatch(isLogin());
         localStorage.setItem("user_id", userId);
         localStorage.setItem("owner_id", ownerId);
         localStorage.setItem("role", role);
         localStorage.setItem("isLogin", "true");
-        dispatch(isLogin());
         router.push("/dashboard");
       } else if (ownerId === null) {
+        dispatch(isLogin());
         localStorage.setItem("user_id", userId);
         localStorage.setItem("role", role);
         localStorage.setItem("isLogin", "true");
-        dispatch(isLogin());
+
         router.push("/auth/owner");
       } else {
         throw new Error("ログイン処理に失敗しました！");
@@ -82,7 +83,7 @@ const LoginPage: React.FC = () => {
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
 
-      {isLoading ? (
+      {isLoading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <div>

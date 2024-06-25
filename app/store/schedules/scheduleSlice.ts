@@ -15,8 +15,24 @@ export const getSchedule = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -47,8 +63,24 @@ export const selectGetSchedules = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -88,8 +120,24 @@ export const createSchedule = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -139,8 +187,24 @@ export const createCustomerAndSchedule = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -205,8 +269,24 @@ export const updateSchedule = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -258,8 +338,24 @@ export const updateCustomerAndSchedule = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -276,6 +372,7 @@ export const updateCustomerAndSchedule = createAsyncThunk(
     }
   }
 );
+
 export const updateCustomerAndScheduleCreate = createAsyncThunk(
   "schedule/customer/updateCustomerAndScheduleCreate",
   async (
@@ -309,8 +406,24 @@ export const updateCustomerAndScheduleCreate = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -341,8 +454,24 @@ export const deleteSchedule = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -375,7 +504,7 @@ export interface ScheduleState {
 
 export interface RootState {
   schedule: ScheduleState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
 }
@@ -383,7 +512,7 @@ export interface RootState {
 const initialState: RootState = {
   // 初期状態
   schedule: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -395,76 +524,76 @@ const scheduleSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getSchedule.pending, (state) => {
-        state.loading = true;
+        state.status = "success";
         state.message = null;
         state.error = null;
       })
       .addCase(getSchedule.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.schedule = [...state.schedule, ...action.payload.schedules];
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールの取得に成功しました！";
       })
       .addCase(getSchedule.rejected, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.error = (action.payload as any).message;
       })
       .addCase(createSchedule.pending, (state) => {
-        state.loading = true;
+        state.status = "success";
         state.message = null;
         state.error = null;
       })
       .addCase(createSchedule.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.schedule = [...state.schedule, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールの作成に成功しました！";
       })
       .addCase(createSchedule.rejected, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.error = (action.payload as any).message;
       })
       .addCase(createCustomerAndSchedule.pending, (state) => {
-        state.loading = true;
+        state.status = "success";
         state.message = null;
         state.error = null;
       })
       .addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.schedule = [...state.schedule, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールと顧客情報の作成に成功しました！";
       })
       .addCase(createCustomerAndSchedule.rejected, (state, action) => {
-        state.loading = false;
+        state.status = "failed";
         state.error = (action.payload as any).message;
       })
       // .addCase(getScheduleById.pending, (state) => {
-      //   state.loading = true;
+      //   state.status = "success";
       //   state.message = null;
       //   state.error = null;
       // })
       // .addCase(getScheduleById.fulfilled, (state, action) => {
-      //   state.loading = false;
+      //   state.status = "success";
       //   state.schedule = [...state.schedule, action.payload.schedule];
       //   state.message = action.payload.message
       //     ? action.payload.message
       //     : "スケジュールの取得に成功しました！";
       // })
       // .addCase(getScheduleById.rejected, (state, action) => {
-      //   state.loading = false;
+      //   state.status = "failed";
       //   state.error = (action.payload as any).message;;
       // })
       .addCase(updateSchedule.pending, (state) => {
-        state.loading = true;
+        state.status = "success";
         state.message = null;
         state.error = null;
       })
       .addCase(updateSchedule.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.schedule = state.schedule.map((schedule) =>
           schedule.id === action.payload.schedule.id
             ? {
@@ -478,16 +607,16 @@ const scheduleSlice = createSlice({
           : "スケジュールの更新に成功しました！";
       })
       .addCase(updateSchedule.rejected, (state, action) => {
-        state.loading = false;
+        state.status = "failed";
         state.error = (action.payload as any).message;
       })
       .addCase(updateCustomerAndSchedule.pending, (state) => {
-        state.loading = true;
+        state.status = "success";
         state.message = null;
         state.error = null;
       })
       .addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.schedule = state.schedule.map((schedule) =>
           schedule.id === action.payload.schedule.id
             ? {
@@ -502,16 +631,16 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateCustomerAndSchedule.rejected, (state, action) => {
         state.error = (action.payload as any).message;
-        state.loading = false;
+        state.status = "failed";
       })
 
       .addCase(updateCustomerAndScheduleCreate.pending, (state) => {
-        state.loading = true;
+        state.status = "success";
         state.message = null;
         state.error = null;
       })
       .addCase(updateCustomerAndScheduleCreate.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.schedule = [...state.schedule, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
@@ -519,16 +648,16 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateCustomerAndScheduleCreate.rejected, (state, action) => {
         state.error = (action.payload as any).message;
-        state.loading = false;
+        state.status = "failed";
       })
 
       .addCase(deleteSchedule.pending, (state) => {
-        state.loading = true;
+        state.status = "success";
         state.message = null;
         state.error = null;
       })
       .addCase(deleteSchedule.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "success";
         state.schedule = state.schedule.filter(
           (schedule) => schedule.id !== Number(action.payload.deleteId)
         );
@@ -538,17 +667,17 @@ const scheduleSlice = createSlice({
       })
       .addCase(deleteSchedule.rejected, (state, action) => {
         state.error = (action.payload as any).message;
-        state.loading = false;
+        state.status = "failed";
       });
 
     builder.addCase(selectGetSchedules.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.schedule = [...state.schedule, ...action.payload.schedules];
       state.message = action.payload.message
         ? action.payload.message
@@ -556,7 +685,7 @@ const scheduleSlice = createSlice({
     });
 
     builder.addCase(selectGetSchedules.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
   },

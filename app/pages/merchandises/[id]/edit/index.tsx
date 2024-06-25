@@ -15,7 +15,7 @@ const merchandiseEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.merchandise.loading);
+  const loading = useSelector((state: RootState) => state.merchandise.status);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -48,7 +48,7 @@ const merchandiseEdit: React.FC = () => {
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/merchandises"} />
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <MerchandiseForm

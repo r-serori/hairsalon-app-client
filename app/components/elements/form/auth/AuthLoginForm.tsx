@@ -20,14 +20,14 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
 
   return (
     <div className="flex items-center justify-center ">
-      <div className="max-w-md w-full space-y-6 mt-4">
+      <div className="max-w-md w-full space-y-6">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className=" text-center text-3xl font-extrabold text-gray-900">
             ログイン画面
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
           <BasicTextField
             type="text"
             placeholder="メールアドレス"

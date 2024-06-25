@@ -46,7 +46,6 @@ interface ModalFormProps {
   link: any;
   open: boolean;
   setOpen: any;
-  isLoading: boolean;
 }
 
 const ModalForm: React.FC<ModalFormProps> = ({
@@ -57,7 +56,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
   link,
   open,
   setOpen,
-  isLoading,
 }) => {
   const [EditValue, setEditValue] = useState(editValue);
   const [EditNode, setEditNode] = useState(editNode);
@@ -674,17 +672,13 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      {isLoading ? (
-        <p>loading...</p>
-      ) : (
-        <div className="mt-8 border-t  border-gray-300 py-4 flex">
-          <input id="updateValueId" type="hidden" value={EditNode.id} />
+      <div className="mt-8 border-t  border-gray-300 py-4 flex">
+        <input id="updateValueId" type="hidden" value={EditNode.id} />
 
-          {renderComponent()}
+        {renderComponent()}
 
-          <PrimaryButton value="更新" />
-        </div>
-      )}
+        <PrimaryButton value="更新" />
+      </div>
     </form>
   );
 };

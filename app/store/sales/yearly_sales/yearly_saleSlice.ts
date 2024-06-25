@@ -15,8 +15,24 @@ export const getYearly_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -50,8 +66,24 @@ export const createYearly_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -68,6 +100,7 @@ export const createYearly_sales = createAsyncThunk(
     }
   }
 );
+
 // export const getYearly_salesById = createAsyncThunk(
 //   "yearly_sales/getYearly_salesById",
 //   async (id: number, { rejectWithValue }) => {
@@ -108,8 +141,24 @@ export const updateYearly_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -140,8 +189,24 @@ export const deleteYearly_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -172,14 +237,14 @@ export interface Yearly_salesState {
 export interface RootState {
   // ルートステートの型を定義
   yearly_sales: Yearly_salesState[];
-  loading: boolean; // ローディング状態
+  status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
   error: string | null; // エラー
 }
 
 export const initialState: RootState = {
   yearly_sales: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -190,12 +255,12 @@ const yearly_salesSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(getYearly_sales.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(getYearly_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.yearly_sales = [
         ...state.yearly_sales,
         ...action.payload.yearlySales,
@@ -205,51 +270,51 @@ const yearly_salesSlice = createSlice({
         : "年間売上の取得に成功しました！";
     });
     builder.addCase(getYearly_sales.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(createYearly_sales.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(createYearly_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
       state.message = action.payload.message
         ? action.payload.message
         : "年間売上の登録に成功しました！";
     });
     builder.addCase(createYearly_sales.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     // builder.addCase(getYearly_salesById.pending, (state, action) => {
-    //   state.loading = true;
+    //   state.status = "success";
     //   state.error = null;
     //   state.message = null;
     // });
     // builder.addCase(getYearly_salesById.fulfilled, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "success";
     //   state.yearly_sales = [...state.yearly_sales, action.payload.yearlySale];
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "年間売上の取得に成功しました！";
     // });
     // builder.addCase(getYearly_salesById.rejected, (state, action) => {
-    //   state.loading = false;
+    //   state.status ="failed";
     //   state.error = (action.payload as any).message;;
     // });
 
     builder.addCase(updateYearly_sales.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(updateYearly_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.yearly_sales = state.yearly_sales.map((yearly_sale) =>
         yearly_sale.id === action.payload.yearlySale.id
           ? { ...yearly_sale, ...action.payload.yearlySale }
@@ -260,23 +325,23 @@ const yearly_salesSlice = createSlice({
         : "年間売上の更新に成功しました！";
     });
     builder.addCase(updateYearly_sales.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(deleteYearly_sales.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(deleteYearly_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.yearly_sales = state.yearly_sales.filter(
         (yearly_sales) => yearly_sales.id !== Number(action.payload.deleteId)
       );
     });
     builder.addCase(deleteYearly_sales.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
   },

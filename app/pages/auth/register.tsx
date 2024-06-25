@@ -7,12 +7,13 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { clearError } from "../../store/auth/authSlice";
 import { isLogin } from "../../store/auth/isLoginSlice";
+import { useEffect } from "react";
 
 const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isLoading = useSelector((state: RootState) => state.auth.loading);
+  const isLoading = useSelector((state: RootState) => state.auth.status);
 
   const error = useSelector((state: RootState) => state.auth.error);
 
@@ -22,28 +23,9 @@ const RegisterPage: React.FC = () => {
 
   const ownerMessage = useSelector((state: RootState) => state.owner.message);
 
-  // useEffect(() => {
-  //   const hasLaravelSessionCookie = () => {
-  //     // ブラウザのCookieからlaravel_session Cookieを取得する
-  //     const cookies = document.cookie;
-  //     console.log("cookies", cookies);
-
-  //     if (cookies.startsWith("XSRF-TOKEN")) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   };
-
-  //   if (hasLaravelSessionCookie()) {
-  //     console.log("XCSRF存在します");
-  //     router.push("/dashboard");
-  //     // ログイン済みの場合の処理を記述する
-  //   } else {
-  //     console.log("XCSRFが存在しません");
-  //     // 未ログインの場合の処理を記述する
-  //   }
-  // }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
+  useEffect(() => {
+    localStorage.setItem("registerNow", "true");
+  }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleRegister = async (formData: {
     name: string;
@@ -54,18 +36,33 @@ const RegisterPage: React.FC = () => {
     isAttendance: boolean;
     password_confirmation: string;
   }) => {
-    try {
-      const response = await dispatch(register(formData) as any);
+    const response = await dispatch(register(formData) as any);
+    console.log("register.tsxのデータだよ", response);
+    if (response.status) {
+      if (
+        response.status === 401 ||
+        response.status === 403 ||
+        response.status === 404 ||
+        response.status === 500
+      ) {
+        router.push({
+          pathname: "/_error",
+          query: { status: response.status },
+        });
+      }
+    }
+    if (response.payload.responseUser) {
+      dispatch(isLogin());
       const userId = response.payload.responseUser.id;
       const role = response.payload.responseUser.role;
       localStorage.setItem("user_id", userId);
       localStorage.setItem("role", role);
       localStorage.setItem("isLogin", "true");
-      dispatch(isLogin());
       console.log("Success", response);
+      localStorage.removeItem("registerNow");
       router.push("/auth/owner");
-    } catch (error) {
-      console.log("Error", error);
+    } else {
+      console.log("Error", response);
       return;
     }
   };
@@ -85,8 +82,8 @@ const RegisterPage: React.FC = () => {
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
 
-      {isLoading ? (
-        <p>Loading...</p>
+      {isLoading === "loading" ? (
+        <p>loading...</p>
       ) : (
         <div>
           <div className="mt-4 ml-4">

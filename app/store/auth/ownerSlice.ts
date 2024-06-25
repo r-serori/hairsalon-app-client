@@ -24,8 +24,24 @@ export const ownerRegister = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -53,14 +69,14 @@ export interface OwnerState {
 
 export interface RootState {
   owner: OwnerState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: any | null;
 }
 
 const initialState: RootState = {
   owner: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -71,22 +87,22 @@ const ownerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(ownerRegister.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(ownerRegister.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.owner = action.payload;
       state.message = "オーナー登録が完了しました。";
     });
     builder.addCase(ownerRegister.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(login.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.owner = [...state.owner, action.payload.responseOwnerId];
       state.message = "ログインしました。";
     });

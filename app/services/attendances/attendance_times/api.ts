@@ -5,9 +5,11 @@ export const attendance_timeApi = {
     user_id: number;
     yearMonth: string;
   }) => {
+    const userIdEncoded = encodeURIComponent(formData.user_id.toString());
+    const yearMonthEncoded = encodeURIComponent(formData.yearMonth);
     const response = await sendRequest(
       "GET",
-      `/images/selectedAttendanceTimes/${formData.user_id}/${formData.yearMonth}`
+      `/images/selectedAttendanceTimes/${userIdEncoded}/${yearMonthEncoded}`
     );
     console.log("APIのattendanceTimeDataだよ");
     return response;

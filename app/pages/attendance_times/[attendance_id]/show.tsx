@@ -25,8 +25,8 @@ const attendanceTimes: React.FC = () => {
   // 初回のみデータ取得を行うためのフラグ
   const [attendanceTimeOpen, setAttendanceTimeOpen] = useState(false);
 
-  const loading = useSelector(
-    (state: RootState) => state.attendance_time.loading
+  const status = useSelector(
+    (state: RootState) => state.attendance_time.status
   );
 
   const message = useSelector(
@@ -145,7 +145,7 @@ const attendanceTimes: React.FC = () => {
           />
         </div>
       </div>
-      {loading ? (
+      {status === "loading" ? (
         <p>loading...</p>
       ) : (
         <ComponentTable
@@ -154,7 +154,6 @@ const attendanceTimes: React.FC = () => {
           nodesProps={nodesProps}
           tHeaderItems={tHeaderItems}
           link="/attendance_times"
-          isLoading={loading}
           role={role}
         />
       )}

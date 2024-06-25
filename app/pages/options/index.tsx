@@ -16,7 +16,7 @@ const options: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const loading = useSelector((state: RootState) => state.option.loading);
+  const loading = useSelector((state: RootState) => state.option.status);
 
   const message = useSelector((state: RootState) => state.option.message);
 
@@ -80,7 +80,7 @@ const options: React.FC = () => {
           <RouterButton link="/options/create" value="新規作成" />
         </div>
 
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -89,7 +89,6 @@ const options: React.FC = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/options"
-            isLoading={loading}
             role={role}
           />
         )}

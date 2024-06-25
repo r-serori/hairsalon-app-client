@@ -11,14 +11,14 @@ export interface StaffState {
 
 export interface RootState {
   staff: StaffState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: any | null;
 }
 
 const initialState: RootState = {
   staff: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -30,7 +30,7 @@ const staffSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(staffRegister.fulfilled, (state, action) => {
       state.staff = action.payload.responseStaff;
-      state.loading = false;
+      state.status = "success";
       state.message = "スタッフの登録が完了しました!";
     });
   },

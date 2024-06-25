@@ -17,8 +17,24 @@ export const getOption = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -57,8 +73,24 @@ export const createOption = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -116,8 +148,24 @@ export const updateOption = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -148,8 +196,24 @@ export const deleteOption = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -179,14 +243,14 @@ export interface OptionState {
 
 export interface RootState {
   option: OptionState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
 }
 
 const initialState: RootState = {
   option: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -197,12 +261,12 @@ const optionSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getOption.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(getOption.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.option = [...state.option, ...action.payload.options];
       state.message = action.payload.message
         ? action.payload.message
@@ -210,16 +274,16 @@ const optionSlice = createSlice({
     });
     builder.addCase(getOption.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "success";
     });
 
     builder.addCase(createOption.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(createOption.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.option = [...state.option, action.payload.option];
       state.message = action.payload.message
         ? action.payload.message
@@ -227,16 +291,16 @@ const optionSlice = createSlice({
     });
     builder.addCase(createOption.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
 
     // builder.addCase(getOptionById.pending, (state) => {
-    //   state.loading = true;
+    //   state.status = "success";
     //   state.message = null;
     //   state.error = null;
     // });
     // builder.addCase(getOptionById.fulfilled, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "success";
     //   state.option = [...state.option, action.payload.option];
     //   state.message = action.payload.message
     //     ? action.payload.message
@@ -244,16 +308,16 @@ const optionSlice = createSlice({
     // });
     // builder.addCase(getOptionById.rejected, (state, action) => {
     //   state.error = (action.payload as any).message;!;
-    //   state.loading = false;
+    //   state.status = "failed";
     // });
 
     builder.addCase(updateOption.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(updateOption.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.option = state.option.map((option) =>
         option.id === action.payload.option.id
           ? { ...option, ...action.payload.option }
@@ -265,16 +329,16 @@ const optionSlice = createSlice({
     });
     builder.addCase(updateOption.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
 
     builder.addCase(deleteOption.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(deleteOption.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.option = state.option.filter(
         (option) => option.id !== Number(action.payload.deleteId)
       );
@@ -284,7 +348,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(deleteOption.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {

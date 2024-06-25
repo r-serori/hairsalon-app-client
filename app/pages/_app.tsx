@@ -12,32 +12,14 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import axios from "axios";
-import { useRouter } from "next/router";
+
+axios.defaults.withCredentials = true; // Cookieを使用するための設定を有効にする
 
 dayjs.locale("ja");
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-// クッキーを取得する関数
-// function getCookie(name: string) {
-//   if (typeof document !== "undefined") {
-//     const value = `; ${document.cookie}`;
-//     const parts = value.split(`; ${name}=`);
-//     if (parts.length === 2) return parts.pop()?.split(";").shift();
-//   }
-//   return null;
-// }
-
 function MyApp({ Component, pageProps }: AppProps) {
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   // ページロード時に 'laravel_session' クッキーをチェックし、LocalStorage をクリアする
-  //   if (!getCookie("laravel_session")) {
-  //     localStorage.clear();
-  //   }
-  // }, [router.pathname]); // router.pathname を依存配列に追加して、ページ遷移時にも確認する
-
   return (
     <Provider store={store}>
       <div className="min-h-screen overflow-x-auto  overflow-y-auto">

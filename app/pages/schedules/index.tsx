@@ -61,7 +61,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  const loading = useSelector((state: RootState) => state.schedule.loading);
+  const loading = useSelector((state: RootState) => state.schedule.status);
 
   const message = useSelector((state: RootState) => state.schedule.message);
 
@@ -100,7 +100,11 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      {loading ? <p>loading...</p> : <MyCalendar events={events} role={role} />}
+      {loading === "loading" ? (
+        <p>loading...</p>
+      ) : (
+        <MyCalendar events={events} role={role} />
+      )}
     </div>
   );
 };

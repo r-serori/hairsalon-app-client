@@ -17,8 +17,24 @@ export const getHairstyle = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -58,8 +74,24 @@ export const createHairstyle = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -122,8 +154,24 @@ export const updateHairstyle = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -154,8 +202,24 @@ export const deleteHairstyle = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -185,7 +249,7 @@ export interface HairstyleState {
 export interface RootState {
   // ルートステートの型を定義
   hairstyle: HairstyleState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
 }
@@ -193,7 +257,7 @@ export interface RootState {
 const initialState: RootState = {
   // 初期状態
   hairstyle: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -204,63 +268,63 @@ const hairstyleSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getHairstyle.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(getHairstyle.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.hairstyle = [...state.hairstyle, ...action.payload.hairstyles];
       state.message = action.payload.message
         ? action.payload.message
         : "ヘアスタイル情報を取得しました！ ";
     });
     builder.addCase(getHairstyle.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(createHairstyle.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(createHairstyle.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.hairstyle = [...state.hairstyle, action.payload.hairstyle];
       state.message = action.payload.message
         ? action.payload.message
         : "ヘアスタイル情報を作成しました！";
     });
     builder.addCase(createHairstyle.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     // builder.addCase(getHairstyleById.pending, (state) => {
-    //   state.loading = true;
+    //   state.status = "success";
     //   state.message = null;
     //   state.error = null;
     // });
     // builder.addCase(getHairstyleById.fulfilled, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "success";
     //   state.hairstyle = [...state.hairstyle, action.payload.hairstyle];
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "ヘアスタイル情報を取得しました！";
     // });
     // builder.addCase(getHairstyleById.rejected, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "failed";
     //   state.error = (action.payload as any).message;!;
     // });
 
     builder.addCase(updateHairstyle.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(updateHairstyle.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.hairstyle = state.hairstyle.map((hairstyle) =>
         hairstyle.id === action.payload.hairstyle.id
           ? { ...hairstyle, ...action.payload.hairstyle }
@@ -272,23 +336,23 @@ const hairstyleSlice = createSlice({
     });
 
     builder.addCase(updateHairstyle.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(deleteHairstyle.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(deleteHairstyle.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.hairstyle = state.hairstyle.filter(
         (hairstyle) => hairstyle.id !== Number(action.payload.deleteId)
       );
     });
     builder.addCase(deleteHairstyle.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 

@@ -15,7 +15,7 @@ const hairstyleCreate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.hairstyle.loading);
+  const loading = useSelector((state: RootState) => state.hairstyle.status);
 
   const handleCreate = async (formData: {
     id: number;
@@ -36,7 +36,7 @@ const hairstyleCreate = () => {
       <div className="mt-4 ml-4">
         <RouterButton link={"/hairstyles"} value="ヘアスタイル管理画面に戻る" />
       </div>
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <HairstyleForm createHairstyle={handleCreate} />

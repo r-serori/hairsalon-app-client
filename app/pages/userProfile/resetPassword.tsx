@@ -35,7 +35,7 @@ const resetPasswordPage: React.FC = () => {
     }
   }, [user]);
 
-  const isLoading = useSelector((state: RootState) => state.auth.loading);
+  const isLoading = useSelector((state: RootState) => state.auth.status);
   const message = useSelector((state: RootState) => state.auth.message);
   const error = useSelector((state: RootState) => state.auth.error);
 
@@ -60,7 +60,7 @@ const resetPasswordPage: React.FC = () => {
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
 
-      {isLoading ? (
+      {isLoading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <ResetPasswordForm onSubmitResetPassword={handleResetPassword} />

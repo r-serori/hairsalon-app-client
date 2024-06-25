@@ -14,7 +14,7 @@ const customersCreate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.customer.loading);
+  const loading = useSelector((state: RootState) => state.customer.status);
 
   const handleCreate = async (formData: {
     id: number;
@@ -43,7 +43,11 @@ const customersCreate = () => {
       <div className="mt-4 ml-4">
         <BackAgainButton link={"/customers"} value="顧客管理画面に戻る" />
       </div>
-      {loading ? <p>Loading...</p> : <CustomerForm onSubmit={handleCreate} />}
+      {loading === "loading" ? (
+        <p>Loading...</p>
+      ) : (
+        <CustomerForm onSubmit={handleCreate} />
+      )}
     </div>
   );
 };

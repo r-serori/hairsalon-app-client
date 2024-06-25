@@ -36,7 +36,7 @@ const daily_sales: React.FC = () => {
     }
   }, [dispatch]);
 
-  const loading = useSelector((state: RootState) => state.daily_sales.loading);
+  const loading = useSelector((state: RootState) => state.daily_sales.status);
 
   const message = useSelector((state: RootState) => state.daily_sales.message);
 
@@ -73,7 +73,7 @@ const daily_sales: React.FC = () => {
             <RouterButton link="/yearly_sales" value="年次売上画面へ" />
           </div>
         </div>
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -82,7 +82,6 @@ const daily_sales: React.FC = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/daily_sales"
-            isLoading={loading}
             role={role}
           />
         )}

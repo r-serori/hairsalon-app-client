@@ -40,7 +40,7 @@ const merchandises = () => {
     }
   }, [dispatch]);
 
-  const loading = useSelector((state: RootState) => state.merchandise.loading);
+  const loading = useSelector((state: RootState) => state.merchandise.status);
 
   const message = useSelector((state: RootState) => state.merchandise.message);
 
@@ -80,7 +80,7 @@ const merchandises = () => {
         <div className="flex my-4 ">
           <RouterButton link="/merchandises/create" value="新規作成" />
         </div>
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -89,7 +89,6 @@ const merchandises = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/merchandises"
-            isLoading={loading}
             role={role}
           />
         )}

@@ -10,10 +10,10 @@ export const authApi = {
         "api/login",
         formData
       )) as any;
-      // console.log("responseLoginDataだよ", response);
+      console.log("responseLoginDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
+      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -31,10 +31,10 @@ export const authApi = {
     try {
       await getCsrfToken();
       const response = await sendRequest("POST", "api/register", formData);
-      // console.log("responseRegisterDataだよ", response);
+      console.log("responseRegisterDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
+      console.error("errorだよ", error);
       return { error: error };
     }
   },

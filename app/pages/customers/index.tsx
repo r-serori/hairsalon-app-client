@@ -42,7 +42,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     }
   }, [dispatch]);
 
-  const loading = useSelector((state: RootState) => state.customer.loading);
+  const loading = useSelector((state: RootState) => state.customer.status);
 
   const message = useSelector((state: RootState) => state.customer.message);
 
@@ -281,7 +281,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
         <div className=" mb-4 ">
           <RouterButton link="/customers/create" value="新規作成" />
         </div>
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -290,7 +290,6 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/customers"
-            isLoading={loading}
             role={role}
           />
         )}

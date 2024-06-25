@@ -11,7 +11,7 @@ const stockCreate: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.stock.loading);
+  const loading = useSelector((state: RootState) => state.stock.status);
 
   const handleCreate = async (formData: {
     id: number;
@@ -36,7 +36,11 @@ const stockCreate: React.FC = () => {
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/stocks"} />
-      {loading ? <p>Loading...</p> : <StockForm createStock={handleCreate} />}
+      {loading === "loading" ? (
+        <p>Loading...</p>
+      ) : (
+        <StockForm createStock={handleCreate} />
+      )}
     </div>
   );
 };

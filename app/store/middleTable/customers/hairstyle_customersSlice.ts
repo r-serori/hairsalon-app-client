@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { hairstyleCustomerApi } from "../../../services/middleTable/customers/hairstyle_customersApi";
+// import { hairstyleCustomerApi } from "../../../services/middleTable/customers/hairstyle_customersApi";
 import RootState from "../../../redux/reducers/rootReducer";
 import {
   getCustomer,
@@ -13,38 +13,38 @@ import {
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
 
-export const getHairstyle_customers = createAsyncThunk(
-  "hairstyle_customers/getHairstyle_customers",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any =
-        await hairstyleCustomerApi.fetchAllHairstyleCustomers();
+// export const getHairstyle_customers = createAsyncThunk(
+//   "hairstyle_customers/getHairstyle_customers",
+//   async (formData: {}, { rejectWithValue }) => {
+//     try {
+//       const response: any =
+//         await hairstyleCustomerApi.fetchAllHairstyleCustomers();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
-    } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
-    }
-  }
-);
+//       if (response.status >= 200 && response.status < 300) {
+//         // 成功時の処理
+//         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+//         return response.data; // response.dataを返すことで、必要なデータのみを返す
+//       } else if (response.status >= 400 && response.status < 500) {
+//         // クライアントエラー時の処理
+//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+//       } else if (response.status >= 500) {
+//         // サーバーエラー時の処理
+//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+//       } else {
+//         return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+//       }
+//     } catch (err) {
+//       console.log("errだよ", err);
+//       return rejectWithValue(
+//         err.response
+//           ? err.response.data
+//           : { message: "予期しないエラーが発生しました" }
+//       );
+//     }
+//   }
+// );
 export interface Hairstyle_customersState {
   // ステートの型
   hairstyles_id: number;
@@ -55,13 +55,13 @@ export interface Hairstyle_customersState {
 export interface RootState {
   // RootStateの型
   hairstyle_customers: Hairstyle_customersState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   error: string | null;
 }
 
 export const initialState: RootState = {
   hairstyle_customers: [],
-  loading: false,
+  status: "idle",
   error: null,
 };
 

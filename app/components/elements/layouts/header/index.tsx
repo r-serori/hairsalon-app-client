@@ -6,8 +6,18 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { isLogin } from "../../../../store/auth/isLoginSlice";
+import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import { useDispatch } from "react-redux";
+
+// クッキーを取得する関数
+function getCookie(name: string) {
+  if (typeof document !== "undefined") {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(";").shift();
+  }
+  return null;
+}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -21,18 +31,25 @@ export default function Header() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const registerNow = localStorage.getItem("registerNow") === "true";
       const IsLoggedIn = localStorage.getItem("isLogin") === "true";
-      if (IsLoggedIn) {
+      const userId = localStorage.getItem("user_id");
+      if (IsLoggedIn && userId) {
         dispatch(isLogin());
       } else {
+        router.push("/");
+      }
+      if (!getCookie("laravel_session") && !loginNow && !registerNow) {
+        localStorage.clear();
+        dispatch(isLogout());
         router.push("/");
       }
     }
     const UserPermission = () => {
       const role = localStorage.getItem("role");
       setRole(role);
+      UserPermission();
     };
-    UserPermission();
   }, [loginNow]);
 
   const navigation =

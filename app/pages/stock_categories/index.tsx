@@ -16,7 +16,7 @@ const stock_categories = () => {
   const dispatch = useDispatch();
 
   const loading = useSelector(
-    (state: RootState) => state.stock_category.loading
+    (state: RootState) => state.stock_category.status
   );
 
   const message = useSelector(
@@ -78,7 +78,7 @@ const stock_categories = () => {
         />
         <RouterButton link="/stocks" value="在庫画面に戻る" />
       </div>
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <ComponentTable
@@ -87,7 +87,6 @@ const stock_categories = () => {
           nodesProps={nodesProps}
           tHeaderItems={tHeaderItems}
           link="/stock_categories"
-          isLoading={loading}
           role={role}
         />
       )}

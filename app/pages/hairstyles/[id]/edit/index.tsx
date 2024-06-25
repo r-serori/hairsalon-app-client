@@ -16,7 +16,7 @@ const hairstyleEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.hairstyle.loading);
+  const loading = useSelector((state: RootState) => state.hairstyle.status);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -50,7 +50,7 @@ const hairstyleEdit: React.FC = () => {
       <div className="mt-4 ml-4">
         <RouterButton link={"/hairstyles"} value="へスタイル管理画面に戻る" />
       </div>
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <HairstyleForm

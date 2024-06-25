@@ -50,9 +50,9 @@ const Attendances = () => {
     } finally {
       setFirstRender(false);
     }
-  }, [firstRender]);
+  }, []);
 
-  const loading = useSelector((state: RootState) => state.auth.loading);
+  const loading = useSelector((state: RootState) => state.auth.status);
 
   const message = useSelector((state: RootState) => state.auth.message);
 
@@ -109,7 +109,7 @@ const Attendances = () => {
         <div className="flex my-4 ml-2">
           <RouterButton link="/auth/staffRegister" value="ユーザー登録" />
         </div>
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -118,7 +118,6 @@ const Attendances = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/attendances"
-            isLoading={loading}
             role={role}
           />
         )}

@@ -31,7 +31,7 @@ const yearly_sales: React.FC = () => {
     }
   }, [dispatch]);
 
-  const loading = useSelector((state: RootState) => state.yearly_sales.loading);
+  const loading = useSelector((state: RootState) => state.yearly_sales.status);
 
   const message = useSelector((state: RootState) => state.yearly_sales.message);
 
@@ -71,7 +71,7 @@ const yearly_sales: React.FC = () => {
           <RouterButton link="/monthly_sales" value="月次売上画面へ" />
         </div>
 
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -80,7 +80,6 @@ const yearly_sales: React.FC = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/yearly_sales"
-            isLoading={loading}
             role={role}
           />
         )}

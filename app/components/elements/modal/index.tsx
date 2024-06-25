@@ -40,7 +40,6 @@ interface BasicModalProps {
   editNode?: any;
   NodesProp?: any;
   link: string;
-  isLoading?: boolean;
 }
 
 const BasicModal: React.FC<BasicModalProps> = ({
@@ -49,7 +48,6 @@ const BasicModal: React.FC<BasicModalProps> = ({
   editNode,
   NodesProp,
   link,
-  isLoading,
 }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -137,7 +135,6 @@ const BasicModal: React.FC<BasicModalProps> = ({
               link={link}
               open={open}
               setOpen={setOpen}
-              isLoading={isLoading}
             />
             <button onClick={() => setOpen(false)}>戻る</button>
           </Box>

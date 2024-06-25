@@ -25,8 +25,24 @@ export const selectGetAttendanceTimes = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -59,8 +75,24 @@ export const firstGetAttendanceTime = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -100,8 +132,24 @@ export const pleaseEditEndTime = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -139,8 +187,24 @@ export const updateStartTime = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -178,8 +242,24 @@ export const updateEndTime = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -216,8 +296,24 @@ export const createStartTime = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -254,8 +350,24 @@ export const createEndTime = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -285,8 +397,24 @@ export const deleteAttendanceTime = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -319,7 +447,7 @@ export interface Attendance_timeState {
 export interface RootState {
   // ルートステートの型を定義
   attendance_times: Attendance_timeState[]; // 出席情報の配列
-  loading: boolean; // ローディング状態
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null; // メッセージ
   error: string | null; // エラーメッセージ
 }
@@ -327,7 +455,7 @@ export interface RootState {
 const initialState: RootState = {
   // 初期状態
   attendance_times: [], // 出席情報の配列
-  loading: false, // ローディング状態
+  status: "idle",
   message: null, // メッセージ
   error: null, // エラーメッセージ
 };
@@ -338,30 +466,30 @@ const attendance_timeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(selectGetAttendanceTimes.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message
         ? action.payload.message
         : "勤怠時間と画像の取得に成功しました！";
       state.attendance_times = action.payload.attendanceTimes;
     });
     builder.addCase(selectGetAttendanceTimes.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(firstGetAttendanceTime.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
 
     builder.addCase(firstGetAttendanceTime.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message
         ? action.payload.message
         : "最新の勤怠情報を取得しました！";
@@ -369,18 +497,18 @@ const attendance_timeSlice = createSlice({
     });
 
     builder.addCase(firstGetAttendanceTime.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(pleaseEditEndTime.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.attendance_times = state.attendance_times.map((attendance_time) =>
         attendance_time.id === action.payload.attendanceTime.id
           ? {
@@ -392,17 +520,17 @@ const attendance_timeSlice = createSlice({
       state.message = action.payload.message;
     });
     builder.addCase(pleaseEditEndTime.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(updateStartTime.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
     builder.addCase(updateStartTime.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message
         ? action.payload.message
         : "出勤時間と画像の更新に成功しました！";
@@ -416,17 +544,17 @@ const attendance_timeSlice = createSlice({
       );
     });
     builder.addCase(updateStartTime.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(updateEndTime.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
     builder.addCase(updateEndTime.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message
         ? action.payload.message
         : "退勤時間と画像の更新に成功しました！";
@@ -438,17 +566,17 @@ const attendance_timeSlice = createSlice({
     });
 
     builder.addCase(updateEndTime.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(createStartTime.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
     builder.addCase(createStartTime.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.attendance_times = [
         ...state.attendance_times,
         action.payload.attendanceTime,
@@ -458,20 +586,20 @@ const attendance_timeSlice = createSlice({
         : "出勤時間と画像の登録に成功しました！";
     });
     builder.addCase(createStartTime.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error =
         (action.payload as any).resStatus === "error"
           ? (action.payload as any).message
-          : action.error.message;
+          : (action.payload as any).message;
     });
 
     builder.addCase(createEndTime.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
     builder.addCase(createEndTime.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.attendance_times = state.attendance_times.map((attendance_time) =>
         attendance_time.id === action.payload.attendanceTime.id
           ? {
@@ -485,17 +613,17 @@ const attendance_timeSlice = createSlice({
         : "退勤時間と画像の登録に成功しました！";
     });
     builder.addCase(createEndTime.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(deleteAttendanceTime.pending, (state) => {
-      state.loading = true;
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
     builder.addCase(deleteAttendanceTime.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.attendance_times = state.attendance_times.filter(
         (attendance_time) =>
           attendance_time.id !== Number(action.payload.deleteId)
@@ -506,12 +634,12 @@ const attendance_timeSlice = createSlice({
     });
 
     builder.addCase(deleteAttendanceTime.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message;
       state.attendance_times = [
         ...state.attendance_times,

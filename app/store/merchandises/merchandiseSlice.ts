@@ -17,8 +17,24 @@ export const getMerchandise = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -59,8 +75,24 @@ export const createMerchandise = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -124,8 +156,24 @@ export const updateMerchandise = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -142,6 +190,7 @@ export const updateMerchandise = createAsyncThunk(
     }
   }
 );
+
 export const deleteMerchandise = createAsyncThunk(
   "merchandise/deleteMerchandise",
   async (id: number, { rejectWithValue }) => {
@@ -155,8 +204,24 @@ export const deleteMerchandise = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -187,7 +252,7 @@ export interface MerchandiseState {
 export interface RootState {
   // RootStateの型
   merchandise: MerchandiseState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
 }
@@ -195,7 +260,7 @@ export interface RootState {
 const initialState: RootState = {
   // 初期状態
   merchandise: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -206,12 +271,12 @@ const merchandiseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getMerchandise.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(getMerchandise.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message
         ? action.payload.message
         : "物販商品の取得に成功しました！";
@@ -221,51 +286,51 @@ const merchandiseSlice = createSlice({
       ];
     });
     builder.addCase(getMerchandise.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(createMerchandise.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(createMerchandise.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message
         ? action.payload.message
         : "物販商品の作成に成功しました！";
       state.merchandise = [...state.merchandise, action.payload.merchandise];
     });
     builder.addCase(createMerchandise.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     // builder.addCase(getMerchandiseById.pending, (state, action) => {
-    //   state.loading = true;
+    //   state.status = "success";
     //   state.message = null;
     //   state.error = null;
     // });
     // builder.addCase(getMerchandiseById.fulfilled, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "success";
     //   state.merchandise = [...state.merchandise, action.payload.merchandise];
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "物販商品の取得に成功しました！";
     // });
     // builder.addCase(getMerchandiseById.rejected, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "failed";
     //   state.error = (action.payload as any).message;!;
     // });
 
     builder.addCase(updateMerchandise.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(updateMerchandise.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.message = action.payload.message
         ? action.payload.message
         : "物販商品の更新に成功しました！";
@@ -276,23 +341,23 @@ const merchandiseSlice = createSlice({
       );
     });
     builder.addCase(updateMerchandise.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(deleteMerchandise.pending, (state, action) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.merchandise = state.merchandise.filter(
         (merchandise) => merchandise.id !== Number(action.payload.deleteId)
       );
     });
     builder.addCase(deleteMerchandise.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 

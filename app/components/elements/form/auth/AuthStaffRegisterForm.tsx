@@ -13,12 +13,10 @@ interface AuthStaffRegisterFormProps {
     isAttendance: boolean;
     owner_id: number;
   }) => void;
-  errorMessage: string;
 }
 
 const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
   onSubmitStaff,
-  errorMessage,
 }) => {
   const [name, setName] = useState("testerStaff");
   const [email, setEmail] = useState("testerStaff@hairsaron.com");
@@ -55,10 +53,6 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
         </div>
 
         <form onSubmit={handleSubmitStaff} className="mt-8 space-y-6">
-          {errorMessage && (
-            <p className="text-red-600 text-center">{errorMessage}</p>
-          )}
-
           <BasicTextField
             type="text"
             placeholder="名前"

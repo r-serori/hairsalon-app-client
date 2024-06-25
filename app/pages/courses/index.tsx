@@ -17,7 +17,7 @@ const courses: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const loading = useSelector((state: RootState) => state.course.loading);
+  const loading = useSelector((state: RootState) => state.course.status);
 
   const message = useSelector((state: RootState) => state.course.message);
 
@@ -86,7 +86,7 @@ const courses: React.FC = () => {
         <div className="flex my-4 ml-2">
           <RouterButton link="/courses/create" value="新規作成" />
         </div>
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -95,7 +95,6 @@ const courses: React.FC = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/courses"
-            isLoading={loading}
             role={role}
           />
         )}

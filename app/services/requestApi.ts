@@ -47,23 +47,25 @@ export const sendRequest = async (
 
     console.log(`${method} request to ${url} successful:`);
     console.log("RESPONSE", response);
-    return response.data;
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("AxiosErrorが発生しました:", error.message);
       if (error.response) {
         console.error("サーバーからのレスポンス:", error.response);
-        return Promise.reject(error.response.data);
+        return error.response;
       } else if (error.request) {
         console.error(
           "リクエストは送信されましたが、レスポンスがありませんでした:",
           error.request
         );
+        return error.request;
       } else {
         console.error(
           "リクエストの設定中にエラーが発生しました:",
           error.message
         );
+        return error;
       }
     } else {
       console.error("予期しないエラーが発生しました:", error);

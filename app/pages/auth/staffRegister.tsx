@@ -10,11 +10,10 @@ import { useState } from "react";
 
 const StaffRegisterPage: React.FC = () => {
   const [role, setRole] = useState<string>("");
-  OwnerPermission(setRole);
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isLoading = useSelector((state: RootState) => state.auth.loading);
+  const isLoading = useSelector((state: RootState) => state.auth.status);
 
   const error = useSelector((state: RootState) => state.auth.error);
 
@@ -71,7 +70,7 @@ const StaffRegisterPage: React.FC = () => {
     <div className="min-h-full ">
       {ownerError && (
         <BasicAlerts
-          type={error}
+          type="error"
           message={ownerError}
           space={1}
           padding={0.6}
@@ -86,13 +85,10 @@ const StaffRegisterPage: React.FC = () => {
         <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
       </div>
 
-      {isLoading ? (
+      {isLoading === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <AuthStaffRegisterForm
-          onSubmitStaff={handleStaffRegister}
-          errorMessage={error}
-        />
+        <AuthStaffRegisterForm onSubmitStaff={handleStaffRegister} />
       )}
     </div>
   );

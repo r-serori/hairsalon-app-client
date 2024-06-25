@@ -13,7 +13,7 @@ const courseCreate: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.course.loading);
+  const loading = useSelector((state: RootState) => state.course.status);
 
   const handleCreate = async (formData: {
     id: number;
@@ -37,7 +37,11 @@ const courseCreate: React.FC = () => {
       <div className="ml-4 mt-4 ">
         <RouterButton link="/courses" value="コース画面へ戻る" />
       </div>
-      {loading ? <p>Loading...</p> : <CourseForm createCourse={handleCreate} />}
+      {loading === "loading" ? (
+        <p>Loading...</p>
+      ) : (
+        <CourseForm createCourse={handleCreate} />
+      )}
     </div>
   );
 };

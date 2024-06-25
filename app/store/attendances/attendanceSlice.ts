@@ -174,7 +174,7 @@
 // export interface RootState {
 //   // ルートステートの型を定義
 //   attendances: AttendanceState[]; // 出席情報の配列
-//   loading: boolean; // ローディング状態
+//   status: boolean; // ローディング状態
 //   message: string | null; // メッセージ
 //   error: string | null; // エラーメッセージ
 // }
@@ -182,7 +182,7 @@
 // const initialState: RootState = {
 //   // 初期状態
 //   attendances: [], // 出席情報の配列
-//   loading: false, // ローディング状態
+//   status: false, // ローディング状態
 //   message: null, // メッセージ
 //   error: null, // エラーメッセージ
 // };
@@ -194,63 +194,63 @@
 //   extraReducers: (builder) => {
 //     // 非同期アクションの処理を定義
 //     builder.addCase(getAttendance.pending, (state) => {
-//       state.loading = true;
+//       state.status = true;
 //       state.message = null;
 //       state.error = null;
 //     });
 //     builder.addCase(getAttendance.fulfilled, (state, action) => {
-//       state.loading = false;
+//       state.status = false;
 //       state.message = action.payload.message
 //         ? action.payload.message
 //         : "スタッフ情報を取得しました！";
 //       state.attendances = [...state.attendances, ...action.payload.attendances];
 //     });
 //     builder.addCase(getAttendance.rejected, (state, action) => {
-//       state.loading = false;
-//       state.error = action.error.message;
+//       state.status = false;
+//       state.error = (action.payload as any).message;
 //     });
 
 //     builder.addCase(createAttendance.pending, (state) => {
-//       state.loading = true;
+//       state.status = true;
 //       state.message = null;
 //       state.error = null;
 //     });
 //     builder.addCase(createAttendance.fulfilled, (state, action) => {
-//       state.loading = false;
+//       state.status = false;
 //       state.message = action.payload.message
 //         ? action.payload.message
 //         : "スタッフ情報を作成しました！";
 //       state.attendances = [...state.attendances, action.payload.attendance];
 //     });
 //     builder.addCase(createAttendance.rejected, (state, action) => {
-//       state.loading = false;
-//       state.error = action.error.message;
+//       state.status = false;
+//       state.error = (action.payload as any).message;
 //     });
 
 //     builder.addCase(getAttendanceById.pending, (state) => {
-//       state.loading = true;
+//       state.status = true;
 //       state.message = null;
 //       state.error = null;
 //     });
 //     builder.addCase(getAttendanceById.fulfilled, (state, action) => {
-//       state.loading = false;
+//       state.status = false;
 //       state.message = action.payload.message
 //         ? action.payload.message
 //         : "スタッフ情報を取得しました！";
 //       state.attendances = [...state.attendances, action.payload.attendance];
 //     });
 //     builder.addCase(getAttendanceById.rejected, (state, action) => {
-//       state.loading = false;
-//       state.error = action.error.message;
+//       state.status = false;
+//       state.error = (action.payload as any).message;
 //     });
 
 //     builder.addCase(updateAttendance.pending, (state) => {
-//       state.loading = true;
+//       state.status = true;
 //       state.message = null;
 //       state.error = null;
 //     });
 //     builder.addCase(updateAttendance.fulfilled, (state, action) => {
-//       state.loading = false;
+//       state.status = false;
 //       state.message = action.payload.message
 //         ? action.payload.message
 //         : "スタッフ情報を更新しました！";
@@ -262,17 +262,17 @@
 //     });
 
 //     builder.addCase(updateAttendance.rejected, (state, action) => {
-//       state.loading = false;
-//       state.error = action.error.message;
+//       state.status = false;
+//       state.error = (action.payload as any).message;
 //     });
 
 //     builder.addCase(deleteAttendance.pending, (state) => {
-//       state.loading = true;
+//       state.status = true;
 //       state.message = null;
 //       state.error = null;
 //     });
 //     builder.addCase(deleteAttendance.fulfilled, (state, action) => {
-//       state.loading = false;
+//       state.status = false;
 //       state.attendances = state.attendances.filter(
 //         (attendance) => attendance.id !== Number(action.payload.deleteId)
 //       );
@@ -281,8 +281,8 @@
 //         : "スタッフ情報を削除しました！";
 //     });
 //     builder.addCase(deleteAttendance.rejected, (state, action) => {
-//       state.loading = false;
-//       state.error = action.error.message;
+//       state.status = false;
+//       state.error = (action.payload as any).message;
 //     });
 
 //     builder.addCase(getCustomer.fulfilled, (state, action) => {

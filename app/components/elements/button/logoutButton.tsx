@@ -38,6 +38,19 @@ const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
     } else {
       try {
         const response = await dispatch(logout({}) as any);
+        if (response.status) {
+          if (
+            response.status === 401 ||
+            response.status === 403 ||
+            response.status === 404 ||
+            response.status === 500
+          ) {
+            router.push({
+              pathname: "/_error",
+              query: { status: response.status },
+            });
+          }
+        }
         deleteCookie("laravel_session");
         deleteCookie("XSRF-TOKEN");
         localStorage.clear();

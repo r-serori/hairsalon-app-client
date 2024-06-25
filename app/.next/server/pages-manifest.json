@@ -2,7 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/auth/register": "pages/auth/register.js",
   "/": "pages/index.js",
-  "/auth/login": "pages/auth/login.js"
+  "/dashboard": "pages/dashboard.js",
+  "/auth/login": "pages/auth/login.js",
+  "/attendances": "pages/attendances.js",
+  "/attendance_times/[attendance_id]/show": "pages/attendance_times/[attendance_id]/show.js"
 }

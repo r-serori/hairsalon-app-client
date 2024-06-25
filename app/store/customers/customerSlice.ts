@@ -21,8 +21,24 @@ export const getCustomer = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -67,8 +83,24 @@ export const createCustomer = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -137,8 +169,24 @@ export const updateCustomer = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -169,8 +217,24 @@ export const deleteCustomer = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -207,7 +271,7 @@ export interface CustomerState {
 export interface RootState {
   // ルートステートの型を定義
   customers: CustomerState[]; // 顧客情報の配列
-  loading: boolean; // ローディング状態
+  status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
   error: string | null; // エラーメッセージ
 }
@@ -215,7 +279,7 @@ export interface RootState {
 const initialState: RootState = {
   // 初期状態
   customers: [], // 顧客情報の配列
-  loading: false, // ローディング状態
+  status: "idle", // ローディング状態
   message: null, // メッセージ
   error: null, // エラーメッセージ
 };
@@ -226,64 +290,64 @@ const customerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.customers = [...state.customers, ...action.payload.customers];
       state.message = action.payload.message
         ? action.payload.message
         : "顧客情報を取得しました！";
     });
     builder.addCase(getCustomer.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(createCustomer.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(createCustomer.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.customers = [...state.customers, action.payload.customer];
       state.message = action.payload.message
         ? action.payload.message
         : "顧客情報を作成しました！";
     });
     builder.addCase(createCustomer.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message!;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     // builder.addCase(getCustomerById.pending, (state) => {
-    //   state.loading = true;
+    //   state.status = "success";
     //   state.message = null;
     //   state.error = null;
     // });
     // builder.addCase(getCustomerById.fulfilled, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "success";
     //   state.customers = [...state.customers, action.payload.customer];
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "顧客情報を取得しました！";
     // });
     // builder.addCase(getCustomerById.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.error.message!;
+    //   state.status = "failed";
+    //   state.error = (action.payload as any).message;
     // });
 
     builder.addCase(updateCustomer.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.customers = state.customers.map((customer) =>
         customer.id === action.payload.customer.id
           ? { ...customer, ...action.payload.customer }
@@ -295,17 +359,17 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(updateCustomer.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message!;
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(deleteCustomer.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.message = null;
       state.error = null;
     });
     builder.addCase(deleteCustomer.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.customers = state.customers.filter(
         (customer) => customer.id !== Number(action.payload.deleteId)
       );
@@ -314,7 +378,7 @@ const customerSlice = createSlice({
         : "顧客情報を削除しました！";
     });
     builder.addCase(deleteCustomer.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 

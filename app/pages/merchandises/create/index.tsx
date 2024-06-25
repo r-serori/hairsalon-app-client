@@ -14,7 +14,7 @@ const merchandiseCreate: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.merchandise.loading);
+  const loading = useSelector((state: RootState) => state.merchandise.status);
 
   const handleCreate = async (formData: {
     id: number;
@@ -36,7 +36,7 @@ const merchandiseCreate: React.FC = () => {
       <div className="ml-4 mt-4">
         <BackAgainButton link={"/merchandises"} />
       </div>
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <MerchandiseForm createMerchandise={handleCreate} />

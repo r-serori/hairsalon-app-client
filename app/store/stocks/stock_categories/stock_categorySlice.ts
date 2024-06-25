@@ -18,8 +18,24 @@ export const getStockCategory = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -60,8 +76,24 @@ export const createStockCategory = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -78,6 +110,7 @@ export const createStockCategory = createAsyncThunk(
     }
   }
 );
+
 // 在庫カテゴリ情報を取得する非同期アクション//show
 // export const getStockCategoryById = createAsyncThunk(
 //   "stock_category/getStockCategoryById",
@@ -125,8 +158,24 @@ export const updateStockCategory = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -158,8 +207,24 @@ export const deleteStockCategory = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -188,7 +253,7 @@ export interface Stock_categoryState {
 
 export interface RootState {
   stock_category: Stock_categoryState[];
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
 }
@@ -196,7 +261,7 @@ export interface RootState {
 const initialState: RootState = {
   // 初期状態
   stock_category: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -207,12 +272,12 @@ const stock_categorySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getStockCategory.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(getStockCategory.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.stock_category = [
         ...state.stock_category,
         ...action.payload.stockCategories,
@@ -222,17 +287,17 @@ const stock_categorySlice = createSlice({
         : "在庫カテゴリーの取得に成功しました！";
     });
     builder.addCase(getStockCategory.rejected, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(createStockCategory.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(createStockCategory.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.stock_category = [
         ...state.stock_category,
         action.payload.stockCategory,
@@ -243,11 +308,11 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(createStockCategory.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
 
     // builder.addCase(getStockCategoryById.pending, (state) => {
-    //   state.loading = true;
+    //   state.status = "success";
     //   state.error = null;
     //   state.message = null;
     // });
@@ -256,23 +321,23 @@ const stock_categorySlice = createSlice({
     //     ...state.stock_category,
     //     action.payload.stockCategory,
     //   ];
-    //   state.loading = false;
+    //   state.status = "success";
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "在庫カテゴリーの取得に成功しました！";
     // });
     // builder.addCase(getStockCategoryById.rejected, (state, action) => {
     //   state.error = (action.payload as any).message;;
-    //   state.loading = false;
+    //   state.status = "failed";
     // });
 
     builder.addCase(updateStockCategory.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(updateStockCategory.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.stock_category = state.stock_category.map((stock_category) =>
         stock_category.id === action.payload.stockCategory.id
           ? { ...stock_category, ...action.payload.stockCategory }
@@ -284,16 +349,16 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(updateStockCategory.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
 
     builder.addCase(deleteStockCategory.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(deleteStockCategory.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.stock_category = state.stock_category.filter(
         (stock_category) =>
           stock_category.id !== Number(action.payload.deleteId)
@@ -304,7 +369,7 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(deleteStockCategory.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
   },
 });

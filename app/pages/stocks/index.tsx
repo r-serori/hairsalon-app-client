@@ -46,10 +46,10 @@ const stocks: React.FC = () => {
     }
   }, [dispatch]);
 
-  const loading = useSelector((state: RootState) => state.stock.loading);
+  const loading = useSelector((state: RootState) => state.stock.status);
 
   const stockCategoryLoading = useSelector(
-    (state: RootState) => state.stock_category.loading
+    (state: RootState) => state.stock_category.status
   );
 
   const message = useSelector((state: RootState) => state.stock.message);
@@ -151,18 +151,17 @@ const stocks: React.FC = () => {
         <RouterButton link="/stock_categories" value="在庫カテゴリ画面へ" />
       </div>
 
-      {!loading && !stockCategoryLoading ? (
+      {loading === "loading" || stockCategoryLoading === "loading" ? (
+        <p>Loading...</p>
+      ) : (
         <ComponentTable
           nodes={nodes}
           searchItems={searchItems}
           nodesProps={nodesProps}
           tHeaderItems={tHeaderItems}
           link="/stocks"
-          isLoading={loading}
           role={role}
         />
-      ) : (
-        <p>Loading...</p>
       )}
     </div>
   );

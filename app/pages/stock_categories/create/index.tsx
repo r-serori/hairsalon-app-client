@@ -15,7 +15,7 @@ const stockCategoryCreate: React.FC = () => {
   const router = useRouter();
 
   const loading = useSelector(
-    (state: RootState) => state.stock_category.loading
+    (state: RootState) => state.stock_category.status
   );
 
   const handleCreate = async (formData: {
@@ -38,7 +38,7 @@ const stockCategoryCreate: React.FC = () => {
       <div className="ml-4 mt-4 ">
         <BackAgainButton link={"/stock_categories"} />
       </div>
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <StockCategoryForm createStockCategory={handleCreate} />

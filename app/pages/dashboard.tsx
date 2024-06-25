@@ -29,29 +29,29 @@ const dashboard: React.FC = () => {
     UserPermission();
   }, []);
 
-  useEffect(() => {
-    const hasLaravelSessionCookie = () => {
-      // ブラウザのCookieからlaravel_session Cookieを取得する
-      const cookies = document.cookie;
-      console.log("cookies", cookies);
+  // useEffect(() => {
+  //   const hasLaravelSessionCookie = () => {
+  //     // ブラウザのCookieからlaravel_session Cookieを取得する
+  //     const cookies = document.cookie;
+  //     console.log("cookies", cookies);
 
-      if (cookies.startsWith("XSRF-TOKEN")) {
-        return true;
-      } else {
-        return false;
-      }
-    };
+  //     if (cookies.startsWith("XSRF-TOKEN")) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   };
 
-    if (hasLaravelSessionCookie() && localStorage.getItem("user_id")) {
-      console.log("XCSRF存在します");
-      return;
-      // ログイン済みの場合の処理を記述する
-    } else {
-      console.log("XCSRFが存在しません");
-      router.push("/auth/login");
-      // 未ログインの場合の処理を記述する
-    }
-  }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
+  //   if (hasLaravelSessionCookie() && localStorage.getItem("user_id")) {
+  //     console.log("XCSRF存在します");
+  //     return;
+  //     // ログイン済みの場合の処理を記述する
+  //   } else {
+  //     console.log("XCSRFが存在しません");
+  //     router.push("/auth/login");
+  //     // 未ログインの場合の処理を記述する
+  //   }
+  // }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   useEffect(() => {
     function handleResize() {

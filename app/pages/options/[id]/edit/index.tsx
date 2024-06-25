@@ -11,7 +11,7 @@ const optionEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.option.loading);
+  const loading = useSelector((state: RootState) => state.option.status);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -41,7 +41,7 @@ const optionEdit: React.FC = () => {
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/options"} />
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <OptionForm node={option} createOption={handleUpdate} edit={true} />

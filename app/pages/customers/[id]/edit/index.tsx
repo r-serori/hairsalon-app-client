@@ -14,7 +14,7 @@ const customersEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.customer.loading);
+  const loading = useSelector((state: RootState) => state.customer.status);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -122,7 +122,7 @@ const customersEdit: React.FC = () => {
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/customers"} />
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <CustomerForm node={customer} onSubmit={handleUpdate} edit={true} />

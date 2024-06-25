@@ -40,7 +40,7 @@ const hairstyles: React.FC = () => {
     }
   }, [dispatch]);
 
-  const loading = useSelector((state: RootState) => state.hairstyle.loading);
+  const loading = useSelector((state: RootState) => state.hairstyle.status);
 
   const message = useSelector((state: RootState) => state.hairstyle.message);
 
@@ -72,7 +72,7 @@ const hairstyles: React.FC = () => {
         <div className="my-4 ml-4">
           <RouterButton link="/hairstyles/create" value="顧客情報新規作成" />
         </div>
-        {loading ? (
+        {loading === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -81,7 +81,6 @@ const hairstyles: React.FC = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/hairstyles"
-            isLoading={loading}
             role={role}
           />
         )}

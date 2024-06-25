@@ -10,7 +10,7 @@ const OwnerPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.auth.loading);
+  const loading = useSelector((state: RootState) => state.auth.status);
 
   const message = useSelector((state: RootState) => state.auth.message);
 
@@ -44,7 +44,7 @@ const OwnerPage = () => {
         <BasicAlerts message={error} type="error" padding={0.8} space={1} />
       )}
 
-      {loading ? (
+      {loading == "loading" ? (
         <p>Loading...</p>
       ) : (
         <OwnerRegisterForm onSubmit={ownerSubmit} />

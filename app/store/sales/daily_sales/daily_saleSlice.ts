@@ -15,8 +15,24 @@ export const getDaily_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -50,8 +66,24 @@ export const createDaily_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -68,6 +100,7 @@ export const createDaily_sales = createAsyncThunk(
     }
   }
 );
+
 // export const getDaily_salesById = createAsyncThunk(
 //   "daily_sales/getDaily_salesById",
 //   async (id: number, { rejectWithValue }) => {
@@ -108,8 +141,24 @@ export const updateDaily_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -140,8 +189,24 @@ export const deleteDaily_sales = createAsyncThunk(
       } else if (response.status >= 400 && response.status < 500) {
         // クライアントエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
       } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
         // サーバーエラー時の処理
         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
@@ -172,7 +237,7 @@ export interface Daily_salesState {
 export interface RootState {
   // ルートステートの型を定義
   daily_sales: Daily_salesState[];
-  loading: boolean; // ローディング状態
+  status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
   error: string | null; // エラー
 }
@@ -180,7 +245,7 @@ export interface RootState {
 export const initialState: RootState = {
   // 初期状態
   daily_sales: [],
-  loading: false,
+  status: "idle",
   message: null,
   error: null,
 };
@@ -191,12 +256,12 @@ const daily_salesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getDaily_sales.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(getDaily_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.daily_sales = [...state.daily_sales, ...action.payload.dailySales];
       state.message = action.payload.message
         ? action.payload.message
@@ -204,16 +269,16 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(getDaily_sales.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "success";
     });
 
     builder.addCase(createDaily_sales.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(createDaily_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.daily_sales = [...state.daily_sales, action.payload.dailySale];
       state.message = action.payload.message
         ? action.payload.message
@@ -221,16 +286,16 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(createDaily_sales.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
 
     // builder.addCase(getDaily_salesById.pending, (state) => {
-    //   state.loading = true;
+    //   state.status = "success";
     //   state.error = null;
     //   state.message = null;
     // });
     // builder.addCase(getDaily_salesById.fulfilled, (state, action) => {
-    //   state.loading = false;
+    //   state.status = "success";
     //   state.daily_sales = [...state.daily_sales, action.payload.dailySale];
     //   state.message = action.payload.message
     //     ? action.payload.message
@@ -238,16 +303,16 @@ const daily_salesSlice = createSlice({
     // });
     // builder.addCase(getDaily_salesById.rejected, (state, action) => {
     //   state.error = (action.payload as any).message;;
-    //   state.loading = false;
+    //   state.status = "failed";
     // });
 
     builder.addCase(updateDaily_sales.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(updateDaily_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.daily_sales = state.daily_sales.map((daily_sales) =>
         daily_sales.id === action.payload.dailySale.id
           ? { ...daily_sales, ...action.payload.dailySale }
@@ -259,16 +324,16 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(updateDaily_sales.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
 
     builder.addCase(deleteDaily_sales.pending, (state) => {
-      state.loading = true;
+      state.status = "success";
       state.error = null;
       state.message = null;
     });
     builder.addCase(deleteDaily_sales.fulfilled, (state, action) => {
-      state.loading = false;
+      state.status = "success";
       state.daily_sales = state.daily_sales.filter(
         (daily_sales) => daily_sales.id !== Number(action.payload.deleteId)
       );
@@ -278,7 +343,7 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(deleteDaily_sales.rejected, (state, action) => {
       state.error = (action.payload as any).message;
-      state.loading = false;
+      state.status = "failed";
     });
   },
 });

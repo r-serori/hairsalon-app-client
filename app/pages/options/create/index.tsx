@@ -12,7 +12,7 @@ const optionCreate: React.FC = () => {
 
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.option.loading);
+  const loading = useSelector((state: RootState) => state.option.status);
 
   const handleCreate = async (formData: {
     id: number;
@@ -34,7 +34,11 @@ const optionCreate: React.FC = () => {
       <div className="ml-4 mt-4 ">
         <BackAgainButton link={"/options"} />
       </div>
-      {loading ? <p>Loading...</p> : <OptionForm createOption={handleCreate} />}
+      {loading === "loading" ? (
+        <p>Loading...</p>
+      ) : (
+        <OptionForm createOption={handleCreate} />
+      )}
     </div>
   );
 };
