@@ -13,12 +13,10 @@ interface AuthRegisterFormProps {
     isAttendance: boolean;
     password_confirmation: string;
   }) => void;
-  errorMessage: string;
 }
 
 const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
   onSubmitOwner,
-  errorMessage,
 }) => {
   const [name, setName] = useState("testerOwner");
   const [email, setEmail] = useState("testerOwner@hairsaron.com");
@@ -55,10 +53,6 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
         </div>
 
         <form onSubmit={handleSubmitOwner} className="mt-8 space-y-6">
-          {errorMessage && (
-            <p className="text-red-600 text-center">{errorMessage}</p>
-          )}
-
           <BasicTextField
             type="text"
             placeholder="名前"

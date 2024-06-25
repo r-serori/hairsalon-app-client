@@ -5,23 +5,31 @@ import RootState from "../../../redux/reducers/rootReducer";
 export const getYearly_sales = createAsyncThunk(
   "yearly_sales/getYearly_sales",
   async (owner_id: number, { rejectWithValue }) => {
-    const response: any = await yearlySaleApi.fetchAllYearlySales(owner_id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await yearlySaleApi.fetchAllYearlySales(owner_id);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -32,23 +40,31 @@ export const createYearly_sales = createAsyncThunk(
     formData: { year: string; yearly_sales: number; owner_id: number },
     { rejectWithValue }
   ) => {
-    const response: any = await yearlySaleApi.createYearlySales(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await yearlySaleApi.createYearlySales(formData);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -82,23 +98,31 @@ export const updateYearly_sales = createAsyncThunk(
     formData: { id: number; year: string; yearly_sales: number },
     { rejectWithValue }
   ) => {
-    const response: any = await yearlySaleApi.updateYearlySales(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await yearlySaleApi.updateYearlySales(formData);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -106,23 +130,31 @@ export const updateYearly_sales = createAsyncThunk(
 export const deleteYearly_sales = createAsyncThunk(
   "yearly_sales/deleteYearly_sales",
   async (id: number, { rejectWithValue }) => {
-    const response: any = await yearlySaleApi.deleteYearlySales(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await yearlySaleApi.deleteYearlySales(id);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -174,7 +206,7 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(getYearly_sales.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(createYearly_sales.pending, (state, action) => {
@@ -191,7 +223,7 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(createYearly_sales.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
     });
 
     // builder.addCase(getYearly_salesById.pending, (state, action) => {
@@ -208,7 +240,7 @@ const yearly_salesSlice = createSlice({
     // });
     // builder.addCase(getYearly_salesById.rejected, (state, action) => {
     //   state.loading = false;
-    //   state.error = action.error.message;
+    //   state.error = (action.payload as any).message;;
     // });
 
     builder.addCase(updateYearly_sales.pending, (state, action) => {
@@ -229,7 +261,7 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(updateYearly_sales.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(deleteYearly_sales.pending, (state, action) => {
@@ -245,7 +277,7 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(deleteYearly_sales.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
     });
   },
 });

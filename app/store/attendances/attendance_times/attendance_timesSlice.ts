@@ -12,26 +12,34 @@ export const selectGetAttendanceTimes = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await attendance_timeApi.selectFetchAttendanceTimes(
-      formData
-    );
-    console.log("responseだよ", response);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response = await attendance_timeApi.selectFetchAttendanceTimes(
+        formData
+      );
+      console.log("responseだよ", response);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -39,26 +47,33 @@ export const selectGetAttendanceTimes = createAsyncThunk(
 export const firstGetAttendanceTime = createAsyncThunk(
   "attendance_times/firstGetAttendanceTime",
   async (id: number, { rejectWithValue }) => {
-    const response: any = await attendance_timeApi.firstGetAttendanceTime(
-      id as number
-    );
-    console.log("responseだよ", response);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await attendance_timeApi.firstGetAttendanceTime(
+        id as number
+      );
+      console.log("responseだよ", response);
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -74,23 +89,32 @@ export const pleaseEditEndTime = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await attendance_timeApi.pleaseEditEndTime(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await attendance_timeApi.pleaseEditEndTime(
+        formData
+      );
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -106,23 +130,30 @@ export const updateStartTime = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await attendance_timeApi.updateStartTime(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await attendance_timeApi.updateStartTime(formData);
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -138,23 +169,30 @@ export const updateEndTime = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await attendance_timeApi.updateEndTime(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await attendance_timeApi.updateEndTime(formData);
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -169,23 +207,30 @@ export const createStartTime = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await attendance_timeApi.createStartTime(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await attendance_timeApi.createStartTime(formData);
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -200,23 +245,30 @@ export const createEndTime = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await attendance_timeApi.createEndTime(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await attendance_timeApi.createEndTime(formData);
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -224,23 +276,30 @@ export const createEndTime = createAsyncThunk(
 export const deleteAttendanceTime = createAsyncThunk(
   "attendance_times/deleteAttendanceTime",
   async (id: number, { rejectWithValue }) => {
-    const response: any = await attendance_timeApi.deleteAttendanceTime(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await attendance_timeApi.deleteAttendanceTime(id);
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );

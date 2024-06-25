@@ -7,23 +7,31 @@ import { getSchedule } from "../schedules/scheduleSlice";
 export const getHairstyle = createAsyncThunk(
   "hairstyle/getHairstyle",
   async (owner_id: number, { rejectWithValue }) => {
-    const response: any = await hairstyleApi.fetchAllHairstyles(owner_id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await hairstyleApi.fetchAllHairstyles(owner_id);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -40,23 +48,31 @@ export const createHairstyle = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await hairstyleApi.createHairstyle(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await hairstyleApi.createHairstyle(formData);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -96,23 +112,31 @@ export const updateHairstyle = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const response: any = await hairstyleApi.updateHairstyle(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await hairstyleApi.updateHairstyle(formData);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -120,23 +144,31 @@ export const updateHairstyle = createAsyncThunk(
 export const deleteHairstyle = createAsyncThunk(
   "hairstyle/deleteHairstyle",
   async (id: number, { rejectWithValue }) => {
-    const response: any = await hairstyleApi.deleteHairstyle(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await hairstyleApi.deleteHairstyle(id);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -185,7 +217,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(getHairstyle.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message!;
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(createHairstyle.pending, (state) => {
@@ -202,7 +234,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(createHairstyle.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message!;
+      state.error = (action.payload as any).message;
     });
 
     // builder.addCase(getHairstyleById.pending, (state) => {
@@ -219,7 +251,7 @@ const hairstyleSlice = createSlice({
     // });
     // builder.addCase(getHairstyleById.rejected, (state, action) => {
     //   state.loading = false;
-    //   state.error = action.error.message!;
+    //   state.error = (action.payload as any).message;!;
     // });
 
     builder.addCase(updateHairstyle.pending, (state) => {
@@ -241,7 +273,7 @@ const hairstyleSlice = createSlice({
 
     builder.addCase(updateHairstyle.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message!;
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(deleteHairstyle.pending, (state) => {
@@ -257,7 +289,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(deleteHairstyle.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message!;
+      state.error = (action.payload as any).message;
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {

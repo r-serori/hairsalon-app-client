@@ -27,10 +27,12 @@ const daily_sales: React.FC = () => {
       router.push("/dashboard");
     }
     if (daily_sales.length === 0 && role === "オーナー") {
-      const ownerId = Number(localStorage.getItem("owner_id"));
-      dispatch(getDaily_sales(ownerId) as any);
-    } else {
-      return;
+      try {
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(getDaily_sales(ownerId) as any);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, [dispatch]);
 

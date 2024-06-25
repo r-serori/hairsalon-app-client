@@ -29,7 +29,7 @@ const hairstyleCreate = () => {
     } catch (error) {
       console.error(error);
     }
-    router.push("/hairstyles"); // Redirect to the hairstyle list page after creating a hairstyle
+    router.push("/hairstyles");
   };
   return (
     <div className="min-h-full ">

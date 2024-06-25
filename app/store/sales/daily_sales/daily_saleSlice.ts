@@ -5,23 +5,31 @@ import RootState from "../../../redux/reducers/rootReducer";
 export const getDaily_sales = createAsyncThunk(
   "daily_sales/getDaily_sales",
   async (owner_id: number, { rejectWithValue }) => {
-    const response: any = await dailySaleApi.fetchAllDailySales(owner_id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await dailySaleApi.fetchAllDailySales(owner_id);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -32,23 +40,31 @@ export const createDaily_sales = createAsyncThunk(
     formData: { date: string; daily_sales: number; owner_id: number },
     { rejectWithValue }
   ) => {
-    const response: any = await dailySaleApi.createDailySales(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await dailySaleApi.createDailySales(formData);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -82,23 +98,31 @@ export const updateDaily_sales = createAsyncThunk(
     formData: { id: number; date: string; daily_sales: number },
     { rejectWithValue }
   ) => {
-    const response: any = await dailySaleApi.updateDailySales(formData);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await dailySaleApi.updateDailySales(formData);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -106,23 +130,31 @@ export const updateDaily_sales = createAsyncThunk(
 export const deleteDaily_sales = createAsyncThunk(
   "daily_sales/deleteDaily_sales",
   async (id: number, { rejectWithValue }) => {
-    const response: any = await dailySaleApi.deleteDailySales(id);
-    if (response.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response);
-    } else if (response.data.resStatus === "error") {
-      //エラー時の処理
-      console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-      return rejectWithValue(response.data);
-    } else if (response.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response;
-    } else if (response.data.resStatus === "success") {
-      //成功時の処理
-      console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-      return response.data;
+    try {
+      const response: any = await dailySaleApi.deleteDailySales(id);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
     }
   }
 );
@@ -171,7 +203,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の取得に成功しました！";
     });
     builder.addCase(getDaily_sales.rejected, (state, action) => {
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
       state.loading = false;
     });
 
@@ -188,7 +220,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の作成に成功しました！";
     });
     builder.addCase(createDaily_sales.rejected, (state, action) => {
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
       state.loading = false;
     });
 
@@ -205,7 +237,7 @@ const daily_salesSlice = createSlice({
     //     : "日次売上の取得に成功しました！";
     // });
     // builder.addCase(getDaily_salesById.rejected, (state, action) => {
-    //   state.error = action.error.message;
+    //   state.error = (action.payload as any).message;;
     //   state.loading = false;
     // });
 
@@ -226,7 +258,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の更新に成功しました！";
     });
     builder.addCase(updateDaily_sales.rejected, (state, action) => {
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
       state.loading = false;
     });
 
@@ -245,7 +277,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の削除に成功しました！";
     });
     builder.addCase(deleteDaily_sales.rejected, (state, action) => {
-      state.error = action.error.message;
+      state.error = (action.payload as any).message;
       state.loading = false;
     });
   },

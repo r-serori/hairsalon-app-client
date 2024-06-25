@@ -47,7 +47,6 @@ const Attendances = () => {
       }
     } catch (error) {
       console.log("Error", error);
-      return;
     } finally {
       setFirstRender(false);
     }

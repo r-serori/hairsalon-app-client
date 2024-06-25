@@ -38,12 +38,7 @@ const stockCategoryEdit: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(updateStockCategory(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      router.push("/stock_categories"); // Redirect to the stock_category list page after updating a stock_category
+      await dispatch(updateStockCategory(formData) as any);
     } catch (error) {
       console.error(error);
     }

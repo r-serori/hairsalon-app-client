@@ -4,13 +4,9 @@ import PrimaryButton from "../../button/PrimaryButton";
 
 interface AuthLoginFormProps {
   onSubmit: (formData: { email: string; password: string }) => void;
-  errorMessage: string;
 }
 
-const AuthLoginForm: React.FC<AuthLoginFormProps> = ({
-  onSubmit,
-  errorMessage,
-}) => {
+const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
   const [email, setEmail] = useState("owner@hairmail.com");
   const [password, setPassword] = useState("password123");
 
@@ -30,9 +26,7 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({
             ログイン画面
           </h2>
         </div>
-        {errorMessage && (
-          <p className="text-red-600 text-center">{errorMessage}</p>
-        )}
+
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <BasicTextField
             type="text"

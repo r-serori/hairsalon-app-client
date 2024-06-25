@@ -38,16 +38,11 @@ const hairstyleEdit: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(updateHairstyle(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      router.push("/hairstyles"); // Redirect to the hairstyle list page after updating a hairstyle
+      await dispatch(updateHairstyle(formData) as any);
     } catch (error) {
       console.error(error);
     }
-    router.push("/hairstyles"); // Redirect to the hairstyle list page after updating a hairstyle
+    router.push("/hairstyles");
   };
 
   return (

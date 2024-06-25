@@ -42,12 +42,7 @@ const stockEdit: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(updateStock(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      router.push("/stocks"); // Redirect to the stock list page after updating a stock
+      await dispatch(updateStock(formData) as any);
     } catch (error) {
       console.error(error);
     }

@@ -31,10 +31,12 @@ const merchandises = () => {
       merchandises.length === 0 &&
       (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
     ) {
-      const ownerId = Number(localStorage.getItem("owner_id"));
-      dispatch(getMerchandise(ownerId) as any);
-    } else {
-      return;
+      try {
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(getMerchandise(ownerId) as any);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, [dispatch]);
 

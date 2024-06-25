@@ -7,12 +7,17 @@ export const ownerApi = {
     phone_number: string;
     user_id: number;
   }) => {
-    const response = (await sendRequest(
-      "POST",
-      `/ownerRegister`,
-      formData
-    )) as any;
-    console.log("responseRegisterDataだよ", response);
-    return response;
+    try {
+      const response = (await sendRequest(
+        "POST",
+        `/ownerRegister`,
+        formData
+      )) as any;
+      // console.log("responseRegisterDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 };

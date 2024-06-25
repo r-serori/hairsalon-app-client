@@ -10,18 +10,35 @@ export const stockApi = {
     stock_category_id: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/stocks/store", formData);
-    return response;
+    try {
+      const response = await sendRequest("POST", "/stocks/store", formData);
+      // console.log("APIのstockDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 
   fetchAllStocks: async (owner_id: number) => {
-    const response = await sendRequest("GET", `/stocks/${owner_id}`);
-    return response;
+    try {
+      const response = await sendRequest("GET", `/stocks/${owner_id}`);
+      // console.log("stocks fetched", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 
   // fetchStockById: async (id: number) => {
+  // try{
   //   const response = await sendRequest("GET", `/stocks/${id}`);
   //   return response;
+  // }catch(error){
+  // console.log("errorだよ", error);
+  //   return {error : error};
+  // }
   // },
 
   updateStock: async (formData: {
@@ -33,12 +50,24 @@ export const stockApi = {
     notice: number;
     stock_category_id: number;
   }) => {
-    const response = await sendRequest("POST", `/stocks/update`, formData);
-    return response;
+    try {
+      const response = await sendRequest("POST", `/stocks/update`, formData);
+      // console.log("APIのstockDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 
   deleteStock: async (id: number) => {
-    const response = await sendRequest("POST", `/stocks/delete`, { id: id });
-    return response;
+    try {
+      const response = await sendRequest("POST", `/stocks/delete`, { id: id });
+      // console.log("APIのstockDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 };

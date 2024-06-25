@@ -6,18 +6,35 @@ export const optionApi = {
     price: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/options/store", formData);
-    return response;
+    try {
+      const response = await sendRequest("POST", "/options/store", formData);
+      console.log("APIのoptionDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("error", error);
+      return { error: error };
+    }
   },
 
   fetchAllOptions: async (owner_id: number) => {
-    const response = await sendRequest("GET", `/options/${owner_id}`);
-    return response;
+    try {
+      const response = await sendRequest("GET", `/options/${owner_id}`);
+      // console.log("options fetched",response);
+      return response;
+    } catch (error) {
+      // console.log("error", error);
+      return { error: error };
+    }
   },
 
   // fetchOptionById: async (id: number) => {
+  // try{
   //   const response = await sendRequest("GET", `/options/${id}`);
   //   return response;
+  // }catch(error){
+  // console.log('error',error);
+  //   return { error: error };
+  // }
   // },
 
   updateOption: async (formData: {
@@ -25,12 +42,24 @@ export const optionApi = {
     option_name: string;
     price: number;
   }) => {
-    const response = await sendRequest("POST", `/options/update`, formData);
-    return response;
+    try {
+      const response = await sendRequest("POST", `/options/update`, formData);
+      // console.log("APIのoptionDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("error", error);
+      return { error: error };
+    }
   },
 
   deleteOption: async (id: number) => {
-    const response = await sendRequest("POST", `/options/delete`, { id: id });
-    return response;
+    try {
+      const response = await sendRequest("POST", `/options/delete`, { id: id });
+      // console.log("APIのoptionDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("error", error);
+      return { error: error };
+    }
   },
 };

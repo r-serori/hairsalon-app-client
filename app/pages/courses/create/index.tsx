@@ -28,7 +28,6 @@ const courseCreate: React.FC = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      console.log("コース作成！！");
       router.push("/courses");
     }
   };

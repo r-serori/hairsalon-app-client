@@ -38,17 +38,11 @@ const merchandiseEdit: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(updateMerchandise(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      router.push("/merchandises"); // Redirect to the merchandise list page after updating a merchandise
+      await dispatch(updateMerchandise(formData) as any);
     } catch (error) {
       console.error(error);
-    } finally {
-      router.push("/merchandises"); // Redirect to the merchandise list page after updating a merchandise
     }
+    router.push("/merchandises"); // Redirect to the merchandise list page after updating a merchandise
   };
 
   return (

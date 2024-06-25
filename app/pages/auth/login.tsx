@@ -6,6 +6,8 @@ import { login } from "../../store/auth/authSlice";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { useState } from "react";
 import { isLogin } from "../../store/auth/isLoginSlice";
+import { clearError } from "../../store/auth/authSlice";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -16,8 +18,6 @@ const LoginPage: React.FC = () => {
   const message = useSelector((state: RootState) => state.auth.message);
 
   const error = useSelector((state: RootState) => state.auth.error);
-
-  const [dispatchError, setDispatchError] = useState<string>("");
 
   // useEffect(() => {
   //   const hasLaravelSessionCookie = () => {
@@ -69,22 +69,11 @@ const LoginPage: React.FC = () => {
       }
     } catch (error) {
       console.log("Error", error);
-      setDispatchError("ログインに失敗しました。もう一度お試しください。");
-      return;
     }
   };
 
   return (
     <div>
-      {dispatchError && (
-        <BasicAlerts
-          type="error"
-          message={dispatchError}
-          space={1}
-          padding={0.6}
-        />
-      )}
-
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
@@ -97,7 +86,14 @@ const LoginPage: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <AuthLoginForm onSubmit={handleLogin} errorMessage={error} />
+          <div className="mt-4 ml-4">
+            <RouterButton
+              link="/"
+              value="ホーム画面へ戻る"
+              onChangeAndRouter={() => dispatch(clearError())}
+            />
+          </div>
+          <AuthLoginForm onSubmit={handleLogin} />
         </div>
       )}
     </div>

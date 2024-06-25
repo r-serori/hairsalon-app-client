@@ -26,31 +26,23 @@ const stocks: React.FC = () => {
   console.log(stockCategories);
 
   useEffect(() => {
-    try {
-      const role = localStorage.getItem("role");
-      if (
-        role === "スタッフ" ||
-        role === "マネージャー" ||
-        role === "オーナー"
-      ) {
-        setRole(role);
-      } else {
-        router.push("/dashboard");
-      }
-      if (
-        stocks.length === 0 &&
-        (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
-      ) {
+    const role = localStorage.getItem("role");
+    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
+      setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (
+      stocks.length === 0 &&
+      (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
+    ) {
+      try {
         const ownerId = Number(localStorage.getItem("owner_id"));
         dispatch(getStock(ownerId) as any);
         dispatch(getStockCategory(ownerId) as any);
-      } else {
-        return;
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("ストック、ストックカテゴリー取得！！");
     }
   }, [dispatch]);
 

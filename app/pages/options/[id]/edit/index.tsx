@@ -32,12 +32,7 @@ const optionEdit: React.FC = () => {
     updated_at: string;
   }) => {
     try {
-      try {
-        await dispatch(updateOption(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getOption as any);
+      await dispatch(updateOption(formData) as any);
     } catch (error) {
       console.error(error);
     }

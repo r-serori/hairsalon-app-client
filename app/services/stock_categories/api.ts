@@ -5,37 +5,79 @@ export const stockCategoryApi = {
     category: string;
     owner_id: number;
   }) => {
-    const response = await sendRequest(
-      "POST",
-      "/stock_categories/store",
-      formData
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        "/stock_categories/store",
+        formData
+      );
+      // console.log("APIのstockCategoryDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return {
+        error: error,
+      };
+    }
   },
 
   fetchAllStockCategories: async (owner_id: number) => {
-    const response = await sendRequest("GET", `/stock_categories/${owner_id}`);
-    return response;
+    try {
+      const response = await sendRequest(
+        "GET",
+        `/stock_categories/${owner_id}`
+      );
+      // console.log("stock_categories fetched", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return {
+        error: error,
+      };
+    }
   },
 
   // fetchStockCategoryById: async (id: number) => {
+  // try{
   //   const response = await sendRequest("GET", `/stock_categories/${id}`);
   //   return response;
+  // }catch(error){
+  // console.log("errorだよ", error);
+  // return {
+  //   error:error
+  // }
+  // }
   // },
 
   updateStockCategory: async (formData: { id: number; category: string }) => {
-    const response = await sendRequest(
-      "POST",
-      `/stock_categories/update`,
-      formData
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        `/stock_categories/update`,
+        formData
+      );
+      // console.log("APIのstockCategoryDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return {
+        error: error,
+      };
+    }
   },
 
   deleteStockCategory: async (id: number) => {
-    const response = await sendRequest("POST", `/stock_categories/delete`, {
-      id: id,
-    });
-    return response;
+    try {
+      const response = await sendRequest("POST", `/stock_categories/delete`, {
+        id: id,
+      });
+      // console.log("APIのstockCategoryDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return {
+        error: error,
+      };
+    }
   },
 };

@@ -50,8 +50,6 @@ const courses: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      console.log("コース取得！！");
     }
   }, [dispatch]);
 

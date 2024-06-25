@@ -6,22 +6,39 @@ export const monthlySaleApi = {
     monthly_sales: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest(
-      "POST",
-      "/monthly_sales/store",
-      formData
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        "/monthly_sales/store",
+        formData
+      );
+      // console.log("APIのmonthlySalesDataだよ",response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 
   fetchAllMonthlySales: async (owner_id: number) => {
-    const response = await sendRequest("GET", `/monthly_sales/${owner_id}`);
-    return response;
+    try {
+      const response = await sendRequest("GET", `/monthly_sales/${owner_id}`);
+      // console.log("monthly_sales fetched",response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 
   // fetchMonthlySalesById: async (id: number) => {
+  // try{
   //   const response = await sendRequest("GET", `/monthly_sales/${id}`);
   //   return response;
+  // }catch (error){
+  //   console.log("errorだよ", error);
+  //   return { error: error };
+  // }
   // },
 
   updateMonthlySales: async (formData: {
@@ -29,18 +46,30 @@ export const monthlySaleApi = {
     year_month: string;
     monthly_sales: number;
   }) => {
-    const response = await sendRequest(
-      "POST",
-      `/monthly_sales/update`,
-      formData
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        `/monthly_sales/update`,
+        formData
+      );
+      // console.log("APIのmonthlySalesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 
   deleteMonthlySales: async (id: number) => {
-    const response = await sendRequest("POST", `/monthly_sales/delete`, {
-      id: id,
-    });
-    return response;
+    try {
+      const response = await sendRequest("POST", `/monthly_sales/delete`, {
+        id: id,
+      });
+      // console.log("APIのmonthlySalesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
   },
 };

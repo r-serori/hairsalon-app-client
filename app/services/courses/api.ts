@@ -6,20 +6,31 @@ export const courseApi = {
     price: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/courses/store", formData);
-    console.log("APIのcourseDataだよ");
-    return response;
+    try {
+      const response = await sendRequest("POST", "/courses/store", formData);
+      // console.log("APIのcourseDataだよ");
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   fetchAllCourses: async (owner_id: number) => {
-    const response = await sendRequest("GET", `/courses/${owner_id}`);
-    console.log("courses fetched");
-    return response;
+    try {
+      const response = await sendRequest("GET", `/courses/${owner_id}`);
+      // console.log("courses fetched");
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   // fetchCourseById: async (id: number) => {
+  // try{
   //   const response = await sendRequest("GET", `/courses/${id}`);
-  //   console.log("course fetched");
+  // console.log("course fetched");
   //   return response;
   // },
 
@@ -28,14 +39,24 @@ export const courseApi = {
     course_name: string;
     price: number;
   }) => {
-    const response = await sendRequest("POST", `/courses/update`, formData);
-    console.log("APIのcourseDataだよ");
-    return response;
+    try {
+      const response = await sendRequest("POST", `/courses/update`, formData);
+      // console.log("APIのcourseDataだよ");
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   deleteCourse: async (id: number) => {
-    const response = await sendRequest("POST", `/courses/delete`, { id: id });
-    console.log("APIのcourseDataだよ");
-    return response;
+    try {
+      const response = await sendRequest("POST", `/courses/delete`, { id: id });
+      // console.log("APIのcourseDataだよ");
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 };

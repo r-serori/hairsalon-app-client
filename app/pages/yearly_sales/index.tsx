@@ -22,10 +22,12 @@ const yearly_sales: React.FC = () => {
       router.push("/dashboard");
     }
     if (yearly_sales.length === 0 && role === "オーナー") {
-      const ownerId = Number(localStorage.getItem("owner_id"));
-      dispatch(getYearly_sales(ownerId) as any);
-    } else {
-      return;
+      try {
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(getYearly_sales(ownerId) as any);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, [dispatch]);
 

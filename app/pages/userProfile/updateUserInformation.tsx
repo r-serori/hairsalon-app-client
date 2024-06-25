@@ -22,11 +22,10 @@ const UpdateUserInformationPage: React.FC = () => {
   }) => {
     console.log(formData);
     try {
-      const response = await dispatch(updateUser(formData) as any);
+      await dispatch(updateUser(formData) as any);
       router.push("/attendances");
     } catch (error) {
       console.log("Error", error);
-      return;
     }
   };
 

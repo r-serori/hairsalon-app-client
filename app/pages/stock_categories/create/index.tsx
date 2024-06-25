@@ -29,9 +29,8 @@ const stockCategoryCreate: React.FC = () => {
       await dispatch(createStockCategory(formData) as any);
     } catch (error) {
       console.error(error);
-    } finally {
-      router.push("/stock_categories");
     }
+    router.push("/stock_categories");
   };
 
   return (

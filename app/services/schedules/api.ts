@@ -17,12 +17,18 @@ export const schedulesApi = {
     allDay: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest(
-      "POST",
-      "/schedules/customers/double",
-      formData
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        "/schedules/customers/double",
+        formData
+      );
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   createSchedule: async (formData: {
@@ -32,26 +38,49 @@ export const schedulesApi = {
     allDay: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/schedules/store", formData);
-    return response;
+    try {
+      const response = await sendRequest("POST", "/schedules/store", formData);
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   fetchAllSchedules: async (id: number) => {
-    const response = await sendRequest("GET", `/schedules/${id}`);
-    return response;
+    try {
+      const response = await sendRequest("GET", `/schedules/${id}`);
+      // console.log("schedules fetched", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   selectGetSchedules: async (formData: { owner_id: number; year: string }) => {
-    const response = await sendRequest(
-      "GET",
-      `/schedules/customers/selectGetYear/${formData.owner_id}/${formData.year}`
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "GET",
+        `/schedules/customers/selectGetYear/${formData.owner_id}/${formData.year}`
+      );
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   // fetchScheduleById: async (id: number) => {
+  // try{
   //   const response = await sendRequest("GET", `/schedules/${id}`);
   //   return response;
+  // }catch(error){
+  // console.error("errorだよ", error);
+  // return { error: error };
+  // }
   // },
 
   updateSchedule: async (formData: {
@@ -61,9 +90,14 @@ export const schedulesApi = {
     end_time: string;
     allDay: number;
   }) => {
-    console.log("updateScheduleの中だよ", formData);
-    const response = await sendRequest("POST", `/schedules/update`, formData);
-    return response;
+    try {
+      const response = await sendRequest("POST", `/schedules/update`, formData);
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   // 両方更新します
@@ -84,17 +118,31 @@ export const schedulesApi = {
     allDay: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest(
-      "POST",
-      `/schedules/customers/doubleUpdate`,
-      formData
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        `/schedules/customers/doubleUpdate`,
+        formData
+      );
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   deleteSchedule: async (id: number) => {
-    const response = await sendRequest("POST", `/schedules/delete`, { id: id });
-    return response;
+    try {
+      const response = await sendRequest("POST", `/schedules/delete`, {
+        id: id,
+      });
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   updateCustomerAndScheduleCreate: async (formData: {
@@ -113,11 +161,17 @@ export const schedulesApi = {
     customers_id: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest(
-      "POST",
-      `schedules/customers/customerOnlyUpdate`,
-      formData
-    );
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        `schedules/customers/customerOnlyUpdate`,
+        formData
+      );
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 };

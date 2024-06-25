@@ -23,9 +23,13 @@ const resetPasswordPage: React.FC = () => {
       router.push("/dashboard");
     }
     if (role === "オーナー" || role === "マネージャー" || role === "スタッフ") {
-      const userId = Number(localStorage.getItem("user_id"));
-      const response = dispatch(showUser(userId) as any);
-      setUser(response.payload.responseUser);
+      try {
+        const userId = Number(localStorage.getItem("user_id"));
+        const response = dispatch(showUser(userId) as any);
+        setUser(response.payload.responseUser);
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       router.push("/");
     }

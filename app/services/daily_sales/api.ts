@@ -6,18 +6,40 @@ export const dailySaleApi = {
     daily_sales: number;
     owner_id: number;
   }) => {
-    const response = await sendRequest("POST", "/daily_sales/store", formData);
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        "/daily_sales/store",
+        formData
+      );
+      // console.log("APIのdailySalesDataだよ");
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   fetchAllDailySales: async (owner_id: number) => {
-    const response = await sendRequest("GET", `/daily_sales/${owner_id}`);
-    return response;
+    try {
+      const response = await sendRequest("GET", `/daily_sales/${owner_id}`);
+      // console.log("daily_sales fetched",response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 
   // fetchDailySalesById: async (id: number) => {
+  // try{
   //   const response = await sendRequest("GET", `/daily_sales/${id}`);
   //   return response;
+  // }catch (error) {
+  //     console.error("errorだよ", error);
+  //     return { error: error };
+  // }
+
   // },
 
   updateDailySales: async (formData: {
@@ -25,13 +47,29 @@ export const dailySaleApi = {
     date: string;
     daily_sales: number;
   }) => {
-    const response = await sendRequest("POST", `/daily_sales/update`, formData);
-    return response;
+    try {
+      const response = await sendRequest(
+        "POST",
+        `/daily_sales/update`,
+        formData
+      );
+      // console.log("APIのdailySalesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
   deleteDailySales: async (id: number) => {
-    const response = await sendRequest("POST", `/daily_sales/delete`, {
-      id: id,
-    });
-    return response;
+    try {
+      const response = await sendRequest("POST", `/daily_sales/delete`, {
+        id: id,
+      });
+      // console.log("APIのdailySalesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
   },
 };

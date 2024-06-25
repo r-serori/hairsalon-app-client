@@ -36,10 +36,12 @@ const options: React.FC = () => {
       options.length === 0 &&
       (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
     ) {
-      const ownerId = Number(localStorage.getItem("owner_id"));
-      dispatch(getOption(ownerId) as any);
-    } else {
-      return;
+      try {
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        dispatch(getOption(ownerId) as any);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, [dispatch]);
 

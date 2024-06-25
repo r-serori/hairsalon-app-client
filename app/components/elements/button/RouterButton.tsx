@@ -1,3 +1,4 @@
+import { el } from "@fullcalendar/core/internal-common";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -6,6 +7,7 @@ interface RouterButtonProps {
   query?: any;
   value?: string;
   onChanger?: () => void;
+  onChangeAndRouter?: () => void;
 }
 
 const RouterButton: React.FC<RouterButtonProps> = ({
@@ -13,11 +15,15 @@ const RouterButton: React.FC<RouterButtonProps> = ({
   onChanger,
   value,
   query,
+  onChangeAndRouter,
 }) => {
   const router = useRouter();
 
   const handleRouter = () => {
     if (link) {
+      if (onChangeAndRouter) {
+        onChangeAndRouter();
+      }
       router.push(link);
     } else if (query) {
       router.push({

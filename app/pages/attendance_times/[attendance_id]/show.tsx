@@ -42,13 +42,17 @@ const attendanceTimes: React.FC = () => {
   const [yearMonth, setYearMonth] = useState("無し");
 
   const nowAttendanceTime = async () => {
-    await dispatch(
-      selectGetAttendanceTimes({
-        user_id: Number(id),
-        yearMonth: "無し",
-      }) as any
-    );
-    setYearMonth("無し");
+    try {
+      await dispatch(
+        selectGetAttendanceTimes({
+          user_id: Number(id),
+          yearMonth: "無し",
+        }) as any
+      );
+      setYearMonth("無し");
+    } catch (error) {
+      // console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -71,9 +75,7 @@ const attendanceTimes: React.FC = () => {
         return;
       }
     } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("勤怠情報取得！！");
+      // console.log(error);
     }
   }, [id, dispatch]);
 
