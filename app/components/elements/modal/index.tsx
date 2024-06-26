@@ -13,6 +13,7 @@ import { RootState } from "../../../redux/store";
 import { getUsers } from "../../../store/auth/authSlice";
 import { get } from "http";
 import { useRouter } from "next/router";
+import RouterButton from "../button/RouterButton";
 
 const style = {
   position: "absolute" as "absolute",
@@ -173,7 +174,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
               open={open}
               setOpen={setOpen}
             />
-            <button onClick={() => setOpen(false)}>戻る</button>
+            <RouterButton onChanger={handleClose} />
           </Box>
         </Modal>
       )}

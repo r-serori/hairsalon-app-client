@@ -247,8 +247,6 @@ export interface Stock_categoryState {
   id: number;
   category: string;
   owner_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

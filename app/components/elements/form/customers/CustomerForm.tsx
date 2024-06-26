@@ -94,30 +94,28 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   const [courses, setCourses] = useState(
     node
       ? getCoursesState
-          .filter((course) => node.courses_id.includes(course.id))
+          .filter((course) => node.course_id.includes(course.id))
           .map((course) => course.course_name)
       : []
   );
   const [options, setOptions] = useState(
     node
       ? getOptionsState
-          .filter((option) => node.options_id.includes(option.id))
+          .filter((option) => node.option_id.includes(option.id))
           .map((option) => option.option_name)
       : []
   );
   const [merchandises, setMerchandises] = useState(
     node
       ? getMerchandisesState
-          .filter((merchandise) =>
-            node.merchandises_id.includes(merchandise.id)
-          )
+          .filter((merchandise) => node.merchandise_id.includes(merchandise.id))
           .map((merchandise) => merchandise.merchandise_name)
       : []
   );
   const [hairstyles, setHairstyles] = useState(
     node
       ? getHairstylesState
-          .filter((hairstyle) => node.hairstyles_id.includes(hairstyle.id))
+          .filter((hairstyle) => node.hairstyle_id.includes(hairstyle.id))
           .map((hairstyle) => hairstyle.hairstyle_name)
       : []
   );
@@ -136,18 +134,18 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       customer_name: customer_name,
       phone_number: phone_number,
       remarks: remarks,
-      courses_id: getCoursesState
+      course_id: getCoursesState
         .filter((course) => courses.includes(course.course_name))
         .map((course) => course.id),
-      options_id: getOptionsState
+      option_id: getOptionsState
         .filter((option) => options.includes(option.option_name))
         .map((option) => option.id),
-      merchandises_id: getMerchandisesState
+      merchandise_id: getMerchandisesState
         .filter((merchandise) =>
           merchandises.includes(merchandise.merchandise_name)
         )
         .map((merchandise) => merchandise.id),
-      hairstyles_id: getHairstylesState
+      hairstyle_id: getHairstylesState
         .filter((hairstyle) => hairstyles.includes(hairstyle.hairstyle_name))
         .map((hairstyle) => hairstyle.id),
       user_id: getUsersState

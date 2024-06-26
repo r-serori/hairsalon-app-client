@@ -6,10 +6,10 @@ export const schedulesApi = {
     customer_name: string;
     phone_number: string | null;
     remarks: string | null;
-    courses_id: number[] | null;
-    options_id: number[] | null;
-    merchandises_id: number[] | null;
-    hairstyles_id: number[] | null;
+    course_id: number[] | null;
+    option_id: number[] | null;
+    merchandise_id: number[] | null;
+    hairstyle_id: number[] | null;
     user_id: number[] | null;
     title: string;
     start_time: string;
@@ -48,11 +48,11 @@ export const schedulesApi = {
     }
   },
 
-  fetchAllSchedules: async (id: number) => {
+  fetchAllSchedules: async (owner_id: number) => {
     try {
       const response = await sendRequest(
         "GET",
-        `/schedules/${encodeURIComponent(id)}`
+        `/schedules/${encodeURIComponent(owner_id)}`
       );
       // console.log("schedules fetched", response);
       return response;
@@ -107,14 +107,14 @@ export const schedulesApi = {
 
   // 両方更新します
   updateCustomerAndSchedule: async (formData: {
-    customers_id: number; // customer_id
+    customer_id: number; // customer_id
     customer_name: string;
     phone_number: string | null;
     remarks: string | null;
-    courses_id: number[] | null;
-    options_id: number[] | null;
-    merchandises_id: number[] | null;
-    hairstyles_id: number[] | null;
+    course_id: number[] | null;
+    option_id: number[] | null;
+    merchandise_id: number[] | null;
+    hairstyle_id: number[] | null;
     user_id: number[] | null;
     Sid: number; // schedule_id
     title: string;
@@ -154,16 +154,16 @@ export const schedulesApi = {
     customer_name: string;
     phone_number: string | null;
     remarks: string | null;
-    courses_id: number[] | null;
-    options_id: number[] | null;
-    merchandises_id: number[] | null;
-    hairstyles_id: number[] | null;
+    course_id: number[] | null;
+    option_id: number[] | null;
+    merchandise_id: number[] | null;
+    hairstyle_id: number[] | null;
     user_id: number[] | null;
     title: string;
     start_time: string;
     end_time: string;
     allDay: number;
-    customers_id: number;
+    customer_id: number;
     owner_id: number;
   }) => {
     try {

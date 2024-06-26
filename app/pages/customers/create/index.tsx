@@ -21,10 +21,10 @@ const customersCreate = () => {
     customer_name: string;
     phone_number: string;
     remarks: string;
-    courses_id: number[];
-    options_id: number[];
-    merchandises_id: number[];
-    hairstyles_id: number[];
+    course_id: number[];
+    option_id: number[];
+    merchandise_id: number[];
+    hairstyle_id: number[];
     user_id: number[];
     owner_id: number;
     created_at: string;

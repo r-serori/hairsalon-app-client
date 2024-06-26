@@ -435,13 +435,11 @@ export const deleteAttendanceTime = createAsyncThunk(
 export interface Attendance_timeState {
   // ステートの型
   id: number;
-  start_time: string;
-  end_time: string;
-  start_photo_path: string;
-  end_photo_path: string;
+  start_time: string | null;
+  end_time: string | null;
+  start_photo_path: string | null;
+  end_photo_path: string | null;
   user_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

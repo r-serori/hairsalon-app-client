@@ -246,8 +246,6 @@ export interface CourseState {
   course_name: string;
   price: number;
   owner_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

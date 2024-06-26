@@ -254,11 +254,11 @@ export interface StockState {
   id: number;
   product_name: string;
   product_price: number;
-  quantity: number;
-  remarks: string;
-  supplier: string; //仕入れ先
+  quantity: number | null;
+  remarks: string | null;
+  supplier: string | null; //仕入れ先
   notice: number; //通知
-  stock_category_id: number; //在庫カテゴリー、外部キー
+  stock_category_id: number | null; //在庫カテゴリー、外部キー
   owner_id: number;
   created_at: string;
   updated_at: string;

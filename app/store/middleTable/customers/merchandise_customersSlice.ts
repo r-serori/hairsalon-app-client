@@ -47,8 +47,8 @@ import {
 // );
 export interface Merchandise_customersState {
   // ステートの型
-  merchandises_id: number;
-  customers_id: number;
+  merchandise_id: number;
+  customer_id: number;
   owner_id: number;
 }
 
@@ -84,8 +84,8 @@ const merchandise_customersSlice = createSlice({
           (stateMerchandise_customer) =>
             !action.payload.merchandise_customers.some(
               (payloadMerchandise_customer) =>
-                stateMerchandise_customer.customers_id ===
-                payloadMerchandise_customer.customers_id
+                stateMerchandise_customer.customer_id ===
+                payloadMerchandise_customer.customer_id
             )
         ),
         ...action.payload.merchandise_customers,
@@ -98,8 +98,8 @@ const merchandise_customersSlice = createSlice({
           (stateMerchandise_customer) =>
             !action.payload.merchandise_customers.some(
               (payloadMerchandise_customer) =>
-                stateMerchandise_customer.customers_id ===
-                payloadMerchandise_customer.customers_id
+                stateMerchandise_customer.customer_id ===
+                payloadMerchandise_customer.customer_id
             )
         ),
         ...action.payload.merchandise_customers,
@@ -121,8 +121,8 @@ const merchandise_customersSlice = createSlice({
             (stateMerchandise_customer) =>
               !action.payload.merchandise_customers.some(
                 (payloadMerchandise_customer) =>
-                  stateMerchandise_customer.customers_id ===
-                  payloadMerchandise_customer.customers_id
+                  stateMerchandise_customer.customer_id ===
+                  payloadMerchandise_customer.customer_id
               )
           ),
           ...action.payload.merchandise_customers,
@@ -136,8 +136,8 @@ const merchandise_customersSlice = createSlice({
           (stateMerchandise_customer) =>
             !action.payload.merchandise_customers.some(
               (payloadMerchandise_customer) =>
-                stateMerchandise_customer.customers_id ===
-                payloadMerchandise_customer.customers_id
+                stateMerchandise_customer.customer_id ===
+                payloadMerchandise_customer.customer_id
             )
         ),
         ...action.payload.merchandise_customers,

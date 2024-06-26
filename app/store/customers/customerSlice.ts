@@ -64,10 +64,10 @@ export const createCustomer = createAsyncThunk(
       customer_name: string;
       phone_number: string;
       remarks: string;
-      courses_id: number[];
-      options_id: number[];
-      merchandises_id: number[];
-      hairstyles_id: number[];
+      course_id: number[];
+      option_id: number[];
+      merchandise_id: number[];
+      hairstyle_id: number[];
       user_id: number[];
       owner_id: number;
     },
@@ -150,10 +150,10 @@ export const updateCustomer = createAsyncThunk(
       customer_name: string;
       phone_number: string;
       remarks: string;
-      courses_id: number[];
-      options_id: number[];
-      merchandises_id: number[];
-      hairstyles_id: number[];
+      course_id: number[];
+      option_id: number[];
+      merchandise_id: number[];
+      hairstyle_id: number[];
       user_id: number[];
       owner_id: number;
     },
@@ -256,16 +256,14 @@ export interface CustomerState {
   // ステートの型
   id: number;
   customer_name: string;
-  phone_number: string;
-  remarks: string;
-  courses_id?: number[];
-  options_id?: number[];
-  merchandises_id?: number[];
-  hairstyles_id?: number[];
-  user_id?: number[];
+  phone_number: string | null;
+  remarks: string | null;
+  course_id: number[] | null;
+  option_id: number[] | null;
+  merchandise_id: number[] | null;
+  hairstyle_id: number[] | null;
+  user_id: number[] | null;
   owner_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

@@ -156,15 +156,15 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
       // customerは一回一番下まで行く。その後、次のcustomerに行く。
       // 顧客に関連するコースの情報を取得
       const customerCourses = course_customers.filter(
-        (course) => course.customers_id === customer.id
+        (course) => course.customer_id === customer.id
       );
       console.log(customerCourses);
-      // [{customers_id: 1, courses_id: 1}]
+      // [{customer_id: 1, course_id: 1}]
 
       // 顧客に関連するコース名を取得し、カンマ区切りの文字列に変換
       const courseNames = customerCourses
         .map((course) => {
-          const courseInfo = courses.find((c) => c.id === course.courses_id);
+          const courseInfo = courses.find((c) => c.id === course.course_id);
           return courseInfo ? courseInfo.course_name : ""; // コース名が見つかった場合のみ取得
         })
         .join(", "); // コース名をカンマ区切りの文字列に変換
@@ -173,16 +173,16 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
 
       // 顧客に関連するオプションの情報を取得
       const customerOptions = option_customers.filter(
-        (cus_op) => cus_op.customers_id === customer.id
+        (cus_op) => cus_op.customer_id === customer.id
       );
       console.log("CUSOP", customerOptions);
-      // [{customers_id: 1, options_id: 1},
-      // {customers_id: 1, options_id: 2}]
+      // [{customer_id: 1, option_id: 1},
+      // {customer_id: 1, option_id: 2}]
 
       // 顧客に関連するオプション名を取得し、カンマ区切りの文字列に変換
       const optionNames = customerOptions
         .map((option) => {
-          const optionInfo = options.find((o) => o.id === option.options_id);
+          const optionInfo = options.find((o) => o.id === option.option_id);
           return optionInfo ? optionInfo.option_name : ""; // オプション名が見つかった場合のみ取得
         })
         .join(", "); // オプション名をカンマ区切りの文字列に変換
@@ -191,17 +191,17 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
 
       // 顧客に関連する商品の情報を取得
       const customerMerchandises = merchandise_customers.filter(
-        (merchandise) => merchandise.customers_id === customer.id
+        (merchandise) => merchandise.customer_id === customer.id
       );
       console.log(customerMerchandises);
-      // [{customers_id: 1, merchandises_id: 1},
-      // {customers_id: 1, merchandises_id: 2}]
+      // [{customer_id: 1, merchandise_id: 1},
+      // {customer_id: 1, merchandise_id: 2}]
 
       // 顧客に関連する商品名を取得し、カンマ区切りの文字列に変換
       const merchandiseNames = customerMerchandises
         .map((merchandise) => {
           const merchandiseInfo = merchandises.find(
-            (m) => m.id === merchandise.merchandises_id
+            (m) => m.id === merchandise.merchandise_id
           );
           return merchandiseInfo ? merchandiseInfo.merchandise_name : ""; // 商品名が見つかった場合のみ取得
         })
@@ -211,17 +211,17 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
 
       // 顧客に関連するヘアスタイルの情報を取得
       const customerHairstyles = hairstyle_customers.filter(
-        (hairstyle) => hairstyle.customers_id === customer.id
+        (hairstyle) => hairstyle.customer_id === customer.id
       );
       console.log(customerHairstyles);
-      // [{customers_id: 1, hairstyles_id: 1},
-      // {customers_id: 1, hairstyles_id: 2}]
+      // [{customer_id: 1, hairstyle_id: 1},
+      // {customer_id: 1, hairstyle_id: 2}]
 
       // 顧客に関連するヘアスタイル名を取得し、カンマ区切りの文字列に変換
       const hairstyleNames = customerHairstyles
         .map((hairstyle) => {
           const hairstyleInfo = hairstyles.find(
-            (h) => h.id === hairstyle.hairstyles_id
+            (h) => h.id === hairstyle.hairstyle_id
           );
           return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // ヘアスタイル名が見つかった場合のみ取得
         })
@@ -231,10 +231,10 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
 
       // 顧客に関連する担当者の情報を取得
       const customerUsers = customer_users.filter(
-        (user) => user.customers_id === customer.id
+        (user) => user.customer_id === customer.id
       );
       console.log(customerUsers);
-      // [{customers_id: 1, user_id: 1}]
+      // [{customer_id: 1, user_id: 1}]
 
       // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
       const userNames = customerUsers

@@ -70,7 +70,10 @@ const hairstyles: React.FC = () => {
 
       <div>
         <div className="my-4 ml-4">
-          <RouterButton link="/hairstyles/create" value="顧客情報新規作成" />
+          <RouterButton
+            link="/hairstyles/create"
+            value="ヘアスタイル情報新規作成"
+          />
         </div>
         {loading === "loading" ? (
           <p>Loading...</p>

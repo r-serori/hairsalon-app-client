@@ -10,7 +10,7 @@ export const attendance_timeApi = {
       const yearMonthEncoded = encodeURIComponent(formData.yearMonth);
       const response = await sendRequest(
         "GET",
-        `/images/selectedAttendanceTimes/${userIdEncoded}/${yearMonthEncoded}`
+        `/attendance_times/selectedAttendanceTimes/${yearMonthEncoded}/${userIdEncoded}`
       );
       console.log("APIのattendanceTimeDataだよ");
       return response;

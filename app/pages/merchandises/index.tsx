@@ -78,7 +78,7 @@ const merchandises = () => {
 
       <div className="mx-4">
         <div className="flex my-4 ">
-          <RouterButton link="/merchandises/create" value="新規作成" />
+          <RouterButton link="/merchandises/create" value="物販情報新規作成" />
         </div>
         {loading === "loading" ? (
           <p>Loading...</p>

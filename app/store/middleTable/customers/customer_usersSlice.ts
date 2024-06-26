@@ -47,7 +47,7 @@ import {
 
 export interface Customer_usersState {
   // ステートの型
-  customers_id: number;
+  customer_id: number;
   user_id: number;
   owner_id: number;
 }
@@ -90,8 +90,8 @@ const customer_usersSlice = createSlice({
           (stateCustomerAttendance) =>
             !action.payload.customer_users.some(
               (payloadCustomerAttendance) =>
-                stateCustomerAttendance.customers_id ===
-                payloadCustomerAttendance.customers_id
+                stateCustomerAttendance.customer_id ===
+                payloadCustomerAttendance.customer_id
             )
         ),
         ...action.payload.customer_users,
@@ -104,8 +104,8 @@ const customer_usersSlice = createSlice({
           (stateCustomerAttendance) =>
             !action.payload.customer_users.some(
               (payloadCustomerAttendance) =>
-                stateCustomerAttendance.customers_id ===
-                payloadCustomerAttendance.customers_id
+                stateCustomerAttendance.customer_id ===
+                payloadCustomerAttendance.customer_id
             )
         ),
         ...action.payload.customer_users,
@@ -127,8 +127,8 @@ const customer_usersSlice = createSlice({
             (stateCustomerAttendance) =>
               !action.payload.customer_users.some(
                 (payloadCustomerAttendance) =>
-                  stateCustomerAttendance.customers_id ===
-                  payloadCustomerAttendance.customers_id
+                  stateCustomerAttendance.customer_id ===
+                  payloadCustomerAttendance.customer_id
               )
           ),
           ...action.payload.customer_users,
@@ -142,8 +142,8 @@ const customer_usersSlice = createSlice({
           (stateCustomerAttendance) =>
             !action.payload.customer_users.some(
               (payloadCustomerAttendance) =>
-                stateCustomerAttendance.customers_id ===
-                payloadCustomerAttendance.customers_id
+                stateCustomerAttendance.customer_id ===
+                payloadCustomerAttendance.customer_id
             )
         ),
         ...action.payload.customer_users,

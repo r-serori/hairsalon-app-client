@@ -62,8 +62,15 @@ export default function Header() {
     const verifySession = async () => {
       await checkSessionApi.checkSession();
     };
-
-    verifySession();
+    const userId = localStorage.getItem("user_id");
+    const ownerId = localStorage.getItem("owner_id");
+    const role = localStorage.getItem("role");
+    const IsLoggedIn = localStorage.getItem("isLogin") === "true";
+    if (typeof window !== "undefined") {
+      if (IsLoggedIn || userId || ownerId || role) {
+        verifySession();
+      }
+    }
 
     const intervalId = setInterval(verifySession, 5 * 60 * 1000); // 5分ごとにチェック
 

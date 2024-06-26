@@ -47,8 +47,8 @@ import {
 // );
 export interface Hairstyle_customersState {
   // ステートの型
-  hairstyles_id: number;
-  customers_id: number;
+  hairstyle_id: number;
+  customer_id: number;
   owner_id: number;
 }
 
@@ -84,8 +84,8 @@ const hairstyle_customersSlice = createSlice({
           (stateHairstyleCustomer) =>
             !action.payload.hairstyle_customers.some(
               (payloadHairstyleCustomer) =>
-                stateHairstyleCustomer.customers_id ===
-                payloadHairstyleCustomer.customers_id
+                stateHairstyleCustomer.customer_id ===
+                payloadHairstyleCustomer.customer_id
             )
         ),
         ...action.payload.hairstyle_customers,
@@ -98,8 +98,8 @@ const hairstyle_customersSlice = createSlice({
           (stateHairstyleCustomer) =>
             !action.payload.hairstyle_customers.some(
               (payloadHairstyleCustomer) =>
-                stateHairstyleCustomer.customers_id ===
-                payloadHairstyleCustomer.customers_id
+                stateHairstyleCustomer.customer_id ===
+                payloadHairstyleCustomer.customer_id
             )
         ),
         ...action.payload.hairstyle_customers,
@@ -121,8 +121,8 @@ const hairstyle_customersSlice = createSlice({
             (stateHairstyleCustomer) =>
               !action.payload.hairstyle_customers.some(
                 (payloadHairstyleCustomer) =>
-                  stateHairstyleCustomer.customers_id ===
-                  payloadHairstyleCustomer.customers_id
+                  stateHairstyleCustomer.customer_id ===
+                  payloadHairstyleCustomer.customer_id
               )
           ),
           ...action.payload.hairstyle_customers,
@@ -136,8 +136,8 @@ const hairstyle_customersSlice = createSlice({
           (stateHairstyleCustomer) =>
             !action.payload.hairstyle_customers.some(
               (payloadHairstyleCustomer) =>
-                stateHairstyleCustomer.customers_id ===
-                payloadHairstyleCustomer.customers_id
+                stateHairstyleCustomer.customer_id ===
+                payloadHairstyleCustomer.customer_id
             )
         ),
         ...action.payload.hairstyle_customers,

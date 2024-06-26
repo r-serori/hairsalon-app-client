@@ -33,9 +33,9 @@ const customersEdit: React.FC = () => {
     state.course_customers.course_customers
       .filter(
         (course_customer) =>
-          course_customer.customers_id === parseInt(id as string)
+          course_customer.customer_id === parseInt(id as string)
       )
-      .map((course_customer) => course_customer.courses_id)
+      .map((course_customer) => course_customer.course_id)
   );
 
   console.log("course_customersだよ");
@@ -45,9 +45,9 @@ const customersEdit: React.FC = () => {
     state.option_customers.option_customers
       .filter(
         (option_customer) =>
-          option_customer.customers_id === parseInt(id as string)
+          option_customer.customer_id === parseInt(id as string)
       )
-      .map((option_customer) => option_customer.options_id)
+      .map((option_customer) => option_customer.option_id)
   );
 
   console.log("option_customersだよ");
@@ -57,9 +57,9 @@ const customersEdit: React.FC = () => {
     state.merchandise_customers.merchandise_customers
       .filter(
         (merchandise_customer) =>
-          merchandise_customer.customers_id === parseInt(id as string)
+          merchandise_customer.customer_id === parseInt(id as string)
       )
-      .map((merchandise_customer) => merchandise_customer.merchandises_id)
+      .map((merchandise_customer) => merchandise_customer.merchandise_id)
   );
 
   console.log("merchandise_customersだよ");
@@ -69,9 +69,9 @@ const customersEdit: React.FC = () => {
     state.hairstyle_customers.hairstyle_customers
       .filter(
         (hairstyle_customer) =>
-          hairstyle_customer.customers_id === parseInt(id as string)
+          hairstyle_customer.customer_id === parseInt(id as string)
       )
-      .map((hairstyle_customer) => hairstyle_customer.hairstyles_id)
+      .map((hairstyle_customer) => hairstyle_customer.hairstyle_id)
   );
 
   console.log("hairstyle_customersだよ");
@@ -80,7 +80,7 @@ const customersEdit: React.FC = () => {
   const customer_users = useSelector((state: RootState) =>
     state.customer_users.customer_users
       .filter(
-        (customer_user) => customer_user.customers_id === parseInt(id as string)
+        (customer_user) => customer_user.customer_id === parseInt(id as string)
       )
       .map((customer_user) => customer_user.user_id)
   );
@@ -90,10 +90,10 @@ const customersEdit: React.FC = () => {
 
   const customer = {
     ...getCustomer,
-    courses_id: course_customers,
-    options_id: option_customers,
-    merchandises_id: merchandise_customers,
-    hairstyles_id: hairstyle_customers,
+    course_id: course_customers,
+    option_id: option_customers,
+    merchandise_id: merchandise_customers,
+    hairstyle_id: hairstyle_customers,
     user_id: customer_users,
   };
 
@@ -103,10 +103,10 @@ const customersEdit: React.FC = () => {
     phone_number: string;
     remarks: string;
     new_customer: string;
-    courses_id: number[];
-    options_id: number[];
-    merchandises_id: number[];
-    hairstyles_id: number[];
+    course_id: number[];
+    option_id: number[];
+    merchandise_id: number[];
+    hairstyle_id: number[];
     user_id: number[];
     owner_id: number;
     created_at: string;

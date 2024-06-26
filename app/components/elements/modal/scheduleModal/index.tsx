@@ -138,8 +138,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       // customerは一回一番下まで行く。その後、次のcustomerに行く。
       // 顧客に関連するコースの情報を取得
       const customerCourses = course_customers
-        .filter((course) => course.customers_id === customer.id)
-        .map((course) => course.courses_id);
+        .filter((course) => course.customer_id === customer.id)
+        .map((course) => course.course_id);
 
       console.log(customerCourses);
       //  [1,2,3]
@@ -153,8 +153,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
       // 顧客に関連するオプションの情報を取得
       const customerOptions = option_customers
-        .filter((option) => option.customers_id === customer.id)
-        .map((option) => option.options_id);
+        .filter((option) => option.customer_id === customer.id)
+        .map((option) => option.option_id);
 
       console.log(customerOptions);
 
@@ -167,8 +167,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
       // 顧客に関連する商品の情報を取得
       const customerMerchandises = merchandise_customers
-        .filter((merchandise) => merchandise.customers_id === customer.id)
-        .map((merchandise) => merchandise.merchandises_id);
+        .filter((merchandise) => merchandise.customer_id === customer.id)
+        .map((merchandise) => merchandise.merchandise_id);
 
       console.log(customerMerchandises);
 
@@ -181,8 +181,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
       // 顧客に関連するヘアスタイルの情報を取得
       const customerHairstyles = hairstyle_customers
-        .filter((hairstyle) => hairstyle.customers_id === customer.id)
-        .map((hairstyle) => hairstyle.hairstyles_id);
+        .filter((hairstyle) => hairstyle.customer_id === customer.id)
+        .map((hairstyle) => hairstyle.hairstyle_id);
 
       console.log("cusHair", customerHairstyles);
 
@@ -199,7 +199,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       // 顧客に関連する担当者の情報を取得
       //user_idを配列にしている
       const customerUsers = customer_users
-        .filter((user) => user.customers_id === customer.id)
+        .filter((user) => user.customer_id === customer.id)
         .map((user) => user.user_id);
 
       console.log("customerUsers", customerUsers);
@@ -409,17 +409,17 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       customer_name: string;
       phone_number: string;
       remarks: string;
-      courses_id: number[];
-      options_id: number[];
-      merchandises_id: number[];
-      hairstyles_id: number[];
+      course_id: number[];
+      option_id: number[];
+      merchandise_id: number[];
+      hairstyle_id: number[];
       user_id: number[];
       Sid: number;
       title: string;
       start_time: string;
       end_time: string;
       allDay: number;
-      customers_id: number;
+      customer_id: number;
       owner_id: number;
     },
     newCustomer
@@ -487,18 +487,18 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         customer_name: customerName,
         phone_number: phone_number,
         remarks: remarks,
-        courses_id: courses
+        course_id: courses
           .filter((course) => courseNames.includes(course.course_name))
           .map((course) => course.id),
-        options_id: options
+        option_id: options
           .filter((option) => optionNames.includes(option.option_name))
           .map((option) => option.id),
-        merchandises_id: merchandises
+        merchandise_id: merchandises
           .filter((merchandise) =>
             merchandiseNames.includes(merchandise.merchandise_name)
           )
           .map((merchandise) => merchandise.id),
-        hairstyles_id: hairstyles
+        hairstyle_id: hairstyles
           .filter((hairstyle) =>
             hairstyleNames.includes(hairstyle.hairstyle_name)
           )
@@ -517,7 +517,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
           .tz("Asia/Tokyo")
           .format("YYYY-MM-DD hh:mm:ss"),
         allDay: allDay,
-        customers_id: !newCustomer ? customerId : 0,
+        customer_id: !newCustomer ? customerId : 0,
         owner_id: Number(localStorage.getItem("owner_id")),
       },
       newCustomer

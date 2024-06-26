@@ -70,9 +70,9 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
   const customers = useSelector((state: RootState) => state.customer.customers);
 
   const events = schedules.map((schedule) => {
-    if (schedule.customers_id) {
+    if (schedule.customer_id) {
       const customer = customers.find(
-        (customer) => schedule.customers_id === customer.id
+        (customer) => schedule.customer_id === customer.id
       );
       return {
         id: schedule.id,

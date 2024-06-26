@@ -48,6 +48,7 @@ const LoginPage: React.FC = () => {
         localStorage.removeItem("registerNow");
         router.push("/auth/owner");
       } else {
+        localStorage.removeItem("registerNow");
         throw new Error("ログイン処理に失敗しました！");
       }
     } catch (error) {

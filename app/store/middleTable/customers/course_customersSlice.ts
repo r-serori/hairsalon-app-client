@@ -46,8 +46,8 @@ import {
 // );
 export interface Course_customersState {
   // ステートの型
-  courses_id: number;
-  customers_id: number;
+  course_id: number;
+  customer_id: number;
   owner_id: number;
 }
 
@@ -89,8 +89,8 @@ const course_customersSlice = createSlice({
           (stateCourse_customer) =>
             !action.payload.course_customers.some(
               (payloadCourse_customer) =>
-                stateCourse_customer.customers_id ===
-                payloadCourse_customer.customers_id
+                stateCourse_customer.customer_id ===
+                payloadCourse_customer.customer_id
             )
         ),
         ...action.payload.course_customers,
@@ -103,8 +103,8 @@ const course_customersSlice = createSlice({
           (stateCourse_customer) =>
             !action.payload.course_customers.some(
               (payloadCourse_customer) =>
-                stateCourse_customer.customers_id ===
-                payloadCourse_customer.customers_id
+                stateCourse_customer.customer_id ===
+                payloadCourse_customer.customer_id
             )
         ),
         ...action.payload.course_customers,
@@ -126,8 +126,8 @@ const course_customersSlice = createSlice({
             (stateCourse_customer) =>
               !action.payload.course_customers.some(
                 (payloadCourse_customer) =>
-                  stateCourse_customer.customers_id ===
-                  payloadCourse_customer.customers_id
+                  stateCourse_customer.customer_id ===
+                  payloadCourse_customer.customer_id
               )
           ),
           ...action.payload.course_customers,
@@ -141,8 +141,8 @@ const course_customersSlice = createSlice({
           (stateCourse_customer) =>
             !action.payload.course_customers.some(
               (payloadCourse_customer) =>
-                stateCourse_customer.customers_id ===
-                payloadCourse_customer.customers_id
+                stateCourse_customer.customer_id ===
+                payloadCourse_customer.customer_id
             )
         ),
         ...action.payload.course_customers,

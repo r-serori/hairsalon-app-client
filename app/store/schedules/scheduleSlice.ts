@@ -162,10 +162,10 @@ export const createCustomerAndSchedule = createAsyncThunk(
       customer_name: string;
       phone_number: string | null;
       remarks: string | null;
-      courses_id: number[] | null;
-      options_id: number[] | null;
-      merchandises_id: number[] | null;
-      hairstyles_id: number[] | null;
+      course_id: number[] | null;
+      option_id: number[] | null;
+      merchandise_id: number[] | null;
+      hairstyle_id: number[] | null;
       user_id: number[] | null;
       title: string;
       start_time: string;
@@ -308,14 +308,14 @@ export const updateCustomerAndSchedule = createAsyncThunk(
   "schedule/customer/doubleUpdate",
   async (
     formData: {
-      customers_id: number; // customer_id
+      customer_id: number; // customer_id
       customer_name: string;
       phone_number: string | null;
       remarks: string | null;
-      courses_id: number[] | null;
-      options_id: number[] | null;
-      merchandises_id: number[] | null;
-      hairstyles_id: number[] | null;
+      course_id: number[] | null;
+      option_id: number[] | null;
+      merchandise_id: number[] | null;
+      hairstyle_id: number[] | null;
       user_id: number[] | null;
       Sid: number; // schedule_id
       title: string;
@@ -380,16 +380,16 @@ export const updateCustomerAndScheduleCreate = createAsyncThunk(
       customer_name: string;
       phone_number: string | null;
       remarks: string | null;
-      courses_id: number[] | null;
-      options_id: number[] | null;
-      merchandises_id: number[] | null;
-      hairstyles_id: number[] | null;
+      course_id: number[] | null;
+      option_id: number[] | null;
+      merchandise_id: number[] | null;
+      hairstyle_id: number[] | null;
       user_id: number[] | null;
       title: string;
       start_time: string;
       end_time: string;
       allDay: number;
-      customers_id: number;
+      customer_id: number;
       owner_id: number;
     },
     { rejectWithValue }
@@ -496,10 +496,8 @@ export interface ScheduleState {
   start_time: string | null;
   end_time: string | null;
   allDay: number;
-  customers_id: number | null;
+  customer_id: number | null;
   owner_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

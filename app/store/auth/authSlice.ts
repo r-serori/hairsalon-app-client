@@ -734,8 +734,7 @@ const authSlice = createSlice({
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, ...action.payload.responseUsers];
-      state.message = action.payload.message;
+      state.auth = action.payload.responseUsers;
     });
 
     builder.addCase(getUsers.rejected, (state, action) => {
@@ -903,7 +902,7 @@ const authSlice = createSlice({
     builder.addCase(isLogout, (state) => {
       state.status = "success";
       state.auth = [];
-      state.message = "セッションが切れました！再度ログインしてください！";
+      // state.error = "セッションが切れました！再度ログインしてください！";
     });
 
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {

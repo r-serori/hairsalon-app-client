@@ -46,8 +46,8 @@ import {
 // );
 export interface Option_customersState {
   // ステートの型
-  options_id: number;
-  customers_id: number;
+  option_id: number;
+  customer_id: number;
   owner_id: number;
 }
 
@@ -89,8 +89,8 @@ const option_customersSlice = createSlice({
           (stateOptionCustomer) =>
             !action.payload.option_customers.some(
               (payloadOptionCustomer) =>
-                stateOptionCustomer.customers_id ===
-                payloadOptionCustomer.customers_id
+                stateOptionCustomer.customer_id ===
+                payloadOptionCustomer.customer_id
             )
         ),
         ...action.payload.option_customers,
@@ -103,8 +103,8 @@ const option_customersSlice = createSlice({
           (stateOptionCustomers) =>
             !action.payload.option_customers.some(
               (payloadOptionCustomers) =>
-                stateOptionCustomers.customers_id ===
-                payloadOptionCustomers.customers_id
+                stateOptionCustomers.customer_id ===
+                payloadOptionCustomers.customer_id
             )
         ),
         ...action.payload.option_customers,
@@ -126,8 +126,8 @@ const option_customersSlice = createSlice({
             (stateOptionCustomers) =>
               !action.payload.option_customers.some(
                 (payloadOptionCustomers) =>
-                  stateOptionCustomers.customers_id ===
-                  payloadOptionCustomers.customers_id
+                  stateOptionCustomers.customer_id ===
+                  payloadOptionCustomers.customer_id
               )
           ),
           ...action.payload.option_customers,
@@ -141,8 +141,8 @@ const option_customersSlice = createSlice({
           (stateOptionCustomers) =>
             !action.payload.option_customers.some(
               (payloadOptionCustomers) =>
-                stateOptionCustomers.customers_id ===
-                payloadOptionCustomers.customers_id
+                stateOptionCustomers.customer_id ===
+                payloadOptionCustomers.customer_id
             )
         ),
         ...action.payload.option_customers,

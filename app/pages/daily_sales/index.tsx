@@ -67,7 +67,7 @@ const daily_sales: React.FC = () => {
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
       <div className="mx-8 mt-4">
-        <div className="flex justify-center items-center mb-4">
+        <div className="flex justify-end items-center mb-4">
           <div className="flex justify-start items-center mb-4 gap-4">
             <RouterButton link="/monthly_sales" value="月次売上画面へ" />
             <RouterButton link="/yearly_sales" value="年次売上画面へ" />
