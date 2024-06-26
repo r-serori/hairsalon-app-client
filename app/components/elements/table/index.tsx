@@ -321,20 +321,16 @@ const ComponentTable = ({
                                   : `${propValue} + ${propName} + ${node.id}+ ${index} + end`
                               }
                               src={
-                                propValue === "編集済み"
+                                propValue === "111222"
                                   ? "https://dummyimage.com/320x240/000/fff&text=編集済み"
                                   : propValue &&
-                                    propValue !== "編集済み" &&
+                                    propValue !== "111222" &&
                                     propProp === "start_photo_path"
-                                  ? imgUrl +
-                                    "attendance_times/images/startPhotos/" +
-                                    decodeURIComponent(propValue)
+                                  ? imgUrl + decodeURIComponent(propValue)
                                   : propValue &&
-                                    propValue !== "編集済み" &&
+                                    propValue !== "111222" &&
                                     propProp === "end_photo_path"
-                                  ? imgUrl +
-                                    "attendance_times/images/endPhotos/" +
-                                    decodeURIComponent(propValue)
+                                  ? imgUrl + decodeURIComponent(propValue)
                                   : "https://dummyimage.com/320x240/000/fff&text=未登録"
                               }
                               alt="画像"

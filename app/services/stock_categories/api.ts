@@ -25,7 +25,7 @@ export const stockCategoryApi = {
     try {
       const response = await sendRequest(
         "GET",
-        `/stock_categories/${owner_id}`
+        `/stock_categories/${encodeURIComponent(owner_id)}`
       );
       // console.log("stock_categories fetched", response);
       return response;

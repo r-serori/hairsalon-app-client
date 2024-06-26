@@ -18,7 +18,10 @@ export const optionApi = {
 
   fetchAllOptions: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/options/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/options/${encodeURIComponent(owner_id)}`
+      );
       // console.log("options fetched",response);
       return response;
     } catch (error) {

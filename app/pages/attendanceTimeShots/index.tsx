@@ -11,15 +11,22 @@ import { useRouter } from "next/router";
 
 const AttendanceTimeShots = () => {
   const [role, setRole] = useState(null);
+  const [firstRender, setFirstRender] = useState(true);
   const router = useRouter();
 
   const dispatch = useDispatch();
 
   const users = useSelector((state: RootState) => state.auth.auth);
   console.log("users", users);
-  const loading = useSelector((state: RootState) => state.auth.loading);
+  const loading = useSelector((state: RootState) => state.auth.status);
 
   useEffect(() => {
+    const getStaffs = async () => {
+      const ownerId = Number(localStorage.getItem("owner_id"));
+      const response = await dispatch(getAttendanceUsers(ownerId) as any);
+      console.log("response", response);
+      localStorage.setItem("userCount", response.payload.userCount);
+    };
     try {
       const role = localStorage.getItem("role");
       if (
@@ -32,28 +39,33 @@ const AttendanceTimeShots = () => {
         router.push("/dashboard");
       }
 
-      const ownerId = Number(localStorage.getItem("owner_id"));
-      console.log("role", role);
+      const userCount = localStorage.getItem("userCount");
       if (
-        role === "オーナー" ||
-        role === "マネージャー" ||
-        role === "スタッフ"
+        (role === "オーナー" ||
+          role === "マネージャー" ||
+          role === "スタッフ") &&
+        (!userCount ||
+          userCount === "undefined" ||
+          userCount === null ||
+          userCount === "" ||
+          userCount === undefined ||
+          (users.length < Number(userCount) && firstRender))
       ) {
-        dispatch(getAttendanceUsers(ownerId) as any);
+        getStaffs();
       } else {
         return;
       }
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("出席情報取得！！");
+      setFirstRender(false);
     }
   }, [dispatch]);
 
   const message = useSelector((state: RootState) => state.auth.message);
 
   const timeLoading = useSelector(
-    (state: RootState) => state.attendance_time.loading
+    (state: RootState) => state.attendance_time.status
   );
 
   const timeMessage = useSelector(
@@ -103,7 +115,7 @@ const AttendanceTimeShots = () => {
         )}
       </div>
       <div className="mx-8 mt-4">
-        {timeLoading || !nodes ? (
+        {timeLoading === "loading" || !nodes ? (
           <p className="py-4 text-blue-700">Loading...</p>
         ) : (
           <ComponentTable
@@ -112,7 +124,6 @@ const AttendanceTimeShots = () => {
             tHeaderItems={tHeaderItems}
             nodesProps={nodesProps}
             link="/attendanceTimeShots"
-            isLoading={loading}
             role={role}
           />
         )}

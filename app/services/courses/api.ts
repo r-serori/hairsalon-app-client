@@ -18,7 +18,10 @@ export const courseApi = {
 
   fetchAllCourses: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/courses/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/courses/${encodeURIComponent(owner_id)}`
+      );
       // console.log("courses fetched");
       return response;
     } catch (error) {

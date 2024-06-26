@@ -22,7 +22,10 @@ export const merchandiseApi = {
 
   fetchAllMerchandises: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/merchandises/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/merchandises/${encodeURIComponent(owner_id)}`
+      );
       // console.log("merchandises fetched",response);
       return response;
     } catch (error) {

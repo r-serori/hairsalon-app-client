@@ -1,23 +1,24 @@
 import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import LogoutButton from "../../button/LogoutButton";
+import LogoutButton from "../../button/logoutButton";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import { useDispatch } from "react-redux";
+import { checkSessionApi } from "../../../../services/auth/checkSession";
 
 // クッキーを取得する関数
-function getCookie(name: string) {
-  if (typeof document !== "undefined") {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(";").shift();
-  }
-  return null;
-}
+// function getCookie(name: string) {
+//   if (typeof document !== "undefined") {
+//     const value = `; ${document.cookie}`;
+//     const parts = value.split(`; ${name}=`);
+//     if (parts.length === 2) return parts.pop()?.split(";").shift();
+//   }
+//   return null;
+// }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -31,7 +32,6 @@ export default function Header() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const registerNow = localStorage.getItem("registerNow") === "true";
       const IsLoggedIn = localStorage.getItem("isLogin") === "true";
       const userId = localStorage.getItem("user_id");
       if (IsLoggedIn && userId) {
@@ -39,18 +39,36 @@ export default function Header() {
       } else {
         router.push("/");
       }
-      if (!getCookie("laravel_session") && !loginNow && !registerNow) {
-        localStorage.clear();
-        dispatch(isLogout());
-        router.push("/");
-      }
     }
     const UserPermission = () => {
       const role = localStorage.getItem("role");
       setRole(role);
-      UserPermission();
     };
+    UserPermission();
   }, [loginNow]);
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     // const registerNow = localStorage.getItem("registerNow") === "true";
+  //     // if (!getCookie("laravel_session") && !loginNow && !registerNow) {
+  //     //   localStorage.clear();
+  //     //   dispatch(isLogout());
+  //     //   router.push("/");
+  //     // }
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    const verifySession = async () => {
+      await checkSessionApi.checkSession();
+    };
+
+    verifySession();
+
+    const intervalId = setInterval(verifySession, 5 * 60 * 1000); // 5分ごとにチェック
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const navigation =
     role === "オーナー"

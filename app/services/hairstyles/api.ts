@@ -17,7 +17,10 @@ export const hairstyleApi = {
 
   fetchAllHairstyles: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/hairstyles/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/hairstyles/${encodeURIComponent(owner_id)}`
+      );
       // console.log("hairstyles fetched");
       return response;
     } catch (error) {

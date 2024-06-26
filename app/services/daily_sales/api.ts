@@ -22,7 +22,10 @@ export const dailySaleApi = {
 
   fetchAllDailySales: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/daily_sales/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/daily_sales/${encodeURIComponent(owner_id)}`
+      );
       // console.log("daily_sales fetched",response);
       return response;
     } catch (error) {

@@ -34,6 +34,7 @@ const Attendances = () => {
       } else {
         router.push("/dashboard");
       }
+
       const userCount = localStorage.getItem("userCount");
       if (
         (role === "オーナー" && !userCount) ||

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { isLogin } from "../../store/auth/isLoginSlice";
 import { clearError } from "../../store/auth/authSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { useEffect } from "react";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,29 +20,9 @@ const LoginPage: React.FC = () => {
 
   const error = useSelector((state: RootState) => state.auth.error);
 
-  // useEffect(() => {
-  //   const hasLaravelSessionCookie = () => {
-  //     // ブラウザのCookieからlaravel_session Cookieを取得する
-  //     const cookies = document.cookie;
-  //     console.log("cookies", cookies);
-
-  //     if (cookies.startsWith("XSRF-TOKEN")) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   };
-
-  //   if (hasLaravelSessionCookie()) {
-  //     console.log("XCSRF存在します");
-  //     router.push("/dashboard");
-  //     // ログイン済みの場合の処理を記述する
-  //   } else {
-  //     console.log("XCSRFが存在しません");
-  //     router.push("/auth/login");
-  //     // 未ログインの場合の処理を記述する
-  //   }
-  // }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
+  useEffect(() => {
+    localStorage.setItem("registerNow", "true");
+  }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleLogin = async (formData: { email: string; password: string }) => {
     console.log(formData);
@@ -54,16 +35,17 @@ const LoginPage: React.FC = () => {
       if (ownerId) {
         dispatch(isLogin());
         localStorage.setItem("user_id", userId);
+        localStorage.setItem("isLogin", "true");
         localStorage.setItem("owner_id", ownerId);
         localStorage.setItem("role", role);
-        localStorage.setItem("isLogin", "true");
+        localStorage.removeItem("registerNow");
         router.push("/dashboard");
       } else if (ownerId === null) {
         dispatch(isLogin());
         localStorage.setItem("user_id", userId);
-        localStorage.setItem("role", role);
         localStorage.setItem("isLogin", "true");
-
+        localStorage.setItem("role", role);
+        localStorage.removeItem("registerNow");
         router.push("/auth/owner");
       } else {
         throw new Error("ログイン処理に失敗しました！");

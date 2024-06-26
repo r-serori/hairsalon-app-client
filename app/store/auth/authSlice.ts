@@ -10,7 +10,9 @@ import {
   pleaseEditEndTime,
   createStartTime,
   createEndTime,
+  selectGetAttendanceTimes,
 } from "../attendances/attendance_times/attendance_timesSlice";
+import { isLogout } from "./isLoginSlice";
 
 export const login = createAsyncThunk(
   "login/auth",
@@ -885,7 +887,7 @@ const authSlice = createSlice({
           ? { ...auth, ...action.payload.responseUser }
           : auth
       );
-      state.message = action.payload.message;
+      state.message = "出勤しました！";
     });
 
     builder.addCase(createEndTime.fulfilled, (state, action) => {
@@ -895,6 +897,25 @@ const authSlice = createSlice({
           ? { ...auth, ...action.payload.responseUser }
           : auth
       );
+      state.message = "退勤しました！";
+    });
+
+    builder.addCase(isLogout, (state) => {
+      state.status = "success";
+      state.auth = [];
+      state.message = "セッションが切れました！再度ログインしてください！";
+    });
+
+    builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
+      state.status = "success";
+      state.auth = action.payload.responseUser
+        ? state.auth.map((auth) =>
+            auth.id === action.payload.responseUser.id
+              ? { ...auth, ...action.payload.responseUser }
+              : auth
+          )
+        : state.auth;
+
       state.message = action.payload.message;
     });
   },

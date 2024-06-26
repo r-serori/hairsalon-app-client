@@ -8,6 +8,11 @@ import AttendanceTimesShotForm from "../form/attendances/attendanceTimeShots/Att
 import BackAgainButton from "../button/RouterButton";
 import { firstGetAttendanceTime } from "../../../store/attendances/attendance_times/attendance_timesSlice";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { getUsers } from "../../../store/auth/authSlice";
+import { get } from "http";
+import { useRouter } from "next/router";
 
 const style = {
   position: "absolute" as "absolute",
@@ -50,20 +55,52 @@ const BasicModal: React.FC<BasicModalProps> = ({
   link,
 }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [openAttendance, setOpenAttendance] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const users = useSelector((state: RootState) => state.auth.auth);
+
   const handleOpenAttendance = () => {
-    setOpenAttendance(true);
-    // if (link === "/attendanceTimeShots") {
-    //   dispatch(firstGetAttendanceTime(editNode.id as number) as any);
-    // } else {
-    //   return;
-    // }
+    console.log("getStaffsuseEffectttttt");
+    try {
+      const getStaffs = async () => {
+        const ownerId = Number(localStorage.getItem("owner_id"));
+        const response = await dispatch(getUsers(ownerId) as any);
+        console.log("response", response);
+        if (response.payload.userCount) {
+          setOpenAttendance(true);
+        } else {
+          router.push("/attendances");
+        }
+      };
+      const role = localStorage.getItem("role");
+      const userCount = localStorage.getItem("userCount");
+      if (
+        role === "オーナー" &&
+        (link === "/attendanceTimeStart" || link === "/attendanceTimeEnd") &&
+        (!userCount ||
+          userCount === "undefined" ||
+          userCount === null ||
+          userCount === "" ||
+          userCount === undefined ||
+          users === undefined ||
+          !users ||
+          users.length < Number(userCount))
+      ) {
+        getStaffs();
+      } else {
+        setOpenAttendance(true);
+      }
+    } catch (error) {
+      console.log(error);
+      router.push("/attendances");
+    }
   };
+
   const handleCloseAttendance = () => setOpenAttendance(false);
 
   return (

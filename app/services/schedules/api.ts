@@ -50,7 +50,10 @@ export const schedulesApi = {
 
   fetchAllSchedules: async (id: number) => {
     try {
-      const response = await sendRequest("GET", `/schedules/${id}`);
+      const response = await sendRequest(
+        "GET",
+        `/schedules/${encodeURIComponent(id)}`
+      );
       // console.log("schedules fetched", response);
       return response;
     } catch (error) {
@@ -63,7 +66,9 @@ export const schedulesApi = {
     try {
       const response = await sendRequest(
         "GET",
-        `/schedules/customers/selectGetYear/${formData.owner_id}/${formData.year}`
+        `/schedules/customers/selectGetYear/${encodeURIComponent(
+          formData.owner_id
+        )}/${encodeURIComponent(formData.year)}`
       );
       // console.log("APIのschedulesDataだよ", response);
       return response;

@@ -22,7 +22,10 @@ export const yearlySaleApi = {
 
   fetchAllYearlySales: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/yearly_sales/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/yearly_sales/${encodeURIComponent(owner_id)}`
+      );
       // console.log("yearly_sales fetched", response);
       return response;
     } catch (error) {

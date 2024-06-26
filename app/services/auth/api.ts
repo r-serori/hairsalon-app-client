@@ -79,7 +79,7 @@ export const authApi = {
     try {
       const response = (await sendRequest(
         "GET",
-        `api/user/getUsers/${owner_id}`
+        `api/user/getUsers/${encodeURIComponent(owner_id)}`
       )) as any;
       // console.log("responseGetUsersDataだよ", response);
       return response;
@@ -93,7 +93,7 @@ export const authApi = {
     try {
       const response = (await sendRequest(
         "GET",
-        `api/user/getAttendanceUsers/${owner_id}`
+        `api/user/getAttendanceUsers/${encodeURIComponent(owner_id)}`
       )) as any;
       // console.log("responseGetUsersDataだよ", response);
       return response;
@@ -108,7 +108,7 @@ export const authApi = {
     try {
       const response = (await sendRequest(
         "GET",
-        `api/user/showUser/${id}`
+        `api/user/showUser/${encodeURIComponent(id)}`
       )) as any;
       // console.log("responseShowUserDataだよ", response);
       return response;

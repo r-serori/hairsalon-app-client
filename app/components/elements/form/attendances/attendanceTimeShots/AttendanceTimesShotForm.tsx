@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
@@ -25,6 +25,8 @@ import { dividerClasses } from "@mui/material";
 import { EditRoad } from "@mui/icons-material";
 import { stat } from "fs";
 import BasicAlerts from "../../../alert/Alert";
+import { getAttendanceUsers } from "../../../../../store/auth/authSlice";
+import { co } from "@fullcalendar/core/internal-common";
 
 interface UserTimesShotFormProps {
   node: any;
@@ -62,11 +64,13 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       : false
   );
 
-  const loading = useSelector((state: RootState) => state.auth.loading);
+  const users = useSelector((state: RootState) => state.auth.auth);
+  console.log("users", users);
 
   //ボタンを押したユーザーの情報を取得
   const user = useSelector((state: RootState) => {
     const userId = link === "/attendanceTimeShots" ? node.id : node.user_id;
+    console.log("userId", userId);
     return state.auth.auth.find((user) => user.id === Number(userId));
   });
   console.log("user", user);
@@ -128,15 +132,15 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
   //出勤時間、退勤時間の編集モードの時、編集済みの写真を表示
   const [photo, setPhoto] = useState(
-    node.start_photo_path === "編集済み" || node.end_photo_path === "編集済み"
+    node.start_photo_path === "111222" || node.end_photo_path === "111222"
       ? null
       : link === "/attendanceTimeStart" &&
         edit &&
-        node.start_photo_path !== "編集済み"
+        node.start_photo_path !== "111222"
       ? node.start_photo_path
       : link === "/attendanceTimeEnd" &&
         edit &&
-        node.end_photo_path !== "編集済み"
+        node.end_photo_path !== "111222"
       ? node.end_photo_path
       : null
   );
@@ -180,7 +184,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
   // 出勤時間、退勤時間の編集モードの時、写真を撮るボタンを押した時、編集済みの写真を表示
   const [editEnd, setEditEnd] = useState(
-    node.start_photo_path === "編集済み" || node.end_photo_path === "編集済み"
+    node.start_photo_path === "111222" || node.end_photo_path === "111222"
       ? true
       : false
   );
@@ -244,7 +248,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         user_id: node.id,
       };
     } else {
-      const startTimePhoto = "編集済み";
+      const startTimePhoto = "111222";
       formData = {
         id: node.id,
         start_time: getTime,
@@ -281,7 +285,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         user_id: node.id,
       };
     } else {
-      const endTimePhoto = "編集済み";
+      const endTimePhoto = "111222";
       formData = {
         id: node.id,
         end_time: getTime,
@@ -313,7 +317,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       formData = {
         id: attendanceTime.id,
         end_time: "9999-12-31 23:59:59",
-        end_photo_path: "編集済み",
+        end_photo_path: "111222",
         user_id: node.user_id,
       };
 
@@ -440,9 +444,9 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
             src={
               !photo
                 ? "https://dummyimage.com/320x240/000/fff&text=未登録"
-                : "http://localhost:8000/attendance_times/images/" + photo
+                : "http://localhost:8000/storage/" + decodeURIComponent(photo)
             }
-            alt="写真がありません"
+            alt="写真が無いか、登録されていません"
           />
           <div className="flex justify-center items-center mt-4">
             <button
@@ -463,8 +467,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           editEnd &&
           !notEdit &&
           !lateTime) ||
-        node.start_photo_path === "編集済み" ||
-        node.end_photo_path === "編集済み" ? (
+        node.start_photo_path === "111222" ||
+        node.end_photo_path === "111222" ? (
         <form
           onSubmit={
             link === "/attendanceTimeStart" && edit && editEnd

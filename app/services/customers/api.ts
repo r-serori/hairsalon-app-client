@@ -24,7 +24,10 @@ export const customerApi = {
 
   fetchAllCustomers: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/customers/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/customers/${encodeURIComponent(owner_id)}`
+      );
       // console.log("customers fetched");
       return response;
     } catch (error) {

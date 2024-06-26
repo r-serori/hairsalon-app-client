@@ -11,7 +11,7 @@ import StorefrontIcon from "@mui/icons-material/Storefront";
 import BasicAlerts from "../components/elements/alert/Alert";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
-import LogoutButton from "../components/elements/button/LogoutButton";
+import LogoutButton from "../components/elements/button/logoutButton";
 
 // ScrollTriggerの初期化
 gsap.registerPlugin(Draggable);

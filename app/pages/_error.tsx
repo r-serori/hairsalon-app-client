@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { Draggable } from "gsap/dist/Draggable";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import LogoutButton from "../components/elements/button/LogoutButton";
+import LogoutButton from "../components/elements/button/logoutButton";
 import RouterButton from "../components/elements/button/RouterButton";
 
 // ScrollTriggerの初期化

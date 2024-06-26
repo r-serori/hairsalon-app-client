@@ -22,7 +22,10 @@ export const stockApi = {
 
   fetchAllStocks: async (owner_id: number) => {
     try {
-      const response = await sendRequest("GET", `/stocks/${owner_id}`);
+      const response = await sendRequest(
+        "GET",
+        `/stocks/${encodeURIComponent(owner_id)}`
+      );
       // console.log("stocks fetched", response);
       return response;
     } catch (error) {
