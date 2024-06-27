@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { getAttendanceUsers } from "../../store/auth/authSlice";
-import { UserPermission } from "../../components/Hooks/UserPermission";
 import { useRouter } from "next/router";
 
 const AttendanceTimeShots = () => {

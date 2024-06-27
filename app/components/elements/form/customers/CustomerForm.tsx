@@ -152,8 +152,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
         .filter((user) => users.includes(user.name))
         .map((user) => user.id),
       owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
-      created_at: "",
-      updated_at: "",
     });
   };
 

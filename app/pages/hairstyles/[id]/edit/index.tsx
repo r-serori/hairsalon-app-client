@@ -10,7 +10,6 @@ import { RootState } from "../../../../redux/store";
 import HairstyleForm from "../../../../components/elements/form/hairstyles/HairstyleForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../../components/Hooks/ManagerPermission";
 
 const hairstyleEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,8 +33,6 @@ const hairstyleEdit: React.FC = () => {
   const handleUpdate = async (formData: {
     id: number;
     hairstyle_name: string;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       await dispatch(updateHairstyle(formData) as any);

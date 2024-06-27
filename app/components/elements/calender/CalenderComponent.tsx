@@ -35,7 +35,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
-  const loading = useSelector((state: RootState) => state.customer.loading);
+  const loading = useSelector((state: RootState) => state.customer.status);
 
   const eventInputs: EventInput[] = events.map((event) => ({
     id: event.id.toString(),

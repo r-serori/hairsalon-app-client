@@ -59,8 +59,6 @@ export const createHairstyle = createAsyncThunk(
       id: number;
       hairstyle_name: string;
       owner_id: number;
-      created_at: string;
-      updated_at: string;
     },
     { rejectWithValue }
   ) => {
@@ -139,8 +137,6 @@ export const updateHairstyle = createAsyncThunk(
     formData: {
       id: number;
       hairstyle_name: string;
-      created_at: string;
-      updated_at: string;
     },
     { rejectWithValue }
   ) => {
@@ -242,8 +238,6 @@ export interface HairstyleState {
   id: number;
   hairstyle_name: string;
   owner_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

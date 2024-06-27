@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -6,13 +5,13 @@ import { getMonthly_sales } from "../../store/sales/monthly_sales/monthly_saleSl
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { OwnerPermission } from "../../components/Hooks/OwnerPermission";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
 const monthly_sales: React.FC = () => {
   const router = useRouter();
   const [role, setRole] = useState<string>("");
+  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const dispatch = useDispatch();
 
   const monthly_sales = useSelector(
@@ -23,6 +22,11 @@ const monthly_sales: React.FC = () => {
     const role = localStorage.getItem("role");
     if (role === "オーナー") {
       setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (role === "オーナー") {
+      setTHeaderItems(["年月", "売上", "編集", "削除"]);
     } else {
       router.push("/dashboard");
     }
@@ -48,13 +52,7 @@ const monthly_sales: React.FC = () => {
     { key: "monthly_sales", value: "売上" },
   ];
 
-  const tHeaderItems = ["年-月", "売上", "更新日", "削除"];
-
-  const nodesProps = [
-    { string: "year_month" },
-    { number: "monthly_sales" },
-    { date: "updated_at" },
-  ];
+  const nodesProps = [{ string: "year_month" }, { number: "monthly_sales" }];
 
   const nodes = monthly_sales;
 

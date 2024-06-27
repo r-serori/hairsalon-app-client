@@ -3,8 +3,10 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/stocks": "pages/stocks.js",
+  "/stock_categories": "pages/stock_categories.js",
+  "/schedules": "pages/schedules.js",
   "/dashboard": "pages/dashboard.js",
-  "/customers": "pages/customers.js",
+  "/auth/login": "pages/auth/login.js",
   "/": "pages/index.js",
-  "/auth/login": "pages/auth/login.js"
+  "/customers": "pages/customers.js"
 }

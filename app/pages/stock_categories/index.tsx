@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -6,13 +5,13 @@ import { getStockCategory } from "../../store/stocks/stock_categories/stock_cate
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/UserPermission";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
 const stock_categories = () => {
   const router = useRouter();
   const [role, setRole] = useState<string>("");
+  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const dispatch = useDispatch();
 
   const loading = useSelector(
@@ -37,6 +36,13 @@ const stock_categories = () => {
     } else {
       router.push("/dashboard");
     }
+    if (role === "オーナー") {
+      setTHeaderItems(["在庫カテゴリ名", "編集", "削除"]);
+    } else if (role === "マネージャー") {
+      setTHeaderItems(["在庫カテゴリ名", "編集"]);
+    } else {
+      setTHeaderItems(["在庫カテゴリ名"]);
+    }
     if (
       stockCategories.length === 0 &&
       (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
@@ -51,13 +57,6 @@ const stock_categories = () => {
   }, [dispatch]);
 
   const searchItems = [{ key: "category", value: "在庫カテゴリ名" }];
-
-  const tHeaderItems =
-    role === "オーナー"
-      ? ["在庫カテゴリ名", "更新日", "編集", "削除"]
-      : role === "マネージャー"
-      ? ["在庫カテゴリ名", "更新日", "編集"]
-      : ["在庫カテゴリ名", "更新日"];
 
   const nodesProps = [{ text: "category" }];
 

@@ -8,7 +8,6 @@ import {
 import { RootState } from "../../../../redux/store";
 import StockCategoryForm from "../../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../../components/Hooks/ManagerPermission";
 
 const stockCategoryEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,12 +30,7 @@ const stockCategoryEdit: React.FC = () => {
   console.log("stockCategoryだよ");
   console.log(stockCategory);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    category: string;
-    created_at: string;
-    updated_at: string;
-  }) => {
+  const handleUpdate = async (formData: { id: number; category: string }) => {
     try {
       await dispatch(updateStockCategory(formData) as any);
     } catch (error) {

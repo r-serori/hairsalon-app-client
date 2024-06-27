@@ -5,14 +5,13 @@ import { use, useEffect } from "react";
 import { getCourse } from "../../store/courses/courseSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import usePageReload from "../../components/Hooks/usePageReload";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/UserPermission";
 
 const courses: React.FC = () => {
   const [role, setRole] = useState<string>("");
+  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -39,6 +38,13 @@ const courses: React.FC = () => {
       } else {
         router.push("/dashboard");
       }
+      if (role === "オーナー") {
+        setTHeaderItems(["コース名", "価格", "編集", "削除"]);
+      } else if (role === "マネージャー") {
+        setTHeaderItems(["コース名", "価格", "編集"]);
+      } else {
+        setTHeaderItems(["コース名", "価格"]);
+      }
       if (
         courses.length === 0 &&
         (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
@@ -58,18 +64,10 @@ const courses: React.FC = () => {
     { key: "price", value: "価格" },
   ];
 
-  const tHeaderItems =
-    role === "オーナー"
-      ? ["コース名", "価格", "更新日", "編集", "削除"]
-      : role === "マネージャー"
-      ? ["コース名", "価格", "更新日", "編集"]
-      : ["コース名", "価格", "更新日"];
+  console.log("roleです", role);
+  console.log("tHeaderItemsです", tHeaderItems);
 
-  const nodesProps = [
-    { text: "course_name" },
-    { number: "price" },
-    { text: "updated_at" },
-  ];
+  const nodesProps = [{ text: "course_name" }, { number: "price" }];
 
   const nodes = courses;
 
@@ -86,7 +84,7 @@ const courses: React.FC = () => {
         <div className="flex my-4 ml-2">
           <RouterButton link="/courses/create" value="新規作成" />
         </div>
-        {loading === "loading" ? (
+        {loading === "loading" && !tHeaderItems ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable

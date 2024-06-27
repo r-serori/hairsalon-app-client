@@ -24,8 +24,6 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
       id: node ? node.id : 0,
       category: category,
       owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
-      created_at: "",
-      updated_at: "",
     });
   };
 

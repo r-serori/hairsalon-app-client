@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ModalForm from "../form/ModalForm";
-import AttendanceTimesShotForm from "../form/attendances/attendanceTimeShots/AttendanceTimesShotForm";
+import AttendanceTimesShotForm from "../form/attendances/AttendanceTimesShotForm";
 import BackAgainButton from "../button/RouterButton";
 import { firstGetAttendanceTime } from "../../../store/attendances/attendance_times/attendance_timesSlice";
 import { useDispatch } from "react-redux";

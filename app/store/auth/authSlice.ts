@@ -630,8 +630,6 @@ export interface AuthState {
   password: string;
   role: string;
   isAttendance: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

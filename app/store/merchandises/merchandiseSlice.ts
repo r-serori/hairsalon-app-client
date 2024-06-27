@@ -60,8 +60,6 @@ export const createMerchandise = createAsyncThunk(
       merchandise_name: string;
       price: number;
       owner_id: number;
-      created_at: string;
-      updated_at: string;
     },
     { rejectWithValue }
   ) => {
@@ -141,8 +139,6 @@ export const updateMerchandise = createAsyncThunk(
       id: number;
       merchandise_name: string;
       price: number;
-      created_at: string;
-      updated_at: string;
     },
     { rejectWithValue }
   ) => {

@@ -5,14 +5,13 @@ import { updateCourse, getCourse } from "../../../../store/courses/courseSlice";
 import { RootState } from "../../../../redux/store";
 import CourseForm from "../../../../components/elements/form/courses/CourseForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../../components/Hooks/ManagerPermission";
 import { useState } from "react";
 
 const courseEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.course.loading);
+  const loading = useSelector((state: RootState) => state.course.status);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -29,8 +28,6 @@ const courseEdit: React.FC = () => {
     id: number;
     course_name: string;
     price: number;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       try {
@@ -47,7 +44,7 @@ const courseEdit: React.FC = () => {
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/courses"} />
-      {loading ? (
+      {loading === "loading" ? (
         <p>Loading...</p>
       ) : (
         <CourseForm node={course} createCourse={handleUpdate} edit={true} />

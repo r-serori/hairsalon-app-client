@@ -35,7 +35,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.customer.loading);
+  const loading = useSelector((state: RootState) => state.customer.status);
 
   const customers = useSelector((state: RootState) => state.customer.customers);
 
@@ -81,8 +81,8 @@ const SaleForm: React.FC<SaleFormProps> = ({
       // customerは一回一番下まで行く。その後、次のcustomerに行く。
       // 顧客に関連するコースの情報を取得
       const customerCourses = course_customers
-        .filter((course) => course.customers_id === customer.id)
-        .map((course) => course.courses_id);
+        .filter((course) => course.customer_id === customer.id)
+        .map((course) => course.course_id);
 
       console.log(customerCourses);
       //  [1,2,3]
@@ -96,8 +96,8 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       // 顧客に関連するオプションの情報を取得
       const customerOptions = option_customers
-        .filter((option) => option.customers_id === customer.id)
-        .map((option) => option.options_id);
+        .filter((option) => option.customer_id === customer.id)
+        .map((option) => option.option_id);
 
       console.log(customerOptions);
 
@@ -110,8 +110,8 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       // 顧客に関連する商品の情報を取得
       const customerMerchandises = merchandise_customers
-        .filter((merchandise) => merchandise.customers_id === customer.id)
-        .map((merchandise) => merchandise.merchandises_id);
+        .filter((merchandise) => merchandise.customer_id === customer.id)
+        .map((merchandise) => merchandise.merchandise_id);
 
       console.log(customerMerchandises);
 
@@ -124,8 +124,8 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       // 顧客に関連するヘアスタイルの情報を取得
       const customerHairstyles = hairstyle_customers
-        .filter((hairstyle) => hairstyle.customers_id === customer.id)
-        .map((hairstyle) => hairstyle.hairstyles_id);
+        .filter((hairstyle) => hairstyle.customer_id === customer.id)
+        .map((hairstyle) => hairstyle.hairstyle_id);
 
       console.log(customerHairstyles);
 
@@ -140,8 +140,8 @@ const SaleForm: React.FC<SaleFormProps> = ({
       // 顧客に関連する担当者の情報を取得
 
       const customerUsers = customer_users
-        .filter((user) => user.customers_id === customer.id)
-        .map((user) => user.users_id);
+        .filter((user) => user.customer_id === customer.id)
+        .map((user) => user.user_id);
 
       console.log(customerUsers);
 
@@ -163,7 +163,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
         merchandise: merchandiseNames,
         hairstyle: hairstyleNames,
         user: userNames,
-        updated_at: customer.updated_at,
       };
     }),
   ];
@@ -340,6 +339,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
     monthly_sales: number;
     year: string;
     yearly_sales: number;
+    owner_id: number;
   }) => {
     console.log("SalesFormDataだよ", SalesFormData);
     const update = true;
@@ -369,6 +369,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
   };
 
   const SalesSubmit = () => {
+    const ownerId = Number(localStorage.getItem("owner_id"));
     if (whatSales === "日次") {
       SalesCreate({
         date: time.utc().tz("Asia/Tokyo").format("YYYY-MM-DD"),
@@ -377,6 +378,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         monthly_sales: 0,
         year: "",
         yearly_sales: 0,
+        owner_id: ownerId,
       });
     } else if (whatSales === "月次") {
       SalesCreate({
@@ -386,6 +388,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         monthly_sales: sumPrice,
         year: "",
         yearly_sales: 0,
+        owner_id: ownerId,
       });
     } else if (whatSales === "年次") {
       SalesCreate({
@@ -395,6 +398,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         monthly_sales: 0,
         year: time.utc().tz("Asia/Tokyo").format("YYYY"),
         yearly_sales: sumPrice,
+        owner_id: ownerId,
       });
     }
   };
@@ -408,7 +412,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
   return (
     <>
-      {loading ? (
+      {loading === "loading" ? (
         <div>loading中です。</div>
       ) : (
         <>

@@ -8,7 +8,6 @@ import {
 import { RootState } from "../../../../redux/store";
 import CustomerForm from "../../../../components/elements/form/customers/CustomerForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../../components/Hooks/ManagerPermission";
 
 const customersEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -109,8 +108,6 @@ const customersEdit: React.FC = () => {
     hairstyle_id: number[];
     user_id: number[];
     owner_id: number;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       await dispatch(updateCustomer(formData) as any);

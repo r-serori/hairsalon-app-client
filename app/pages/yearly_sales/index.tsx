@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -11,6 +10,7 @@ import { useRouter } from "next/router";
 
 const yearly_sales: React.FC = () => {
   const [role, setRole] = useState<string>("");
+  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -18,6 +18,11 @@ const yearly_sales: React.FC = () => {
     const role = localStorage.getItem("role");
     if (role === "オーナー") {
       setRole(role);
+    } else {
+      router.push("/dashboard");
+    }
+    if (role === "オーナー") {
+      setTHeaderItems(["年", "売上", "削除"]);
     } else {
       router.push("/dashboard");
     }
@@ -46,13 +51,7 @@ const yearly_sales: React.FC = () => {
     { key: "yearly_sales", value: "売上" },
   ];
 
-  const tHeaderItems = ["年", "売上", "更新日", "削除"];
-
-  const nodesProps = [
-    { string: "year" },
-    { number: "yearly_sales" },
-    { date: "updated_at" },
-  ];
+  const nodesProps = [{ string: "year" }, { number: "yearly_sales" }];
 
   const nodes = yearly_sales;
 

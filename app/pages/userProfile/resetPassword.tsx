@@ -6,7 +6,6 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import ResetPasswordForm from "../../components/elements/form/userProfile/ResetPasswordForm";
 import { useEffect } from "react";
 import { useState } from "react";
-import { UserPermission } from "../../components/Hooks/UserPermission";
 
 const resetPasswordPage: React.FC = () => {
   const [role, setRole] = useState<string>("");

@@ -5,7 +5,6 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { getUsers } from "../../store/auth/authSlice";
-import { OwnerPermission } from "../../components/Hooks/OwnerPermission";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
@@ -69,7 +68,6 @@ const Attendances = () => {
     "名前",
     "スタッフ電話番号",
     "役職",
-    "更新日",
     "編集",
     "勤怠時間管理",
   ];
@@ -78,7 +76,6 @@ const Attendances = () => {
     { text: "name" },
     { number: "staff_phone_number" },
     { text: "role" },
-    { date: "updated_at" },
   ];
 
   // nodesにusersをマップして処理
@@ -93,7 +90,6 @@ const Attendances = () => {
         staff_phone_number: user.phone_number,
         role: user.role,
         isAttendance: user.isAttendance,
-        updated_at: user.updated_at,
       };
     });
 

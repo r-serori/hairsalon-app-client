@@ -235,8 +235,6 @@ export interface Monthly_salesState {
   month: number;
   monthly_sales: number;
   owner_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

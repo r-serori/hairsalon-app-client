@@ -9,7 +9,6 @@ import {
 import { RootState } from "../../../../redux/store";
 import MerchandiseForm from "../../../../components/elements/form/merchandises/MerchandiseForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../../components/Hooks/ManagerPermission";
 
 const merchandiseEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,8 +33,6 @@ const merchandiseEdit: React.FC = () => {
     id: number;
     merchandise_name: string;
     price: number;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       await dispatch(updateMerchandise(formData) as any);

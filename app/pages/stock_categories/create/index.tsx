@@ -8,7 +8,6 @@ import { RootState } from "../../../redux/store";
 import StockCategoryForm from "../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../components/Hooks/ManagerPermission";
 
 const stockCategoryCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,8 +21,6 @@ const stockCategoryCreate: React.FC = () => {
     id: number;
     category: string;
     owner_id: number;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       await dispatch(createStockCategory(formData) as any);

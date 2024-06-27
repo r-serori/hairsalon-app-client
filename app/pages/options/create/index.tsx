@@ -5,7 +5,6 @@ import { RootState } from "../../../redux/store";
 import OptionForm from "../../../components/elements/form/options/OptionForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../components/Hooks/ManagerPermission";
 
 const optionCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,8 +18,6 @@ const optionCreate: React.FC = () => {
     option_name: string;
     price: number;
     owner_id: number;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       await dispatch(createOption(formData) as any);

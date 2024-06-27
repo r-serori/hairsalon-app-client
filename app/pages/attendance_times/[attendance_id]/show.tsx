@@ -8,10 +8,8 @@ import { useRouter } from "next/router";
 import { selectGetAttendanceTimes } from "../../../store/attendances/attendance_times/attendance_timesSlice";
 import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
-import usePageReload from "../../../components/Hooks/usePageReload";
 import BasicAlerts from "../../../components/elements/alert/Alert";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import { OwnerPermission } from "../../../components/Hooks/OwnerPermission";
 
 const attendanceTimes: React.FC = () => {
   const [role, setRole] = useState<string>("");

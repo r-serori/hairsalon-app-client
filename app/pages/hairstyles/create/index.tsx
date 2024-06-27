@@ -1,15 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createHairstyle,
-  getHairstyle,
-} from "../../../store/hairstyles/hairstyleSlice";
+import { createHairstyle } from "../../../store/hairstyles/hairstyleSlice";
 import { RootState } from "../../../redux/store";
 import HairstyleForm from "../../../components/elements/form/hairstyles/HairstyleForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/RouterButton";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../components/Hooks/ManagerPermission";
 
 const hairstyleCreate = () => {
   const dispatch = useDispatch();

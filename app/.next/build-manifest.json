@@ -42,6 +42,16 @@
       "static/chunks/main.js",
       "static/chunks/pages/dashboard.js"
     ],
+    "/schedules": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/schedules.js"
+    ],
+    "/stock_categories": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/stock_categories.js"
+    ],
     "/stocks": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

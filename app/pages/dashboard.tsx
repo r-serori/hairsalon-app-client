@@ -1,5 +1,5 @@
 import React from "react";
-import NavLink from "../components/link";
+import NavLink from "../components/elements/link";
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";

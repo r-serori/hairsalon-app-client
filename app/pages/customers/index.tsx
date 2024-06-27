@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -6,8 +5,6 @@ import { getCustomer } from "../../store/customers/customerSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { Router } from "next/router";
-import { UserPermission } from "../../components/Hooks/UserPermission";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
@@ -18,6 +15,7 @@ interface CustomerProps {
 const customers: React.FC<CustomerProps> = ({ update }) => {
   const router = useRouter();
   const [role, setRole] = useState<string>("");
+  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const dispatch = useDispatch();
 
   const customers = useSelector((state: RootState) => state.customer.customers);
@@ -28,6 +26,43 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
       setRole(role);
     } else {
       router.push("/dashboard");
+    }
+    if (role === "オーナー") {
+      setTHeaderItems([
+        "顧客名",
+        "電話番号",
+        "備考",
+        "コース名",
+        "オプション名",
+        "商品名",
+        "ヘアスタイル名",
+        "担当者名",
+        "編集",
+        "削除",
+      ]);
+    } else if (role === "マネージャー") {
+      setTHeaderItems([
+        "顧客名",
+        "電話番号",
+        "備考",
+        "コース名",
+        "オプション名",
+        "商品名",
+        "ヘアスタイル名",
+        "担当者名",
+        "編集",
+      ]);
+    } else {
+      setTHeaderItems([
+        "顧客名",
+        "電話番号",
+        "備考",
+        "コース名",
+        "オプション名",
+        "商品名",
+        "ヘアスタイル名",
+        "担当者名",
+      ]);
     }
     if (
       customers.length === 0 &&
@@ -99,46 +134,6 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     { key: "names", value: "担当者名" },
   ];
 
-  const tHeaderItems =
-    role === "オーナー"
-      ? [
-          "顧客名",
-          "電話番号",
-          "備考",
-          "コース名",
-          "オプション名",
-          "商品名",
-          "ヘアスタイル名",
-          "担当者名",
-          "更新日",
-          "編集",
-          "削除",
-        ]
-      : role === "マネージャー"
-      ? [
-          "顧客名",
-          "電話番号",
-          "備考",
-          "コース名",
-          "オプション名",
-          "商品名",
-          "ヘアスタイル名",
-          "担当者名",
-          "更新日",
-          "編集",
-        ]
-      : [
-          "顧客名",
-          "電話番号",
-          "備考",
-          "コース名",
-          "オプション名",
-          "商品名",
-          "ヘアスタイル名",
-          "担当者名",
-          "更新日",
-        ];
-
   const nodesProps = [
     { text: "customer_name" },
     { number: "phone_number" },
@@ -148,7 +143,6 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     { text: "merchandise" },
     { text: "hairstyle" },
     { text: "names" },
-    { date: "updated_at" },
   ];
 
   const nodes = [
@@ -257,7 +251,6 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
         merchandise: merchandiseNames,
         hairstyle: hairstyleNames,
         names: userNames,
-        updated_at: customer.updated_at,
       };
     }),
   ];

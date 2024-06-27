@@ -1,42 +1,22 @@
 import React, { useState, useEffect } from "react";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { SelectChangeEvent } from "@mui/material/Select";
 import PrimaryButton from "../../button/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootState } from "../../../../redux/store";
-import { getCourse, updateCourse } from "../../../../store/courses/courseSlice";
-import { getOption, updateOption } from "../../../../store/options/optionSlice";
-import {
-  getMerchandise,
-  updateMerchandise,
-} from "../../../../store/merchandises/merchandiseSlice";
-import {
-  getHairstyle,
-  updateHairstyle,
-} from "../../../../store/hairstyles/hairstyleSlice";
-import {
-  getStockCategory,
-  updateStockCategory,
-} from "../../../../store/stocks/stock_categories/stock_categorySlice";
+import { updateCourse } from "../../../../store/courses/courseSlice";
+import { updateOption } from "../../../../store/options/optionSlice";
+import { updateMerchandise } from "../../../../store/merchandises/merchandiseSlice";
+import { updateHairstyle } from "../../../../store/hairstyles/hairstyleSlice";
+import { updateStockCategory } from "../../../../store/stocks/stock_categories/stock_categorySlice";
 import { updateStock } from "../../../../store/stocks/stockSlice";
-import {
-  updateCustomer,
-  getCustomer,
-} from "../../../../store/customers/customerSlice";
+import { updateCustomer } from "../../../../store/customers/customerSlice";
 import { updateDaily_sales } from "../../../../store/sales/daily_sales/daily_saleSlice";
 import { updateMonthly_sales } from "../../../../store/sales/monthly_sales/monthly_saleSlice";
 import { updateYearly_sales } from "../../../../store/sales/yearly_sales/yearly_saleSlice";
-import { Course_customersState } from "../../../../store/middleTable/customers/course_customersSlice";
-import { Option_customersState } from "../../../../store/middleTable/customers/option_customersSlice";
-import { Merchandise_customersState } from "../../../../store/middleTable/customers/merchandise_customersSlice";
-import { Hairstyle_customersState } from "../../../../store/middleTable/customers/hairstyle_customersSlice";
-import { Customer_usersState } from "../../../../store/middleTable/customers/customer_usersSlice";
-
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import BasicTextField from "../../input/BasicTextField";
-import Link from "next/link";
-import courses from "../../../../pages/courses";
 
 interface ModalFormProps {
   type: any;
@@ -568,11 +548,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
   console.log("EditNodeだよ");
   console.log(EditNode); // address: "東京都渋谷区";
   // user_name: "田中店長";
-  // created_at: "2024-04-13T03:51:09.000000Z";
   // id: 1;
   // phone_number: "09012345678";
   // position: "オーナー";
-  // updated_at: null;
   console.log("EditValueだよ");
   console.log(EditValue); //田中店長
   console.log("EditNodeIdだよ");

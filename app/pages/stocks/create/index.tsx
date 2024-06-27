@@ -5,7 +5,6 @@ import { RootState } from "../../../redux/store";
 import StockForm from "../../../components/elements/form/stocks/StockForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { ManagerPermission } from "../../../components/Hooks/ManagerPermission";
 
 const stockCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,8 +22,6 @@ const stockCreate: React.FC = () => {
     notice: number;
     stock_category_id: number;
     owner_id: number;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       await dispatch(createStock(formData) as any);

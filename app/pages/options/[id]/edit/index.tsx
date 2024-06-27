@@ -28,8 +28,6 @@ const optionEdit: React.FC = () => {
     id: number;
     option_name: string;
     price: number;
-    created_at: string;
-    updated_at: string;
   }) => {
     try {
       await dispatch(updateOption(formData) as any);

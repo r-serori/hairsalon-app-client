@@ -223,7 +223,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         merchandise: merchandiseNames,
         hairstyle: hairstyleNames,
         names: userNames,
-        updated_at: customer.updated_at,
       };
     }),
   ];

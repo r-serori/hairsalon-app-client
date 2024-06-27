@@ -260,8 +260,6 @@ export interface StockState {
   notice: number; //通知
   stock_category_id: number | null; //在庫カテゴリー、外部キー
   owner_id: number;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface RootState {

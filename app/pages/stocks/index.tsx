@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -7,13 +6,13 @@ import { getStockCategory } from "../../store/stocks/stock_categories/stock_cate
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { UserPermission } from "../../components/Hooks/UserPermission";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
 const stocks: React.FC = () => {
   const router = useRouter();
   const [role, setRole] = useState<string>("");
+  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
 
   const dispatch = useDispatch();
 
@@ -31,6 +30,42 @@ const stocks: React.FC = () => {
       setRole(role);
     } else {
       router.push("/dashboard");
+    }
+    if (role === "オーナー") {
+      setTHeaderItems([
+        "在庫カテゴリ",
+        "商品名",
+        "価格",
+        "在庫数量",
+        "備考",
+        "仕入れ先",
+        "通知",
+
+        "編集",
+        "削除",
+      ]);
+    } else if (role === "マネージャー") {
+      setTHeaderItems([
+        "在庫カテゴリ",
+        "商品名",
+        "価格",
+        "在庫数量",
+        "備考",
+        "仕入れ先",
+        "通知",
+
+        "編集",
+      ]);
+    } else {
+      setTHeaderItems([
+        "在庫カテゴリ",
+        "商品名",
+        "価格",
+        "在庫数量",
+        "備考",
+        "仕入れ先",
+        "通知",
+      ]);
     }
     if (
       stocks.length === 0 &&
@@ -68,43 +103,6 @@ const stocks: React.FC = () => {
 
   //コースカテゴリをとってきて、nosesPropsに追加する
 
-  const tHeaderItems =
-    role === "オーナー"
-      ? [
-          "在庫カテゴリ",
-          "商品名",
-          "価格",
-          "在庫数量",
-          "備考",
-          "仕入れ先",
-          "通知",
-          "更新日",
-          "編集",
-          "削除",
-        ]
-      : role === "マネージャー"
-      ? [
-          "在庫カテゴリ",
-          "商品名",
-          "価格",
-          "在庫数量",
-          "備考",
-          "仕入れ先",
-          "通知",
-          "更新日",
-          "編集",
-        ]
-      : [
-          "在庫カテゴリ",
-          "商品名",
-          "価格",
-          "在庫数量",
-          "備考",
-          "仕入れ先",
-          "通知",
-          "更新日",
-        ];
-
   const nodesProps = [
     { text: "category_name" },
     { text: "product_name" },
@@ -113,7 +111,6 @@ const stocks: React.FC = () => {
     { text: "remarks" },
     { text: "supplier" },
     { number: "notice" },
-    { string: "updated_at" },
   ];
 
   //stocksのstock_category_idとstockCategoriesのidが一致するものをnodesに追加する
@@ -131,7 +128,6 @@ const stocks: React.FC = () => {
         remarks: stock.remarks,
         supplier: stock.supplier,
         notice: stock.notice,
-        updated_at: stock.updated_at,
       };
     }),
 
