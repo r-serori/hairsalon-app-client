@@ -70,11 +70,9 @@ export const customerApi = {
     }
   },
 
-  deleteCustomer: async (id: number) => {
+  deleteCustomer: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/customers/delete`, {
-        id: id,
-      });
+      const response = await sendRequest("POST", `/customers/delete`, formData);
       // console.log("APIのcustomerDataだよ");
       return response;
     } catch (error) {

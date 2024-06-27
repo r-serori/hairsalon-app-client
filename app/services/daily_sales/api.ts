@@ -49,6 +49,7 @@ export const dailySaleApi = {
     id: number;
     date: string;
     daily_sales: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -63,11 +64,13 @@ export const dailySaleApi = {
       return { error: error };
     }
   },
-  deleteDailySales: async (id: number) => {
+  deleteDailySales: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/daily_sales/delete`, {
-        id: id,
-      });
+      const response = await sendRequest(
+        "POST",
+        `/daily_sales/delete`,
+        formData
+      );
       // console.log("APIのdailySalesDataだよ", response);
       return response;
     } catch (error) {

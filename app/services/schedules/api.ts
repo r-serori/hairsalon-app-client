@@ -94,6 +94,7 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     allDay: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/schedules/update`, formData);
@@ -137,11 +138,9 @@ export const schedulesApi = {
     }
   },
 
-  deleteSchedule: async (id: number) => {
+  deleteSchedule: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/schedules/delete`, {
-        id: id,
-      });
+      const response = await sendRequest("POST", `/schedules/delete`, formData);
       // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {

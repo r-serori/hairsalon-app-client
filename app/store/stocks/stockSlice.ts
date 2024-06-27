@@ -152,6 +152,7 @@ export const updateStock = createAsyncThunk(
       supplier: string;
       notice: number;
       stock_category_id: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -203,9 +204,9 @@ export const updateStock = createAsyncThunk(
 // 在庫情報を削除する非同期アクション//delete
 export const deleteStock = createAsyncThunk(
   "stock/deleteStock",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await stockApi.deleteStock(id);
+      const response: any = await stockApi.deleteStock(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

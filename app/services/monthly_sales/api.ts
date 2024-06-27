@@ -48,6 +48,7 @@ export const monthlySaleApi = {
     id: number;
     year_month: string;
     monthly_sales: number;
+    owner_id;
   }) => {
     try {
       const response = await sendRequest(
@@ -63,11 +64,13 @@ export const monthlySaleApi = {
     }
   },
 
-  deleteMonthlySales: async (id: number) => {
+  deleteMonthlySales: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/monthly_sales/delete`, {
-        id: id,
-      });
+      const response = await sendRequest(
+        "POST",
+        `/monthly_sales/delete`,
+        formData
+      );
       // console.log("APIのmonthlySalesDataだよ", response);
       return response;
     } catch (error) {

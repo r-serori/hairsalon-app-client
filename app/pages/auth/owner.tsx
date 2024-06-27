@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { ownerRegister } from "../../store/auth/ownerSlice";
 import OwnerRegisterForm from "../../components/elements/form/auth/AuthOwnerForm";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import CryptoJS from "crypto-js";
+import { getKey } from "../../store/auth/keySlice";
 
 const OwnerPage = () => {
   const dispatch = useDispatch();
@@ -15,6 +17,10 @@ const OwnerPage = () => {
   const message = useSelector((state: RootState) => state.auth.message);
 
   const error = useSelector((state: RootState) => state.auth.error);
+
+  const key = useSelector((state: RootState) => state.key.key);
+
+  const keyStatus = useSelector((state: RootState) => state.key.status);
 
   const ownerSubmit = async (formData: {
     store_name: string;
@@ -27,8 +33,28 @@ const OwnerPage = () => {
       const response = await dispatch(ownerRegister(formData) as any);
       console.log("Success", response);
       const ownerId = response.payload.responseOwner.id;
-      localStorage.setItem("owner_id", ownerId);
-      router.push("/dashboard");
+
+      try {
+        if (loading === "success" && key === null) {
+          await dispatch(getKey({}) as any);
+        }
+      } catch (error) {
+        throw new Error("キーの取得に失敗しました！");
+      }
+
+      const ownerIdString = JSON.stringify(ownerId);
+
+      const encryptedOwnerId = CryptoJS.AES.encrypt(
+        ownerIdString,
+        key
+      ).toString();
+
+      if (ownerId && keyStatus === "success") {
+        localStorage.setItem("owner_id", encryptedOwnerId);
+        router.push("/dashboard");
+      } else {
+        throw new Error("オーナー登録に失敗しました");
+      }
     } catch (error) {
       console.log("Error", error);
       return;

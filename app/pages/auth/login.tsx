@@ -9,6 +9,8 @@ import { isLogin } from "../../store/auth/isLoginSlice";
 import { clearError } from "../../store/auth/authSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useEffect } from "react";
+import CryptoJS from "crypto-js";
+import { getKey } from "../../store/auth/keySlice";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,6 +21,10 @@ const LoginPage: React.FC = () => {
   const message = useSelector((state: RootState) => state.auth.message);
 
   const error = useSelector((state: RootState) => state.auth.error);
+
+  const key = useSelector((state: RootState) => state.key.key);
+
+  const keyStatus = useSelector((state: RootState) => state.key.status);
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
@@ -32,19 +38,39 @@ const LoginPage: React.FC = () => {
       const userId = response.payload.responseUser.id;
       const ownerId = response.payload.responseOwnerId;
       const role = response.payload.responseUser.role;
-      if (ownerId) {
+
+      if (isLoading === "success") {
+        await dispatch(getKey({}) as any);
+      } else {
+        throw new Error("キーの取得に失敗しました！");
+      }
+      const responseData = {
+        user_id: userId,
+        role: role,
+      };
+      // データをJSON文字列に変換
+      const dataString = JSON.stringify(responseData);
+      const ownerIdString = JSON.stringify(ownerId);
+
+      const encryptedData = CryptoJS.AES.encrypt(dataString, key).toString();
+      const encryptedOwnerId = CryptoJS.AES.encrypt(
+        ownerIdString,
+        key
+      ).toString();
+
+      if (ownerId && keyStatus === "success") {
         dispatch(isLogin());
-        localStorage.setItem("user_id", userId);
+        // 暗号化されたデータをローカルストレージに保存
+        localStorage.setItem("user_data", encryptedData);
+        localStorage.setItem("owner_id", encryptedOwnerId);
         localStorage.setItem("isLogin", "true");
-        localStorage.setItem("owner_id", ownerId);
-        localStorage.setItem("role", role);
         localStorage.removeItem("registerNow");
         router.push("/dashboard");
-      } else if (ownerId === null) {
+      } else if (ownerId === null && keyStatus === "success") {
         dispatch(isLogin());
-        localStorage.setItem("user_id", userId);
+        localStorage.setItem("user_data", encryptedData);
+        localStorage.setItem("owner_id", encryptedOwnerId);
         localStorage.setItem("isLogin", "true");
-        localStorage.setItem("role", role);
         localStorage.removeItem("registerNow");
         router.push("/auth/owner");
       } else {

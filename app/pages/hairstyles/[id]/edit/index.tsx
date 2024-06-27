@@ -33,6 +33,7 @@ const hairstyleEdit: React.FC = () => {
   const handleUpdate = async (formData: {
     id: number;
     hairstyle_name: string;
+    owner_id: number;
   }) => {
     try {
       await dispatch(updateHairstyle(formData) as any);

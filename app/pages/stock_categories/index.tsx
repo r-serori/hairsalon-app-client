@@ -63,32 +63,34 @@ const stock_categories = () => {
   const nodes = stockCategories;
 
   return (
-    <div className="mx-4">
+    <div>
       {message && (
         <BasicAlerts type="success" message={message} space={1} padding={0.6} />
       )}
       {error && (
         <BasicAlerts type="error" message={error} space={1} padding={0.6} />
       )}
-      <div className="flex mb-4">
-        <RouterButton
-          link="/stock_categories/create"
-          value="在庫カテゴリ新規作成"
-        />
-        <RouterButton link="/stocks" value="在庫画面に戻る" />
+      <div className="mx-4">
+        <div className="flex mb-4">
+          <RouterButton
+            link="/stock_categories/create"
+            value="在庫カテゴリ新規作成"
+          />
+          <RouterButton link="/stocks" value="在庫画面に戻る" />
+        </div>
+        {loading === "loading" ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/stock_categories"
+            role={role}
+          />
+        )}
       </div>
-      {loading === "loading" ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/stock_categories"
-          role={role}
-        />
-      )}
     </div>
   );
 };

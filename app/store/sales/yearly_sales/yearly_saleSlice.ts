@@ -128,7 +128,12 @@ export const createYearly_sales = createAsyncThunk(
 export const updateYearly_sales = createAsyncThunk(
   "yearly_sales/updateYearly_sales",
   async (
-    formData: { id: number; year: string; yearly_sales: number },
+    formData: {
+      id: number;
+      year: string;
+      yearly_sales: number;
+      owner_id: number;
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -178,9 +183,9 @@ export const updateYearly_sales = createAsyncThunk(
 
 export const deleteYearly_sales = createAsyncThunk(
   "yearly_sales/deleteYearly_sales",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await yearlySaleApi.deleteYearlySales(id);
+      const response: any = await yearlySaleApi.deleteYearlySales(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

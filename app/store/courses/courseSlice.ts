@@ -140,6 +140,7 @@ export const updateCourse = createAsyncThunk(
       id: number;
       course_name: string;
       price: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -190,9 +191,9 @@ export const updateCourse = createAsyncThunk(
 
 export const deleteCourse = createAsyncThunk(
   "course/deleteCourse",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await courseApi.deleteCourse(id);
+      const response: any = await courseApi.deleteCourse(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

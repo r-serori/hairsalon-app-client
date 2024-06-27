@@ -39,7 +39,11 @@ export const hairstyleApi = {
   //   }
   // },
 
-  updateHairstyle: async (formData: { id: number; hairstyle_name: string }) => {
+  updateHairstyle: async (formData: {
+    id: number;
+    hairstyle_name: string;
+    owner_id: number;
+  }) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -54,11 +58,13 @@ export const hairstyleApi = {
     }
   },
 
-  deleteHairstyle: async (id: number) => {
+  deleteHairstyle: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/hairstyles/delete`, {
-        id: id,
-      });
+      const response = await sendRequest(
+        "POST",
+        `/hairstyles/delete`,
+        formData
+      );
       // console.log("APIのhairstyleDataだよ", response);
       return response;
     } catch (error) {

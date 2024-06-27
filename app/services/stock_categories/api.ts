@@ -49,7 +49,11 @@ export const stockCategoryApi = {
   // }
   // },
 
-  updateStockCategory: async (formData: { id: number; category: string }) => {
+  updateStockCategory: async (formData: {
+    id: number;
+    category: string;
+    owner_id: number;
+  }) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -66,11 +70,13 @@ export const stockCategoryApi = {
     }
   },
 
-  deleteStockCategory: async (id: number) => {
+  deleteStockCategory: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/stock_categories/delete`, {
-        id: id,
-      });
+      const response = await sendRequest(
+        "POST",
+        `/stock_categories/delete`,
+        formData
+      );
       // console.log("APIのstockCategoryDataだよ", response);
       return response;
     } catch (error) {

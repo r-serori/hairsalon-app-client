@@ -139,6 +139,7 @@ export const updateMerchandise = createAsyncThunk(
       id: number;
       merchandise_name: string;
       price: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -189,9 +190,9 @@ export const updateMerchandise = createAsyncThunk(
 
 export const deleteMerchandise = createAsyncThunk(
   "merchandise/deleteMerchandise",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await merchandiseApi.deleteMerchandise(id);
+      const response: any = await merchandiseApi.deleteMerchandise(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

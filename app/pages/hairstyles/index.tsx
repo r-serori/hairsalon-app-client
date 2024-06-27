@@ -27,7 +27,7 @@ const hairstyles: React.FC = () => {
       router.push("/dashboard");
     }
     if (role === "オーナー") {
-      setTHeaderItems(["髪型", , "編集", "削除"]);
+      setTHeaderItems(["髪型", "編集", "削除"]);
     } else if (role === "マネージャー") {
       setTHeaderItems(["髪型", "編集"]);
     } else {
@@ -55,7 +55,7 @@ const hairstyles: React.FC = () => {
 
   const searchItems = [{ key: "hairstyle_name", value: "髪型" }];
 
-  const nodesProps = [{ text: "hairstyle_name" }, { date: "updated_at" }];
+  const nodesProps = [{ text: "hairstyle_name" }];
 
   const nodes = hairstyles;
   return (

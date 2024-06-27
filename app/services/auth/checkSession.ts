@@ -1,5 +1,4 @@
 import Router from "next/router";
-import { useDispatch } from "react-redux";
 import { sendRequest } from "../requestApi";
 import { isLogout } from "../../store/auth/isLoginSlice";
 import { logout } from "../../store/auth/authSlice";

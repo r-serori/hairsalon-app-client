@@ -25,7 +25,7 @@ const optionForm: React.FC<OptionFormProps> = ({
       id: node ? node.id : 0,
       option_name: option_name,
       price: price,
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
+      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
     });
   };
 

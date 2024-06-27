@@ -132,6 +132,7 @@ export const updateMonthly_sales = createAsyncThunk(
       id: number;
       year_month: string;
       monthly_sales: number;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -182,10 +183,9 @@ export const updateMonthly_sales = createAsyncThunk(
 
 export const deleteMonthly_sales = createAsyncThunk(
   "monthly_sales/deleteMonthly_sales",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await monthlySaleApi.deleteMonthlySales(id);
-
+      const response: any = await monthlySaleApi.deleteMonthlySales(formData);
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う

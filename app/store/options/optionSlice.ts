@@ -135,7 +135,12 @@ export const createOption = createAsyncThunk(
 export const updateOption = createAsyncThunk(
   "option/updateOption",
   async (
-    formData: { id: number; option_name: string; price: number },
+    formData: {
+      id: number;
+      option_name: string;
+      price: number;
+      owner_id: number;
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -185,9 +190,9 @@ export const updateOption = createAsyncThunk(
 
 export const deleteOption = createAsyncThunk(
   "option/deleteOption",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await optionApi.deleteOption(id);
+      const response: any = await optionApi.deleteOption(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

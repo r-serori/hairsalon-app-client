@@ -52,6 +52,7 @@ export const stockApi = {
     remarks: string;
     notice: number;
     stock_category_id: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/stocks/update`, formData);
@@ -63,9 +64,9 @@ export const stockApi = {
     }
   },
 
-  deleteStock: async (id: number) => {
+  deleteStock: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/stocks/delete`, { id: id });
+      const response = await sendRequest("POST", `/stocks/delete`, formData);
       // console.log("APIのstockDataだよ", response);
       return response;
     } catch (error) {

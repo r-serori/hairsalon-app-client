@@ -30,7 +30,11 @@ const stockCategoryEdit: React.FC = () => {
   console.log("stockCategoryだよ");
   console.log(stockCategory);
 
-  const handleUpdate = async (formData: { id: number; category: string }) => {
+  const handleUpdate = async (formData: {
+    id: number;
+    category: string;
+    owner_id: number;
+  }) => {
     try {
       await dispatch(updateStockCategory(formData) as any);
     } catch (error) {

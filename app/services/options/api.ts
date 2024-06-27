@@ -44,6 +44,7 @@ export const optionApi = {
     id: number;
     option_name: string;
     price: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/options/update`, formData);
@@ -55,9 +56,9 @@ export const optionApi = {
     }
   },
 
-  deleteOption: async (id: number) => {
+  deleteOption: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/options/delete`, { id: id });
+      const response = await sendRequest("POST", `/options/delete`, formData);
       // console.log("APIのoptionDataだよ", response);
       return response;
     } catch (error) {

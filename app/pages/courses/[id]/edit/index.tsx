@@ -28,6 +28,7 @@ const courseEdit: React.FC = () => {
     id: number;
     course_name: string;
     price: number;
+    owner_id: number;
   }) => {
     try {
       try {

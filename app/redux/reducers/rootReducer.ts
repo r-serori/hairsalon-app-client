@@ -50,6 +50,7 @@ import authReducer from "../../store/auth/authSlice";
 import ownerReducer from "../../store/auth/ownerSlice";
 import staffReducer from "../../store/auth/staffSlice";
 import { loginNowReducer } from "../../store/auth/isLoginSlice";
+import keyReducer from "../../store/auth/keySlice";
 
 // 他のリデューサーをインポートする
 const rootReducer = combineReducers({
@@ -57,6 +58,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   owner: ownerReducer,
   staff: staffReducer,
+  key: keyReducer,
   attendance_time: attendance_timeReducer,
   course: courseReducer,
   option: optionReducer,

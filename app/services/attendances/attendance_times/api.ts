@@ -4,13 +4,14 @@ export const attendance_timeApi = {
   selectFetchAttendanceTimes: async (formData: {
     user_id: number;
     yearMonth: string;
+    owner_id: number;
   }) => {
     try {
       const userIdEncoded = encodeURIComponent(formData.user_id.toString());
       const yearMonthEncoded = encodeURIComponent(formData.yearMonth);
       const response = await sendRequest(
         "GET",
-        `/attendance_times/selectedAttendanceTimes/${yearMonthEncoded}/${userIdEncoded}`
+        `/attendance_times/selectedAttendanceTimes/${yearMonthEncoded}/${userIdEncoded}/${formData.owner_id}`
       );
       console.log("APIのattendanceTimeDataだよ");
       return response;
@@ -20,11 +21,11 @@ export const attendance_timeApi = {
     }
   },
 
-  firstGetAttendanceTime: async (id) => {
+  firstGetAttendanceTime: async (user_id: number) => {
     try {
       const response = await sendRequest(
         "GET",
-        `/firstAttendanceTimes/firstGet/${encodeURIComponent(id)}`
+        `/firstAttendanceTimes/firstGet/${encodeURIComponent(user_id)}`
       );
       console.log("APIのattendanceTimeDataだよ");
       return response;
@@ -39,6 +40,7 @@ export const attendance_timeApi = {
     end_time: string;
     end_photo_path: string;
     user_id: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -58,6 +60,7 @@ export const attendance_timeApi = {
     start_time: string;
     start_photo_path: string;
     user_id: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -77,6 +80,7 @@ export const attendance_timeApi = {
     end_time: string;
     end_photo_path: string;
     user_id: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -97,6 +101,7 @@ export const attendance_timeApi = {
     start_time: string;
     start_photo_path: string;
     user_id: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -117,6 +122,7 @@ export const attendance_timeApi = {
     end_time: string;
     end_photo_path: string;
     user_id: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -132,11 +138,13 @@ export const attendance_timeApi = {
     }
   },
 
-  deleteAttendanceTime: async (id: number) => {
+  deleteAttendanceTime: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/attendance_times/delete`, {
-        id: id,
-      });
+      const response = await sendRequest(
+        "POST",
+        `/attendance_times/delete`,
+        formData
+      );
       console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {

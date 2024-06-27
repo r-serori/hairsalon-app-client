@@ -8,6 +8,8 @@ import RouterButton from "../../components/elements/button/RouterButton";
 import { clearError } from "../../store/auth/authSlice";
 import { isLogin } from "../../store/auth/isLoginSlice";
 import { useEffect } from "react";
+import CryptoJS from "crypto-js";
+import { getKey } from "../../store/auth/keySlice";
 
 const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,11 +19,11 @@ const RegisterPage: React.FC = () => {
 
   const error = useSelector((state: RootState) => state.auth.error);
 
-  const owner = useSelector((state: RootState) => state.owner.owner);
-
   const ownerError = useSelector((state: RootState) => state.owner.error);
 
-  const ownerMessage = useSelector((state: RootState) => state.owner.message);
+  const key = useSelector((state: RootState) => state.key.key);
+
+  const keyStatus = useSelector((state: RootState) => state.key.status);
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
@@ -38,25 +40,37 @@ const RegisterPage: React.FC = () => {
   }) => {
     const response = await dispatch(register(formData) as any);
     console.log("register.tsxのデータだよ", response);
-    if (response.status) {
-      if (
-        response.status === 401 ||
-        response.status === 403 ||
-        response.status === 404 ||
-        response.status === 500
-      ) {
-        router.push({
-          pathname: "/_error",
-          query: { status: response.status },
-        });
-      }
+    const userId = response.payload.responseUser.id;
+    const role = response.payload.responseUser.role;
+    // if (response.status) {
+    //   if (
+    //     response.status === 401 ||
+    //     response.status === 403 ||
+    //     response.status === 404 ||
+    //     response.status === 500
+    //   ) {
+    //     router.push({
+    //       pathname: "/_error",
+    //       query: { status: response.status },
+    //     });
+    //   }
+    // }
+    if (isLoading === "success") {
+      await dispatch(getKey({}) as any);
+    } else {
+      throw new Error("キーの取得に失敗しました！");
     }
-    if (response.payload.responseUser) {
+    const responseData = {
+      user_id: userId,
+      role: role,
+    };
+    // データをJSON文字列に変換
+    const dataString = JSON.stringify(responseData);
+    const encryptedData = CryptoJS.AES.encrypt(dataString, key).toString();
+
+    if (userId && role && keyStatus === "success") {
       dispatch(isLogin());
-      const userId = response.payload.responseUser.id;
-      const role = response.payload.responseUser.role;
-      localStorage.setItem("user_id", userId);
-      localStorage.setItem("role", role);
+      localStorage.setItem("user_data", encryptedData);
       localStorage.setItem("isLogin", "true");
       console.log("Success", response);
       localStorage.removeItem("registerNow");

@@ -443,9 +443,9 @@ export const updateCustomerAndScheduleCreate = createAsyncThunk(
 
 export const deleteSchedule = createAsyncThunk(
   "schedule/deleteSchedule",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await schedulesApi.deleteSchedule(id);
+      const response: any = await schedulesApi.deleteSchedule(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

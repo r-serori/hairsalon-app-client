@@ -137,6 +137,7 @@ export const updateHairstyle = createAsyncThunk(
     formData: {
       id: number;
       hairstyle_name: string;
+      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -187,9 +188,9 @@ export const updateHairstyle = createAsyncThunk(
 
 export const deleteHairstyle = createAsyncThunk(
   "hairstyle/deleteHairstyle",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await hairstyleApi.deleteHairstyle(id);
+      const response: any = await hairstyleApi.deleteHairstyle(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

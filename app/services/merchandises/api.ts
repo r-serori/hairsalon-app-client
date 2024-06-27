@@ -48,6 +48,7 @@ export const merchandiseApi = {
     id: number;
     merchandise_name: string;
     price: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -63,11 +64,13 @@ export const merchandiseApi = {
     }
   },
 
-  deleteMerchandise: async (id: number) => {
+  deleteMerchandise: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/merchandises/delete`, {
-        id: id,
-      });
+      const response = await sendRequest(
+        "POST",
+        `/merchandises/delete`,
+        formData
+      );
       // console.log("APIのmerchandiseDataだよ", response);
       return response;
     } catch (error) {

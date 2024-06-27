@@ -128,7 +128,12 @@ export const createDaily_sales = createAsyncThunk(
 export const updateDaily_sales = createAsyncThunk(
   "daily_sales/updateDaily_sales",
   async (
-    formData: { id: number; date: string; daily_sales: number },
+    formData: {
+      id: number;
+      date: string;
+      daily_sales: number;
+      owner_id: number;
+    },
     { rejectWithValue }
   ) => {
     try {
@@ -178,9 +183,9 @@ export const updateDaily_sales = createAsyncThunk(
 
 export const deleteDaily_sales = createAsyncThunk(
   "daily_sales/deleteDaily_sales",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await dailySaleApi.deleteDailySales(id);
+      const response: any = await dailySaleApi.deleteDailySales(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

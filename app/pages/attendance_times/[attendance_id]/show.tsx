@@ -10,15 +10,21 @@ import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
 import BasicAlerts from "../../../components/elements/alert/Alert";
 import RouterButton from "../../../components/elements/button/RouterButton";
+import CryptoJS from "crypto-js";
+import { getKey } from "../../../store/auth/keySlice";
 
 const attendanceTimes: React.FC = () => {
   const [role, setRole] = useState<string>("");
+
   const dispatch = useDispatch();
   const router = useRouter();
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
+
+  const key = useSelector((state: RootState) => state.key.key);
+  const keyStatus = useSelector((state: RootState) => state.key.status);
 
   // 初回のみデータ取得を行うためのフラグ
   const [attendanceTimeOpen, setAttendanceTimeOpen] = useState(false);
@@ -40,11 +46,13 @@ const attendanceTimes: React.FC = () => {
   const [yearMonth, setYearMonth] = useState("000111");
 
   const nowAttendanceTime = async () => {
+    const ownerId = localStorage.getItem("owner_id");
     try {
       await dispatch(
         selectGetAttendanceTimes({
           user_id: Number(id),
           yearMonth: "000111",
+          owner_id: Number(ownerId),
         }) as any
       );
       setYearMonth("000111");
@@ -55,6 +63,8 @@ const attendanceTimes: React.FC = () => {
 
   useEffect(() => {
     try {
+      const encryptUserData = localStorage.getItem("userData");
+
       const role = localStorage.getItem("role");
       if (role === "オーナー") {
         setRole(role);
@@ -62,11 +72,13 @@ const attendanceTimes: React.FC = () => {
         router.push("/dashboard");
       }
       if (attendanceTimes.length === 0 && id && role === "オーナー") {
+        const ownerId = localStorage.getItem("owner_id");
         setYearMonth("000111");
         dispatch(
           selectGetAttendanceTimes({
             user_id: Number(id),
             yearMonth: yearMonth,
+            owner_id: Number(ownerId),
           }) as any
         );
       } else {

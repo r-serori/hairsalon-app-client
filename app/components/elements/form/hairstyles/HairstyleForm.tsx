@@ -25,7 +25,7 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
     createHairstyle({
       id: node ? node.id : 0,
       hairstyle_name: hairstyle_name,
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
+      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
     });
   };
 

@@ -37,6 +37,7 @@ const stockEdit: React.FC = () => {
     supplier: string;
     notice: number;
     stock_category_id: number;
+    owner_id: number;
   }) => {
     try {
       await dispatch(updateStock(formData) as any);

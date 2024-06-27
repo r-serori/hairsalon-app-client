@@ -23,7 +23,7 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
     createStockCategory({
       id: node ? node.id : 0,
       category: category,
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
+      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
     });
   };
 

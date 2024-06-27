@@ -89,6 +89,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
           selectGetAttendanceTimes({
             user_id: whatIsYourId,
             yearMonth: year,
+            owner_id: ownerId,
           }) as any
         );
 

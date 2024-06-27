@@ -206,9 +206,9 @@ export const updateCustomer = createAsyncThunk(
 
 export const deleteCustomer = createAsyncThunk(
   "customer/deleteCustomer",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
-      const response: any = await customerApi.deleteCustomer(id);
+      const response: any = await customerApi.deleteCustomer(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理

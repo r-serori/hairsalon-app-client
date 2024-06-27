@@ -33,6 +33,7 @@ const merchandiseEdit: React.FC = () => {
     id: number;
     merchandise_name: string;
     price: number;
+    owner_id: number;
   }) => {
     try {
       await dispatch(updateMerchandise(formData) as any);

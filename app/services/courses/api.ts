@@ -41,6 +41,7 @@ export const courseApi = {
     id: number;
     course_name: string;
     price: number;
+    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/courses/update`, formData);
@@ -52,9 +53,9 @@ export const courseApi = {
     }
   },
 
-  deleteCourse: async (id: number) => {
+  deleteCourse: async (formData: { id: number; owner_id: number }) => {
     try {
-      const response = await sendRequest("POST", `/courses/delete`, { id: id });
+      const response = await sendRequest("POST", `/courses/delete`, formData);
       // console.log("APIのcourseDataだよ");
       return response;
     } catch (error) {

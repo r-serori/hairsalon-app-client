@@ -27,7 +27,7 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
       id: node ? node.id : 0,
       merchandise_name: merchandise_name,
       price: price,
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("user_id")),
+      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
     });
   };
 
