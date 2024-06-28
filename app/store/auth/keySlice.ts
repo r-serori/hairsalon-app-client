@@ -55,14 +55,12 @@ export interface KeyState {
 }
 
 export interface RootState {
-  key: KeyState;
+  key: string | null;
   status: "idle" | "loading" | "success" | "failed";
 }
 
 const initialState: RootState = {
-  key: {
-    key: "",
-  },
+  key: null,
   status: "idle",
 };
 
@@ -84,7 +82,7 @@ export const keySlice = createSlice({
   },
 });
 
-export const selectKey = (state: RootState) => state.key.key;
+export const selectKey = (state: RootState) => state.key;
 
 const keyReducer = keySlice.reducer;
 

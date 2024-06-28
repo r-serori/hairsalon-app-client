@@ -12,12 +12,13 @@ import BasicAlerts from "../components/elements/alert/Alert";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import LogoutButton from "../components/elements/button/logoutButton";
+import { userError } from "../components/Hooks/authSelector";
 
 // ScrollTriggerの初期化
 gsap.registerPlugin(Draggable);
 
 const HomePage: React.FC = () => {
-  const error = useSelector((state: RootState) => state.auth.error);
+  const uError: string | null = useSelector(userError) as string | null;
   useEffect(() => {
     // Draggableの設定
     Draggable.create("#active", {
@@ -39,8 +40,8 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {uError && (
+        <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
       <div className="flex flex-col items-center justify-between container h-full mx-auto overflow-hidden ">
         <div className="flex justify-end py-4 mr-4 ">
@@ -49,7 +50,9 @@ const HomePage: React.FC = () => {
         <div>
           <h1
             id="rotate"
-            className={`mt-10 lg:text-8xl text-3xl ${!error && "rotate-12"}`}
+            className={`mt-10 lg:text-8xl text-3xl ${
+              uError === null && "rotate-12"
+            }`}
           >
             Welcome to HairSalon App
           </h1>

@@ -18,7 +18,6 @@ import { user, userKey, userMessage } from "../components/Hooks/authSelector";
 import { allLogout, getUserKey } from "../components/Hooks/useMethod";
 import { useDispatch } from "react-redux";
 import { getRole } from "../components/Hooks/getLocalStorage";
-import { env } from "process";
 
 const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
@@ -26,20 +25,18 @@ const dashboard: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const key: string | null = useSelector(userKey) as string | null;
-  const UMessage: string | null = useSelector(userMessage) as string | null;
-  const OWNERROLE: string = env.NEXT_PUBLIC_OWNER_ROLE as string;
+  const key: string | null = useSelector(userKey);
+  const uMessage: string | null = useSelector(userMessage);
 
   useEffect(() => {
     const getRoleAndKey = async () => {
       try {
         if (key === null) {
-          const userKey: string = (await getUserKey(dispatch)) as string | null;
+          const userKey: string = await getUserKey(dispatch);
 
           if (userKey !== null) {
-            const roleData: string | null = await dispatch(
-              getRole(userKey) as any
-            );
+            const roleData: string | null = await getRole(userKey);
+
             if (roleData !== null) {
               setRole(roleData);
             }
@@ -69,9 +66,9 @@ const dashboard: React.FC = () => {
 
   return (
     <>
-      {UMessage && (
+      {uMessage && (
         <BasicAlerts
-          message={UMessage}
+          message={uMessage}
           type="success"
           space={1}
           padding={0.6}
@@ -87,7 +84,7 @@ const dashboard: React.FC = () => {
             className={`flex flex-wrap justify-center h-full
             ${isFullScreen ? "gap-16" : "gap-4"}`}
           >
-            {role === OWNERROLE && (
+            {role === "オーナー" && (
               <NavLink
                 IconName={ManageAccountsIcon}
                 href="/attendances"
@@ -143,7 +140,7 @@ const dashboard: React.FC = () => {
               iconSrc="#"
               label="髪型"
             />
-            {role === OWNERROLE && (
+            {role === "ownerRole" && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/daily_sales"
@@ -151,7 +148,7 @@ const dashboard: React.FC = () => {
                 label="日次売上"
               />
             )}
-            {role === OWNERROLE && (
+            {role === "ownerRole" && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/monthly_sales"
@@ -159,7 +156,7 @@ const dashboard: React.FC = () => {
                 label="月次売上"
               />
             )}
-            {role === OWNERROLE && (
+            {role === "ownerRole" && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/yearly_sales"

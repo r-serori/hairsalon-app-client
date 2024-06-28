@@ -652,7 +652,7 @@ const usersSlice = createSlice({
       state.error = null;
     },
     changeMessage(state, action) {
-      state.message = action.payload;
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {

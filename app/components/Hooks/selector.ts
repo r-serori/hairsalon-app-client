@@ -1,7 +1,12 @@
 import { RootState } from "../../redux/store";
+import { env } from "process";
+
+export const ownerRole: string | undefined = env.NEXT_PUBLIC_OWNER_ROLE;
+export const managerRole: string | undefined = env.NEXT_PUBLIC_MANAGERROLE;
+export const staffRole: string | undefined = env.NEXT_PUBLIC_STAFFROLE;
 
 //勤怠時間を取得 配列で取得
-export const attendance_times = (state: RootState) =>
+export const attendance_timesStore = (state: RootState) =>
   state.attendance_times.attendance_times;
 
 //勤怠時間のステータスを取得
@@ -18,7 +23,7 @@ export const attendance_timeError = (state: RootState) =>
 
 //--------------------------------------------
 //コース情報を取得 配列で取得
-export const courses = (state: RootState) => state.courses.courses;
+export const coursesStore = (state: RootState) => state.courses.courses;
 
 //コース情報のステータスを取得
 export const courseStatus = (state: RootState) => state.courses.status;
@@ -31,7 +36,7 @@ export const courseError = (state: RootState) => state.courses.error;
 
 //--------------------------------------------
 //オプション情報を取得 配列で取得
-export const options = (state: RootState) => state.options.options;
+export const optionsStore = (state: RootState) => state.options.options;
 
 //オプション情報のステータスを取得
 export const optionStatus = (state: RootState) => state.options.status;
@@ -44,7 +49,7 @@ export const optionError = (state: RootState) => state.options.error;
 
 //--------------------------------------------
 //物販情報を取得 配列で取得
-export const merchandises = (state: RootState) =>
+export const merchandiseStores = (state: RootState) =>
   state.merchandises.merchandises;
 
 //物販情報のステータスを取得
@@ -60,7 +65,8 @@ export const merchandiseError = (state: RootState) => state.merchandises.error;
 
 //--------------------------------------------
 //ヘアスタイル情報を取得 配列で取得
-export const hairstyles = (state: RootState) => state.hairstyles.hairstyles;
+export const hairstylesStore = (state: RootState) =>
+  state.hairstyles.hairstyles;
 
 //ヘアスタイル情報のステータスを取得
 export const hairstyleStatus = (state: RootState) => state.hairstyles.status;
@@ -73,7 +79,7 @@ export const hairstyleError = (state: RootState) => state.hairstyles.error;
 
 //--------------------------------------------
 //顧客情報を取得 配列で取得
-export const customers = (state: RootState) => state.customers.customers;
+export const customersStore = (state: RootState) => state.customers.customers;
 
 //顧客情報のステータスを取得
 export const customerStatus = (state: RootState) => state.customers.status;
@@ -86,7 +92,7 @@ export const customerError = (state: RootState) => state.customers.error;
 
 //--------------------------------------------
 //在庫情報を取得 配列で取得
-export const stocks = (state: RootState) => state.stocks.stocks;
+export const stocksStore = (state: RootState) => state.stocks.stocks;
 
 //在庫情報のステータスを取得
 export const stockStatus = (state: RootState) => state.stocks.status;
@@ -99,7 +105,7 @@ export const stockError = (state: RootState) => state.stocks.error;
 
 //--------------------------------------------
 //在庫カテゴリ情報を取得 配列で取得
-export const stock_categories = (state: RootState) =>
+export const stock_categoriesStore = (state: RootState) =>
   state.stock_categories.stock_categories;
 
 //在庫カテゴリ情報のステータスを取得
@@ -116,7 +122,7 @@ export const stock_categoryError = (state: RootState) =>
 
 //--------------------------------------------
 //スケジュール情報を取得 配列で取得
-export const schedules = (state: RootState) => state.schedules.schedules;
+export const schedulesStore = (state: RootState) => state.schedules.schedules;
 
 //スケジュール情報のステータスを取得
 export const scheduleStatus = (state: RootState) => state.schedules.status;
@@ -129,7 +135,8 @@ export const scheduleError = (state: RootState) => state.schedules.error;
 
 //--------------------------------------------
 //日次売上情報を取得 配列で取得
-export const daily_sales = (state: RootState) => state.daily_sales.daily_sales;
+export const daily_salesStore = (state: RootState) =>
+  state.daily_sales.daily_sales;
 
 //日次売上情報のステータスを取得
 export const daily_saleStatus = (state: RootState) => state.daily_sales.status;
@@ -144,7 +151,7 @@ export const daily_saleError = (state: RootState) => state.daily_sales.error;
 
 //--------------------------------------------
 //月次売上情報を取得 配列で取得
-export const monthly_sales = (state: RootState) =>
+export const monthly_salesStore = (state: RootState) =>
   state.monthly_sales.monthly_sales;
 
 //月次売上情報のステータスを取得
@@ -163,7 +170,7 @@ export const monthly_saleError = (state: RootState) =>
 
 //--------------------------------------------
 //年次売上情報を取得 配列で取得
-export const yearly_sales = (state: RootState) =>
+export const yearly_salesStore = (state: RootState) =>
   state.yearly_sales.yearly_sales;
 
 //年次売上情報のステータスを取得
@@ -179,17 +186,17 @@ export const yearly_saleError = (state: RootState) => state.yearly_sales.error;
 
 //--------------------------------------------
 //中間テーブル情報
-export const course_customers = (state: RootState) =>
+export const course_customersStore = (state: RootState) =>
   state.course_customers.course_customers;
 
-export const option_customers = (state: RootState) =>
+export const option_customersStore = (state: RootState) =>
   state.option_customers.option_customers;
 
-export const merchandise_customers = (state: RootState) =>
+export const merchandise_customersStore = (state: RootState) =>
   state.merchandise_customers.merchandise_customers;
 
-export const hairstyle_customers = (state: RootState) =>
+export const hairstyle_customersStore = (state: RootState) =>
   state.hairstyle_customers.hairstyle_customers;
 
-export const customer_users = (state: RootState) =>
+export const customer_usersStore = (state: RootState) =>
   state.customer_users.customer_users;

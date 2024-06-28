@@ -7,6 +7,7 @@ import { logout } from "../../../store/auth/userSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { isLogout } from "../../../store/auth/isLoginSlice";
+import { user } from "../../Hooks/authSelector";
 
 interface LogoutProps {
   className?: string;
@@ -15,16 +16,6 @@ interface LogoutProps {
 const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const auth = useSelector((state: RootState) => state.auth);
-
-  const user = auth.auth;
-
-  console.log(user);
-
-  const message = useSelector((state: RootState) => state.auth.message);
-
-  const error = useSelector((state: RootState) => state.auth.error);
 
   const deleteCookie = (name) => {
     document.cookie = `${name}=; Max-Age=0; path=/; domain=${location.hostname}`;

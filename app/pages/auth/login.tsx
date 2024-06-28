@@ -24,21 +24,25 @@ import {
   pushOwnerId,
 } from "../../components/Hooks/pushLocalStorage";
 import { UserData } from "../../components/Hooks/interface";
+import { env } from "process";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const UStatus: string = useSelector(userStatus) as string;
+  const uStatus: string = useSelector(userStatus);
 
-  const UMessage: string | null = useSelector(userMessage) as string | null;
+  const uMessage: string | null = useSelector(userMessage);
 
-  const UError: string | null = useSelector(userError) as string | null;
+  const uError: string | null = useSelector(userError);
 
-  const key: string | null = useSelector(userKey) as string | null;
+  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
+    console.log("env", process.env);
+    console.log(env);
+    console.log(env.NEXT_PUBLIC_OWNER_ROLE);
   }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleLogin = async (formData: { email: string; password: string }) => {
@@ -46,25 +50,27 @@ const LoginPage: React.FC = () => {
     try {
       const response: any = await dispatch(login(formData) as any);
       console.log("Success", response);
-      const ownerId: number = response.payload.responseOwnerId as number;
+      const ownerId: number = response.payload.responseOwnerId;
 
       const userData: UserData = {
-        user_id: response.payload.responseUser.id as number,
-        role: response.payload.responseUser.role as string,
-      } as UserData;
+        user_id: response.payload.responseUser.id,
+        role: response.payload.responseUser.role,
+      };
 
-      (await getUserKey(dispatch)) as string | null;
+      const userKey: string | null = await getUserKey(dispatch);
 
-      if (key === null) {
+      if (userKey === null) {
+        console.log("key is null");
         throw new Error("e");
       }
 
-      const pushUser: boolean = (await pushUserData(
-        userData as UserData,
-        key as string
-      )) as boolean;
+      const pushUser: boolean = await pushUserData(userData, userKey);
 
-      const pushOwner: boolean = (await pushOwnerId(ownerId, key)) as boolean;
+      console.log("pushUser", pushUser);
+
+      const pushOwner: boolean = await pushOwnerId(ownerId, userKey);
+
+      console.log("pushOwner", pushOwner);
 
       if (pushUser && pushOwner) {
         dispatch(isLogin());
@@ -93,20 +99,20 @@ const LoginPage: React.FC = () => {
 
   return (
     <div>
-      {UError && (
-        <BasicAlerts type="error" message={UError} space={1} padding={0.6} />
+      {uError && (
+        <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
 
-      {UMessage && (
+      {uMessage && (
         <BasicAlerts
           type="success"
-          message={UMessage}
+          message={uMessage}
           space={1}
           padding={0.6}
         />
       )}
 
-      {UStatus === "loading" ? (
+      {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <div>

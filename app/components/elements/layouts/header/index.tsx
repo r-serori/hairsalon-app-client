@@ -11,12 +11,9 @@ import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
 import { loginNow, userKey } from "../../../Hooks/authSelector";
 import { getUserData, getUserId } from "../../../Hooks/getLocalStorage";
-import { getUserKey } from "../../../Hooks/useMethod";
-
-interface UserData {
-  user_id: number;
-  role: string;
-}
+import { allLogout, getUserKey } from "../../../Hooks/useMethod";
+import { UserData } from "../../../Hooks/interface";
+import { env } from "process";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -28,47 +25,46 @@ export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
   const nowLogin: boolean = useSelector(loginNow);
-  const key: string | null = useSelector(userKey) as string | null;
+  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const IsLoggedIn = localStorage.getItem("isLogin") === "true";
       const getKeyAndUserData = async () => {
         if (key === null) {
-          (await getUserKey(dispatch)) as string | null;
+          const myKey = await getUserKey(dispatch);
+
+          const userData: UserData = await getUserData(myKey);
+          console.log("userData", userData);
+
+          setRole(userData.role);
+          setUser_id(userData.user_id);
         }
-
-        const userData: UserData = (await getUserData(key)) as UserData;
-
-        setRole(userData.role);
-        setUser_id(userData.user_id);
       };
+
+      const verifySession = async () => {
+        const response: boolean = await checkSessionApi.checkSession();
+        if (!response) {
+          await allLogout(dispatch);
+          router.push("/login");
+        }
+      };
+
+      const IsLoggedIn: boolean =
+        localStorage.getItem("isLogin") === "true" ? true : false;
+
       if (IsLoggedIn) {
         getKeyAndUserData();
-      } else {
-        router.push("/login");
       }
-    }
-  }, [nowLogin]);
 
-  useEffect(() => {
-    const verifySession = async () => {
-      await checkSessionApi.checkSession();
-    };
-    const userId = localStorage.getItem("user_id");
-    const ownerId = localStorage.getItem("owner_id");
-    const role = localStorage.getItem("role");
-    const IsLoggedIn = localStorage.getItem("isLogin") === "true";
-    if (typeof window !== "undefined") {
-      if (IsLoggedIn || userId || ownerId || role) {
+      if (IsLoggedIn && user_id && role) {
         verifySession();
       }
+
+      const intervalId = setInterval(verifySession, 10 * 60 * 1000); // 5分ごとにチェック
+
+      return () => clearInterval(intervalId);
     }
-
-    const intervalId = setInterval(verifySession, 5 * 60 * 1000); // 5分ごとにチェック
-
-    return () => clearInterval(intervalId);
-  }, []);
+  }, [nowLogin]);
 
   const navigation =
     role === "オーナー"

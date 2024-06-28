@@ -19,9 +19,11 @@ export const loginNowSlice = createSlice({
   reducers: {
     isLogin: (state) => {
       state.loginNow = true;
+      localStorage.setItem("isLogin", "true");
     },
     isLogout: (state) => {
       state.loginNow = false;
+      localStorage.removeItem("isLogin");
     },
   },
 });

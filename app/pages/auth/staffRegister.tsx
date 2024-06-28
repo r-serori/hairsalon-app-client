@@ -12,9 +12,9 @@ const StaffRegisterPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const UStatus = useSelector(userStatus);
+  const uStatus = useSelector(userStatus);
 
-  const UError = useSelector(userError);
+  const uError = useSelector(userError);
 
   const handleStaffRegister = async (formData: {
     name: string;
@@ -27,7 +27,7 @@ const StaffRegisterPage: React.FC = () => {
   }) => {
     console.log(formData);
     try {
-      const response = await dispatch(staffRegister(formData) as any);
+      const response: any = await dispatch(staffRegister(formData) as any);
       console.log("Success", response);
       router.push("/attendances");
     } catch (error) {
@@ -38,13 +38,13 @@ const StaffRegisterPage: React.FC = () => {
 
   return (
     <div className="min-h-full ">
-      {UError && (
-        <BasicAlerts type="error" message={UError} space={1} padding={0.6} />
+      {uError && (
+        <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
       <div className="mt-4 ml-4">
         <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
       </div>
-      {UStatus === "loading" ? (
+      {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <AuthStaffRegisterForm onSubmitStaff={handleStaffRegister} />

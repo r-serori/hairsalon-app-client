@@ -29,13 +29,13 @@ const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const UStatus: string = useSelector(userStatus) as string;
+  const uStatus: string = useSelector(userStatus);
 
-  const UError: string | null = useSelector(userError) as string | null;
+  const uError: string | null = useSelector(userError);
 
-  const OError: string | null = useSelector(ownerError) as string | null;
+  const oError: string | null = useSelector(ownerError);
 
-  const key: string | null = useSelector(userKey) as string | null;
+  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
@@ -54,19 +54,16 @@ const RegisterPage: React.FC = () => {
       const response: any = await dispatch(register(formData) as any);
       console.log("register.tsxのデータだよ", response);
       const userData: UserData = {
-        user_id: response.payload.responseUser.id as number,
-        role: response.payload.responseUser.role as string,
-      } as UserData;
+        user_id: response.payload.responseUser.id,
+        role: response.payload.responseUser.role,
+      };
 
-      (await getUserKey(dispatch)) as string | null;
+      const userKey: string | null = await getUserKey(dispatch);
 
-      if (key === null) {
+      if (userKey === null) {
         throw new Error("e");
       }
-      const pushUser: boolean = (await pushUserData(
-        userData as UserData,
-        key as string
-      )) as boolean;
+      const pushUser: boolean = await pushUserData(userData, userKey);
 
       if (pushUser) {
         await dispatch(isLogin());
@@ -79,6 +76,7 @@ const RegisterPage: React.FC = () => {
     } catch (error) {
       await allLogout(dispatch);
       await changeMessage("登録処理に失敗しました！もう一度お試しください！");
+      localStorage.removeItem("registerNow");
       console.log("Error", error);
       return;
     }
@@ -86,15 +84,15 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div>
-      {OError && (
-        <BasicAlerts type="error" message={OError} space={1} padding={0.6} />
+      {oError && (
+        <BasicAlerts type="error" message={oError} space={1} padding={0.6} />
       )}
 
-      {UError && (
-        <BasicAlerts type="error" message={UError} space={1} padding={0.6} />
+      {uError && (
+        <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
 
-      {UStatus === "loading" ? (
+      {uStatus === "loading" ? (
         <p>loading...</p>
       ) : (
         <div>

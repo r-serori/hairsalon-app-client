@@ -7,8 +7,10 @@ export const attendance_timeApi = {
     owner_id: number;
   }) => {
     try {
-      const userIdEncoded = encodeURIComponent(formData.user_id.toString());
-      const yearMonthEncoded = encodeURIComponent(formData.yearMonth);
+      const userIdEncoded: string = encodeURIComponent(
+        formData.user_id.toString()
+      );
+      const yearMonthEncoded: string = encodeURIComponent(formData.yearMonth);
       const response = await sendRequest(
         "GET",
         `/attendance_times/selectedAttendanceTimes/${yearMonthEncoded}/${userIdEncoded}/${formData.owner_id}`

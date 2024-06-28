@@ -18,14 +18,14 @@ const OwnerPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const UStatus: string = useSelector(userStatus) as string;
+  const UStatus: string = useSelector(userStatus);
 
-  const UMessage: string | null = useSelector(userMessage) as string | null;
+  const UMessage: string | null = useSelector(userMessage);
 
-  const UError: string | null = useSelector(userError) as string | null;
+  const UError: string | null = useSelector(userError);
 
-  const keyStatus: string | null = useSelector(userKeyStatus) as string | null;
-  const key: string | null = useSelector(userKey) as string | null;
+  const keyStatus: string | null = useSelector(userKeyStatus);
+  const key: string | null = useSelector(userKey);
 
   const ownerSubmit = async (formData: {
     store_name: string;
@@ -37,14 +37,13 @@ const OwnerPage = () => {
     try {
       const response: any = await dispatch(ownerRegister(formData) as any);
       console.log("Success", response);
-      const ownerId: number = response.payload.responseOwner.id as number;
+      const ownerId: number = response.payload.responseOwner.id;
 
       if (key === null) {
-        (await getUserKey(dispatch)) as string | null;
+        await getUserKey(dispatch);
       }
 
-      const pushOwner: boolean = (await pushOwnerId(ownerId, key)) as boolean;
-
+      const pushOwner: boolean = await pushOwnerId(ownerId, key);
       if (pushOwner) {
         router.push("/dashboard");
       } else {

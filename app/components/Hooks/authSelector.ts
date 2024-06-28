@@ -36,6 +36,6 @@ export const userMessage = (state: RootState) => state.users.message;
 //ユーザー情報のエラーを取得
 export const userError = (state: RootState) => state.users.error;
 //ユーザー情報のキーを取得
-export const userKey = (state: RootState) => state.key.key.key;
+export const userKey = (state: RootState) => state.key.key;
 //ユーザー情報のキーのステータスを取得
 export const userKeyStatus = (state: RootState) => state.key.status;
