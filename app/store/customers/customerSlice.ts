@@ -283,7 +283,7 @@ const initialState: RootState = {
 };
 
 const customerSlice = createSlice({
-  name: "customer",
+  name: "customers",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

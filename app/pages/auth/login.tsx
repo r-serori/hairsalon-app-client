@@ -2,29 +2,40 @@ import AuthLoginForm from "../../components/elements/form/auth/AuthLoginForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootState } from "../../redux/store";
-import { login } from "../../store/auth/authSlice";
+import { login } from "../../store/auth/userSlice";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import { useState } from "react";
-import { isLogin } from "../../store/auth/isLoginSlice";
-import { clearError } from "../../store/auth/authSlice";
+import { isLogin, isLogout } from "../../store/auth/isLoginSlice";
+import { clearError, changeMessage } from "../../store/auth/userSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useEffect } from "react";
-import CryptoJS from "crypto-js";
-import { getKey } from "../../store/auth/keySlice";
+import { allLogout } from "../../components/Hooks/useMethod";
+
+import {
+  user,
+  userStatus,
+  userMessage,
+  userError,
+  userKey,
+  userKeyStatus,
+} from "../../components/Hooks/authSelector";
+import { getUserKey } from "../../components/Hooks/useMethod";
+import {
+  pushUserData,
+  pushOwnerId,
+} from "../../components/Hooks/pushLocalStorage";
+import { UserData } from "../../components/Hooks/interface";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isLoading = useSelector((state: RootState) => state.auth.status);
+  const UStatus: string = useSelector(userStatus) as string;
 
-  const message = useSelector((state: RootState) => state.auth.message);
+  const UMessage: string | null = useSelector(userMessage) as string | null;
 
-  const error = useSelector((state: RootState) => state.auth.error);
+  const UError: string | null = useSelector(userError) as string | null;
 
-  const key = useSelector((state: RootState) => state.key.key);
-
-  const keyStatus = useSelector((state: RootState) => state.key.status);
+  const key: string | null = useSelector(userKey) as string | null;
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
@@ -33,66 +44,69 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (formData: { email: string; password: string }) => {
     console.log(formData);
     try {
-      const response = await dispatch(login(formData) as any);
+      const response: any = await dispatch(login(formData) as any);
       console.log("Success", response);
-      const userId = response.payload.responseUser.id;
-      const ownerId = response.payload.responseOwnerId;
-      const role = response.payload.responseUser.role;
+      const ownerId: number = response.payload.responseOwnerId as number;
 
-      if (isLoading === "success") {
-        await dispatch(getKey({}) as any);
-      } else {
-        throw new Error("キーの取得に失敗しました！");
+      const userData: UserData = {
+        user_id: response.payload.responseUser.id as number,
+        role: response.payload.responseUser.role as string,
+      } as UserData;
+
+      (await getUserKey(dispatch)) as string | null;
+
+      if (key === null) {
+        throw new Error("e");
       }
-      const responseData = {
-        user_id: userId,
-        role: role,
-      };
-      // データをJSON文字列に変換
-      const dataString = JSON.stringify(responseData);
-      const ownerIdString = JSON.stringify(ownerId);
 
-      const encryptedData = CryptoJS.AES.encrypt(dataString, key).toString();
-      const encryptedOwnerId = CryptoJS.AES.encrypt(
-        ownerIdString,
-        key
-      ).toString();
+      const pushUser: boolean = (await pushUserData(
+        userData as UserData,
+        key as string
+      )) as boolean;
 
-      if (ownerId && keyStatus === "success") {
+      const pushOwner: boolean = (await pushOwnerId(ownerId, key)) as boolean;
+
+      if (pushUser && pushOwner) {
         dispatch(isLogin());
         // 暗号化されたデータをローカルストレージに保存
-        localStorage.setItem("user_data", encryptedData);
-        localStorage.setItem("owner_id", encryptedOwnerId);
         localStorage.setItem("isLogin", "true");
         localStorage.removeItem("registerNow");
         router.push("/dashboard");
-      } else if (ownerId === null && keyStatus === "success") {
+      } else if (pushUser && !pushOwner) {
         dispatch(isLogin());
-        localStorage.setItem("user_data", encryptedData);
-        localStorage.setItem("owner_id", encryptedOwnerId);
         localStorage.setItem("isLogin", "true");
         localStorage.removeItem("registerNow");
         router.push("/auth/owner");
       } else {
-        localStorage.removeItem("registerNow");
-        throw new Error("ログイン処理に失敗しました！");
+        throw new Error("e");
       }
     } catch (error) {
+      localStorage.removeItem("registerNow");
+      await allLogout(dispatch);
+      await changeMessage(
+        "ログイン処理に失敗しました！もう一度お試しください！"
+      );
       console.log("Error", error);
+      return;
     }
   };
 
   return (
     <div>
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {UError && (
+        <BasicAlerts type="error" message={UError} space={1} padding={0.6} />
       )}
 
-      {message && (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      {UMessage && (
+        <BasicAlerts
+          type="success"
+          message={UMessage}
+          space={1}
+          padding={0.6}
+        />
       )}
 
-      {isLoading === "loading" ? (
+      {UStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <div>

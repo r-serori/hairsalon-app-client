@@ -10,7 +10,7 @@ import { firstGetAttendanceTime } from "../../../store/attendances/attendance_ti
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { getUsers } from "../../../store/auth/authSlice";
+import { getUsers } from "../../../store/auth/userSlice";
 import { get } from "http";
 import { useRouter } from "next/router";
 import RouterButton from "../button/RouterButton";

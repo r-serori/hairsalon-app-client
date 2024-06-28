@@ -1,6 +1,6 @@
 // reducers/rootReducer.ts
 import { combineReducers } from "@reduxjs/toolkit";
-import { AuthState } from "../../store/auth/authSlice";
+import { AuthState } from "../../store/auth/userSlice";
 import attendance_timeReducer, {
   Attendance_timeState,
 } from "../../store/attendances/attendance_times/attendance_timesSlice";
@@ -46,7 +46,7 @@ import monthly_salesReducer, {
 import yearly_salesReducer, {
   Yearly_salesState,
 } from "../../store/sales/yearly_sales/yearly_saleSlice";
-import authReducer from "../../store/auth/authSlice";
+import authReducer from "../../store/auth/userSlice";
 import ownerReducer from "../../store/auth/ownerSlice";
 import staffReducer from "../../store/auth/staffSlice";
 import { loginNowReducer } from "../../store/auth/isLoginSlice";
@@ -55,19 +55,19 @@ import keyReducer from "../../store/auth/keySlice";
 // 他のリデューサーをインポートする
 const rootReducer = combineReducers({
   loginNow: loginNowReducer,
-  auth: authReducer,
+  users: authReducer,
   owner: ownerReducer,
-  staff: staffReducer,
+  staffs: staffReducer,
   key: keyReducer,
-  attendance_time: attendance_timeReducer,
-  course: courseReducer,
-  option: optionReducer,
-  merchandise: merchandiseReducer,
-  hairstyle: hairstyleReducer,
-  customer: customerReducer,
-  schedule: scheduleReducer,
-  stock: stockReducer,
-  stock_category: stock_categoryReducer,
+  attendance_times: attendance_timeReducer,
+  courses: courseReducer,
+  options: optionReducer,
+  merchandises: merchandiseReducer,
+  hairstyles: hairstyleReducer,
+  customers: customerReducer,
+  schedules: scheduleReducer,
+  stocks: stockReducer,
+  stock_categories: stock_categoryReducer,
   daily_sales: daily_salesReducer,
   monthly_sales: monthly_salesReducer,
   yearly_sales: yearly_salesReducer,

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { getUsers } from "../../store/auth/authSlice";
+import { getUsers } from "../../store/auth/userSlice";
 import { useState } from "react";
 import { useRouter } from "next/router";
 

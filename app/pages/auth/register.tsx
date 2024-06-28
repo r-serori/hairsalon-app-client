@@ -1,29 +1,41 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import AuthRegisterForm from "../../components/elements/form/auth/AuthRegisterForm";
-import { register } from "../../store/auth/authSlice";
+import { register } from "../../store/auth/userSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { clearError } from "../../store/auth/authSlice";
+import { clearError, changeMessage } from "../../store/auth/userSlice";
 import { isLogin } from "../../store/auth/isLoginSlice";
 import { useEffect } from "react";
-import CryptoJS from "crypto-js";
-import { getKey } from "../../store/auth/keySlice";
+import {
+  user,
+  userStatus,
+  userMessage,
+  userError,
+  userKey,
+  userKeyStatus,
+  ownerError,
+} from "../../components/Hooks/authSelector";
+import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
+import {
+  pushUserData,
+  pushOwnerId,
+} from "../../components/Hooks/pushLocalStorage";
+import { UserData } from "../../components/Hooks/interface";
+import { string } from "yup";
 
 const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isLoading = useSelector((state: RootState) => state.auth.status);
+  const UStatus: string = useSelector(userStatus) as string;
 
-  const error = useSelector((state: RootState) => state.auth.error);
+  const UError: string | null = useSelector(userError) as string | null;
 
-  const ownerError = useSelector((state: RootState) => state.owner.error);
+  const OError: string | null = useSelector(ownerError) as string | null;
 
-  const key = useSelector((state: RootState) => state.key.key);
-
-  const keyStatus = useSelector((state: RootState) => state.key.status);
+  const key: string | null = useSelector(userKey) as string | null;
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
@@ -38,65 +50,51 @@ const RegisterPage: React.FC = () => {
     isAttendance: boolean;
     password_confirmation: string;
   }) => {
-    const response = await dispatch(register(formData) as any);
-    console.log("register.tsxのデータだよ", response);
-    const userId = response.payload.responseUser.id;
-    const role = response.payload.responseUser.role;
-    // if (response.status) {
-    //   if (
-    //     response.status === 401 ||
-    //     response.status === 403 ||
-    //     response.status === 404 ||
-    //     response.status === 500
-    //   ) {
-    //     router.push({
-    //       pathname: "/_error",
-    //       query: { status: response.status },
-    //     });
-    //   }
-    // }
-    if (isLoading === "success") {
-      await dispatch(getKey({}) as any);
-    } else {
-      throw new Error("キーの取得に失敗しました！");
-    }
-    const responseData = {
-      user_id: userId,
-      role: role,
-    };
-    // データをJSON文字列に変換
-    const dataString = JSON.stringify(responseData);
-    const encryptedData = CryptoJS.AES.encrypt(dataString, key).toString();
+    try {
+      const response: any = await dispatch(register(formData) as any);
+      console.log("register.tsxのデータだよ", response);
+      const userData: UserData = {
+        user_id: response.payload.responseUser.id as number,
+        role: response.payload.responseUser.role as string,
+      } as UserData;
 
-    if (userId && role && keyStatus === "success") {
-      dispatch(isLogin());
-      localStorage.setItem("user_data", encryptedData);
-      localStorage.setItem("isLogin", "true");
-      console.log("Success", response);
-      localStorage.removeItem("registerNow");
-      router.push("/auth/owner");
-    } else {
-      console.log("Error", response);
+      (await getUserKey(dispatch)) as string | null;
+
+      if (key === null) {
+        throw new Error("e");
+      }
+      const pushUser: boolean = (await pushUserData(
+        userData as UserData,
+        key as string
+      )) as boolean;
+
+      if (pushUser) {
+        await dispatch(isLogin());
+        localStorage.setItem("isLogin", "true");
+        localStorage.removeItem("registerNow");
+        router.push("/auth/owner");
+      } else {
+        throw new Error("e");
+      }
+    } catch (error) {
+      await allLogout(dispatch);
+      await changeMessage("登録処理に失敗しました！もう一度お試しください！");
+      console.log("Error", error);
       return;
     }
   };
 
   return (
     <div>
-      {ownerError && (
-        <BasicAlerts
-          type="error"
-          message={ownerError}
-          space={1}
-          padding={0.6}
-        />
+      {OError && (
+        <BasicAlerts type="error" message={OError} space={1} padding={0.6} />
       )}
 
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {UError && (
+        <BasicAlerts type="error" message={UError} space={1} padding={0.6} />
       )}
 
-      {isLoading === "loading" ? (
+      {UStatus === "loading" ? (
         <p>loading...</p>
       ) : (
         <div>

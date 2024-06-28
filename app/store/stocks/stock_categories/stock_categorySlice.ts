@@ -4,7 +4,7 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 // APIから在庫カテゴリ情報を取得する非同期アクション//get
 export const getStockCategory = createAsyncThunk(
-  "stock_category/getStockCategory",
+  "stock_categories/getStockCategory",
   async (owner_id: number, { rejectWithValue }) => {
     try {
       const response: any = await stockCategoryApi.fetchAllStockCategories(
@@ -55,7 +55,7 @@ export const getStockCategory = createAsyncThunk(
 
 // 新しい在庫カテゴリ情報を作成する非同期アクション//post,store
 export const createStockCategory = createAsyncThunk(
-  "stock_category/createStockCategory",
+  "stock_categories/createStockCategory",
   async (
     formData: {
       id: number;
@@ -113,7 +113,7 @@ export const createStockCategory = createAsyncThunk(
 
 // 在庫カテゴリ情報を取得する非同期アクション//show
 // export const getStockCategoryById = createAsyncThunk(
-//   "stock_category/getStockCategoryById",
+//   "stock_categories/getStockCategoryById",
 //   async (id: number, { rejectWithValue }) => {
 //     const response: any = await stockCategoryApi.fetchStockCategoryById(id);
 //     if (response.resStatus === "error") {
@@ -138,7 +138,7 @@ export const createStockCategory = createAsyncThunk(
 
 // 在庫カテゴリ情報を更新する非同期アクション,put,update
 export const updateStockCategory = createAsyncThunk(
-  "stock_category/updateStockCategory",
+  "stock_categories/updateStockCategory",
   async (
     formData: {
       id: number;
@@ -196,7 +196,7 @@ export const updateStockCategory = createAsyncThunk(
 
 // 在庫カテゴリ情報を削除する非同期アクション//delete
 export const deleteStockCategory = createAsyncThunk(
-  "stock_category/deleteStockCategory",
+  "stock_categories/deleteStockCategory",
   async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
       const response: any = await stockCategoryApi.deleteStockCategory(
@@ -253,7 +253,7 @@ export interface Stock_categoryState {
 }
 
 export interface RootState {
-  stock_category: Stock_categoryState[];
+  stock_categories: Stock_categoryState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
@@ -261,14 +261,14 @@ export interface RootState {
 
 const initialState: RootState = {
   // 初期状態
-  stock_category: [],
+  stock_categories: [],
   status: "idle",
   message: null,
   error: null,
 };
 
 const stock_categorySlice = createSlice({
-  name: "stock_category",
+  name: "stock_categories",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -279,8 +279,8 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(getStockCategory.fulfilled, (state, action) => {
       state.status = "success";
-      state.stock_category = [
-        ...state.stock_category,
+      state.stock_categories = [
+        ...state.stock_categories,
         ...action.payload.stockCategories,
       ];
       state.message = action.payload.message
@@ -299,8 +299,8 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(createStockCategory.fulfilled, (state, action) => {
       state.status = "success";
-      state.stock_category = [
-        ...state.stock_category,
+      state.stock_categories = [
+        ...state.stock_categories,
         action.payload.stockCategory,
       ];
       state.message = action.payload.message
@@ -318,8 +318,8 @@ const stock_categorySlice = createSlice({
     //   state.message = null;
     // });
     // builder.addCase(getStockCategoryById.fulfilled, (state, action) => {
-    //   state.stock_category = [
-    //     ...state.stock_category,
+    //   state.stock_categories = [
+    //     ...state.stock_categories,
     //     action.payload.stockCategory,
     //   ];
     //   state.status = "success";
@@ -339,7 +339,7 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(updateStockCategory.fulfilled, (state, action) => {
       state.status = "success";
-      state.stock_category = state.stock_category.map((stock_category) =>
+      state.stock_categories = state.stock_categories.map((stock_category) =>
         stock_category.id === action.payload.stockCategory.id
           ? { ...stock_category, ...action.payload.stockCategory }
           : stock_category
@@ -360,7 +360,7 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(deleteStockCategory.fulfilled, (state, action) => {
       state.status = "success";
-      state.stock_category = state.stock_category.filter(
+      state.stock_categories = state.stock_categories.filter(
         (stock_category) =>
           stock_category.id !== Number(action.payload.deleteId)
       );

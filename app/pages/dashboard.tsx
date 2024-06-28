@@ -11,47 +11,50 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 import LogoutButton from "../components/elements/button/logoutButton";
 import { useRouter } from "next/router";
 import BasicAlerts from "../components/elements/alert/Alert";
+import { user, userKey, userMessage } from "../components/Hooks/authSelector";
+import { allLogout, getUserKey } from "../components/Hooks/useMethod";
+import { useDispatch } from "react-redux";
+import { getRole } from "../components/Hooks/getLocalStorage";
+import { env } from "process";
 
 const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
-  const [role, setRole] = useState<string>("");
+  const [role, setRole] = useState<string | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const key: string | null = useSelector(userKey) as string | null;
+  const UMessage: string | null = useSelector(userMessage) as string | null;
+  const OWNERROLE: string = env.NEXT_PUBLIC_OWNER_ROLE as string;
 
   useEffect(() => {
-    const UserPermission = () => {
-      const role = localStorage.getItem("role");
-      setRole(role);
+    const getRoleAndKey = async () => {
+      try {
+        if (key === null) {
+          const userKey: string = (await getUserKey(dispatch)) as string | null;
+
+          if (userKey !== null) {
+            const roleData: string | null = await dispatch(
+              getRole(userKey) as any
+            );
+            if (roleData !== null) {
+              setRole(roleData);
+            }
+          } else {
+            throw new Error("error");
+          }
+        }
+      } catch (error) {
+        console.log("Error", error);
+        allLogout(dispatch);
+        router.push("/auth/login");
+      }
     };
-    UserPermission();
+    getRoleAndKey();
   }, []);
-
-  // useEffect(() => {
-  //   const hasLaravelSessionCookie = () => {
-  //     // ブラウザのCookieからlaravel_session Cookieを取得する
-  //     const cookies = document.cookie;
-  //     console.log("cookies", cookies);
-
-  //     if (cookies.startsWith("XSRF-TOKEN")) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   };
-
-  //   if (hasLaravelSessionCookie() && localStorage.getItem("user_id")) {
-  //     console.log("XCSRF存在します");
-  //     return;
-  //     // ログイン済みの場合の処理を記述する
-  //   } else {
-  //     console.log("XCSRFが存在しません");
-  //     router.push("/auth/login");
-  //     // 未ログインの場合の処理を記述する
-  //   }
-  // }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   useEffect(() => {
     function handleResize() {
@@ -64,16 +67,15 @@ const dashboard: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const auth = useSelector((state: RootState) => state.auth);
-
-  console.log(auth);
-
-  const message = useSelector((state: RootState) => state.auth.message);
-
   return (
     <>
-      {message && (
-        <BasicAlerts message={message} type="success" space={1} padding={0.6} />
+      {UMessage && (
+        <BasicAlerts
+          message={UMessage}
+          type="success"
+          space={1}
+          padding={0.6}
+        />
       )}
 
       <div className="flex justify-end py-4 mr-4 ">
@@ -85,7 +87,7 @@ const dashboard: React.FC = () => {
             className={`flex flex-wrap justify-center h-full
             ${isFullScreen ? "gap-16" : "gap-4"}`}
           >
-            {role === "オーナー" && (
+            {role === OWNERROLE && (
               <NavLink
                 IconName={ManageAccountsIcon}
                 href="/attendances"
@@ -141,7 +143,7 @@ const dashboard: React.FC = () => {
               iconSrc="#"
               label="髪型"
             />
-            {role === "オーナー" && (
+            {role === OWNERROLE && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/daily_sales"
@@ -149,7 +151,7 @@ const dashboard: React.FC = () => {
                 label="日次売上"
               />
             )}
-            {role === "オーナー" && (
+            {role === OWNERROLE && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/monthly_sales"
@@ -157,7 +159,7 @@ const dashboard: React.FC = () => {
                 label="月次売上"
               />
             )}
-            {role === "オーナー" && (
+            {role === OWNERROLE && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/yearly_sales"

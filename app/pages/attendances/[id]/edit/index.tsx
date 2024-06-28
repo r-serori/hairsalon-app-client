@@ -9,7 +9,7 @@ import {
   updateUserPermission,
   deleteUser,
   showUser,
-} from "../../../../store/auth/authSlice";
+} from "../../../../store/auth/userSlice";
 import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import DeleteButton from "../../../../components/elements/button/DeleteButton";
 import { useState } from "react";

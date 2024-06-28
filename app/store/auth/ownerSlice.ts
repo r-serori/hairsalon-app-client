@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { ownerApi } from "../../services/auth/ownerApi";
 import RootState from "../../redux/reducers/rootReducer";
-import { login } from "./authSlice";
+import { login } from "./userSlice";
 
 export const ownerRegister = createAsyncThunk(
   "owner/register",

@@ -5,7 +5,7 @@ import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getHairstyle = createAsyncThunk(
-  "hairstyle/getHairstyle",
+  "hairstyles/getHairstyle",
   async (owner_id: number, { rejectWithValue }) => {
     try {
       const response: any = await hairstyleApi.fetchAllHairstyles(owner_id);
@@ -53,7 +53,7 @@ export const getHairstyle = createAsyncThunk(
 );
 
 export const createHairstyle = createAsyncThunk(
-  "hairstyle/createHairstyle",
+  "hairstyles/createHairstyle",
   async (
     formData: {
       id: number;
@@ -108,7 +108,7 @@ export const createHairstyle = createAsyncThunk(
 );
 
 // export const getHairstyleById = createAsyncThunk(
-//   "hairstyle/getHairstyleById",
+//   "hairstyles/getHairstyleById",
 //   async (id: number, { rejectWithValue }) => {
 //     const response: any = await hairstyleApi.fetchHairstyleById(id);
 //     if (response.resStatus === "error") {
@@ -132,7 +132,7 @@ export const createHairstyle = createAsyncThunk(
 // );
 
 export const updateHairstyle = createAsyncThunk(
-  "hairstyle/updateHairstyle",
+  "hairstyles/updateHairstyle",
   async (
     formData: {
       id: number;
@@ -187,7 +187,7 @@ export const updateHairstyle = createAsyncThunk(
 );
 
 export const deleteHairstyle = createAsyncThunk(
-  "hairstyle/deleteHairstyle",
+  "hairstyles/deleteHairstyle",
   async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
       const response: any = await hairstyleApi.deleteHairstyle(formData);
@@ -243,7 +243,7 @@ export interface HairstyleState {
 
 export interface RootState {
   // ルートステートの型を定義
-  hairstyle: HairstyleState[];
+  hairstyles: HairstyleState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
@@ -251,14 +251,14 @@ export interface RootState {
 
 const initialState: RootState = {
   // 初期状態
-  hairstyle: [],
+  hairstyles: [],
   status: "idle",
   message: null,
   error: null,
 };
 
 const hairstyleSlice = createSlice({
-  name: "hairstyle",
+  name: "hairstyles",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -269,7 +269,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(getHairstyle.fulfilled, (state, action) => {
       state.status = "success";
-      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyles];
+      state.hairstyles = [...state.hairstyles, ...action.payload.hairstyles];
       state.message = action.payload.message
         ? action.payload.message
         : "ヘアスタイル情報を取得しました！ ";
@@ -286,7 +286,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(createHairstyle.fulfilled, (state, action) => {
       state.status = "success";
-      state.hairstyle = [...state.hairstyle, action.payload.hairstyle];
+      state.hairstyles = [...state.hairstyles, action.payload.hairstyle];
       state.message = action.payload.message
         ? action.payload.message
         : "ヘアスタイル情報を作成しました！";
@@ -303,7 +303,7 @@ const hairstyleSlice = createSlice({
     // });
     // builder.addCase(getHairstyleById.fulfilled, (state, action) => {
     //   state.status = "success";
-    //   state.hairstyle = [...state.hairstyle, action.payload.hairstyle];
+    //   state.hairstyles = [...state.hairstyles, action.payload.hairstyle];
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "ヘアスタイル情報を取得しました！";
@@ -320,7 +320,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(updateHairstyle.fulfilled, (state, action) => {
       state.status = "success";
-      state.hairstyle = state.hairstyle.map((hairstyle) =>
+      state.hairstyles = state.hairstyles.map((hairstyle) =>
         hairstyle.id === action.payload.hairstyle.id
           ? { ...hairstyle, ...action.payload.hairstyle }
           : hairstyle
@@ -342,7 +342,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(deleteHairstyle.fulfilled, (state, action) => {
       state.status = "success";
-      state.hairstyle = state.hairstyle.filter(
+      state.hairstyles = state.hairstyles.filter(
         (hairstyle) => hairstyle.id !== Number(action.payload.deleteId)
       );
     });
@@ -352,11 +352,11 @@ const hairstyleSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyles];
+      state.hairstyles = [...state.hairstyles, ...action.payload.hairstyles];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.hairstyle = [...state.hairstyle, ...action.payload.hairstyles];
+      state.hairstyles = [...state.hairstyles, ...action.payload.hairstyles];
     });
   },
 });

@@ -9,54 +9,47 @@ import { useRouter } from "next/router";
 import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
+import { loginNow, userKey } from "../../../Hooks/authSelector";
+import { getUserData, getUserId } from "../../../Hooks/getLocalStorage";
+import { getUserKey } from "../../../Hooks/useMethod";
 
-// クッキーを取得する関数
-// function getCookie(name: string) {
-//   if (typeof document !== "undefined") {
-//     const value = `; ${document.cookie}`;
-//     const parts = value.split(`; ${name}=`);
-//     if (parts.length === 2) return parts.pop()?.split(";").shift();
-//   }
-//   return null;
-// }
+interface UserData {
+  user_id: number;
+  role: string;
+}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-  const [role, setRole] = useState<string>("");
+  const [role, setRole] = useState<string | null>(null);
+  const [user_id, setUser_id] = useState<number | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
-  const loginNow = useSelector((state: RootState) => state.loginNow.loginNow);
+  const nowLogin: boolean = useSelector(loginNow);
+  const key: string | null = useSelector(userKey) as string | null;
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const IsLoggedIn = localStorage.getItem("isLogin") === "true";
-      const userId = localStorage.getItem("user_id");
-      if (IsLoggedIn && userId) {
-        dispatch(isLogin());
+      const getKeyAndUserData = async () => {
+        if (key === null) {
+          (await getUserKey(dispatch)) as string | null;
+        }
+
+        const userData: UserData = (await getUserData(key)) as UserData;
+
+        setRole(userData.role);
+        setUser_id(userData.user_id);
+      };
+      if (IsLoggedIn) {
+        getKeyAndUserData();
       } else {
-        router.push("/");
+        router.push("/login");
       }
     }
-    const UserPermission = () => {
-      const role = localStorage.getItem("role");
-      setRole(role);
-    };
-    UserPermission();
-  }, [loginNow]);
-
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     // const registerNow = localStorage.getItem("registerNow") === "true";
-  //     // if (!getCookie("laravel_session") && !loginNow && !registerNow) {
-  //     //   localStorage.clear();
-  //     //   dispatch(isLogout());
-  //     //   router.push("/");
-  //     // }
-  //   }
-  // }, []);
+  }, [nowLogin]);
 
   useEffect(() => {
     const verifySession = async () => {
@@ -113,7 +106,7 @@ export default function Header() {
   return (
     <>
       <div className="min-h-full">
-        {loginNow && (
+        {nowLogin && (
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>

@@ -1,6 +1,6 @@
 import { sendRequest, getCsrfToken } from "../requestApi";
 
-export const authApi = {
+export const userApi = {
   //ログイン処理
   login: async (formData: { email: string; password: string }) => {
     try {

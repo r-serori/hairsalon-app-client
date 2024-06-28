@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { authApi } from "../../services/auth/api";
+import { userApi } from "../../services/auth/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { getCustomer } from "../../store/customers/customerSlice";
-import {
-  getSchedule,
-  selectGetSchedules,
-} from "../../store/schedules/scheduleSlice";
+import { getCustomer } from "../customers/customerSlice";
+import { getSchedule, selectGetSchedules } from "../schedules/scheduleSlice";
 import {
   pleaseEditEndTime,
   createStartTime,
@@ -15,7 +12,7 @@ import {
 import { isLogout } from "./isLoginSlice";
 
 export const login = createAsyncThunk(
-  "login/auth",
+  "login/users",
   async (
     formData: {
       email: string;
@@ -24,7 +21,7 @@ export const login = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await authApi.login(formData);
+      const response = await userApi.login(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -70,7 +67,7 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-  "register/auth",
+  "register/users",
   async (
     formData: {
       name: string;
@@ -84,7 +81,7 @@ export const register = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await authApi.register(formData);
+      const response = await userApi.register(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -119,7 +116,7 @@ export const register = createAsyncThunk(
 );
 
 export const staffRegister = createAsyncThunk(
-  "staffRegister/auth",
+  "staffRegister/users",
   async (
     formData: {
       name: string;
@@ -132,7 +129,7 @@ export const staffRegister = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await authApi.staffRegister(formData);
+      const response = await userApi.staffRegister(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -177,10 +174,10 @@ export const staffRegister = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk(
-  "logout/auth",
+  "logout/users",
   async (formData: {}, { rejectWithValue }) => {
     try {
-      const response = await authApi.logout();
+      const response = await userApi.logout();
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
@@ -225,10 +222,10 @@ export const logout = createAsyncThunk(
 );
 
 export const getAttendanceUsers = createAsyncThunk(
-  "auth/getAttendanceUser",
+  "users/getAttendanceUser",
   async (owner_id: number, { rejectWithValue }) => {
     try {
-      const response = await authApi.getAttendanceUsers(owner_id);
+      const response = await userApi.getAttendanceUsers(owner_id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -273,10 +270,10 @@ export const getAttendanceUsers = createAsyncThunk(
 );
 
 export const getUsers = createAsyncThunk(
-  "auth/getUsers",
+  "users/getUsers",
   async (owner_id: number, { rejectWithValue }) => {
     try {
-      const response = await authApi.getUsers(owner_id);
+      const response = await userApi.getUsers(owner_id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -321,10 +318,10 @@ export const getUsers = createAsyncThunk(
 );
 
 export const showUser = createAsyncThunk(
-  "auth/showUser",
+  "users/showUser",
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await authApi.showUser(id);
+      const response = await userApi.showUser(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -369,7 +366,7 @@ export const showUser = createAsyncThunk(
 );
 
 export const updateUserPassword = createAsyncThunk(
-  "auth/updateUserPassword",
+  "users/updateUserPassword",
   async (
     formData: {
       current_password: string;
@@ -378,7 +375,7 @@ export const updateUserPassword = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await authApi.updateUserPassword(formData);
+      const response = await userApi.updateUserPassword(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -423,10 +420,10 @@ export const updateUserPassword = createAsyncThunk(
 );
 
 export const updateUserPermission = createAsyncThunk(
-  "auth/updateUserPermission",
+  "users/updateUserPermission",
   async (formData: { id: number; role: string }, { rejectWithValue }) => {
     try {
-      const response = await authApi.updateUserPermission(formData);
+      const response = await userApi.updateUserPermission(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -471,7 +468,7 @@ export const updateUserPermission = createAsyncThunk(
 );
 
 export const updateUser = createAsyncThunk(
-  "auth/updateUser",
+  "users/updateUser",
   async (
     formData: {
       name: string;
@@ -481,7 +478,7 @@ export const updateUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await authApi.updateUser(formData);
+      const response = await userApi.updateUser(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -526,10 +523,10 @@ export const updateUser = createAsyncThunk(
 );
 
 export const resetPassword = createAsyncThunk(
-  "auth/resetPassword",
+  "users/resetPassword",
   async (formData: { password: string }, { rejectWithValue }) => {
     try {
-      const response = await authApi.resetPassword(formData);
+      const response = await userApi.resetPassword(formData);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -574,10 +571,10 @@ export const resetPassword = createAsyncThunk(
 );
 
 export const deleteUser = createAsyncThunk(
-  "auth/deleteUser",
+  "users/deleteUser",
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await authApi.deleteUser(id);
+      const response = await userApi.deleteUser(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -633,7 +630,7 @@ export interface AuthState {
 }
 
 export interface RootState {
-  auth: AuthState[];
+  users: AuthState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
@@ -641,18 +638,21 @@ export interface RootState {
 
 const initialState: RootState = {
   // 初期状態
-  auth: [],
+  users: [],
   status: "idle",
   message: null,
   error: null,
 };
 
-const authSlice = createSlice({
-  name: "auth",
+const usersSlice = createSlice({
+  name: "users",
   initialState,
   reducers: {
     clearError(state) {
       state.error = null;
+    },
+    changeMessage(state, action) {
+      state.message = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -663,7 +663,7 @@ const authSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
       state.message =
         action.payload.resStatus === "ownerError"
           ? action.payload.message
@@ -680,7 +680,7 @@ const authSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
       state.message = `登録に成功しました！ ${action.payload.responseUser.name}さん！`;
     });
     builder.addCase(register.rejected, (state, action) => {
@@ -699,12 +699,13 @@ const authSlice = createSlice({
     builder.addCase(staffRegister.fulfilled, (state, action) => {
       state.status = "success";
       state.message = `スタッフの登録に成功しました！ ${action.payload.responseUser.name}さん！`;
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
     });
     builder.addCase(staffRegister.rejected, (state, action) => {
       state.status = "failed";
       state.error = (action.payload as any).message;
     });
+
     builder.addCase(logout.pending, (state) => {
       state.status = "loading";
       state.message = null;
@@ -712,7 +713,7 @@ const authSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [];
+      state.users = [];
       state.message = "ログアウトに成功しました！";
     });
     builder.addCase(logout.rejected, (state, action) => {
@@ -732,7 +733,7 @@ const authSlice = createSlice({
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = action.payload.responseUsers;
+      state.users = action.payload.responseUsers;
     });
 
     builder.addCase(getUsers.rejected, (state, action) => {
@@ -747,7 +748,7 @@ const authSlice = createSlice({
     });
     builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, ...action.payload.responseUsers];
+      state.users = [...state.users, ...action.payload.responseUsers];
       state.message = action.payload.message;
     });
     builder.addCase(getAttendanceUsers.rejected, (state, action) => {
@@ -762,7 +763,7 @@ const authSlice = createSlice({
     });
     builder.addCase(showUser.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
       state.message = "ユーザー情報の取得に成功しました！";
     });
     builder.addCase(showUser.rejected, (state, action) => {
@@ -778,7 +779,7 @@ const authSlice = createSlice({
     });
     builder.addCase(updateUserPermission.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
       state.message = "ユーザー情報の更新に成功しました！";
     });
     builder.addCase(updateUserPermission.rejected, (state, action) => {
@@ -793,7 +794,7 @@ const authSlice = createSlice({
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
       state.message = "ユーザー情報の更新に成功しました！";
     });
     builder.addCase(updateUser.rejected, (state, action) => {
@@ -809,8 +810,8 @@ const authSlice = createSlice({
     });
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = state.auth.filter(
-        (auth) => auth.id !== action.payload.deleteId
+      state.users = state.users.filter(
+        (users) => users.id !== action.payload.deleteId
       );
       state.message = "ユーザー情報の削除に成功しました！";
     });
@@ -826,7 +827,7 @@ const authSlice = createSlice({
     });
     builder.addCase(updateUserPassword.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
       state.message = "パスワードの更新に成功しました！";
     });
     builder.addCase(updateUserPassword.rejected, (state, action) => {
@@ -841,7 +842,7 @@ const authSlice = createSlice({
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, action.payload.responseUser];
+      state.users = [...state.users, action.payload.responseUser];
       state.message = "パスワードのリセットに成功しました！";
     });
     builder.addCase(resetPassword.rejected, (state, action) => {
@@ -851,75 +852,75 @@ const authSlice = createSlice({
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, ...action.payload.responseUsers];
+      state.users = [...state.users, ...action.payload.responseUsers];
       state.message = action.payload.message;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, ...action.payload.responseUsers];
+      state.users = [...state.users, ...action.payload.responseUsers];
       state.message = action.payload.message;
     });
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = [...state.auth, ...action.payload.responseUsers];
+      state.users = [...state.users, ...action.payload.responseUsers];
       state.message = action.payload.message;
     });
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = state.auth.map((auth) =>
-        auth.id === action.payload.responseUser.id
-          ? { ...auth, ...action.payload.responseUser }
-          : auth
+      state.users = state.users.map((users) =>
+        users.id === action.payload.responseUser.id
+          ? { ...users, ...action.payload.responseUser }
+          : users
       );
       state.message = action.payload.message;
     });
 
     builder.addCase(createStartTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = state.auth.map((auth) =>
-        auth.id === action.payload.responseUser.id
-          ? { ...auth, ...action.payload.responseUser }
-          : auth
+      state.users = state.users.map((users) =>
+        users.id === action.payload.responseUser.id
+          ? { ...users, ...action.payload.responseUser }
+          : users
       );
       state.message = "出勤しました！";
     });
 
     builder.addCase(createEndTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = state.auth.map((auth) =>
-        auth.id === action.payload.responseUser.id
-          ? { ...auth, ...action.payload.responseUser }
-          : auth
+      state.users = state.users.map((users) =>
+        users.id === action.payload.responseUser.id
+          ? { ...users, ...action.payload.responseUser }
+          : users
       );
       state.message = "退勤しました！";
     });
 
     builder.addCase(isLogout, (state) => {
       state.status = "success";
-      state.auth = [];
+      state.users = [];
       // state.error = "セッションが切れました！再度ログインしてください！";
     });
 
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
       state.status = "success";
-      state.auth = action.payload.responseUser
-        ? state.auth.map((auth) =>
-            auth.id === action.payload.responseUser.id
-              ? { ...auth, ...action.payload.responseUser }
-              : auth
+      state.users = action.payload.responseUser
+        ? state.users.map((users) =>
+            users.id === action.payload.responseUser.id
+              ? { ...users, ...action.payload.responseUser }
+              : users
           )
-        : state.auth;
+        : state.users;
 
       state.message = action.payload.message;
     });
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, changeMessage } = usersSlice.actions;
 
-const authReducer = authSlice.reducer;
+const usersReducer = usersSlice.reducer;
 
-export default authReducer;
+export default usersReducer;

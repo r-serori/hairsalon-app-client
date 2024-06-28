@@ -5,7 +5,7 @@ import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getMerchandise = createAsyncThunk(
-  "merchandise/getMerchandise",
+  "merchandises/getMerchandise",
   async (owner_id: number, { rejectWithValue }) => {
     try {
       const response: any = await merchandiseApi.fetchAllMerchandises(owner_id);
@@ -53,7 +53,7 @@ export const getMerchandise = createAsyncThunk(
 );
 
 export const createMerchandise = createAsyncThunk(
-  "merchandise/createMerchandise",
+  "merchandises/createMerchandise",
   async (
     formData: {
       id: number;
@@ -109,7 +109,7 @@ export const createMerchandise = createAsyncThunk(
 );
 
 // export const getMerchandiseById = createAsyncThunk(
-//   "merchandise/getMerchandiseById",
+//   "merchandises/getMerchandiseById",
 //   async (id: number, { rejectWithValue }) => {
 //     const response: any = await merchandiseApi.fetchMerchandiseById(id);
 //     if (response.resStatus === "error") {
@@ -133,7 +133,7 @@ export const createMerchandise = createAsyncThunk(
 // );
 
 export const updateMerchandise = createAsyncThunk(
-  "merchandise/updateMerchandise",
+  "merchandises/updateMerchandise",
   async (
     formData: {
       id: number;
@@ -189,7 +189,7 @@ export const updateMerchandise = createAsyncThunk(
 );
 
 export const deleteMerchandise = createAsyncThunk(
-  "merchandise/deleteMerchandise",
+  "merchandises/deleteMerchandise",
   async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
       const response: any = await merchandiseApi.deleteMerchandise(formData);
@@ -246,7 +246,7 @@ export interface MerchandiseState {
 
 export interface RootState {
   // RootStateの型
-  merchandise: MerchandiseState[];
+  merchandises: MerchandiseState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
@@ -254,14 +254,14 @@ export interface RootState {
 
 const initialState: RootState = {
   // 初期状態
-  merchandise: [],
+  merchandises: [],
   status: "idle",
   message: null,
   error: null,
 };
 
 const merchandiseSlice = createSlice({
-  name: "merchandise",
+  name: "merchandises",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -275,8 +275,8 @@ const merchandiseSlice = createSlice({
       state.message = action.payload.message
         ? action.payload.message
         : "物販商品の取得に成功しました！";
-      state.merchandise = [
-        ...state.merchandise,
+      state.merchandises = [
+        ...state.merchandises,
         ...action.payload.merchandises,
       ];
     });
@@ -295,7 +295,7 @@ const merchandiseSlice = createSlice({
       state.message = action.payload.message
         ? action.payload.message
         : "物販商品の作成に成功しました！";
-      state.merchandise = [...state.merchandise, action.payload.merchandise];
+      state.merchandises = [...state.merchandises, action.payload.merchandise];
     });
     builder.addCase(createMerchandise.rejected, (state, action) => {
       state.status = "failed";
@@ -309,7 +309,7 @@ const merchandiseSlice = createSlice({
     // });
     // builder.addCase(getMerchandiseById.fulfilled, (state, action) => {
     //   state.status = "success";
-    //   state.merchandise = [...state.merchandise, action.payload.merchandise];
+    //   state.merchandises = [...state.merchandises, action.payload.merchandise];
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "物販商品の取得に成功しました！";
@@ -329,7 +329,7 @@ const merchandiseSlice = createSlice({
       state.message = action.payload.message
         ? action.payload.message
         : "物販商品の更新に成功しました！";
-      state.merchandise = state.merchandise.map((merchandise) =>
+      state.merchandises = state.merchandises.map((merchandise) =>
         merchandise.id === action.payload.merchandise.id
           ? { ...merchandise, ...action.payload.merchandise }
           : merchandise
@@ -347,7 +347,7 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
       state.status = "success";
-      state.merchandise = state.merchandise.filter(
+      state.merchandises = state.merchandises.filter(
         (merchandise) => merchandise.id !== Number(action.payload.deleteId)
       );
     });
@@ -357,15 +357,15 @@ const merchandiseSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.merchandise = [
-        ...state.merchandise,
+      state.merchandises = [
+        ...state.merchandises,
         ...action.payload.merchandises,
       ];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.merchandise = [
-        ...state.merchandise,
+      state.merchandises = [
+        ...state.merchandises,
         ...action.payload.merchandises,
       ];
     });

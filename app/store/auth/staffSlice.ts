@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import RootState from "../../redux/reducers/rootReducer";
-import { staffRegister } from "./authSlice";
+import { staffRegister } from "./userSlice";
 
 export interface StaffState {
   id: number;

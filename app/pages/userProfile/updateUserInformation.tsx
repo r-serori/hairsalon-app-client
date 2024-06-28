@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { updateUser } from "../../store/auth/authSlice";
+import { updateUser } from "../../store/auth/userSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import UpdateInformationForm from "../../components/elements/form/userProfile/UpdateInformationForm";

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { resetPassword, showUser } from "../../store/auth/authSlice";
+import { resetPassword, showUser } from "../../store/auth/userSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import ResetPasswordForm from "../../components/elements/form/userProfile/ResetPasswordForm";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
-import { showUser } from "../../../../store/auth/authSlice";
+import { showUser } from "../../../../store/auth/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";

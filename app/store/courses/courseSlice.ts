@@ -5,7 +5,7 @@ import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getCourse = createAsyncThunk(
-  "course/getCourse",
+  "courses/getCourse",
   async (owner_id: number, { rejectWithValue }) => {
     try {
       const response: any = await courseApi.fetchAllCourses(owner_id);
@@ -53,7 +53,7 @@ export const getCourse = createAsyncThunk(
 );
 
 export const createCourse = createAsyncThunk(
-  "course/createCourse",
+  "courses/createCourse",
   async (
     formData: {
       id: number;
@@ -109,7 +109,7 @@ export const createCourse = createAsyncThunk(
 );
 
 // export const getCourseById = createAsyncThunk(
-//   "course/getCourseById",
+//   "courses/getCourseById",
 //   async (id: number, { rejectWithValue }) => {
 //     const response: any = await courseApi.fetchCourseById(id);
 
@@ -134,7 +134,7 @@ export const createCourse = createAsyncThunk(
 // );
 
 export const updateCourse = createAsyncThunk(
-  "course/updateCourse",
+  "courses/updateCourse",
   async (
     formData: {
       id: number;
@@ -190,7 +190,7 @@ export const updateCourse = createAsyncThunk(
 );
 
 export const deleteCourse = createAsyncThunk(
-  "course/deleteCourse",
+  "courses/deleteCourse",
   async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
       const response: any = await courseApi.deleteCourse(formData);
@@ -247,7 +247,7 @@ export interface CourseState {
 
 export interface RootState {
   // ルートステートの型を定義
-  course: CourseState[];
+  courses: CourseState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null; // メッセージ
   error: string | null; // エラーメッセージ
@@ -255,14 +255,14 @@ export interface RootState {
 
 const initialState: RootState = {
   // 初期状態
-  course: [],
+  courses: [],
   status: "idle",
   message: null, // メッセージ
   error: null, // エラーメッセージ
 };
 
 const courseSlice = createSlice({
-  name: "course",
+  name: "courses",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -276,7 +276,7 @@ const courseSlice = createSlice({
       state.message = action.payload.message
         ? action.payload.message
         : "コースの取得に成功しました！";
-      state.course = [...state.course, ...action.payload.courses];
+      state.courses = [...state.courses, ...action.payload.courses];
     });
     builder.addCase(getCourse.rejected, (state, action) => {
       state.status = "failed";
@@ -293,7 +293,7 @@ const courseSlice = createSlice({
       state.message = action.payload.message
         ? action.payload.message
         : "コースの作成に成功しました！";
-      state.course = [...state.course, action.payload.course];
+      state.courses = [...state.courses, action.payload.course];
     });
     builder.addCase(createCourse.rejected, (state, action) => {
       state.status = "failed";
@@ -307,7 +307,7 @@ const courseSlice = createSlice({
     // });
     // builder.addCase(getCourseById.fulfilled, (state, action) => {
     //   state.status = "success";
-    //   state.course = [...state.course, action.payload.course];
+    //   state.courses = [...state.courses, action.payload.course];
     // });
     // builder.addCase(getCourseById.rejected, (state, action) => {
     //   state.status = "success";
@@ -321,7 +321,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(updateCourse.fulfilled, (state, action) => {
       state.status = "success";
-      state.course = state.course.map((course) =>
+      state.courses = state.courses.map((course) =>
         course.id === action.payload.course.id
           ? { ...course, ...action.payload.course }
           : course
@@ -342,7 +342,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(deleteCourse.fulfilled, (state, action) => {
       state.status = "success";
-      state.course = state.course.filter(
+      state.courses = state.courses.filter(
         (course) => course.id !== Number(action.payload.deleteId)
       );
 
@@ -356,11 +356,11 @@ const courseSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.course = [...state.course, ...action.payload.courses];
+      state.courses = [...state.courses, ...action.payload.courses];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.course = [...state.course, ...action.payload.courses];
+      state.courses = [...state.courses, ...action.payload.courses];
     });
   },
 });

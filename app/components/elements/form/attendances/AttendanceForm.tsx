@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
-import { AuthState } from "../../../../store/auth/authSlice";
+import { AuthState } from "../../../../store/auth/userSlice";
 
 interface UserUpdateFormProps {
   onSubmit: (formData: { id: number; role: string }) => void;

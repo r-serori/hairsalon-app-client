@@ -501,7 +501,7 @@ export interface ScheduleState {
 }
 
 export interface RootState {
-  schedule: ScheduleState[];
+  schedules: ScheduleState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
@@ -509,14 +509,14 @@ export interface RootState {
 
 const initialState: RootState = {
   // 初期状態
-  schedule: [],
+  schedules: [],
   status: "idle",
   message: null,
   error: null,
 };
 
 const scheduleSlice = createSlice({
-  name: "schedule",
+  name: "schedules",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -528,7 +528,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(getSchedule.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedule = [...state.schedule, ...action.payload.schedules];
+        state.schedules = [...state.schedules, ...action.payload.schedules];
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールの取得に成功しました！";
@@ -544,7 +544,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(createSchedule.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedule = [...state.schedule, action.payload.schedule];
+        state.schedules = [...state.schedules, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールの作成に成功しました！";
@@ -560,7 +560,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedule = [...state.schedule, action.payload.schedule];
+        state.schedules = [...state.schedules, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールと顧客情報の作成に成功しました！";
@@ -576,7 +576,7 @@ const scheduleSlice = createSlice({
       // })
       // .addCase(getScheduleById.fulfilled, (state, action) => {
       //   state.status = "success";
-      //   state.schedule = [...state.schedule, action.payload.schedule];
+      //   state.schedules = [...state.schedules, action.payload.schedule];
       //   state.message = action.payload.message
       //     ? action.payload.message
       //     : "スケジュールの取得に成功しました！";
@@ -592,7 +592,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateSchedule.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedule = state.schedule.map((schedule) =>
+        state.schedules = state.schedules.map((schedule) =>
           schedule.id === action.payload.schedule.id
             ? {
                 ...schedule,
@@ -615,7 +615,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedule = state.schedule.map((schedule) =>
+        state.schedules = state.schedules.map((schedule) =>
           schedule.id === action.payload.schedule.id
             ? {
                 ...schedule,
@@ -639,7 +639,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateCustomerAndScheduleCreate.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedule = [...state.schedule, action.payload.schedule];
+        state.schedules = [...state.schedules, action.payload.schedule];
         state.message = action.payload.message
           ? action.payload.message
           : "顧客情報の更新とスケジュールの作成に成功しました！";
@@ -656,7 +656,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(deleteSchedule.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedule = state.schedule.filter(
+        state.schedules = state.schedules.filter(
           (schedule) => schedule.id !== Number(action.payload.deleteId)
         );
         state.message = action.payload.message
@@ -676,7 +676,7 @@ const scheduleSlice = createSlice({
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.status = "success";
-      state.schedule = [...state.schedule, ...action.payload.schedules];
+      state.schedules = [...state.schedules, ...action.payload.schedules];
       state.message = action.payload.message
         ? action.payload.message
         : "スケジュールの取得に成功しました！";

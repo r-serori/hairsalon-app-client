@@ -4,7 +4,7 @@ import RootState from "../../redux/reducers/rootReducer";
 
 // APIから在庫情報を取得する非同期アクション//get
 export const getStock = createAsyncThunk(
-  "stock/getStock",
+  "stocks/getStock",
   async (owner_id: number, { rejectWithValue }) => {
     try {
       const response: any = await stockApi.fetchAllStocks(owner_id); // APIからデータを取得
@@ -53,7 +53,7 @@ export const getStock = createAsyncThunk(
 
 // 新しい在庫情報を作成する非同期アクション//post,store
 export const createStock = createAsyncThunk(
-  "stock/createStock",
+  "stocks/createStock",
   async (
     formData: {
       id: number;
@@ -115,7 +115,7 @@ export const createStock = createAsyncThunk(
 
 // 在庫情報を取得する非同期アクション//show
 // export const getStockById = createAsyncThunk(
-//   "stock/getStockById",
+//   "stocks/getStockById",
 //   async (id: number, { rejectWithValue }) => {
 //     const response: any = await stockApi.fetchStockById(id);
 //     console.log("stockShowDataだよ");
@@ -141,7 +141,7 @@ export const createStock = createAsyncThunk(
 
 // 在庫情報を更新する非同期アクション,put,update
 export const updateStock = createAsyncThunk(
-  "stock/updateStock",
+  "stocks/updateStock",
   async (
     formData: {
       id: number;
@@ -203,7 +203,7 @@ export const updateStock = createAsyncThunk(
 
 // 在庫情報を削除する非同期アクション//delete
 export const deleteStock = createAsyncThunk(
-  "stock/deleteStock",
+  "stocks/deleteStock",
   async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
       const response: any = await stockApi.deleteStock(formData);
@@ -279,7 +279,7 @@ const initialState: RootState = {
 };
 
 const stockSlice = createSlice({
-  name: "stock",
+  name: "stocks",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

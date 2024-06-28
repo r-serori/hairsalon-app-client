@@ -5,7 +5,7 @@ import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getOption = createAsyncThunk(
-  "option/getOption",
+  "options/getOption",
   async (owner_id: number, { rejectWithValue }) => {
     try {
       const response: any = await optionApi.fetchAllOptions(owner_id);
@@ -53,7 +53,7 @@ export const getOption = createAsyncThunk(
 );
 
 export const createOption = createAsyncThunk(
-  "option/createOption",
+  "options/createOption",
   async (
     formData: {
       id: number;
@@ -109,7 +109,7 @@ export const createOption = createAsyncThunk(
 );
 
 // export const getOptionById = createAsyncThunk(
-//   "option/getOptionById",
+//   "options/getOptionById",
 //   async (id: number, { rejectWithValue }) => {
 //     const response: any = await optionApi.fetchOptionById(id);
 //     if (response.resStatus === "error") {
@@ -133,7 +133,7 @@ export const createOption = createAsyncThunk(
 // );
 
 export const updateOption = createAsyncThunk(
-  "option/updateOption",
+  "options/updateOption",
   async (
     formData: {
       id: number;
@@ -189,7 +189,7 @@ export const updateOption = createAsyncThunk(
 );
 
 export const deleteOption = createAsyncThunk(
-  "option/deleteOption",
+  "options/deleteOption",
   async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
     try {
       const response: any = await optionApi.deleteOption(formData);
@@ -245,21 +245,21 @@ export interface OptionState {
 }
 
 export interface RootState {
-  option: OptionState[];
+  options: OptionState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;
 }
 
 const initialState: RootState = {
-  option: [],
+  options: [],
   status: "idle",
   message: null,
   error: null,
 };
 
 const optionSlice = createSlice({
-  name: "option",
+  name: "options",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -270,7 +270,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(getOption.fulfilled, (state, action) => {
       state.status = "success";
-      state.option = [...state.option, ...action.payload.options];
+      state.options = [...state.options, ...action.payload.options];
       state.message = action.payload.message
         ? action.payload.message
         : "オプションの取得に成功しました！";
@@ -287,7 +287,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(createOption.fulfilled, (state, action) => {
       state.status = "success";
-      state.option = [...state.option, action.payload.option];
+      state.options = [...state.options, action.payload.option];
       state.message = action.payload.message
         ? action.payload.message
         : "オプションの登録に成功しました！";
@@ -304,7 +304,7 @@ const optionSlice = createSlice({
     // });
     // builder.addCase(getOptionById.fulfilled, (state, action) => {
     //   state.status = "success";
-    //   state.option = [...state.option, action.payload.option];
+    //   state.options = [...state.options, action.payload.option];
     //   state.message = action.payload.message
     //     ? action.payload.message
     //     : "オプション情報を取得しました！";
@@ -321,7 +321,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(updateOption.fulfilled, (state, action) => {
       state.status = "success";
-      state.option = state.option.map((option) =>
+      state.options = state.options.map((option) =>
         option.id === action.payload.option.id
           ? { ...option, ...action.payload.option }
           : option
@@ -342,7 +342,7 @@ const optionSlice = createSlice({
     });
     builder.addCase(deleteOption.fulfilled, (state, action) => {
       state.status = "success";
-      state.option = state.option.filter(
+      state.options = state.options.filter(
         (option) => option.id !== Number(action.payload.deleteId)
       );
       state.message = action.payload.message
@@ -355,11 +355,11 @@ const optionSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.option = [...state.option, ...action.payload.options];
+      state.options = [...state.options, ...action.payload.options];
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.option = [...state.option, ...action.payload.options];
+      state.options = [...state.options, ...action.payload.options];
     });
   },
 });
