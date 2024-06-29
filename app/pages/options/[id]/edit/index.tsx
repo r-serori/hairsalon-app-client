@@ -5,22 +5,27 @@ import { updateOption, getOption } from "../../../../store/options/optionSlice";
 import { RootState } from "../../../../redux/store";
 import OptionForm from "../../../../components/elements/form/options/OptionForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import {
+  optionStatus,
+  optionsStore,
+} from "../../../../components/Hooks/selector";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { getUserKey } from "../../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const optionEdit: React.FC = () => {
-  const [role, setRole] = React.useState<string>("");
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.option.status);
+  const oStatus: string = useSelector(optionStatus);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const option = useSelector((state: RootState) =>
-    state.option.option.find((option) => option.id === parseInt(id as string))
+  const option = useSelector(optionsStore).find(
+    (option) => option.id === Number(id)
   );
-
   console.log("optionだよ");
   console.log(option);
 
@@ -40,7 +45,7 @@ const optionEdit: React.FC = () => {
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/options"} />
-      {loading === "loading" ? (
+      {oStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <OptionForm node={option} createOption={handleUpdate} edit={true} />

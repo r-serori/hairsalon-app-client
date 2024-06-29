@@ -4,9 +4,15 @@ import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store";
 import { SelectChangeEvent } from "@mui/material";
 import { CustomerState } from "../../../../store/customers/customerSlice";
+import {
+  coursesStore,
+  hairstylesStore,
+  merchandiseStore,
+  optionsStore,
+} from "../../../Hooks/selector";
+import { user } from "../../../Hooks/authSelector";
 
 interface CustomerFormProps {
   node?: CustomerState;
@@ -19,9 +25,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   onSubmit,
   edit,
 }) => {
-  const getCoursesState = useSelector(
-    (state: RootState) => state.course.course
-  );
+  const getCoursesState = useSelector(coursesStore);
 
   console.log("getCoursesStateだよ");
   console.log(getCoursesState);
@@ -31,9 +35,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getCourseNamesだよ");
   console.log(getCourseNames);
 
-  const getOptionsState = useSelector(
-    (state: RootState) => state.option.option
-  );
+  const getOptionsState = useSelector(optionsStore);
 
   console.log("getOptionsStateだよ");
   console.log(getOptionsState);
@@ -43,9 +45,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getOptionsNamesだよ");
   console.log(getOptionsNames);
 
-  const getMerchandisesState = useSelector(
-    (state: RootState) => state.merchandise.merchandise
-  );
+  const getMerchandisesState = useSelector(merchandiseStore);
 
   console.log("getMerchandisesStateだよ");
   console.log(getMerchandisesState);
@@ -57,9 +57,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getMerchandisesNamesだよ");
   console.log(getMerchandisesNames);
 
-  const getHairstylesState = useSelector(
-    (state: RootState) => state.hairstyle.hairstyle
-  );
+  const getHairstylesState = useSelector(hairstylesStore);
 
   console.log("getHairstylesStateだよ");
   console.log(getHairstylesState);
@@ -71,7 +69,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getHairstylesNamesだよ");
   console.log(getHairstylesNames);
 
-  const getUsersState = useSelector((state: RootState) => state.auth.auth);
+  const getUsersState = useSelector(user);
 
   console.log("getUsersStateだよ");
   console.log(getUsersState);
@@ -81,45 +79,45 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getUsersNamesだよ");
   console.log(getUsersNames);
 
-  const [customer_name, setCustomer_Name] = useState(
+  const [customer_name, setCustomer_Name] = useState<string>(
     node ? node.customer_name : ""
   );
 
-  const [phone_number, setPhoneNumber] = useState(
+  const [phone_number, setPhoneNumber] = useState<string>(
     node ? node.phone_number : ""
   );
 
-  const [remarks, setRemarks] = useState(node ? node.remarks : "");
+  const [remarks, setRemarks] = useState<string>(node ? node.remarks : "");
 
-  const [courses, setCourses] = useState(
+  const [courses, setCourses] = useState<string[]>(
     node
       ? getCoursesState
           .filter((course) => node.course_id.includes(course.id))
           .map((course) => course.course_name)
       : []
   );
-  const [options, setOptions] = useState(
+  const [options, setOptions] = useState<string[]>(
     node
       ? getOptionsState
           .filter((option) => node.option_id.includes(option.id))
           .map((option) => option.option_name)
       : []
   );
-  const [merchandises, setMerchandises] = useState(
+  const [merchandises, setMerchandises] = useState<string[]>(
     node
       ? getMerchandisesState
           .filter((merchandise) => node.merchandise_id.includes(merchandise.id))
           .map((merchandise) => merchandise.merchandise_name)
       : []
   );
-  const [hairstyles, setHairstyles] = useState(
+  const [hairstyles, setHairstyles] = useState<string[]>(
     node
       ? getHairstylesState
           .filter((hairstyle) => node.hairstyle_id.includes(hairstyle.id))
           .map((hairstyle) => hairstyle.hairstyle_name)
       : []
   );
-  const [users, setUsers] = useState(
+  const [users, setUsers] = useState<string[]>(
     node
       ? getUsersState
           .filter((user) => node.user_id.includes(user.id))
@@ -151,7 +149,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       user_id: getUsersState
         .filter((user) => users.includes(user.name))
         .map((user) => user.id),
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
+      owner_id: node ? node.owner_id : 0,
     });
   };
 

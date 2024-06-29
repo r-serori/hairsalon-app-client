@@ -14,6 +14,17 @@ import { getUsers } from "../../../store/auth/userSlice";
 import { get } from "http";
 import { useRouter } from "next/router";
 import RouterButton from "../button/RouterButton";
+import { user } from "../../Hooks/authSelector";
+import { UserAllState } from "../../Hooks/interface";
+import { userKey } from "../../Hooks/authSelector";
+import { getUserKey } from "../../Hooks/useMethod";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../Hooks/getLocalStorage";
+import { ownerPermission } from "../../Hooks/useMethod";
+import { useState } from "react";
 
 const style = {
   position: "absolute" as "absolute",
@@ -59,47 +70,69 @@ const BasicModal: React.FC<BasicModalProps> = ({
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [openAttendance, setOpenAttendance] = React.useState(false);
+  const [ownerId, setOwnerId] = useState<number | null>(null);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const users = useSelector((state: RootState) => state.auth.auth);
+  const users: UserAllState[] = useSelector(user);
+
+  const key: string | null = useSelector(userKey);
 
   const handleOpenAttendance = () => {
-    console.log("getStaffsuseEffectttttt");
-    try {
-      const getStaffs = async () => {
-        const ownerId = Number(localStorage.getItem("owner_id"));
-        const response = await dispatch(getUsers(ownerId) as any);
-        console.log("response", response);
-        if (response.payload.userCount) {
-          setOpenAttendance(true);
-        } else {
-          router.push("/attendances");
+    const getStaffs = async () => {
+      const response = await dispatch(getUsers(ownerId) as any);
+      console.log("response", response);
+      localStorage.setItem("userCount", response.payload.userCount);
+    };
+
+    const fetchData = async () => {
+      try {
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
+
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
         }
-      };
-      const role = localStorage.getItem("role");
-      const userCount = localStorage.getItem("userCount");
-      if (
-        role === "オーナー" &&
-        (link === "/attendanceTimeStart" || link === "/attendanceTimeEnd") &&
-        (!userCount ||
-          userCount === "undefined" ||
-          userCount === null ||
-          userCount === "" ||
-          userCount === undefined ||
-          users === undefined ||
-          !users ||
-          users.length < Number(userCount))
-      ) {
-        getStaffs();
-      } else {
-        setOpenAttendance(true);
+
+        ownerPermission(permission, router);
+
+        const userCount: string = localStorage.getItem("userCount");
+        if (
+          (permission === "オーナー" && !userCount) ||
+          (permission === "オーナー" && userCount === undefined) ||
+          (permission === "オーナー" && userCount === null) ||
+          (permission === "オーナー" && userCount === "") ||
+          (permission === "オーナー" && userCount === "undefined") ||
+          (users.length < Number(userCount) && permission === "オーナー")
+        ) {
+          getStaffs();
+        } else {
+          setOpenAttendance(true);
+        }
+      } catch (error) {
+        console.log(error);
+        router.push("/attendances");
       }
-    } catch (error) {
-      console.log(error);
-      router.push("/attendances");
-    }
+    };
+    fetchData();
   };
 
   const handleCloseAttendance = () => setOpenAttendance(false);

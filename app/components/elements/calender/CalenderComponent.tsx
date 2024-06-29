@@ -17,6 +17,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import ButtonModal from "../buttonModal/ButtonModal";
 import { el } from "@fullcalendar/core/internal-common";
+import { customerStatus } from "../../Hooks/selector";
+import { RoleState } from "../../Hooks/interface";
 
 interface Event {
   id: number;
@@ -28,14 +30,14 @@ interface Event {
 
 interface OpenCalendarProps {
   events: Event[];
-  role: string;
+  role: RoleState;
 }
 
 const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
-  const loading = useSelector((state: RootState) => state.customer.status);
+  const cStatus = useSelector(customerStatus);
 
   const eventInputs: EventInput[] = events.map((event) => ({
     id: event.id.toString(),
@@ -103,7 +105,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
   console.log("nextYear", nextYear);
   return (
     <>
-      {loading ? (
+      {cStatus ? (
         <p>loading...</p>
       ) : (
         // ローディングが終わったらカレンダーを表示する

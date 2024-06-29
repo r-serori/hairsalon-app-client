@@ -1,10 +1,6 @@
 import { RootState } from "../../redux/store";
 import { env } from "process";
 
-export const ownerRole: string | undefined = env.NEXT_PUBLIC_OWNER_ROLE;
-export const managerRole: string | undefined = env.NEXT_PUBLIC_MANAGERROLE;
-export const staffRole: string | undefined = env.NEXT_PUBLIC_STAFFROLE;
-
 //勤怠時間を取得 配列で取得
 export const attendance_timesStore = (state: RootState) =>
   state.attendance_times.attendance_times;
@@ -49,7 +45,7 @@ export const optionError = (state: RootState) => state.options.error;
 
 //--------------------------------------------
 //物販情報を取得 配列で取得
-export const merchandiseStores = (state: RootState) =>
+export const merchandiseStore = (state: RootState) =>
   state.merchandises.merchandises;
 
 //物販情報のステータスを取得

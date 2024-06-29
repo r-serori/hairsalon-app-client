@@ -16,10 +16,10 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
   createMerchandise,
   edit,
 }) => {
-  const [merchandise_name, setMerchandiseName] = useState(
+  const [merchandise_name, setMerchandiseName] = useState<string>(
     node ? node.merchandise_name : ""
   );
-  const [price, setPrice] = useState(node ? node.price : 0);
+  const [price, setPrice] = useState<number>(node ? node.price : 0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

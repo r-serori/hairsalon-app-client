@@ -15,6 +15,21 @@ import DeleteButton from "../../button/DeleteButton";
 import { createDaily_sales } from "../../../../store/sales/daily_sales/daily_saleSlice";
 import { createMonthly_sales } from "../../../../store/sales/monthly_sales/monthly_saleSlice";
 import { createYearly_sales } from "../../../../store/sales/yearly_sales/yearly_saleSlice";
+import {
+  coursesStore,
+  customerStatus,
+  customersStore,
+  hairstylesStore,
+  merchandiseStore,
+  optionsStore,
+} from "../../../Hooks/selector";
+import { CustomerState } from "../../../../store/customers/customerSlice";
+import { CourseState } from "../../../../store/courses/courseSlice";
+import { OptionState } from "../../../../store/options/optionSlice";
+import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
+import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
+import { user } from "../../../Hooks/authSelector";
+import {} from "../../../../store/auth/userSlice";
 
 interface SaleFormProps {
   events: any;
@@ -35,23 +50,19 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.customer.status);
+  const cusStatus: string = useSelector(customerStatus);
 
-  const customers = useSelector((state: RootState) => state.customer.customers);
+  const customers: CustomerState[] = useSelector(customersStore);
 
-  const courses = useSelector((state: RootState) => state.course.course);
+  const courses: CourseState[] = useSelector(coursesStore);
 
-  const options = useSelector((state: RootState) => state.option.option);
+  const options: OptionState[] = useSelector(optionsStore);
 
-  const merchandises = useSelector(
-    (state: RootState) => state.merchandise.merchandise
-  );
+  const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
 
-  const hairstyles = useSelector(
-    (state: RootState) => state.hairstyle.hairstyle
-  );
+  const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
 
-  const users = useSelector((state: RootState) => state.auth.auth);
+  const users = useSelector(user);
 
   const course_customers = useSelector(
     (state: RootState) => state.course_customers.course_customers
@@ -412,7 +423,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
   return (
     <>
-      {loading === "loading" ? (
+      {cusStatus === "loading" ? (
         <div>loading中です。</div>
       ) : (
         <>

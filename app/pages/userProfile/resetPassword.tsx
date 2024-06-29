@@ -6,43 +6,88 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import ResetPasswordForm from "../../components/elements/form/userProfile/ResetPasswordForm";
 import { useEffect } from "react";
 import { useState } from "react";
+import { getUserData, getUserId } from "../../components/Hooks/getLocalStorage";
+import {
+  userError,
+  userKey,
+  userMessage,
+  userStatus,
+} from "../../components/Hooks/authSelector";
+import {
+  getOwnerId,
+  getVioRoleData,
+} from "../../components/Hooks/getLocalStorage";
+import { getUserKey, staffPermission } from "../../components/Hooks/useMethod";
+import { ownerPermission } from "../../components/Hooks/useMethod";
 
 const resetPasswordPage: React.FC = () => {
-  const [role, setRole] = useState<string>("");
+  const [ownerId, setOwnerId] = useState<number | null>(null);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
+  const [userId, setUserId] = useState<number | null>(null);
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [user, setUser] = useState<any>();
+  const key: string | null = useSelector(userKey);
+
+  const uError = useSelector(userError);
+
+  const uStatus = useSelector(userStatus);
+
+  const uMessage = useSelector(userMessage);
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
-    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
-      setRole(role);
-    } else {
-      router.push("/dashboard");
-    }
-    if (role === "オーナー" || role === "マネージャー" || role === "スタッフ") {
+    const fetchData = async () => {
       try {
-        const userId = Number(localStorage.getItem("user_id"));
-        const response = dispatch(showUser(userId) as any);
-        setUser(response.payload.responseUser);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      router.push("/");
-    }
-  }, [user]);
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
 
-  const isLoading = useSelector((state: RootState) => state.auth.status);
-  const message = useSelector((state: RootState) => state.auth.message);
-  const error = useSelector((state: RootState) => state.auth.error);
+          if (userKey !== null) {
+            const userId: number | null = await getUserId(userKey);
+
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (ownerId !== null && vioRole !== null && userId !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+              setUserId(userId);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
+        }
+
+        staffPermission(permission, ownerId);
+
+        if (
+          permission === "オーナー" ||
+          permission === "マネージャー" ||
+          permission === "スタッフ"
+        ) {
+          const response = dispatch(showUser(Number()) as any);
+        } else {
+          return;
+        }
+      } catch (error) {
+        console.log("Error", error);
+        return;
+      }
+    };
+
+    fetchData();
+  }, [key, permission, ownerId, userId]);
 
   const handleResetPassword = async (formData: { password: string }) => {
     console.log(formData);
     try {
       const response = await dispatch(resetPassword(formData) as any);
-      router.push("/attendances");
+      router.push("/dashboard");
     } catch (error) {
       console.log("Error", error);
       return;
@@ -51,15 +96,20 @@ const resetPasswordPage: React.FC = () => {
 
   return (
     <div>
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {uError && (
+        <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
 
-      {message && (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      {uMessage && (
+        <BasicAlerts
+          type="success"
+          message={uMessage}
+          space={1}
+          padding={0.6}
+        />
       )}
 
-      {isLoading === "loading" ? (
+      {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <ResetPasswordForm onSubmitResetPassword={handleResetPassword} />

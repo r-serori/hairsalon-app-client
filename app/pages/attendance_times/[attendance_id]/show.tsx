@@ -1,20 +1,37 @@
-import Link from "next/link";
 import ComponentTable from "../../../components/elements/table";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { selectGetAttendanceTimes } from "../../../store/attendances/attendance_times/attendance_timesSlice";
+import {
+  Attendance_timeState,
+  selectGetAttendanceTimes,
+} from "../../../store/attendances/attendance_times/attendance_timesSlice";
 import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
 import BasicAlerts from "../../../components/elements/alert/Alert";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import CryptoJS from "crypto-js";
-import { getKey } from "../../../store/auth/keySlice";
+import {
+  attendance_timeMessage,
+  attendance_timesStore,
+  attendance_timeStatus,
+} from "../../../components/Hooks/selector";
+import { userKey } from "../../../components/Hooks/authSelector";
+import { ownerPermission } from "../../../components/Hooks/useMethod";
+import { getUserKey } from "../../../components/Hooks/useMethod";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../../components/Hooks/getLocalStorage";
+import { allLogout } from "../../../components/Hooks/useMethod";
+import _ from "lodash";
 
 const attendanceTimes: React.FC = () => {
-  const [role, setRole] = useState<string>("");
+  const [ownerId, setOwnerId] = useState<number | null>(null);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -23,76 +40,105 @@ const attendanceTimes: React.FC = () => {
   console.log("idだよ");
   console.log({ id });
 
-  const key = useSelector((state: RootState) => state.key.key);
-  const keyStatus = useSelector((state: RootState) => state.key.status);
+  const key: string | null = useSelector(userKey);
 
   // 初回のみデータ取得を行うためのフラグ
-  const [attendanceTimeOpen, setAttendanceTimeOpen] = useState(false);
+  const [attendanceTimeOpen, setAttendanceTimeOpen] = useState<boolean>(false);
 
-  const status = useSelector(
-    (state: RootState) => state.attendance_time.status
+  const atStatus: string = useSelector(attendance_timeStatus);
+
+  const atMessage: string | null = useSelector(attendance_timeMessage);
+
+  const atError: string | null = useSelector(attendance_timeMessage);
+
+  const attendanceTimes: Attendance_timeState[] = useSelector(
+    attendance_timesStore
   );
 
-  const message = useSelector(
-    (state: RootState) => state.attendance_time.message
-  );
-
-  const error = useSelector((state: RootState) => state.attendance_time.error);
-
-  const attendanceTimes = useSelector(
-    (state: RootState) => state.attendance_time.attendance_times
-  );
-
-  const [yearMonth, setYearMonth] = useState("000111");
+  const [yearMonth, setYearMonth] = useState<string>("000111");
 
   const nowAttendanceTime = async () => {
-    const ownerId = localStorage.getItem("owner_id");
     try {
-      await dispatch(
-        selectGetAttendanceTimes({
-          user_id: Number(id),
-          yearMonth: "000111",
-          owner_id: Number(ownerId),
-        }) as any
-      );
-      setYearMonth("000111");
+      if (key === null) {
+        const userKey: string = await getUserKey(dispatch);
+
+        if (userKey !== null) {
+          const ownerId: number | null = await getOwnerId(userKey);
+
+          if (ownerId !== null) {
+            setOwnerId(ownerId);
+          } else {
+            throw new Error("ownerId is null");
+          }
+        } else {
+          throw new Error("UserKey is null");
+        }
+        await dispatch(
+          selectGetAttendanceTimes({
+            user_id: Number(id),
+            yearMonth: "000111",
+            owner_id: Number(ownerId),
+          }) as any
+        );
+        setYearMonth("000111");
+      }
     } catch (error) {
-      // console.log(error);
+      console.error("Error:", error);
+      allLogout(dispatch);
+      router.push("/auth/login");
     }
   };
 
   useEffect(() => {
-    try {
-      const encryptUserData = localStorage.getItem("userData");
+    const fetchData = async () => {
+      try {
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
 
-      const role = localStorage.getItem("role");
-      if (role === "オーナー") {
-        setRole(role);
-      } else {
-        router.push("/dashboard");
-      }
-      if (attendanceTimes.length === 0 && id && role === "オーナー") {
-        const ownerId = localStorage.getItem("owner_id");
-        setYearMonth("000111");
-        dispatch(
-          selectGetAttendanceTimes({
-            user_id: Number(id),
-            yearMonth: yearMonth,
-            owner_id: Number(ownerId),
-          }) as any
-        );
-      } else {
-        return;
-      }
-    } catch (error) {
-      // console.log(error);
-    }
-  }, [id, dispatch]);
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
 
-  const user = useSelector((state: RootState) =>
-    state.auth.auth.find((auth) => auth.id === Number(id))
-  );
-  console.log(user);
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
+        }
+        ownerPermission(permission, router);
+
+        if (
+          _.isEmpty(attendanceTimes) &&
+          (permission === "オーナー" ||
+            permission === "マネージャー" ||
+            permission === "スタッフ")
+        ) {
+          setYearMonth("000111");
+          await dispatch(
+            selectGetAttendanceTimes({
+              user_id: Number(id),
+              yearMonth: yearMonth,
+              owner_id: Number(ownerId),
+            }) as any
+          );
+        } else {
+          return;
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        allLogout(dispatch);
+        router.push("/auth/login");
+      }
+    };
+    fetchData();
+  }, [id, dispatch, key, attendanceTimes, ownerId]);
 
   const searchItems = [
     { key: "start_time", value: "出勤時間" },
@@ -116,17 +162,22 @@ const attendanceTimes: React.FC = () => {
     { string: "end_photo_path" },
   ];
 
-  const nodes = attendanceTimes;
+  const nodes: Attendance_timeState[] = attendanceTimes;
   console.log("nodes", nodes);
 
   return (
     <div>
       <div>
-        {message && (
-          <BasicAlerts type="info" message={message} space={1} padding={0.6} />
+        {atMessage && (
+          <BasicAlerts
+            type="info"
+            message={atMessage}
+            space={1}
+            padding={0.6}
+          />
         )}
-        {error && (
-          <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+        {atError && (
+          <BasicAlerts type="error" message={atError} space={1} padding={0.6} />
         )}
       </div>
       <div className="flex justify-between my-4 mx-4">
@@ -155,7 +206,7 @@ const attendanceTimes: React.FC = () => {
           />
         </div>
       </div>
-      {status === "loading" ? (
+      {atStatus === "loading" ? (
         <p>loading...</p>
       ) : (
         <ComponentTable
@@ -164,7 +215,7 @@ const attendanceTimes: React.FC = () => {
           nodesProps={nodesProps}
           tHeaderItems={tHeaderItems}
           link="/attendance_times"
-          role={role}
+          role={permission}
         />
       )}
     </div>

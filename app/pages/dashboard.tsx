@@ -17,11 +17,13 @@ import BasicAlerts from "../components/elements/alert/Alert";
 import { user, userKey, userMessage } from "../components/Hooks/authSelector";
 import { allLogout, getUserKey } from "../components/Hooks/useMethod";
 import { useDispatch } from "react-redux";
-import { getRole } from "../components/Hooks/getLocalStorage";
+import { getRole, getVioRoleData } from "../components/Hooks/getLocalStorage";
 
 const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
-  const [role, setRole] = useState<string | null>(null);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -37,8 +39,11 @@ const dashboard: React.FC = () => {
           if (userKey !== null) {
             const roleData: string | null = await getRole(userKey);
 
-            if (roleData !== null) {
-              setRole(roleData);
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && vioRole !== null) {
+              setPermission(vioRole);
             }
           } else {
             throw new Error("error");
@@ -84,7 +89,7 @@ const dashboard: React.FC = () => {
             className={`flex flex-wrap justify-center h-full
             ${isFullScreen ? "gap-16" : "gap-4"}`}
           >
-            {role === "オーナー" && (
+            {permission === "オーナー" && (
               <NavLink
                 IconName={ManageAccountsIcon}
                 href="/attendances"
@@ -140,7 +145,7 @@ const dashboard: React.FC = () => {
               iconSrc="#"
               label="髪型"
             />
-            {role === "ownerRole" && (
+            {permission === "オーナー" && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/daily_sales"
@@ -148,7 +153,7 @@ const dashboard: React.FC = () => {
                 label="日次売上"
               />
             )}
-            {role === "ownerRole" && (
+            {permission === "オーナー" && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/monthly_sales"
@@ -156,7 +161,7 @@ const dashboard: React.FC = () => {
                 label="月次売上"
               />
             )}
-            {role === "ownerRole" && (
+            {permission === "オーナー" && (
               <NavLink
                 IconName={CurrencyYenIcon}
                 href="/yearly_sales"

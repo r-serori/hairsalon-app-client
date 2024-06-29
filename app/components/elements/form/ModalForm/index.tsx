@@ -17,15 +17,28 @@ import { updateYearly_sales } from "../../../../store/sales/yearly_sales/yearly_
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import BasicTextField from "../../input/BasicTextField";
+import {
+  course_customersStore,
+  coursesStore,
+  customer_usersStore,
+  hairstyle_customersStore,
+  hairstylesStore,
+  merchandiseStore,
+  merchandise_customersStore,
+  option_customersStore,
+  optionsStore,
+  stock_categoriesStore,
+} from "../../../Hooks/selector";
+import { user } from "../../../Hooks/authSelector";
 
 interface ModalFormProps {
   type: any;
   editValue: any;
   editNode: any;
-  NodesProp: any;
-  link: any;
+  NodesProp: string;
+  link: string;
   open: boolean;
-  setOpen: any;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ModalForm: React.FC<ModalFormProps> = ({
@@ -37,8 +50,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
   open,
   setOpen,
 }) => {
-  const [EditValue, setEditValue] = useState(editValue);
-  const [EditNode, setEditNode] = useState(editNode);
+  const [EditValue, setEditValue] = useState<any>(editValue);
+  const [EditNode, setEditNode] = useState<any>(editNode);
   const [checkName, setCheckName] = React.useState<string[]>([]);
 
   const dispatch = useDispatch();
@@ -65,9 +78,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     }
   }, [NodesProp, EditValue]);
 
-  const getCheckBoxCategoriesState = useSelector(
-    (state: RootState) => state.stock_category.stock_category
-  );
+  const getCheckBoxCategoriesState = useSelector(stock_categoriesStore);
 
   console.log("useCheckBoxCategoriesStateだよ");
   console.log(getCheckBoxCategoriesState);
@@ -79,71 +90,50 @@ const ModalForm: React.FC<ModalFormProps> = ({
   console.log("getOptionCategoriesだよ");
   console.log(getOptionCategories);
 
-  const getCoursesState = useSelector(
-    (state: RootState) => state.course.course
-  );
-
+  const getCoursesState = useSelector(coursesStore);
   console.log("getCoursesStateだよ");
   console.log(getCoursesState);
 
-  const getOptionsState = useSelector(
-    (state: RootState) => state.option.option
-  );
+  const getOptionsState = useSelector(optionsStore);
 
   console.log("getOptionsStateだよ");
   console.log(getOptionsState);
 
-  const getMerchandisesState = useSelector(
-    (state: RootState) => state.merchandise.merchandise
-  );
+  const getMerchandisesState = useSelector(merchandiseStore);
 
   console.log("getMerchandisesStateだよ");
   console.log(getMerchandisesState);
 
-  const getHairstylesState = useSelector(
-    (state: RootState) => state.hairstyle.hairstyle
-  );
+  const getHairstylesState = useSelector(hairstylesStore);
 
   console.log("getHairstylesStateだよ");
   console.log(getHairstylesState);
 
-  const getUsersState = useSelector((state: RootState) => state.auth.auth);
+  const getUsersState = useSelector(user);
 
   console.log("getUsersStateだよ");
   console.log(getUsersState);
 
-  const getCourse_customers = useSelector(
-    (state: RootState) => state.course_customers.course_customers
-  );
-
+  const getCourse_customers = useSelector(course_customersStore);
   console.log("getCourse_customersだよ");
   console.log(getCourse_customers);
 
-  const getOption_customers = useSelector(
-    (state: RootState) => state.option_customers.option_customers
-  );
+  const getOption_customers = useSelector(option_customersStore);
 
   console.log("getOption_customersだよ");
   console.log(getOption_customers);
 
-  const getMerchandise_customers = useSelector(
-    (state: RootState) => state.merchandise_customers.merchandise_customers
-  );
+  const getMerchandise_customers = useSelector(merchandise_customersStore);
 
   console.log("getMerchandise_customersだよ");
   console.log(getMerchandise_customers);
 
-  const getHairstyle_customers = useSelector(
-    (state: RootState) => state.hairstyle_customers.hairstyle_customers
-  );
+  const getHairstyle_customers = useSelector(hairstyle_customersStore);
 
   console.log("getHairstyle_customersだよ");
   console.log(getHairstyle_customers);
 
-  const getCustomer_users = useSelector(
-    (state: RootState) => state.customer_users.customer_users
-  );
-
+  const getCustomer_users = useSelector(customer_usersStore);
   console.log("getCustomer_usersだよ");
   console.log(getCustomer_users);
 

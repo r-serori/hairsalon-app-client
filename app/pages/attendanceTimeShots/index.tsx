@@ -5,77 +5,114 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
+import { UserAllState } from "../../components/Hooks/interface";
 import { getAttendanceUsers } from "../../store/auth/userSlice";
 import { useRouter } from "next/router";
+import {
+  user,
+  userError,
+  userMessage,
+  userStatus,
+} from "../../components/Hooks/authSelector";
+import {
+  attendance_timeError,
+  attendance_timeMessage,
+  attendance_timesStore,
+  attendance_timeStatus,
+} from "../../components/Hooks/selector";
+import { userKey } from "../../components/Hooks/authSelector";
+import { getUserKey } from "../../components/Hooks/useMethod";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../components/Hooks/getLocalStorage";
+import { staffPermission } from "../../components/Hooks/useMethod";
+import _ from "lodash";
+import { allLogout } from "../../components/Hooks/useMethod";
 
 const AttendanceTimeShots = () => {
-  const [role, setRole] = useState(null);
+  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [firstRender, setFirstRender] = useState(true);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
+
   const router = useRouter();
 
   const dispatch = useDispatch();
 
-  const users = useSelector((state: RootState) => state.auth.auth);
+  const users: UserAllState[] = useSelector(user);
   console.log("users", users);
-  const loading = useSelector((state: RootState) => state.auth.status);
+  const uStatus: string = useSelector(userStatus);
+
+  const uMessage: string | null = useSelector(userMessage);
+
+  const uError: string | null = useSelector(userError);
+
+  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
     const getStaffs = async () => {
-      const ownerId = Number(localStorage.getItem("owner_id"));
       const response = await dispatch(getAttendanceUsers(ownerId) as any);
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
     };
-    try {
-      const role = localStorage.getItem("role");
-      if (
-        role === "スタッフ" ||
-        role === "マネージャー" ||
-        role === "オーナー"
-      ) {
-        setRole(role);
-      } else {
-        router.push("/dashboard");
-      }
 
-      const userCount = localStorage.getItem("userCount");
-      if (
-        (role === "オーナー" ||
-          role === "マネージャー" ||
-          role === "スタッフ") &&
-        (!userCount ||
+    const fetchData = async () => {
+      try {
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
+
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
+        }
+
+        staffPermission(permission, router);
+
+        const userCount = localStorage.getItem("userCount");
+
+        if (
+          !userCount ||
           userCount === "undefined" ||
           userCount === null ||
           userCount === "" ||
           userCount === undefined ||
-          (users.length < Number(userCount) && firstRender))
-      ) {
-        getStaffs();
-      } else {
-        return;
+          (users.length < Number(userCount) && firstRender)
+        ) {
+          getStaffs();
+        }
+      } catch (error) {
+        console.log("Error", error);
+        allLogout(dispatch);
+        router.push("/auth/login");
+      } finally {
+        setFirstRender(false);
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setFirstRender(false);
-    }
-  }, [dispatch]);
+    };
 
-  const message = useSelector((state: RootState) => state.auth.message);
+    fetchData();
+  }, [dispatch, key, ownerId, permission, users, firstRender]);
 
-  const timeLoading = useSelector(
-    (state: RootState) => state.attendance_time.status
-  );
+  const atimeStatus = useSelector(attendance_timeStatus);
 
-  const timeMessage = useSelector(
-    (state: RootState) => state.attendance_time.message
-  );
+  const atimeMessage = useSelector(attendance_timeMessage);
 
-  const error = useSelector((state: RootState) => state.auth.error);
-
-  const timeError = useSelector(
-    (state: RootState) => state.attendance_time.error
-  );
+  const atimeError = useSelector(attendance_timeError);
 
   const searchItems = [{ key: "shotUserName", value: "名前" }];
 
@@ -96,25 +133,25 @@ const AttendanceTimeShots = () => {
   return (
     <div>
       <div>
-        {timeMessage && (
+        {uMessage && (
           <BasicAlerts
             type="success"
-            message={timeMessage}
+            message={uMessage}
             space={1}
             padding={0.6}
           />
         )}
-        {timeError && (
+        {uError && (
           <BasicAlerts
             type="error"
-            message={timeError}
+            message={atimeError}
             space={1}
             padding={0.6}
           />
         )}
       </div>
       <div className="mx-8 mt-4">
-        {timeLoading === "loading" || !nodes ? (
+        {uStatus === "loading" || !nodes ? (
           <p className="py-4 text-blue-700">Loading...</p>
         ) : (
           <ComponentTable
@@ -123,7 +160,7 @@ const AttendanceTimeShots = () => {
             tHeaderItems={tHeaderItems}
             nodesProps={nodesProps}
             link="/attendanceTimeShots"
-            role={role}
+            role={permission}
           />
         )}
       </div>

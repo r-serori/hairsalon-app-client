@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
+import { getOwnerId } from "../../../Hooks/getLocalStorage";
+import { useSelector } from "react-redux";
+import { userKey } from "../../../Hooks/authSelector";
 
 interface HairstyleFormProps {
   node?: HairstyleState;
@@ -16,7 +19,7 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
   createHairstyle,
   edit,
 }) => {
-  const [hairstyle_name, setHairstyleName] = useState(
+  const [hairstyle_name, setHairstyleName] = useState<string>(
     node ? node.hairstyle_name : ""
   );
 
@@ -25,7 +28,7 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
     createHairstyle({
       id: node ? node.id : 0,
       hairstyle_name: hairstyle_name,
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
+      owner_id: node ? node.owner_id : 0,
     });
   };
 

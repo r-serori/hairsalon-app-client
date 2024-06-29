@@ -1,62 +1,105 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { getUsers } from "../../store/auth/userSlice";
+import { UserAllState } from "../../components/Hooks/interface";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import {
+  user,
+  userError,
+  userKey,
+  userMessage,
+  userStatus,
+} from "../../components/Hooks/authSelector";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../components/Hooks/getLocalStorage";
+import { getUserKey } from "../../components/Hooks/useMethod";
+import { ownerPermission } from "../../components/Hooks/useMethod";
+import _ from "lodash";
+import { allLogout } from "../../components/Hooks/useMethod";
 
 const Attendances = () => {
   const router = useRouter();
-  const [role, setRole] = useState<string>("");
+  const [ownerId, setOwnerId] = useState<number | null>(null);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
 
-  const [firstRender, setFirstRender] = useState(true);
+  const [firstRender, setFirstRender] = useState<boolean>(true);
   const dispatch = useDispatch();
 
-  const auth = useSelector((state: RootState) => state.auth.auth);
-  console.log("auth", auth.length);
+  const users: UserAllState[] = useSelector(user);
+
+  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
     const getStaffs = async () => {
-      const ownerId = Number(localStorage.getItem("owner_id"));
       const response = await dispatch(getUsers(ownerId) as any);
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
     };
 
-    try {
-      const role = localStorage.getItem("role");
-      if (role === "オーナー") {
-        setRole(role);
-      } else {
-        router.push("/dashboard");
+    const fetchData = async () => {
+      try {
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
+
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
+        }
+
+        ownerPermission(permission, router);
+
+        const userCount: string = localStorage.getItem("userCount");
+        if (
+          (permission === "オーナー" && !userCount) ||
+          (permission === "オーナー" && userCount === undefined) ||
+          (permission === "オーナー" && userCount === null) ||
+          (permission === "オーナー" && userCount === "") ||
+          (permission === "オーナー" && userCount === "undefined") ||
+          (users.length < Number(userCount) &&
+            permission === "オーナー" &&
+            firstRender)
+        ) {
+          getStaffs();
+        }
+      } catch (error) {
+        console.log("Error", error);
+        allLogout(dispatch);
+        router.push("/auth/login");
+      } finally {
+        setFirstRender(false);
       }
+    };
 
-      const userCount = localStorage.getItem("userCount");
-      if (
-        (role === "オーナー" && !userCount) ||
-        (role === "オーナー" && userCount === undefined) ||
-        (role === "オーナー" && userCount === null) ||
-        (role === "オーナー" && userCount === "") ||
-        (role === "オーナー" && userCount === "undefined") ||
-        (auth.length < Number(userCount) && role === "オーナー" && firstRender)
-      ) {
-        getStaffs();
-      }
-    } catch (error) {
-      console.log("Error", error);
-    } finally {
-      setFirstRender(false);
-    }
-  }, []);
+    fetchData();
+  }, [dispatch, key, ownerId, permission, users, firstRender]);
 
-  const loading = useSelector((state: RootState) => state.auth.status);
+  const uStatus: string = useSelector(userStatus);
 
-  const message = useSelector((state: RootState) => state.auth.message);
+  const uMessage: string | null = useSelector(userMessage);
 
-  const error = useSelector((state: RootState) => state.auth.error);
+  const uError: string | null = useSelector(userError);
 
   const searchItems = [
     { key: "name", value: "名前" },
@@ -79,11 +122,11 @@ const Attendances = () => {
   ];
 
   // nodesにusersをマップして処理
-  const nodes = auth
-    .filter((user: any) => {
+  const nodes = users
+    .filter((user: UserAllState) => {
       return user.role !== "オーナー";
     })
-    .map((user: any) => {
+    .map((user: UserAllState) => {
       return {
         id: user.id,
         name: user.name,
@@ -95,18 +138,23 @@ const Attendances = () => {
 
   return (
     <div>
-      {message && (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      {uMessage && (
+        <BasicAlerts
+          type="success"
+          message={uMessage}
+          space={1}
+          padding={0.6}
+        />
       )}
 
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {uError && (
+        <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
       <div className="mx-8 mt-4">
         <div className="flex my-4 ml-2">
           <RouterButton link="/auth/staffRegister" value="ユーザー登録" />
         </div>
-        {loading === "loading" ? (
+        {uStatus === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -115,7 +163,7 @@ const Attendances = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/attendances"
-            role={role}
+            role={permission}
           />
         )}
       </div>

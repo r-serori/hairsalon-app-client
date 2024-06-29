@@ -8,27 +8,31 @@ import {
 import { RootState } from "../../../../redux/store";
 import StockCategoryForm from "../../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import {
+  stock_categoryStatus,
+  stock_categoriesStore,
+} from "../../../../components/Hooks/selector";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { getUserKey } from "../../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const stockCategoryEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector(
-    (state: RootState) => state.stock_category.status
-  );
+  const scStatus: string = useSelector(stock_categoryStatus);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const stockCategory = useSelector((state: RootState) =>
-    state.stock_category.stock_category.find(
-      (stockCategory) => stockCategory.id === parseInt(id as string)
-    )
+  const stockCategory = useSelector(stock_categoriesStore).find(
+    (stockCategory) => stockCategory.id === Number(id)
   );
-
   console.log("stockCategoryだよ");
   console.log(stockCategory);
+
+  const key: string | null = useSelector(userKey);
 
   const handleUpdate = async (formData: {
     id: number;
@@ -36,16 +40,28 @@ const stockCategoryEdit: React.FC = () => {
     owner_id: number;
   }) => {
     try {
-      await dispatch(updateStockCategory(formData) as any);
+      if (formData.owner_id === 0) {
+        if (key === null) {
+          const userKey: string | null = await getUserKey(dispatch);
+          if (userKey !== null) {
+            const ownerId = await getOwnerId(userKey);
+
+            formData.owner_id = ownerId;
+            await dispatch(updateStockCategory(formData) as any);
+          }
+        }
+      } else {
+        await dispatch(updateStockCategory(formData) as any);
+      }
     } catch (error) {
       console.error(error);
     }
-    router.push("/stock_categories"); // Redirect to the stock_category list page after updating a stock_category
+    router.push("/stock_categories");
   };
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/stock_categories"} />
-      {loading === "loading" ? (
+      {scStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <StockCategoryForm

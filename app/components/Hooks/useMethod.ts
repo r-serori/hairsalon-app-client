@@ -1,7 +1,6 @@
 import { getKey } from "../../store/auth/keySlice";
 import { isLogout } from "../../store/auth/isLoginSlice";
 import { logout } from "../../store/auth/userSlice";
-import { ownerRole, managerRole, staffRole } from "./selector";
 
 export const allLogout = async (dispatch: any): Promise<string | null> => {
   try {
@@ -10,7 +9,7 @@ export const allLogout = async (dispatch: any): Promise<string | null> => {
     localStorage.clear();
   } catch (error) {
     console.log("Error", error);
-    return null as null;
+    return null;
   }
 };
 
@@ -18,15 +17,15 @@ export const getUserKey = async (dispatch: any): Promise<string | null> => {
   try {
     const response = await dispatch(getKey({}) as any);
     console.log("responseGetKey", response);
-    return response.payload.key as string;
+    return response.payload.key;
   } catch (error) {
     console.log("Error", error);
-    return null as null;
+    return null;
   }
 };
 
 export const ownerPermission = (role: string, router: any): boolean => {
-  if (role === ownerRole) {
+  if (role === "オーナー") {
     return true;
   } else {
     router.push("/dashboard");
@@ -34,7 +33,7 @@ export const ownerPermission = (role: string, router: any): boolean => {
 };
 
 export const managerPermission = (role: string, router: any): boolean => {
-  if (role === managerRole || role === ownerRole) {
+  if (role === "マネージャー" || role === "オーナー") {
     return true;
   } else {
     router.push("/dashboard");
@@ -42,7 +41,7 @@ export const managerPermission = (role: string, router: any): boolean => {
 };
 
 export const staffPermission = (role: string, router: any): boolean => {
-  if (role === staffRole || role === managerRole || role === ownerRole) {
+  if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
     return true;
   } else {
     router.push("/dashboard");

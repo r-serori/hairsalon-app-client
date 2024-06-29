@@ -9,21 +9,28 @@ import {
 import { RootState } from "../../../../redux/store";
 import MerchandiseForm from "../../../../components/elements/form/merchandises/MerchandiseForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import {
+  merchandiseStatus,
+  merchandiseMessage,
+  merchandiseError,
+  merchandiseStore,
+} from "../../../../components/Hooks/selector";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { getUserKey } from "../../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const merchandiseEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.merchandise.status);
+  const mStatus: string = useSelector(merchandiseStatus);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const merchandise = useSelector((state: RootState) =>
-    state.merchandise.merchandise.find(
-      (merchandise) => merchandise.id === parseInt(id as string)
-    )
+  const merchandise = useSelector(merchandiseStore).find(
+    (merchandise) => merchandise.id === Number(id)
   );
 
   console.log("merchandiseだよ");
@@ -40,13 +47,13 @@ const merchandiseEdit: React.FC = () => {
     } catch (error) {
       console.error(error);
     }
-    router.push("/merchandises"); // Redirect to the merchandise list page after updating a merchandise
+    router.push("/merchandises");
   };
 
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/merchandises"} />
-      {loading === "loading" ? (
+      {mStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <MerchandiseForm

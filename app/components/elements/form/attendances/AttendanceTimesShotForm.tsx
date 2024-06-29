@@ -9,9 +9,9 @@ import {
   updateStartTime,
   updateEndTime,
   pleaseEditEndTime,
+  Attendance_timeState,
 } from "../../../../store/attendances/attendance_times/attendance_timesSlice";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
 import Webcam from "react-webcam";
 import { useRef } from "react";
 import { useState } from "react";
@@ -21,6 +21,9 @@ import DateTimeRangePicker from "../../input/DateTimePicker";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import BasicAlerts from "../../alert/Alert";
+import { user } from "../../../Hooks/authSelector";
+import { attendance_timesStore } from "../../../Hooks/selector";
+import { UserAllState } from "../../../../components/Hooks/interface";
 
 interface UserTimesShotFormProps {
   node: any;
@@ -45,53 +48,45 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   console.log("node", node);
 
   const dispatch = useDispatch();
-  const router = useRouter();
   const webcamRef = useRef(null);
 
   //link === "/attendanceTimeStart" || link === "/attendanceTimeEnd"の時、編集モード
   //link === "/attendanceTimeShots"の時、撮影モード　スタッフの出勤、退勤時間の登録
 
   // 出勤時間、退勤時間の編集モード
-  const [edit, setEdit] = useState(
+  const [edit, setEdit] = useState<boolean>(
     link == "/attendanceTimeStart" || link === "/attendanceTimeEnd"
       ? true
       : false
   );
 
-  const users = useSelector((state: RootState) => state.auth.auth);
-  console.log("users", users);
+  const userId: number =
+    link === "/attendanceTimeShots" ? node.id : node.user_id;
 
   //ボタンを押したユーザーの情報を取得
-  const user = useSelector((state: RootState) => {
-    const userId = link === "/attendanceTimeShots" ? node.id : node.user_id;
-    console.log("userId", userId);
-    return state.auth.auth.find((user) => user.id === Number(userId));
-  });
+  const attendanceUser: UserAllState = useSelector(user).find(
+    (user) => user.id === Number(userId)
+  );
+
   console.log("user", user);
 
   // 編集する時のユーザーが持っている出勤時間、退勤時間の情報を取得
-  const attendanceTime = useSelector((state: RootState) => {
-    const userAttendanceTimes = state.attendance_time.attendance_times.filter(
-      (time) => time.user_id === node.user_id
-    );
-    if (userAttendanceTimes.length > 0) {
-      const latestAttendanceTime =
-        userAttendanceTimes[userAttendanceTimes.length - 1];
-      return latestAttendanceTime;
-    }
+  const attendanceTimes: Attendance_timeState[] = useSelector(
+    attendance_timesStore
+  ).filter((time) => time.user_id === node.user_id);
 
-    return null;
-  });
-
-  console.log("attendanceTime", attendanceTime);
+  const lastAttendanceTime: Attendance_timeState | null =
+    attendanceTimes.length > 0
+      ? attendanceTimes[attendanceTimes.length - 1]
+      : null;
 
   //出勤中か退勤中かの判定
-  const [isAttendance, setIsAttendance] = useState(
-    user.isAttendance ? true : false
+  const [isAttendance, setIsAttendance] = useState<boolean>(
+    attendanceUser.isAttendance ? true : false
   ); //true:出勤中 false:退勤中
 
   //出勤中の時、オーナーが本日の出勤時間、退勤時間の編集を不可にする
-  const [notEdit, setNotEdit] = useState(
+  const [notEdit, setNotEdit] = useState<boolean>(
     (edit &&
       isAttendance &&
       dayjs(node.start_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD") ===
@@ -107,11 +102,11 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   // console.log("node.start_time", attendanceTime.start_time);
 
   //出勤する時に、昨日の退勤時間が登録されていない時　true　編集依頼を出すため
-  const [lateTime, setLateTime] = useState(
+  const [lateTime, setLateTime] = useState<boolean>(
     isAttendance &&
-      attendanceTime &&
-      attendanceTime.start_time !== null &&
-      dayjs(attendanceTime.start_time)
+      lastAttendanceTime &&
+      lastAttendanceTime.start_time !== null &&
+      dayjs(lastAttendanceTime.start_time)
         .utc()
         .tz("Asia/Tokyo")
         .format("YYYY/MM/DD") !==
@@ -122,10 +117,10 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   console.log("lateTime", lateTime);
 
   //出勤時間、退勤時間の編集モードの時、編集済みの写真を表示
-  const [shotEdit, setShotEdit] = useState(false);
+  const [shotEdit, setShotEdit] = useState<boolean>(false);
 
   //出勤時間、退勤時間の編集モードの時、編集済みの写真を表示
-  const [photo, setPhoto] = useState(
+  const [photo, setPhoto] = useState<string | null>(
     node.start_photo_path === "111222" || node.end_photo_path === "111222"
       ? null
       : link === "/attendanceTimeStart" &&
@@ -150,7 +145,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   );
 
   // 時間の表示
-  const [showTime, setShowTime] = useState(
+  const [showTime, setShowTime] = useState<string>(
     link === "/attendanceTimeStart" && node.start_time
       ? dayjs(node.start_time)
           .utc()
@@ -169,7 +164,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   );
 
   // 出勤時間、退勤時間の編集モードの時、写真を撮るボタンを押した時、ローディングを表示
-  const [isLoading, setIsLoading] = useState(
+  const [isLoading, setIsLoading] = useState<boolean>(
     link !== "/attendanceTimeShots" && !lateTime ? false : true
   );
   console.log("isLoading", isLoading);
@@ -177,7 +172,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   console.log("edit", edit);
 
   // 出勤時間、退勤時間の編集モードの時、写真を撮るボタンを押した時、編集済みの写真を表示
-  const [editEnd, setEditEnd] = useState(
+  const [editEnd, setEditEnd] = useState<boolean>(
     node.start_photo_path === "111222" || node.end_photo_path === "111222"
       ? true
       : false
@@ -231,18 +226,18 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   };
 
   const handleStartTime = async () => {
-    const getTime = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
+    const getTime: string = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
     let formData;
 
     if (!edit) {
-      const startTimePhoto = photo;
+      const startTimePhoto: string = photo;
       formData = {
         start_time: getTime,
         start_photo_path: startTimePhoto,
         user_id: node.id,
       };
     } else {
-      const startTimePhoto = "111222";
+      const startTimePhoto: string = "111222";
       formData = {
         id: node.id,
         start_time: getTime,
@@ -268,18 +263,18 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   };
 
   const handleEndTime = async () => {
-    const getTime = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
+    const getTime: string = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
     let formData;
 
     if (!edit) {
-      const endTimePhoto = photo;
+      const endTimePhoto: string = photo;
       formData = {
         end_time: getTime,
         end_photo_path: endTimePhoto,
         user_id: node.id,
       };
     } else {
-      const endTimePhoto = "111222";
+      const endTimePhoto: string = "111222";
       formData = {
         id: node.id,
         end_time: getTime,
@@ -309,7 +304,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
     if (link === "/attendanceTimeShots") {
       formData = {
-        id: attendanceTime.id,
+        id: lastAttendanceTime.id,
         end_time: "9999-12-31 23:59:59",
         end_photo_path: "111222",
         user_id: node.user_id,

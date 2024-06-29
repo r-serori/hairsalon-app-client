@@ -7,8 +7,8 @@ interface AuthLoginFormProps {
 }
 
 const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
-  const [email, setEmail] = useState("owner@hairmail.com");
-  const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState<string>("owner@hairmail.com");
+  const [password, setPassword] = useState<string>("password123");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -18,11 +18,11 @@ interface AuthRegisterFormProps {
 const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
   onSubmitOwner,
 }) => {
-  const [name, setName] = useState("testerOwner");
-  const [email, setEmail] = useState("testerOwner@hairsaron.com");
-  const [phone_number, setPhoneNumber] = useState("08012345678");
-  const [password, setPassword] = useState("password123");
-  const [confirmPassword, setConfirmPassword] = useState("password123");
+  const [name, setName] = useState<string>("testerOwner");
+  const [email, setEmail] = useState<string>("testerOwner@hairsaron.com");
+  const [phone_number, setPhoneNumber] = useState<string>("08012345678");
+  const [password, setPassword] = useState<string>("password123");
+  const [confirmPassword, setConfirmPassword] = useState<string>("password123");
 
   // const [confirmPassword, setConfirmPassword] = useState("");
 

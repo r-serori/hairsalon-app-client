@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import {
   selectGetSchedules,
   getSchedule,
+  ScheduleState,
 } from "../../store/schedules/scheduleSlice";
 import { RootState } from "../../redux/store";
 import dayjs, { Dayjs } from "dayjs";
@@ -14,6 +15,23 @@ import timezone from "dayjs/plugin/timezone";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import {
+  customersStore,
+  scheduleError,
+  scheduleMessage,
+  scheduleStatus,
+  schedulesStore,
+} from "../../components/Hooks/selector";
+import { userKey } from "../../components/Hooks/authSelector";
+import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
+import { getUserKey } from "../../components/Hooks/useMethod";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../components/Hooks/getLocalStorage";
+import _ from "lodash";
+import { CustomerState } from "../../store/customers/customerSlice";
 
 interface Schedule {
   year?: string;
@@ -21,51 +39,71 @@ interface Schedule {
 }
 
 const schedules: React.FC<Schedule> = ({ year, update }) => {
-  const [role, setRole] = useState<string>("");
+  const [ownerId, setOwnerId] = useState<number | null>(null);
+  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
+
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const schedules = useSelector((state: RootState) => state.schedule.schedule);
+  const schedules: ScheduleState[] = useSelector(schedulesStore);
+
+  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
-    try {
-      const role = localStorage.getItem("role");
-      if (
-        role === "スタッフ" ||
-        role === "マネージャー" ||
-        role === "オーナー"
-      ) {
-        setRole(role);
-      } else {
-        router.push("/dashboard");
-      }
-      if (
-        schedules.length === 0 &&
-        (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
-      ) {
-        try {
-          const ownerId = Number(localStorage.getItem("owner_id"));
-          dispatch(getSchedule(ownerId) as any);
-        } catch (error) {
-          console.log(error);
+    const fetchData = async () => {
+      try {
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
+
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
         }
+
+        staffPermission(permission, router);
+
+        if (
+          _.isEmpty(schedules) &&
+          (permission === "オーナー" ||
+            permission === "マネージャー" ||
+            permission === "スタッフ")
+        ) {
+          await dispatch(getSchedule(ownerId) as any);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [dispatch]);
+    };
+    fetchData();
+  }, [dispatch, ownerId, permission, router, schedules]);
 
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  const loading = useSelector((state: RootState) => state.schedule.status);
+  const sStatus: string = useSelector(scheduleStatus);
 
-  const message = useSelector((state: RootState) => state.schedule.message);
+  const sMessage: string | null = useSelector(scheduleMessage);
 
-  const error = useSelector((state: RootState) => state.schedule.error);
+  const sError: string | null = useSelector(scheduleError);
 
-  const customers = useSelector((state: RootState) => state.customer.customers);
+  const customers: CustomerState[] = useSelector(customersStore);
 
   const events = schedules.map((schedule) => {
     if (schedule.customer_id) {
@@ -92,16 +130,21 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
 
   return (
     <div>
-      {message && (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      {sMessage && (
+        <BasicAlerts
+          type="success"
+          message={sMessage}
+          space={1}
+          padding={0.6}
+        />
       )}
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {sError && (
+        <BasicAlerts type="error" message={sError} space={1} padding={0.6} />
       )}
-      {loading === "loading" ? (
+      {sStatus === "loading" ? (
         <p>loading...</p>
       ) : (
-        <MyCalendar events={events} role={role} />
+        <MyCalendar events={events} role={permission} />
       )}
     </div>
   );

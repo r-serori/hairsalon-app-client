@@ -4,14 +4,27 @@ import { updateUser } from "../../store/auth/userSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import UpdateInformationForm from "../../components/elements/form/userProfile/UpdateInformationForm";
+import {
+  userError,
+  userKey,
+  userMessage,
+  userStatus,
+} from "../../components/Hooks/authSelector";
+import {
+  getOwnerId,
+  getVioRoleData,
+} from "../../components/Hooks/getLocalStorage";
+import { getUserKey, staffPermission } from "../../components/Hooks/useMethod";
 
 const UpdateUserInformationPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const isLoading = useSelector((state: RootState) => state.auth.status);
-  const message = useSelector((state: RootState) => state.auth.message);
-  const error = useSelector((state: RootState) => state.auth.error);
+  const uError: string | null = useSelector(userError);
+
+  const uStatus: string = useSelector(userStatus);
+
+  const uMessage: string | null = useSelector(userMessage);
 
   const handleUpdateUserInformation = async (formData: {
     name: string;
@@ -29,15 +42,20 @@ const UpdateUserInformationPage: React.FC = () => {
 
   return (
     <div>
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {uError && (
+        <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
 
-      {message && (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      {uMessage && (
+        <BasicAlerts
+          type="success"
+          message={uMessage}
+          space={1}
+          padding={0.6}
+        />
       )}
 
-      {isLoading === "loading" ? (
+      {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <UpdateInformationForm

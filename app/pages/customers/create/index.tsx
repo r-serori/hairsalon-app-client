@@ -8,12 +8,18 @@ import {
 import { RootState } from "../../../redux/store";
 import CustomerForm from "../../../components/elements/form/customers/CustomerForm";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
+import {
+  customersStore,
+  customerStatus,
+} from "../../../components/Hooks/selector";
+import { getUserKey } from "../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../components/Hooks/getLocalStorage";
 
 const customersCreate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.customer.status);
+  const cusStatus = useSelector(customerStatus);
 
   const handleCreate = async (formData: {
     id: number;
@@ -28,6 +34,9 @@ const customersCreate = () => {
     owner_id: number;
   }) => {
     try {
+      const userKey: string | null = await getUserKey(dispatch);
+      const ownerId = await getOwnerId(userKey);
+      formData.owner_id = ownerId;
       await dispatch(createCustomer(formData) as any);
     } catch (error) {
       console.error(error);
@@ -40,7 +49,7 @@ const customersCreate = () => {
       <div className="mt-4 ml-4">
         <BackAgainButton link={"/customers"} value="顧客管理画面に戻る" />
       </div>
-      {loading === "loading" ? (
+      {cusStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <CustomerForm onSubmit={handleCreate} />

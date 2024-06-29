@@ -9,21 +9,28 @@ import {
 import { RootState } from "../../../../redux/store";
 import StockForm from "../../../../components/elements/form/stocks/StockForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import {
+  stockStatus,
+  stocksStore,
+} from "../../../../components/Hooks/selector";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { getUserKey } from "../../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const stockEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.stock.status);
+  const sStatus: string = useSelector(stockStatus);
+
+  const key: string | null = useSelector(userKey);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const stocks = useSelector((state: RootState) =>
-    state.stock.stocks.find(
-      (stock: StockState) => stock.id === parseInt(id as string)
-    )
+  const stocks = useSelector(stocksStore).find(
+    (stock: StockState) => stock.id === Number(id)
   );
   console.log("stocksだよ");
   console.log(stocks);
@@ -50,7 +57,7 @@ const stockEdit: React.FC = () => {
   return (
     <div className="min-h-full">
       <BackAgainButton link={"/stocks"} />
-      {loading === "loading" ? (
+      {sStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <StockForm node={stocks} createStock={handleUpdate} edit={true} />

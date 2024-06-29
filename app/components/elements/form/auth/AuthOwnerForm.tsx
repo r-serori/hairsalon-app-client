@@ -15,9 +15,9 @@ interface AuthOwnerFormProps {
 }
 
 const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
-  const [store_name, setStoreName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone_number, setPhoneNumber] = useState("");
+  const [store_name, setStoreName] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [phone_number, setPhoneNumber] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const userId = localStorage.getItem("user_id");

@@ -38,6 +38,29 @@ import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { v4 as uuidv4 } from "uuid";
+import {
+  course_customersStore,
+  coursesStore,
+  customer_usersStore,
+  customersStore,
+  hairstyle_customersStore,
+  hairstylesStore,
+  merchandiseStore,
+  merchandise_customersStore,
+  option_customersStore,
+  optionsStore,
+} from "../../../Hooks/selector";
+import { user } from "../../../Hooks/authSelector";
+import { CourseState } from "../../../../store/courses/courseSlice";
+import { OptionState } from "../../../../store/options/optionSlice";
+import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
+import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
+import { RoleState, UserAllState } from "../../../Hooks/interface";
+import { Course_customersState } from "../../../../store/middleTable/customers/course_customersSlice";
+import { Option_customersState } from "../../../../store/middleTable/customers/option_customersSlice";
+import { Merchandise_customersState } from "../../../../store/middleTable/customers/merchandise_customersSlice";
+import { Hairstyle_customersState } from "../../../../store/middleTable/customers/hairstyle_customersSlice";
+import { Customer_usersState } from "../../../../store/middleTable/customers/customer_usersSlice";
 
 const style = {
   position: "absolute" as "absolute",
@@ -62,7 +85,7 @@ interface ScheduleModalProps {
   setSelectedEvent: (value: any) => void;
   isCustomer: boolean;
   setIsCustomer: (value: boolean) => void;
-  role: string;
+  role: RoleState;
 }
 
 const ScheduleModal: React.FC<ScheduleModalProps> = ({
@@ -86,131 +109,126 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const uniqueId = uuidv4();
 
   // 顧客情報を取得
-  const customers = useSelector((state: RootState) => state.customer.customers);
+  const customers: CustomerState[] = useSelector(customersStore);
 
   // コース情報を取得
-  const courses = useSelector((state: RootState) => state.course.course);
+  const courses: CourseState[] = useSelector(coursesStore);
 
   // オプション情報を取得
-  const options = useSelector((state: RootState) => state.option.option);
+  const options: OptionState[] = useSelector(optionsStore);
 
   // 商品情報を取得
-  const merchandises = useSelector(
-    (state: RootState) => state.merchandise.merchandise
-  );
+  const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
 
   // ヘアスタイル情報を取得
-  const hairstyles = useSelector(
-    (state: RootState) => state.hairstyle.hairstyle
-  );
+  const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
 
   // 担当者情報を取得
-  const users = useSelector((state: RootState) => state.auth.auth);
-  console.log("userです", users);
+  const users: UserAllState[] = useSelector(user);
+  // console.log("userです", users);
 
   // 中間テーブルの情報を取得
-  const course_customers = useSelector(
-    (state: RootState) => state.course_customers.course_customers
+  const course_customers: Course_customersState[] = useSelector(
+    course_customersStore
   );
 
-  console.log("course_customersだよ");
-  console.log(course_customers);
+  // console.log("course_customersだよ");
+  // console.log(course_customers);
   // 中間テーブルの情報を取得
-  const option_customers = useSelector(
-    (state: RootState) => state.option_customers.option_customers
+  const option_customers: Option_customersState[] = useSelector(
+    option_customersStore
   );
   // 中間テーブルの情報を取得
-  const merchandise_customers = useSelector(
-    (state: RootState) => state.merchandise_customers.merchandise_customers
+  const merchandise_customers: Merchandise_customersState[] = useSelector(
+    merchandise_customersStore
   );
   // 中間テーブルの情報を取得
-  const hairstyle_customers = useSelector(
-    (state: RootState) => state.hairstyle_customers.hairstyle_customers
+  const hairstyle_customers: Hairstyle_customersState[] = useSelector(
+    hairstyle_customersStore
   );
   // 中間テーブルの情報を取得
-  const customer_users = useSelector(
-    (state: RootState) => state.customer_users.customer_users
-  );
+  const customer_users: Customer_usersState[] =
+    useSelector(customer_usersStore);
 
   // 顧客情報を取得　上記の情報を元に顧客情報を取得
   const nodes = [
     ...customers.map((customer) => {
       // customerは一回一番下まで行く。その後、次のcustomerに行く。
       // 顧客に関連するコースの情報を取得
-      const customerCourses = course_customers
+      const customerCourses: number[] = course_customers
         .filter((course) => course.customer_id === customer.id)
         .map((course) => course.course_id);
 
-      console.log(customerCourses);
+      // console.log(customerCourses);
       //  [1,2,3]
 
-      const courseNames = courses
+      const courseNames: string[] = courses
         .filter((course) => customerCourses.includes(course.id))
         .map((course) => course.course_name);
 
-      console.log("courseNamesだよ");
-      console.log(courseNames);
+      // console.log("courseNamesだよ");
+      // console.log(courseNames);
 
       // 顧客に関連するオプションの情報を取得
-      const customerOptions = option_customers
+      const customerOptions: number[] = option_customers
         .filter((option) => option.customer_id === customer.id)
         .map((option) => option.option_id);
 
-      console.log(customerOptions);
+      // console.log(customerOptions);
 
-      const optionNames = options
+      const optionNames: string[] = options
         .filter((option) => customerOptions.includes(option.id))
         .map((option) => option.option_name);
 
-      console.log("optionNamesだよ");
-      console.log(optionNames);
+      // console.log("optionNamesだよ");
+      // console.log(optionNames);
 
       // 顧客に関連する商品の情報を取得
-      const customerMerchandises = merchandise_customers
+      const customerMerchandises: number[] = merchandise_customers
         .filter((merchandise) => merchandise.customer_id === customer.id)
         .map((merchandise) => merchandise.merchandise_id);
 
-      console.log(customerMerchandises);
+      // console.log(customerMerchandises);
 
-      const merchandiseNames = merchandises
+      const merchandiseNames: string[] = merchandises
         .filter((merchandise) => customerMerchandises.includes(merchandise.id))
         .map((merchandise) => merchandise.merchandise_name);
 
-      console.log("merchandiseNamesだよ");
-      console.log(merchandiseNames);
+      // console.log("merchandiseNamesだよ");
+      // console.log(merchandiseNames);
 
       // 顧客に関連するヘアスタイルの情報を取得
-      const customerHairstyles = hairstyle_customers
+      const customerHairstyles: number[] = hairstyle_customers
         .filter((hairstyle) => hairstyle.customer_id === customer.id)
         .map((hairstyle) => hairstyle.hairstyle_id);
 
-      console.log("cusHair", customerHairstyles);
+      // console.log("cusHair", customerHairstyles);
 
-      console.log("hairstylesだよ", hairstyles);
+      // console.log("hairstylesだよ", hairstyles);
 
-      const hairstyleNames = hairstyles
+      const hairstyleNames: string[] = hairstyles
         .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
         .map((hairstyle) => hairstyle.hairstyle_name);
 
-      console.log("hairstyleNamesだよ");
+      // console.log("hairstyleNamesだよ");
 
-      console.log(hairstyleNames);
+      // console.log(hairstyleNames);
 
       // 顧客に関連する担当者の情報を取得
       //user_idを配列にしている
-      const customerUsers = customer_users
+      const customerUsers: number[] = customer_users
         .filter((user) => user.customer_id === customer.id)
         .map((user) => user.user_id);
 
-      console.log("customerUsers", customerUsers);
+      // console.log("customerUsers", customerUsers);
 
-      console.log("users前", users);
+      // console.log("users前", users);
 
-      const userNames = users
+      const userNames: string[] = users
         .filter((user) => customerUsers.includes(user.id))
         .map((user) => user.name);
 
-      console.log("userNames", userNames);
+      // console.log("userNames", userNames);
 
       // 顧客情報を返す
       return {
@@ -227,36 +245,38 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     }),
   ];
 
-  console.log("nodes", nodes);
+  // console.log("nodes", nodes);
 
   // 顧客名のみを取得
-  const customersNames = nodes.map((node) => node.customer_name);
+  const customersNames: string[] = nodes.map((node) => node.customer_name);
 
   //編集時に顧客名を検索し、存在していればtrueを返す
-  const searchCustomer =
-    whoIsEvent === "編集"
-      ? customersNames.includes(selectedEvent.title)
+  const searchCustomer: boolean =
+    whoIsEvent === "編集" && customersNames.includes(selectedEvent.title)
+      ? true
       : false;
 
-  console.log("searchCustomerだよ", searchCustomer);
+  // console.log("searchCustomerだよ", searchCustomer);
 
   const [newReservation, setNewReservation] = useState<boolean>(
     whoIsEvent === "編集" ? false : true
   );
 
   //trueは新規顧客、falseは既存顧客 顧客予約の場合はfalse　最初は既存顧客を表示
-  const [newCustomer, setNewCustomer] = useState(isCustomer ? false : true);
+  const [newCustomer, setNewCustomer] = useState<boolean>(
+    isCustomer ? false : true
+  );
 
   //新規予約の場合、初期値として最初の顧客情報を取得
   const initialCustomer = nodes[0];
 
   // 既存顧客で新規予約の場合、初期値として最初の顧客情報を取得
-  const [customerId, setCustomerId] = useState(
+  const [customerId, setCustomerId] = useState<number>(
     !newCustomer ? initialCustomer.id : 0
   );
 
   //
-  const [customerName, setCustomerName] = useState(
+  const [customerName, setCustomerName] = useState<string>(
     //新規顧客、新規予約の場合は初期値としてnode[0]の顧客名を設定
     !newCustomer && whoIsEvent !== "編集"
       ? initialCustomer.customer_name
@@ -269,13 +289,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : ""
   );
 
-  console.log("customerNameだよ", customerName);
+  // console.log("customerNameだよ", customerName);
 
-  const [phone_number, setPhoneNumber] = useState(
+  const [phone_number, setPhoneNumber] = useState<string>(
     !newCustomer ? initialCustomer.phone_number : ""
   );
 
-  const [remarks, setRemarks] = useState(
+  const [remarks, setRemarks] = useState<string>(
     !newCustomer ? initialCustomer.remarks : ""
   );
 
@@ -337,8 +357,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       (node) => node.customer_name === newValue
     );
 
-    console.log("useCustomerStateだよ");
-    console.log(useCustomerState);
+    // console.log("useCustomerStateだよ");
+    // console.log(useCustomerState);
 
     if (!useCustomerState) {
       setIsCustomer(false);
@@ -472,7 +492,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         await dispatch(updateSchedule(scheduleAndCustomerFormData) as any);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       handleClose();
       // window.location.reload();
@@ -546,20 +566,20 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   };
 
   const startTimeChange = (e) => {
-    console.log("eFです", dayjs(e).utc().tz("Asia/Tokyo"));
+    // console.log("eFです", dayjs(e).utc().tz("Asia/Tokyo"));
     setStartTime(dayjs(e).utc().tz("Asia/Tokyo"));
   };
-  console.log("startTimeです", startTime);
+  // console.log("startTimeです", startTime);
 
   const endTimeChange = (e) => {
     setEndTime(dayjs(e).utc().tz("Asia/Tokyo"));
   };
 
-  console.log("endTimeです", endTime);
+  // console.log("endTimeです", endTime);
 
-  console.log("ScheIdです", Sid);
+  // console.log("ScheIdです", Sid);
 
-  console.log("uniqueIdです", uniqueId);
+  // console.log("uniqueIdです", uniqueId);
 
   return (
     <div>

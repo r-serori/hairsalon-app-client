@@ -24,7 +24,7 @@ export const getUserId = (key: string): number | null => {
 
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
-    return decryptedData.user_id;
+    return decryptedData.user_role;
   } catch (error) {
     console.log("Error", error);
     return null;
@@ -61,8 +61,18 @@ export const getOwnerId = (key: string): number | null => {
   }
 };
 
-export const getVioRoleData = (key: string, role: string): string | null => {
+export const getVioRoleData = (
+  key: string
+): "オーナー" | "マネージャー" | "スタッフ" | null => {
   try {
+    const userData = localStorage.getItem("user_data");
+
+    const myBytes = CryptoJS.AES.decrypt(userData, key);
+
+    const myDecryptedData = JSON.parse(myBytes.toString(CryptoJS.enc.Utf8));
+
+    const myRole = myDecryptedData.role;
+
     const roleData = localStorage.getItem("role_data");
 
     const bytes = CryptoJS.AES.decrypt(roleData, key);
@@ -71,19 +81,22 @@ export const getVioRoleData = (key: string, role: string): string | null => {
 
     const dataMather = () => {
       for (const key in decryptedData) {
-        if (decryptedData[key] === role) {
+        if (decryptedData[key] === myRole) {
           return String(key);
         }
       }
     };
+
     const matchData: string = dataMather();
 
-    const matchDataResult: string =
-      matchData === "owner_id"
+    const matchDataResult: "オーナー" | "マネージャー" | "スタッフ" | null =
+      matchData === "owner_role"
         ? "オーナー"
-        : matchData === "manager_id"
+        : matchData === "manager_role"
         ? "マネージャー"
-        : "スタッフ";
+        : matchData === "staff_role"
+        ? "スタッフ"
+        : null;
 
     return matchDataResult;
   } catch (error) {

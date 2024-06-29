@@ -1,55 +1,101 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getOption } from "../../store/options/optionSlice";
+import { OptionState, getOption } from "../../store/options/optionSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import {
+  optionError,
+  optionMessage,
+  optionStatus,
+  optionsStore,
+} from "../../components/Hooks/selector";
+import { userKey } from "../../components/Hooks/authSelector";
+import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
+import { getUserKey } from "../../components/Hooks/useMethod";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../components/Hooks/getLocalStorage";
+import _ from "lodash";
 
 const options: React.FC = () => {
   const router = useRouter();
-  const [role, setRole] = useState<string>("");
+  const [ownerId, setOwnerId] = useState<number | null>(null);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
 
   const dispatch = useDispatch();
 
-  const loading = useSelector((state: RootState) => state.option.status);
+  const opStatus: string = useSelector(optionStatus);
 
-  const message = useSelector((state: RootState) => state.option.message);
+  const opMessage: string | null = useSelector(optionMessage);
 
-  const error = useSelector((state: RootState) => state.option.error);
+  const opError: string | null = useSelector(optionError);
 
-  const options = useSelector((state: RootState) => state.option.option);
-  console.log(options);
+  const key: string | null = useSelector(userKey);
+
+  const options: OptionState[] = useSelector(optionsStore);
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
-    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
-      setRole(role);
-    } else {
-      router.push("/dashboard");
-    }
-    if (role === "オーナー") {
-      setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
-    } else if (role === "マネージャー") {
-      setTHeaderItems(["オプション名", "価格", "編集"]);
-    } else {
-      setTHeaderItems(["オプション名", "価格"]);
-    }
-    if (
-      options.length === 0 &&
-      (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
-    ) {
+    const fetchData = async () => {
       try {
-        const ownerId = Number(localStorage.getItem("owner_id"));
-        dispatch(getOption(ownerId) as any);
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
+
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
+        }
+
+        staffPermission(permission, router);
+
+        if (
+          _.isEmpty(options) &&
+          (permission === "オーナー" ||
+            permission === "マネージャー" ||
+            permission === "スタッフ")
+        ) {
+          await dispatch(getOption(ownerId) as any);
+        } else {
+          return;
+        }
+
+        if (permission === "オーナー") {
+          setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
+        } else if (permission === "マネージャー") {
+          setTHeaderItems(["オプション名", "価格", "編集"]);
+        } else {
+          setTHeaderItems(["オプション名", "価格"]);
+        }
       } catch (error) {
-        console.log(error);
+        console.error("Error:", error);
+        allLogout(dispatch);
+        router.push("/auth/login");
       }
-    }
-  }, [dispatch]);
+    };
+
+    fetchData();
+  }, [dispatch, key, options, ownerId]);
 
   const searchItems = [
     { key: "option_name", value: "オプション名" },
@@ -62,12 +108,17 @@ const options: React.FC = () => {
 
   return (
     <div>
-      {message && (
-        <BasicAlerts type="success" message={message} space={1} padding={0.6} />
+      {opMessage && (
+        <BasicAlerts
+          type="success"
+          message={opMessage}
+          space={1}
+          padding={0.6}
+        />
       )}
 
-      {error && (
-        <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+      {opError && (
+        <BasicAlerts type="error" message={opError} space={1} padding={0.6} />
       )}
 
       <div className="mx-4">
@@ -75,7 +126,7 @@ const options: React.FC = () => {
           <RouterButton link="/options/create" value="オプション情報新規作成" />
         </div>
 
-        {loading === "loading" ? (
+        {opStatus === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -84,7 +135,7 @@ const options: React.FC = () => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/options"
-            role={role}
+            role={permission}
           />
         )}
       </div>

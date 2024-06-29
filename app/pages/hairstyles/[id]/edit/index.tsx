@@ -10,23 +10,27 @@ import { RootState } from "../../../../redux/store";
 import HairstyleForm from "../../../../components/elements/form/hairstyles/HairstyleForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import RouterButton from "../../../../components/elements/button/RouterButton";
+import {
+  hairstyleStatus,
+  hairstylesStore,
+} from "../../../../components/Hooks/selector";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { getUserKey } from "../../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const hairstyleEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.hairstyle.status);
+  const hStatus: string = useSelector(hairstyleStatus);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const hairstyle = useSelector((state: RootState) =>
-    state.hairstyle.hairstyle.find(
-      (hairstyle: HairstyleState) => hairstyle.id === parseInt(id as string)
-    )
+  const hairstyle = useSelector(hairstylesStore).find(
+    (hairstyle: HairstyleState) => hairstyle.id === Number(id)
   );
-
   console.log("hairstyleだよ");
   console.log(hairstyle);
 
@@ -48,7 +52,7 @@ const hairstyleEdit: React.FC = () => {
       <div className="mt-4 ml-4">
         <RouterButton link={"/hairstyles"} value="へスタイル管理画面に戻る" />
       </div>
-      {loading === "loading" ? (
+      {hStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <HairstyleForm

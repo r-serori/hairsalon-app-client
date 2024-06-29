@@ -4,85 +4,90 @@ import { useRouter } from "next/router";
 import {
   updateCustomer,
   getCustomer,
+  CustomerState,
 } from "../../../../store/customers/customerSlice";
 import { RootState } from "../../../../redux/store";
 import CustomerForm from "../../../../components/elements/form/customers/CustomerForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import {
+  course_customersStore,
+  customerStatus,
+  customer_usersStore,
+  customersStore,
+  hairstyle_customersStore,
+  merchandise_customersStore,
+  option_customersStore,
+} from "../../../../components/Hooks/selector";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { getUserKey } from "../../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const customersEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.customer.status);
+  const cStatus = useSelector(customerStatus);
+
+  const key: string | null = useSelector(userKey);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const getCustomer = useSelector((state: RootState) =>
-    state.customer.customers.find(
-      (customer) => customer.id === parseInt(id as string)
-    )
+  const getCustomer: CustomerState = useSelector(customersStore).find(
+    (customer) => customer.id === Number(id)
   );
 
   console.log("getCustomerだよ");
   console.log(getCustomer);
 
-  const course_customers = useSelector((state: RootState) =>
-    state.course_customers.course_customers
-      .filter(
-        (course_customer) =>
-          course_customer.customer_id === parseInt(id as string)
-      )
-      .map((course_customer) => course_customer.course_id)
-  );
+  const course_customers: number[] = useSelector(course_customersStore)
+    .filter(
+      (course_customer) =>
+        course_customer.customer_id === parseInt(id as string)
+    )
+    .map((course_customer) => course_customer.course_id);
 
   console.log("course_customersだよ");
   console.log(course_customers);
 
-  const option_customers = useSelector((state: RootState) =>
-    state.option_customers.option_customers
-      .filter(
-        (option_customer) =>
-          option_customer.customer_id === parseInt(id as string)
-      )
-      .map((option_customer) => option_customer.option_id)
-  );
+  const option_customers: number[] = useSelector(option_customersStore)
+    .filter(
+      (option_customer) =>
+        option_customer.customer_id === parseInt(id as string)
+    )
+    .map((option_customer) => option_customer.option_id);
 
   console.log("option_customersだよ");
   console.log(option_customers);
 
-  const merchandise_customers = useSelector((state: RootState) =>
-    state.merchandise_customers.merchandise_customers
-      .filter(
-        (merchandise_customer) =>
-          merchandise_customer.customer_id === parseInt(id as string)
-      )
-      .map((merchandise_customer) => merchandise_customer.merchandise_id)
-  );
+  const merchandise_customers: number[] = useSelector(
+    merchandise_customersStore
+  )
+    .filter(
+      (merchandise_customer) =>
+        merchandise_customer.customer_id === parseInt(id as string)
+    )
+    .map((merchandise_customer) => merchandise_customer.merchandise_id);
 
   console.log("merchandise_customersだよ");
   console.log(merchandise_customers);
 
-  const hairstyle_customers = useSelector((state: RootState) =>
-    state.hairstyle_customers.hairstyle_customers
-      .filter(
-        (hairstyle_customer) =>
-          hairstyle_customer.customer_id === parseInt(id as string)
-      )
-      .map((hairstyle_customer) => hairstyle_customer.hairstyle_id)
-  );
+  const hairstyle_customers: number[] = useSelector(hairstyle_customersStore)
+    .filter(
+      (hairstyle_customer) =>
+        hairstyle_customer.customer_id === parseInt(id as string)
+    )
+    .map((hairstyle_customer) => hairstyle_customer.hairstyle_id);
 
   console.log("hairstyle_customersだよ");
   console.log(hairstyle_customers);
 
-  const customer_users = useSelector((state: RootState) =>
-    state.customer_users.customer_users
-      .filter(
-        (customer_user) => customer_user.customer_id === parseInt(id as string)
-      )
-      .map((customer_user) => customer_user.user_id)
-  );
+  const customer_users: number[] = useSelector(customer_usersStore)
+    .filter(
+      (customer_user) => customer_user.customer_id === parseInt(id as string)
+    )
+    .map((customer_user) => customer_user.user_id);
 
   console.log("customer_usersだよ");
   console.log(customer_users);
@@ -114,12 +119,12 @@ const customersEdit: React.FC = () => {
     } catch (error) {
       console.error(error);
     }
-    router.push("/customers"); // Redirect to the customer list page after updating a customer
+    router.push("/customers");
   };
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/customers"} />
-      {loading === "loading" ? (
+      {cStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <CustomerForm node={customer} onSubmit={handleUpdate} edit={true} />

@@ -13,45 +13,87 @@ import {
 import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import DeleteButton from "../../../../components/elements/button/DeleteButton";
 import { useState } from "react";
+import { user, userStatus } from "../../../../components/Hooks/authSelector";
+import { UserAllState } from "../../../../components/Hooks/interface";
+import {
+  getUserKey,
+  ownerPermission,
+} from "../../../../components/Hooks/useMethod";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../../../components/Hooks/getLocalStorage";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { allLogout } from "../../../../components/Hooks/useMethod";
 
 const attenDanceEdit: React.FC = () => {
-  const [role, setRole] = useState<string>("");
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
+  const [ownerId, setOwnerId] = useState<number | null>(null);
 
   const dispatch = useDispatch();
 
-  const loading = useSelector((state: RootState) => state.auth.status);
+  const uStatus: string = useSelector(userStatus);
+
+  const key: string | null = useSelector(userKey);
+
   const router = useRouter();
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
+  // console.log("idだよ");
+  // console.log({ id });
 
-  let user = useSelector((state: RootState) =>
-    state.auth.auth.find((user) => user.id === Number(id))
+  let editUser: UserAllState = useSelector(user).find(
+    (user) => user.id === Number(id)
   );
 
   const [dispatchLoading, setDispatchLoading] = useState<boolean>(false);
   useEffect(() => {
     setDispatchLoading(true);
-    const role = localStorage.getItem("role");
-    if (role === "オーナー") {
-      setRole(role);
-    } else {
-      router.push("/dashboard");
-    }
-    try {
-      if (!user && role === "オーナー") {
-        const response = dispatch(showUser(Number(id)) as any);
-        user = response.payload.responseUser;
-      } else {
-        console.log("user", user);
+    const fetchData = async () => {
+      try {
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
+
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
+        }
+
+        ownerPermission(permission, ownerId);
+
+        if (!editUser && permission === "オーナー") {
+          const response = dispatch(showUser(Number(id)) as any);
+          editUser = response.payload.responseUser;
+        } else {
+          return;
+        }
+      } catch (error) {
+        // console.log("Error", error);
+        allLogout(dispatch);
+        router.push("/auth/login");
+      } finally {
+        setDispatchLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setDispatchLoading(false);
-    }
-  }, [user, id, dispatch]);
+    };
+
+    fetchData();
+  }, [user, id, dispatch, key, permission, ownerId]);
 
   const handleUpdate = async (formData: { id: number; role: string }) => {
     try {
@@ -64,7 +106,7 @@ const attenDanceEdit: React.FC = () => {
 
   const handleDeleteUser = async () => {
     try {
-      await dispatch(deleteUser(user.id) as any);
+      await dispatch(deleteUser(editUser.id) as any);
     } catch (error) {
       console.error(error);
     }
@@ -81,11 +123,11 @@ const attenDanceEdit: React.FC = () => {
         </div>
       </div>
 
-      {loading === "loading" || dispatchLoading || !user ? (
+      {uStatus === "loading" || dispatchLoading || !user ? (
         <p>Loading...</p>
       ) : (
         <div>
-          <UserUpdateForm onSubmit={handleUpdate} node={user} />
+          <UserUpdateForm onSubmit={handleUpdate} node={editUser} />
         </div>
       )}
     </div>

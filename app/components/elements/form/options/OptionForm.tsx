@@ -16,8 +16,10 @@ const optionForm: React.FC<OptionFormProps> = ({
   createOption,
   edit,
 }) => {
-  const [option_name, setOptionName] = useState(node ? node.option_name : "");
-  const [price, setPrice] = useState(node ? node.price : 0);
+  const [option_name, setOptionName] = useState<string>(
+    node ? node.option_name : ""
+  );
+  const [price, setPrice] = useState<number>(node ? node.price : 0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

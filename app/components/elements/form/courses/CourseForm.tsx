@@ -14,8 +14,10 @@ const CourseForm: React.FC<CourseFormProps> = ({
   createCourse,
   edit,
 }) => {
-  const [course_name, setCourse_name] = useState(node ? node.course_name : "");
-  const [price, setPrice] = useState(node ? node.price : 0);
+  const [course_name, setCourse_name] = useState<string>(
+    node ? node.course_name : ""
+  );
+  const [price, setPrice] = useState<number>(node ? node.price : 0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
-import { AuthState } from "../../../../store/auth/userSlice";
+import { UserState } from "../../../../store/auth/userSlice";
+import { RoleState, UserAllState } from "../../../Hooks/interface";
 
 interface UserUpdateFormProps {
-  onSubmit: (formData: { id: number; role: string }) => void;
-  node: AuthState;
+  onSubmit: (formData: { id: number; role: RoleState }) => void;
+  node: UserAllState;
 }
 
 const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
-  const [name, setName] = useState(node.name);
-  const [phone_number, setPhoneNumber] = useState(node.phone_number);
-  const [role, setRole] = useState(node.role);
+  const [name, setName] = useState<string>(node.name || "");
+  const [phone_number, setPhoneNumber] = useState<string>(
+    node.phone_number || ""
+  );
+  const [role, setRole] = useState<RoleState>(node.role || "スタッフ");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,7 +55,7 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
           <SingleCheckBox
             label="役職"
             value={role}
-            onChange={(newValue) => setRole(newValue)}
+            onChange={(newValue: RoleState) => setRole(newValue)}
             getOptions={["マネージャー", "スタッフ"]}
           />
 

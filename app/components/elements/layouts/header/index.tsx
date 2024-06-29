@@ -10,10 +10,9 @@ import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
 import { loginNow, userKey } from "../../../Hooks/authSelector";
-import { getUserData, getUserId } from "../../../Hooks/getLocalStorage";
+import { getUserData, getVioRoleData } from "../../../Hooks/getLocalStorage";
 import { allLogout, getUserKey } from "../../../Hooks/useMethod";
 import { UserData } from "../../../Hooks/interface";
-import { env } from "process";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -22,6 +21,9 @@ function classNames(...classes) {
 export default function Header() {
   const [role, setRole] = useState<string | null>(null);
   const [user_id, setUser_id] = useState<number | null>(null);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
   const router = useRouter();
   const dispatch = useDispatch();
   const nowLogin: boolean = useSelector(loginNow);
@@ -36,8 +38,12 @@ export default function Header() {
           const userData: UserData = await getUserData(myKey);
           console.log("userData", userData);
 
+          const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+            await getVioRoleData(myKey);
+
           setRole(userData.role);
           setUser_id(userData.user_id);
+          setPermission(vioRole);
         }
       };
 
@@ -67,7 +73,7 @@ export default function Header() {
   }, [nowLogin]);
 
   const navigation =
-    role === "オーナー"
+    permission === "オーナー"
       ? [
           { name: "一覧画面", href: "/dashboard", current: false },
           { name: "スタッフ管理", href: "/attendances", current: false },

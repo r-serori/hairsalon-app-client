@@ -18,12 +18,12 @@ interface AuthStaffRegisterFormProps {
 const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
   onSubmitStaff,
 }) => {
-  const [name, setName] = useState("testerStaff");
-  const [email, setEmail] = useState("testerStaff@hairsaron.com");
-  const [phone_number, setPhoneNumber] = useState("07012345678");
-  const [password, setPassword] = useState("password123");
-  const [role, setRole] = useState("スタッフ");
-  const [confirmPassword, setConfirmPassword] = useState("password123");
+  const [name, setName] = useState<string>("testerStaff");
+  const [email, setEmail] = useState<string>("testerStaff@hairsaron.com");
+  const [phone_number, setPhoneNumber] = useState<string>("07012345678");
+  const [password, setPassword] = useState<string>("password123");
+  const [role, setRole] = useState<string>("スタッフ");
+  const [confirmPassword, setConfirmPassword] = useState<string>("password123");
 
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

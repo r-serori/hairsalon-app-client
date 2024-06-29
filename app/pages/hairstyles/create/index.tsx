@@ -5,12 +5,14 @@ import { RootState } from "../../../redux/store";
 import HairstyleForm from "../../../components/elements/form/hairstyles/HairstyleForm";
 import { useRouter } from "next/router";
 import RouterButton from "../../../components/elements/button/RouterButton";
+import { hairstyleStatus } from "../../../components/Hooks/selector";
+import { getUserKey } from "../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../components/Hooks/getLocalStorage";
 
 const hairstyleCreate = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const loading = useSelector((state: RootState) => state.hairstyle.status);
+  const hStatus: string = useSelector(hairstyleStatus);
 
   const handleCreate = async (formData: {
     id: number;
@@ -20,6 +22,9 @@ const hairstyleCreate = () => {
     updated_at: string;
   }) => {
     try {
+      const userKey: string | null = await getUserKey(dispatch);
+      const ownerId = await getOwnerId(userKey);
+      formData.owner_id = ownerId;
       await dispatch(createHairstyle(formData) as any);
     } catch (error) {
       console.error(error);
@@ -31,7 +36,7 @@ const hairstyleCreate = () => {
       <div className="mt-4 ml-4">
         <RouterButton link={"/hairstyles"} value="ヘアスタイル管理画面に戻る" />
       </div>
-      {loading === "loading" ? (
+      {hStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <HairstyleForm createHairstyle={handleCreate} />

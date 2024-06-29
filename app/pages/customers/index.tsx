@@ -1,12 +1,50 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getCustomer } from "../../store/customers/customerSlice";
+import {
+  CustomerState,
+  getCustomer,
+} from "../../store/customers/customerSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import {
+  customersStore,
+  customerStatus,
+  customerMessage,
+  customerError,
+  coursesStore,
+  optionsStore,
+  merchandiseStore,
+  hairstylesStore,
+  course_customersStore,
+  option_customersStore,
+  merchandise_customersStore,
+  hairstyle_customersStore,
+  customer_usersStore,
+} from "../../components/Hooks/selector";
+import { user, userKey } from "../../components/Hooks/authSelector";
+import { staffPermission } from "../../components/Hooks/useMethod";
+import { getUserKey } from "../../components/Hooks/useMethod";
+import {
+  getRole,
+  getOwnerId,
+  getVioRoleData,
+} from "../../components/Hooks/getLocalStorage";
+import { allLogout } from "../../components/Hooks/useMethod";
+import _ from "lodash";
+import { CourseState } from "../../store/courses/courseSlice";
+import { OptionState } from "../../store/options/optionSlice";
+import { MerchandiseState } from "../../store/merchandises/merchandiseSlice";
+import { HairstyleState } from "../../store/hairstyles/hairstyleSlice";
+import { UserAllState } from "../../components/Hooks/interface";
+import { Course_customersState } from "../../store/middleTable/customers/course_customersSlice";
+import { Option_customersState } from "../../store/middleTable/customers/option_customersSlice";
+import { Merchandise_customersState } from "../../store/middleTable/customers/merchandise_customersSlice";
+import { Hairstyle_customersState } from "../../store/middleTable/customers/hairstyle_customersSlice";
+import { Customer_usersState } from "../../store/middleTable/customers/customer_usersSlice";
 
 interface CustomerProps {
   update?: boolean;
@@ -14,111 +52,134 @@ interface CustomerProps {
 
 const customers: React.FC<CustomerProps> = ({ update }) => {
   const router = useRouter();
-  const [role, setRole] = useState<string>("");
+  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [permission, setPermission] = useState<
+    "オーナー" | "マネージャー" | "スタッフ" | null
+  >(null);
+
   const dispatch = useDispatch();
 
-  const customers = useSelector((state: RootState) => state.customer.customers);
+  const customers: CustomerState[] = useSelector(customersStore);
+
+  const cStatus: string = useSelector(customerStatus);
+
+  const cMessage: string | null = useSelector(customerMessage);
+
+  const cError: string | null = useSelector(customerError);
+
+  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
-    if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
-      setRole(role);
-    } else {
-      router.push("/dashboard");
-    }
-    if (role === "オーナー") {
-      setTHeaderItems([
-        "顧客名",
-        "電話番号",
-        "備考",
-        "コース名",
-        "オプション名",
-        "商品名",
-        "ヘアスタイル名",
-        "担当者名",
-        "編集",
-        "削除",
-      ]);
-    } else if (role === "マネージャー") {
-      setTHeaderItems([
-        "顧客名",
-        "電話番号",
-        "備考",
-        "コース名",
-        "オプション名",
-        "商品名",
-        "ヘアスタイル名",
-        "担当者名",
-        "編集",
-      ]);
-    } else {
-      setTHeaderItems([
-        "顧客名",
-        "電話番号",
-        "備考",
-        "コース名",
-        "オプション名",
-        "商品名",
-        "ヘアスタイル名",
-        "担当者名",
-      ]);
-    }
-    if (
-      customers.length === 0 &&
-      (role === "オーナー" || role === "マネージャー" || role === "スタッフ")
-    ) {
+    const fetchData = async () => {
       try {
-        const ownerId = Number(localStorage.getItem("owner_id"));
-        dispatch(getCustomer(ownerId) as any);
+        if (key === null) {
+          const userKey: string = await getUserKey(dispatch);
+
+          if (userKey !== null) {
+            const roleData: string | null = await getRole(userKey);
+            const ownerId: number | null = await getOwnerId(userKey);
+
+            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
+              await getVioRoleData(userKey);
+
+            if (roleData !== null && ownerId !== null && vioRole !== null) {
+              setOwnerId(ownerId);
+              setPermission(vioRole);
+            } else {
+              throw new Error("RoleData or ownerId is null");
+            }
+          } else {
+            throw new Error("UserKey is null");
+          }
+        }
+
+        staffPermission(permission, router);
+
+        if (
+          _.isEmpty(hairstyles) &&
+          (permission === "オーナー" ||
+            permission === "マネージャー" ||
+            permission === "スタッフ")
+        ) {
+          await dispatch(getCustomer(ownerId) as any);
+        }
+        if (permission === "オーナー") {
+          setTHeaderItems([
+            "顧客名",
+            "電話番号",
+            "備考",
+            "コース名",
+            "オプション名",
+            "商品名",
+            "ヘアスタイル名",
+            "担当者名",
+            "編集",
+            "削除",
+          ]);
+        } else if (permission === "マネージャー") {
+          setTHeaderItems([
+            "顧客名",
+            "電話番号",
+            "備考",
+            "コース名",
+            "オプション名",
+            "商品名",
+            "ヘアスタイル名",
+            "担当者名",
+            "編集",
+          ]);
+        } else {
+          setTHeaderItems([
+            "顧客名",
+            "電話番号",
+            "備考",
+            "コース名",
+            "オプション名",
+            "商品名",
+            "ヘアスタイル名",
+            "担当者名",
+          ]);
+        }
       } catch (error) {
         console.log(error);
+        allLogout(dispatch);
+        router.push("/auth/login");
       }
-    }
-  }, [dispatch]);
+    };
 
-  const loading = useSelector((state: RootState) => state.customer.status);
+    fetchData();
+  }, [dispatch, key, ownerId, customers]);
 
-  const message = useSelector((state: RootState) => state.customer.message);
+  const courses: CourseState[] = useSelector(coursesStore);
 
-  const error = useSelector((state: RootState) => state.customer.error);
+  const options: OptionState[] = useSelector(optionsStore);
 
-  const courses = useSelector((state: RootState) => state.course.course);
+  const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
 
-  const options = useSelector((state: RootState) => state.option.option);
+  const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
 
-  const merchandises = useSelector(
-    (state: RootState) => state.merchandise.merchandise
-  );
+  const users: UserAllState[] = useSelector(user);
 
-  const hairstyles = useSelector(
-    (state: RootState) => state.hairstyle.hairstyle
-  );
-
-  const users = useSelector((state: RootState) => state.auth.auth);
-
-  const course_customers = useSelector(
-    (state: RootState) => state.course_customers.course_customers
+  const course_customers: Course_customersState[] = useSelector(
+    course_customersStore
   );
 
   console.log("course_customersだよ");
   console.log(course_customers);
 
-  const option_customers = useSelector(
-    (state: RootState) => state.option_customers.option_customers
+  const option_customers: Option_customersState[] = useSelector(
+    option_customersStore
+  );
+  const merchandise_customers: Merchandise_customersState[] = useSelector(
+    merchandise_customersStore
+  );
+  const hairstyle_customers: Hairstyle_customersState[] = useSelector(
+    hairstyle_customersStore
   );
 
-  const merchandise_customers = useSelector(
-    (state: RootState) => state.merchandise_customers.merchandise_customers
-  );
-
-  const hairstyle_customers = useSelector(
-    (state: RootState) => state.hairstyle_customers.hairstyle_customers
-  );
-
-  const customer_users = useSelector(
-    (state: RootState) => state.customer_users.customer_users
-  );
+  const customer_users: Customer_usersState[] =
+    useSelector(customer_usersStore);
 
   const searchItems = [
     { key: "customer_name", value: "顧客名" },
@@ -258,23 +319,23 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
   return (
     <div>
       <div>
-        {message && (
+        {cMessage && (
           <BasicAlerts
             type="success"
-            message={message}
+            message={cMessage}
             space={1}
             padding={0.6}
           />
         )}
-        {error && (
-          <BasicAlerts type="error" message={error} space={1} padding={0.6} />
+        {cError && (
+          <BasicAlerts type="error" message={cError} space={1} padding={0.6} />
         )}
       </div>
       <div className="mx-8 mt-4">
         <div className=" mb-4 ">
           <RouterButton link="/customers/create" value="新規作成" />
         </div>
-        {loading === "loading" ? (
+        {cStatus === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable
@@ -283,7 +344,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
             nodesProps={nodesProps}
             tHeaderItems={tHeaderItems}
             link="/customers"
-            role={role}
+            role={permission}
           />
         )}
       </div>

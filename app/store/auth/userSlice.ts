@@ -10,6 +10,7 @@ import {
   selectGetAttendanceTimes,
 } from "../attendances/attendance_times/attendance_timesSlice";
 import { isLogout } from "./isLoginSlice";
+import { RoleState } from "../../components/Hooks/interface";
 
 export const login = createAsyncThunk(
   "login/users",
@@ -618,19 +619,19 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-export interface AuthState {
+export interface UserState {
   // ステートの型
   id: number;
   name: string;
   email: string;
   phone_number: string;
   password: string;
-  role: string;
+  role: RoleState;
   isAttendance: boolean;
 }
 
 export interface RootState {
-  users: AuthState[];
+  users: UserState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
   error: string | null;

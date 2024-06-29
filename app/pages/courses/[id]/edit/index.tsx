@@ -5,23 +5,37 @@ import { updateCourse, getCourse } from "../../../../store/courses/courseSlice";
 import { RootState } from "../../../../redux/store";
 import CourseForm from "../../../../components/elements/form/courses/CourseForm";
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
-import { useState } from "react";
+import {
+  coursesStore,
+  courseStatus,
+  courseMessage,
+  courseError,
+} from "../../../../components/Hooks/selector";
+import { CourseState } from "../../../../store/courses/courseSlice";
+import { userKey } from "../../../../components/Hooks/authSelector";
+import { getUserKey } from "../../../../components/Hooks/useMethod";
+import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const courseEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const loading = useSelector((state: RootState) => state.course.status);
+  const cStatus: string = useSelector(courseStatus);
+
+  const cMessage: string | null = useSelector(courseMessage);
+
+  const cError: string | null = useSelector(courseError);
+
+  const key: string | null = useSelector(userKey);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const course = useSelector((state: RootState) =>
-    state.course.course.find((course) => course.id === parseInt(id as string))
+  const course = useSelector(coursesStore).find(
+    (course: CourseState) => course.id === Number(id)
   );
-
-  console.log("courseだよ");
+  console.log("courseです");
   console.log(course);
 
   const handleUpdate = async (formData: {
@@ -31,21 +45,16 @@ const courseEdit: React.FC = () => {
     owner_id: number;
   }) => {
     try {
-      try {
-        await dispatch(updateCourse(formData) as any);
-      } catch (error) {
-        console.error(error);
-      }
-      await dispatch(getCourse as any);
+      await dispatch(updateCourse(formData) as any);
     } catch (error) {
       console.error(error);
     }
-    router.push("/courses"); // Redirect to the course list page after updating a course
+    router.push("/courses");
   };
   return (
     <div className="min-h-full ">
       <BackAgainButton link={"/courses"} />
-      {loading === "loading" ? (
+      {cStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <CourseForm node={course} createCourse={handleUpdate} edit={true} />

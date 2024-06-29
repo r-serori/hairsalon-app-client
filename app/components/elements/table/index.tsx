@@ -51,41 +51,41 @@ const ComponentTable = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  console.log("nodesだよ");
-  console.log(nodes); // [{id: 1, attendance_name: "田中店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}, {id: 2, attendance_name: "佐藤店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}]
+  // console.log("nodesだよ");
+  // console.log(nodes); // [{id: 1, attendance_name: "田中店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}, {id: 2, attendance_name: "佐藤店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}]
 
   //dataという新しいオブジェクトを作成
   const data = {
     nodes: nodes.filter((node) =>
       nodesProps.some((nodesProp) => {
         const propName = Object.keys(nodesProp)[0];
-        console.log("propNameだよ");
-        console.log(propName); //attendance_name
+        // console.log("propNameだよ");
+        // console.log(propName); //attendance_name
         const propValue = node[nodesProp[propName]];
         const propProp = nodesProp[propName];
-        console.log("propValueだよ");
-        console.log(propValue); //attendance_name
+        // console.log("propValueだよ");
+        // console.log(propValue); //attendance_name
 
         const searchResult =
           propProp.toString().includes(searchField || "") &&
           propValue.toString().includes(searchText || "");
 
-        console.log("searchResultだよ");
-        console.log(searchResult);
+        // console.log("searchResultだよ");
+        // console.log(searchResult);
 
         return searchResult;
       })
     ),
   };
 
-  console.log("searchFieldだよ");
-  console.log(searchField); //名前
+  // console.log("searchFieldだよ");
+  // console.log(searchField); //名前
 
-  console.log("searchTextだよ");
-  console.log(searchText); //田中
+  // console.log("searchTextだよ");
+  // console.log(searchText); //田中
 
-  console.log("dataだよ");
-  console.log(data); //{nodes: Array(2)}
+  // console.log("dataだよ");
+  // console.log(data); //{nodes: Array(2)}
   // 検索処理,onChange処理をカスタムフックで定義,searchの値をstateとして持つ
 
   const paginatedData = {
@@ -125,8 +125,8 @@ const ComponentTable = ({
 
   //編集画面へ遷移
   const handleEditManagement = (nodeId, link) => {
-    console.log("nodeIdだよヨヨヨ");
-    console.log(nodeId);
+    // console.log("nodeIdだよヨヨヨ");
+    // console.log(nodeId);
     router.push(`${link}/${nodeId}/edit?id=${nodeId}`);
   };
 
@@ -147,8 +147,8 @@ const ComponentTable = ({
               {searchItems.map((searchItem) => {
                 const searchKey = searchItem.key;
                 const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
-                console.log("searchKeyだよ");
-                console.log(searchKey); //名前
+                // console.log("searchKeyだよ");
+                // console.log(searchKey); //名前
 
                 return (
                   <option key={searchKey} value={searchKey}>
@@ -225,7 +225,7 @@ const ComponentTable = ({
                     const imgUrl = "http://localhost:8000/storage/";
 
                     const imgDecode = decodeURIComponent(propValue);
-                    console.log("imgDecodeだよ", imgDecode);
+                    // console.log("imgDecodeだよ", imgDecode);
 
                     if (
                       propProp === "created_at" ||
@@ -436,27 +436,26 @@ const ComponentTable = ({
                     ""
                   )}
                   {/* tHeaderItemsに"編集"が含まれていたら作成 */}
-                  {tHeaderItems.includes("編集") &&
-                    (console.log("編集nodeだよ"),
-                    console.log(node.id),
-                    (
-                      <Cell
-                        className="items-center bg-gray-100 text-gray-900 pt-1 px-1"
-                        style={{
-                          cursor: "pointer",
-                          whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                        }}
-                      >
-                        <div className="flex justify-center items-center text-center mx-auto pb-1">
-                          <button
-                            className="items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
-                            onClick={() => handleEditManagement(node.id, link)}
-                          >
-                            編集
-                          </button>
-                        </div>
-                      </Cell>
-                    ))}
+                  {tHeaderItems.includes("編集") && (
+                    // console.log("編集nodeだよ"),
+                    // console.log(node.id),
+                    <Cell
+                      className="items-center bg-gray-100 text-gray-900 pt-1 px-1"
+                      style={{
+                        cursor: "pointer",
+                        whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
+                      }}
+                    >
+                      <div className="flex justify-center items-center text-center mx-auto pb-1">
+                        <button
+                          className="items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
+                          onClick={() => handleEditManagement(node.id, link)}
+                        >
+                          編集
+                        </button>
+                      </div>
+                    </Cell>
+                  )}
                   {/* tHeaderItemsに"削除"が含まれていたら作成 */}
                   {tHeaderItems.includes("削除") && (
                     <Cell
