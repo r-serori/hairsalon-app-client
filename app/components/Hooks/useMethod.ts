@@ -17,7 +17,7 @@ export const getUserKey = async (dispatch: any): Promise<string | null> => {
   try {
     const response = await dispatch(getKey({}) as any);
     console.log("responseGetKey", response);
-    return response.payload.key;
+    return response.payload.roleKey;
   } catch (error) {
     console.log("Error", error);
     return null;

@@ -1,6 +1,6 @@
 // reducers/rootReducer.ts
 import { combineReducers } from "@reduxjs/toolkit";
-import { AuthState } from "../../store/auth/userSlice";
+import { UserState } from "../../store/auth/userSlice";
 import attendance_timeReducer, {
   Attendance_timeState,
 } from "../../store/attendances/attendance_times/attendance_timesSlice";
@@ -51,6 +51,8 @@ import ownerReducer from "../../store/auth/ownerSlice";
 import staffReducer from "../../store/auth/staffSlice";
 import { loginNowReducer } from "../../store/auth/isLoginSlice";
 import keyReducer from "../../store/auth/keySlice";
+import { permission } from "process";
+import permissionReducer from "../../store/auth/permissionSlice";
 
 // 他のリデューサーをインポートする
 const rootReducer = combineReducers({
@@ -59,6 +61,7 @@ const rootReducer = combineReducers({
   owner: ownerReducer,
   staffs: staffReducer,
   key: keyReducer,
+  permissions: permissionReducer,
   attendance_times: attendance_timeReducer,
   courses: courseReducer,
   options: optionReducer,

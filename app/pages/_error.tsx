@@ -52,7 +52,7 @@ const ErrorPage = () => {
       case 419:
         return "セッションがタイムアウトしました。再度ログインしてください。";
       default:
-        return "エラーが発生しました。";
+        return "エラーが発生しました。再ログインしてください。";
     }
   };
 
@@ -62,7 +62,7 @@ const ErrorPage = () => {
         <LogoutButton className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" />
       </div>
       <div>
-        <h1 id="rotate" className="mt-16 lg:text-8xl text-3xl rotate-45 ">
+        <h1 className="mt-16 lg:text-8xl text-3xl  text-red-500 ">
           {getMessage()}
         </h1>
       </div>

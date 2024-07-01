@@ -50,8 +50,12 @@ const OwnerPage = () => {
         throw new Error("オーナー登録に失敗しました");
       }
     } catch (error) {
-      allLogout(dispatch);
-      changeMessage("登録処理に失敗しました！もう一度お試しください！");
+      await allLogout(dispatch);
+      await dispatch(
+        await dispatch(
+          changeMessage("登録処理に失敗しました！もう一度お試しください！")
+        )
+      );
       console.log("Error", error);
       return;
     }

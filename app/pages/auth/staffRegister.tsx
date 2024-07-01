@@ -12,9 +12,9 @@ const StaffRegisterPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const uStatus = useSelector(userStatus);
+  const uStatus: string = useSelector(userStatus);
 
-  const uError = useSelector(userError);
+  const uError: string | null = useSelector(userError);
 
   const handleStaffRegister = async (formData: {
     name: string;

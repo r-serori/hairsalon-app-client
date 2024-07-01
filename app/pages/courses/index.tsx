@@ -61,8 +61,8 @@ const courses: React.FC = () => {
               await getVioRoleData(userKey);
 
             if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
+              await setOwnerId(ownerId);
+              await setPermission(vioRole);
             } else {
               throw new Error("RoleData or ownerId is null");
             }
@@ -71,7 +71,7 @@ const courses: React.FC = () => {
           }
         }
 
-        staffPermission(permission, router);
+        await staffPermission(permission, router);
 
         if (
           _.isEmpty(courses) &&
@@ -85,15 +85,15 @@ const courses: React.FC = () => {
         }
 
         if (permission === "オーナー") {
-          setTHeaderItems(["コース名", "価格", "編集", "削除"]);
+          await setTHeaderItems(["コース名", "価格", "編集", "削除"]);
         } else if (permission === "マネージャー") {
-          setTHeaderItems(["コース名", "価格", "編集"]);
+          await setTHeaderItems(["コース名", "価格", "編集"]);
         } else {
-          setTHeaderItems(["コース名", "価格"]);
+          await setTHeaderItems(["コース名", "価格"]);
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
+        await allLogout(dispatch);
         router.push("/auth/login");
       }
     };

@@ -14,49 +14,25 @@ import { useSelector } from "react-redux";
 import LogoutButton from "../components/elements/button/logoutButton";
 import { useRouter } from "next/router";
 import BasicAlerts from "../components/elements/alert/Alert";
-import { user, userKey, userMessage } from "../components/Hooks/authSelector";
+import {
+  permissionStore,
+  user,
+  userKey,
+  userMessage,
+} from "../components/Hooks/authSelector";
 import { allLogout, getUserKey } from "../components/Hooks/useMethod";
 import { useDispatch } from "react-redux";
-import { getRole, getVioRoleData } from "../components/Hooks/getLocalStorage";
+import { PermissionsState } from "../store/auth/permissionSlice";
+import { UserState } from "../store/auth/userSlice";
 
 const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
+
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
   const uMessage: string | null = useSelector(userMessage);
-
-  useEffect(() => {
-    const getRoleAndKey = async () => {
-      try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && vioRole !== null) {
-              setPermission(vioRole);
-            }
-          } else {
-            throw new Error("error");
-          }
-        }
-      } catch (error) {
-        console.log("Error", error);
-        allLogout(dispatch);
-        router.push("/auth/login");
-      }
-    };
-    getRoleAndKey();
-  }, []);
 
   useEffect(() => {
     function handleResize() {
@@ -89,13 +65,15 @@ const dashboard: React.FC = () => {
             className={`flex flex-wrap justify-center h-full
             ${isFullScreen ? "gap-16" : "gap-4"}`}
           >
-            {permission === "オーナー" && (
+            {permission === "オーナー" ? (
               <NavLink
                 IconName={ManageAccountsIcon}
                 href="/attendances"
                 iconSrc="#"
                 label="スタッフ管理"
               />
+            ) : (
+              ""
             )}
             {/* <NavLink
               IconName={ManageAccountsIcon}

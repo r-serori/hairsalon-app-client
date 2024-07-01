@@ -39,3 +39,6 @@ export const userError = (state: RootState) => state.users.error;
 export const userKey = (state: RootState) => state.key.key;
 //ユーザー情報のキーのステータスを取得
 export const userKeyStatus = (state: RootState) => state.key.status;
+
+export const permissionStore = (state: RootState) =>
+  state.permissions.permission;

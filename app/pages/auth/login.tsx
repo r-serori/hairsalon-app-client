@@ -20,11 +20,11 @@ import {
 } from "../../components/Hooks/authSelector";
 import { getUserKey } from "../../components/Hooks/useMethod";
 import {
-  pushUserData,
+  pushUserId,
   pushOwnerId,
 } from "../../components/Hooks/pushLocalStorage";
-import { UserData } from "../../components/Hooks/interface";
-import { env } from "process";
+import { vioRoleApi } from "../../services/auth/vioRole";
+import { getPermission } from "../../store/auth/permissionSlice";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -36,13 +36,8 @@ const LoginPage: React.FC = () => {
 
   const uError: string | null = useSelector(userError);
 
-  const key: string | null = useSelector(userKey);
-
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
-    console.log("env", process.env);
-    console.log(env);
-    console.log(env.NEXT_PUBLIC_OWNER_ROLE);
   }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleLogin = async (formData: { email: string; password: string }) => {
@@ -51,11 +46,7 @@ const LoginPage: React.FC = () => {
       const response: any = await dispatch(login(formData) as any);
       console.log("Success", response);
       const ownerId: number = response.payload.responseOwnerId;
-
-      const userData: UserData = {
-        user_id: response.payload.responseUser.id,
-        role: response.payload.responseUser.role,
-      };
+      const userId: number = response.payload.responseUser.id;
 
       const userKey: string | null = await getUserKey(dispatch);
 
@@ -63,8 +54,7 @@ const LoginPage: React.FC = () => {
         console.log("key is null");
         throw new Error("e");
       }
-
-      const pushUser: boolean = await pushUserData(userData, userKey);
+      const pushUser: boolean = await pushUserId(userId, userKey);
 
       console.log("pushUser", pushUser);
 
@@ -72,14 +62,16 @@ const LoginPage: React.FC = () => {
 
       console.log("pushOwner", pushOwner);
 
+      await dispatch(getPermission({}) as any);
+
       if (pushUser && pushOwner) {
-        dispatch(isLogin());
+        await dispatch(isLogin());
         // 暗号化されたデータをローカルストレージに保存
         localStorage.setItem("isLogin", "true");
         localStorage.removeItem("registerNow");
         router.push("/dashboard");
       } else if (pushUser && !pushOwner) {
-        dispatch(isLogin());
+        await dispatch(isLogin());
         localStorage.setItem("isLogin", "true");
         localStorage.removeItem("registerNow");
         router.push("/auth/owner");

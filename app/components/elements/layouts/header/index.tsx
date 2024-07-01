@@ -10,40 +10,34 @@ import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
 import { loginNow, userKey } from "../../../Hooks/authSelector";
-import { getUserData, getVioRoleData } from "../../../Hooks/getLocalStorage";
 import { allLogout, getUserKey } from "../../../Hooks/useMethod";
-import { UserData } from "../../../Hooks/interface";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../Hooks/authSelector";
+import { UserState } from "../../../../store/auth/userSlice";
+import { user } from "../../../Hooks/authSelector";
+import { getPermission } from "../../../../store/auth/permissionSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-  const [role, setRole] = useState<string | null>(null);
-  const [user_id, setUser_id] = useState<number | null>(null);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
   const router = useRouter();
   const dispatch = useDispatch();
   const nowLogin: boolean = useSelector(loginNow);
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const getKeyAndUserData = async () => {
-        if (key === null) {
-          const myKey = await getUserKey(dispatch);
-
-          const userData: UserData = await getUserData(myKey);
-          console.log("userData", userData);
-
-          const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-            await getVioRoleData(myKey);
-
-          setRole(userData.role);
-          setUser_id(userData.user_id);
-          setPermission(vioRole);
+      console.log("headerrrrrrrrrrrr  ");
+      const getPermissionData = async () => {
+        try {
+          await dispatch(getPermission({}) as any);
+        } catch (e) {
+          console.log("Error", e);
+          allLogout(dispatch);
+          router.push("/auth/login");
         }
       };
 
@@ -57,12 +51,13 @@ export default function Header() {
 
       const IsLoggedIn: boolean =
         localStorage.getItem("isLogin") === "true" ? true : false;
+      console.log("isLogin", IsLoggedIn);
+      if (permission === null && IsLoggedIn) {
+        getPermissionData();
+      }
+      console.log("permission", permission);
 
       if (IsLoggedIn) {
-        getKeyAndUserData();
-      }
-
-      if (IsLoggedIn && user_id && role) {
         verifySession();
       }
 
@@ -70,7 +65,7 @@ export default function Header() {
 
       return () => clearInterval(intervalId);
     }
-  }, [nowLogin]);
+  }, [key, permission, dispatch, nowLogin]);
 
   const navigation =
     permission === "オーナー"

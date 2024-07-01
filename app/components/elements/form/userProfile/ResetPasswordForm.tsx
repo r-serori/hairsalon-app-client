@@ -37,7 +37,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
       <div className="max-w-md w-full space-y-6 mt-4">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            スタッフ登録
+            パスワードリセット
           </h2>
         </div>
 

@@ -19,11 +19,11 @@ import {
 } from "../../components/Hooks/authSelector";
 import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
 import {
-  pushUserData,
   pushOwnerId,
+  pushUserId,
 } from "../../components/Hooks/pushLocalStorage";
-import { UserData } from "../../components/Hooks/interface";
-import { string } from "yup";
+import { vioRoleApi } from "../../services/auth/vioRole";
+import { getPermission } from "../../store/auth/permissionSlice";
 
 const RegisterPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,8 +34,6 @@ const RegisterPage: React.FC = () => {
   const uError: string | null = useSelector(userError);
 
   const oError: string | null = useSelector(ownerError);
-
-  const key: string | null = useSelector(userKey);
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
@@ -53,17 +51,16 @@ const RegisterPage: React.FC = () => {
     try {
       const response: any = await dispatch(register(formData) as any);
       console.log("register.tsxのデータだよ", response);
-      const userData: UserData = {
-        user_id: response.payload.responseUser.id,
-        role: response.payload.responseUser.role,
-      };
+      const userId = response.payload.responseUser.id;
 
       const userKey: string | null = await getUserKey(dispatch);
 
       if (userKey === null) {
         throw new Error("e");
       }
-      const pushUser: boolean = await pushUserData(userData, userKey);
+      const pushUser: boolean = await pushUserId(userId, userKey);
+
+      await dispatch(getPermission({}) as any);
 
       if (pushUser) {
         await dispatch(isLogin());

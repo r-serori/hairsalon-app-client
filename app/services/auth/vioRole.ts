@@ -4,8 +4,9 @@ export const vioRoleApi = {
   getVioRole: async () => {
     try {
       const response = await sendRequest("GET", "/api/vio-role");
-      if (response.status === 200 && response.data.status === "authenticated") {
-        return response.data;
+      console.log("responseMyRoleApi", response);
+      if (response.status === 200) {
+        return response;
       } else {
         throw new Error("権限未確認");
       }

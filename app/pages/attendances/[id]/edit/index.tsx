@@ -65,8 +65,8 @@ const attenDanceEdit: React.FC = () => {
               await getVioRoleData(userKey);
 
             if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
+              await setOwnerId(ownerId);
+              await setPermission(vioRole);
             } else {
               throw new Error("RoleData or ownerId is null");
             }
@@ -75,17 +75,17 @@ const attenDanceEdit: React.FC = () => {
           }
         }
 
-        ownerPermission(permission, ownerId);
+        await ownerPermission(permission, ownerId);
 
         if (!editUser && permission === "オーナー") {
-          const response = dispatch(showUser(Number(id)) as any);
+          const response = await dispatch(showUser(Number(id)) as any);
           editUser = response.payload.responseUser;
         } else {
           return;
         }
       } catch (error) {
         // console.log("Error", error);
-        allLogout(dispatch);
+        await allLogout(dispatch);
         router.push("/auth/login");
       } finally {
         setDispatchLoading(false);

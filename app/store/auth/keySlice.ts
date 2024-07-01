@@ -74,7 +74,7 @@ export const keySlice = createSlice({
     });
     builder.addCase(getKey.fulfilled, (state, action) => {
       state.status = "success";
-      state.key = action.payload.key;
+      state.key = action.payload.roleKey;
     });
     builder.addCase(getKey.rejected, (state) => {
       state.status = "failed";

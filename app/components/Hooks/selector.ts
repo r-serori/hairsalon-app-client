@@ -1,5 +1,4 @@
 import { RootState } from "../../redux/store";
-import { env } from "process";
 
 //勤怠時間を取得 配列で取得
 export const attendance_timesStore = (state: RootState) =>

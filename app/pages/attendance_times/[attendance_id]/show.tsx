@@ -19,19 +19,15 @@ import {
 import { userKey } from "../../../components/Hooks/authSelector";
 import { ownerPermission } from "../../../components/Hooks/useMethod";
 import { getUserKey } from "../../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../../components/Hooks/getLocalStorage";
+
 import { allLogout } from "../../../components/Hooks/useMethod";
 import _ from "lodash";
+import { getOwnerId } from "../../../components/Hooks/getLocalStorage";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
 
 const attendanceTimes: React.FC = () => {
   const [ownerId, setOwnerId] = useState<number | null>(null);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -62,17 +58,8 @@ const attendanceTimes: React.FC = () => {
       if (key === null) {
         const userKey: string = await getUserKey(dispatch);
 
-        if (userKey !== null) {
-          const ownerId: number | null = await getOwnerId(userKey);
+        const ownerId: number | null = await getOwnerId(userKey);
 
-          if (ownerId !== null) {
-            setOwnerId(ownerId);
-          } else {
-            throw new Error("ownerId is null");
-          }
-        } else {
-          throw new Error("UserKey is null");
-        }
         await dispatch(
           selectGetAttendanceTimes({
             user_id: Number(id),
@@ -80,7 +67,7 @@ const attendanceTimes: React.FC = () => {
             owner_id: Number(ownerId),
           }) as any
         );
-        setYearMonth("000111");
+        await setYearMonth("000111");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -96,15 +83,11 @@ const attendanceTimes: React.FC = () => {
           const userKey: string = await getUserKey(dispatch);
 
           if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
             const ownerId: number | null = await getOwnerId(userKey);
 
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
             if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
+              await setOwnerId(ownerId);
+              await setPermission(vioRole);
             } else {
               throw new Error("RoleData or ownerId is null");
             }
@@ -112,7 +95,7 @@ const attendanceTimes: React.FC = () => {
             throw new Error("UserKey is null");
           }
         }
-        ownerPermission(permission, router);
+        await ownerPermission(permission, router);
 
         if (
           _.isEmpty(attendanceTimes) &&
@@ -120,7 +103,7 @@ const attendanceTimes: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          setYearMonth("000111");
+          await setYearMonth("000111");
           await dispatch(
             selectGetAttendanceTimes({
               user_id: Number(id),
@@ -133,7 +116,7 @@ const attendanceTimes: React.FC = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
+        await allLogout(dispatch);
         router.push("/auth/login");
       }
     };
