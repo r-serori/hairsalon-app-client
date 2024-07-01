@@ -28,9 +28,6 @@ import { UserState } from "../store/auth/userSlice";
 const dashboard: React.FC = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 
-  const router = useRouter();
-  const dispatch = useDispatch();
-
   const permission: PermissionsState = useSelector(permissionStore);
   const uMessage: string | null = useSelector(userMessage);
 
@@ -38,12 +35,11 @@ const dashboard: React.FC = () => {
     function handleResize() {
       setIsFullScreen(window.innerWidth >= 1024); // 1024px 以上でフルスクリーンと判定
     }
-
     window.addEventListener("resize", handleResize);
     handleResize(); // コンポーネントがマウントされたときに初期設定を行う
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [permission]);
 
   return (
     <>

@@ -5,11 +5,9 @@ import RootState from "../../../redux/reducers/rootReducer";
 // APIから在庫カテゴリ情報を取得する非同期アクション//get
 export const getStockCategory = createAsyncThunk(
   "stock_categories/getStockCategory",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await stockCategoryApi.fetchAllStockCategories(
-        owner_id
-      ); // APIからデータを取得
+      const response: any = await stockCategoryApi.fetchAllStockCategories(); // APIからデータを取得
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -60,7 +58,6 @@ export const createStockCategory = createAsyncThunk(
     formData: {
       id: number;
       category: string;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -143,7 +140,6 @@ export const updateStockCategory = createAsyncThunk(
     formData: {
       id: number;
       category: string;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -197,11 +193,9 @@ export const updateStockCategory = createAsyncThunk(
 // 在庫カテゴリ情報を削除する非同期アクション//delete
 export const deleteStockCategory = createAsyncThunk(
   "stock_categories/deleteStockCategory",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await stockCategoryApi.deleteStockCategory(
-        formData
-      );
+      const response: any = await stockCategoryApi.deleteStockCategory(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -249,7 +243,6 @@ export interface Stock_categoryState {
   // ステートの型
   id: number;
   category: string;
-  owner_id: number;
 }
 
 export interface RootState {

@@ -6,7 +6,6 @@ import {
   Stock_categoryState,
   getStockCategory,
 } from "../../store/stocks/stock_categories/stock_categorySlice";
-import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useState } from "react";
@@ -19,24 +18,14 @@ import {
   stock_categoryStatus,
   stocksStore,
 } from "../../components/Hooks/selector";
-import { userKey } from "../../components/Hooks/authSelector";
+import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
 import _ from "lodash";
 
 const stocks: React.FC = () => {
   const router = useRouter();
-  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
-
   const dispatch = useDispatch();
 
   const stocks: StockState[] = useSelector(stocksStore);
@@ -54,32 +43,12 @@ const stocks: React.FC = () => {
   const scStatus: string = useSelector(stock_categoryStatus);
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
-        staffPermission(permission, router);
+        await staffPermission(permission, router);
 
         if (
           _.isEmpty(stocks) &&
@@ -88,14 +57,14 @@ const stocks: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getStock(ownerId) as any);
-          await dispatch(getStockCategory(ownerId) as any);
+          await dispatch(getStock({}) as any);
+          await dispatch(getStockCategory({}) as any);
         } else {
           return;
         }
 
         if (permission === "オーナー") {
-          setTHeaderItems([
+          await setTHeaderItems([
             "在庫カテゴリ",
             "商品名",
             "価格",
@@ -107,7 +76,7 @@ const stocks: React.FC = () => {
             "削除",
           ]);
         } else if (permission === "マネージャー") {
-          setTHeaderItems([
+          await setTHeaderItems([
             "在庫カテゴリ",
             "商品名",
             "価格",
@@ -118,7 +87,7 @@ const stocks: React.FC = () => {
             "編集",
           ]);
         } else if (permission === "スタッフ") {
-          setTHeaderItems([
+          await setTHeaderItems([
             "在庫カテゴリ",
             "商品名",
             "価格",
@@ -130,13 +99,13 @@ const stocks: React.FC = () => {
         }
       } catch (error) {
         console.log(error);
-        allLogout(dispatch);
+        await allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, stocks, stockCategories, ownerId]);
+  }, [dispatch, key, stocks, stockCategories, permission]);
 
   const searchItems = [
     { key: "category_name", value: "在庫カテゴリ" },

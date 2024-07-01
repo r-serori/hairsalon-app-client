@@ -15,7 +15,6 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     allDay: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -36,7 +35,6 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     allDay: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", "/schedules/store", formData);
@@ -48,12 +46,9 @@ export const schedulesApi = {
     }
   },
 
-  fetchAllSchedules: async (owner_id: number) => {
+  fetchAllSchedules: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/schedules/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/schedules/all`);
       // console.log("schedules fetched", response);
       return response;
     } catch (error) {
@@ -62,13 +57,11 @@ export const schedulesApi = {
     }
   },
 
-  selectGetSchedules: async (formData: { owner_id: number; year: string }) => {
+  selectGetSchedules: async (year: string) => {
     try {
       const response = await sendRequest(
         "GET",
-        `/schedules/customers/selectGetYear/${encodeURIComponent(
-          formData.owner_id
-        )}/${encodeURIComponent(formData.year)}`
+        `/schedules/customers/selectGetYear/${encodeURIComponent(year)}`
       );
       // console.log("APIのschedulesDataだよ", response);
       return response;
@@ -94,7 +87,6 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     allDay: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/schedules/update`, formData);
@@ -122,7 +114,6 @@ export const schedulesApi = {
     start_time: string;
     end_time: string;
     allDay: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -138,9 +129,11 @@ export const schedulesApi = {
     }
   },
 
-  deleteSchedule: async (formData: { id: number; owner_id: number }) => {
+  deleteSchedule: async (id: number) => {
     try {
-      const response = await sendRequest("POST", `/schedules/delete`, formData);
+      const response = await sendRequest("POST", `/schedules/delete`, {
+        id: id,
+      });
       // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
@@ -163,7 +156,6 @@ export const schedulesApi = {
     end_time: string;
     allDay: number;
     customer_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(

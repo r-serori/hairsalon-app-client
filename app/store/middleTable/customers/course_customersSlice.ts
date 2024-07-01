@@ -48,7 +48,6 @@ export interface Course_customersState {
   // ステートの型
   course_id: number;
   customer_id: number;
-  owner_id: number;
 }
 
 export interface RootState {

@@ -1,10 +1,7 @@
 import { sendRequest } from "../requestApi";
 
 export const hairstyleApi = {
-  createHairstyle: async (formData: {
-    hairstyle_name: string;
-    owner_id: number;
-  }) => {
+  createHairstyle: async (formData: { hairstyle_name: string }) => {
     try {
       const response = await sendRequest("POST", "/hairstyles/store", formData);
       // console.log("APIのhairstyleDataだよ");
@@ -15,12 +12,9 @@ export const hairstyleApi = {
     }
   },
 
-  fetchAllHairstyles: async (owner_id: number) => {
+  fetchAllHairstyles: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/hairstyles/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/hairstyles/all`);
       // console.log("hairstyles fetched");
       return response;
     } catch (error) {
@@ -39,11 +33,7 @@ export const hairstyleApi = {
   //   }
   // },
 
-  updateHairstyle: async (formData: {
-    id: number;
-    hairstyle_name: string;
-    owner_id: number;
-  }) => {
+  updateHairstyle: async (formData: { id: number; hairstyle_name: string }) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -58,13 +48,11 @@ export const hairstyleApi = {
     }
   },
 
-  deleteHairstyle: async (formData: { id: number; owner_id: number }) => {
+  deleteHairstyle: async (id: number) => {
     try {
-      const response = await sendRequest(
-        "POST",
-        `/hairstyles/delete`,
-        formData
-      );
+      const response = await sendRequest("POST", `/hairstyles/delete`, {
+        id: id,
+      });
       // console.log("APIのhairstyleDataだよ", response);
       return response;
     } catch (error) {

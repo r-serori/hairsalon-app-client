@@ -9,7 +9,6 @@ export const selectGetAttendanceTimes = createAsyncThunk(
     formData: {
       user_id: number;
       yearMonth: string;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -119,7 +118,6 @@ export const pleaseEditEndTime = createAsyncThunk(
       end_time: string;
       end_photo_path: string;
       user_id: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -177,7 +175,6 @@ export const updateStartTime = createAsyncThunk(
       start_time: string;
       start_photo_path: string;
       user_id: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -233,7 +230,6 @@ export const updateEndTime = createAsyncThunk(
       end_time: string;
       end_photo_path: string;
       user_id: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -288,7 +284,6 @@ export const createStartTime = createAsyncThunk(
       start_time: string;
       start_photo_path: string;
       user_id: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -343,7 +338,6 @@ export const createEndTime = createAsyncThunk(
       end_time: string;
       end_photo_path: string;
       user_id: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -393,11 +387,9 @@ export const createEndTime = createAsyncThunk(
 
 export const deleteAttendanceTime = createAsyncThunk(
   "attendance_times/deleteAttendanceTime",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await attendance_timeApi.deleteAttendanceTime(
-        formData
-      );
+      const response: any = await attendance_timeApi.deleteAttendanceTime(id);
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う

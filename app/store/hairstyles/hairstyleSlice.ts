@@ -6,9 +6,9 @@ import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getHairstyle = createAsyncThunk(
   "hairstyles/getHairstyle",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await hairstyleApi.fetchAllHairstyles(owner_id);
+      const response: any = await hairstyleApi.fetchAllHairstyles();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -58,7 +58,6 @@ export const createHairstyle = createAsyncThunk(
     formData: {
       id: number;
       hairstyle_name: string;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -137,7 +136,6 @@ export const updateHairstyle = createAsyncThunk(
     formData: {
       id: number;
       hairstyle_name: string;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -188,9 +186,9 @@ export const updateHairstyle = createAsyncThunk(
 
 export const deleteHairstyle = createAsyncThunk(
   "hairstyles/deleteHairstyle",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await hairstyleApi.deleteHairstyle(formData);
+      const response: any = await hairstyleApi.deleteHairstyle(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -238,7 +236,6 @@ export interface HairstyleState {
   // ステートの型
   id: number;
   hairstyle_name: string;
-  owner_id: number;
 }
 
 export interface RootState {

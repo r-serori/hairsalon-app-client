@@ -1,11 +1,7 @@
 import { sendRequest } from "../requestApi";
 
 export const courseApi = {
-  createCourse: async (formData: {
-    course_name: string;
-    price: number;
-    owner_id: number;
-  }) => {
+  createCourse: async (formData: { course_name: string; price: number }) => {
     try {
       const response = await sendRequest("POST", "/courses/store", formData);
       // console.log("APIのcourseDataだよ");
@@ -16,12 +12,9 @@ export const courseApi = {
     }
   },
 
-  fetchAllCourses: async (owner_id: number) => {
+  fetchAllCourses: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/courses/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/course/all`);
       // console.log("courses fetched");
       return response;
     } catch (error) {
@@ -41,7 +34,6 @@ export const courseApi = {
     id: number;
     course_name: string;
     price: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/courses/update`, formData);
@@ -53,9 +45,9 @@ export const courseApi = {
     }
   },
 
-  deleteCourse: async (formData: { id: number; owner_id: number }) => {
+  deleteCourse: async (id: number) => {
     try {
-      const response = await sendRequest("POST", `/courses/delete`, formData);
+      const response = await sendRequest("POST", `/courses/delete`, { id: id });
       // console.log("APIのcourseDataだよ");
       return response;
     } catch (error) {

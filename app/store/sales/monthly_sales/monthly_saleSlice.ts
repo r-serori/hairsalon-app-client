@@ -4,9 +4,9 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getMonthly_sales = createAsyncThunk(
   "monthly_sales/getMonthly_sales",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await monthlySaleApi.fetchAllMonthlySales(owner_id);
+      const response: any = await monthlySaleApi.fetchAllMonthlySales();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -53,7 +53,7 @@ export const getMonthly_sales = createAsyncThunk(
 export const createMonthly_sales = createAsyncThunk(
   "monthly_sales/createMonthly_sales",
   async (
-    formData: { year_month: string; monthly_sales: number; owner_id: number },
+    formData: { year_month: string; monthly_sales: number },
     { rejectWithValue }
   ) => {
     try {
@@ -132,7 +132,6 @@ export const updateMonthly_sales = createAsyncThunk(
       id: number;
       year_month: string;
       monthly_sales: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -183,9 +182,9 @@ export const updateMonthly_sales = createAsyncThunk(
 
 export const deleteMonthly_sales = createAsyncThunk(
   "monthly_sales/deleteMonthly_sales",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await monthlySaleApi.deleteMonthlySales(formData);
+      const response: any = await monthlySaleApi.deleteMonthlySales(id);
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
@@ -234,7 +233,6 @@ export interface Monthly_salesState {
   year: number;
   month: number;
   monthly_sales: number;
-  owner_id: number;
 }
 
 export interface RootState {

@@ -14,9 +14,6 @@ import {
   hairstyleStatus,
   hairstylesStore,
 } from "../../../../components/Hooks/selector";
-import { userKey } from "../../../../components/Hooks/authSelector";
-import { getUserKey } from "../../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const hairstyleEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,7 +34,6 @@ const hairstyleEdit: React.FC = () => {
   const handleUpdate = async (formData: {
     id: number;
     hairstyle_name: string;
-    owner_id: number;
   }) => {
     try {
       await dispatch(updateHairstyle(formData) as any);

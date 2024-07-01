@@ -16,22 +16,14 @@ import {
   daily_saleStatus,
 } from "../../components/Hooks/selector";
 import { getUserKey, ownerPermission } from "../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
 import _ from "lodash";
 import { allLogout } from "../../components/Hooks/useMethod";
-import { userKey } from "../../components/Hooks/authSelector";
+import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 const daily_sales: React.FC = () => {
   const router = useRouter();
-  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
 
   const dispatch = useDispatch();
 
@@ -46,51 +38,31 @@ const daily_sales: React.FC = () => {
   const dsError: string | null = useSelector(daily_saleError);
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
-        ownerPermission(permission, router);
+        await ownerPermission(permission, router);
 
         if (permission === "オーナー") {
-          setTHeaderItems(["日付", "売上", "編集", "削除"]);
+          await setTHeaderItems(["日付", "売上", "編集", "削除"]);
         } else {
           throw new Error("Permission is not オーナー");
         }
 
         if (_.isEmpty(daily_sales) && permission === "オーナー") {
-          await dispatch(getDaily_sales(ownerId) as any);
+          await dispatch(getDaily_sales({}) as any);
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
+        await allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, daily_sales, ownerId, permission]);
+  }, [dispatch, key, daily_sales, permission]);
 
   const searchItems = [
     { key: "date", value: "日付" },

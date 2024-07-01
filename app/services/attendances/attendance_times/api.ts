@@ -4,7 +4,6 @@ export const attendance_timeApi = {
   selectFetchAttendanceTimes: async (formData: {
     user_id: number;
     yearMonth: string;
-    owner_id: number;
   }) => {
     try {
       const userIdEncoded: string = encodeURIComponent(
@@ -13,7 +12,7 @@ export const attendance_timeApi = {
       const yearMonthEncoded: string = encodeURIComponent(formData.yearMonth);
       const response = await sendRequest(
         "GET",
-        `/attendance_times/selectedAttendanceTimes/${yearMonthEncoded}/${userIdEncoded}/${formData.owner_id}`
+        `/attendance_times/selectedAttendanceTimes/${yearMonthEncoded}/${userIdEncoded}`
       );
       console.log("APIのattendanceTimeDataだよ");
       return response;
@@ -42,7 +41,6 @@ export const attendance_timeApi = {
     end_time: string;
     end_photo_path: string;
     user_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -62,7 +60,6 @@ export const attendance_timeApi = {
     start_time: string;
     start_photo_path: string;
     user_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -82,7 +79,6 @@ export const attendance_timeApi = {
     end_time: string;
     end_photo_path: string;
     user_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -103,7 +99,6 @@ export const attendance_timeApi = {
     start_time: string;
     start_photo_path: string;
     user_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -124,7 +119,6 @@ export const attendance_timeApi = {
     end_time: string;
     end_photo_path: string;
     user_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -140,13 +134,11 @@ export const attendance_timeApi = {
     }
   },
 
-  deleteAttendanceTime: async (formData: { id: number; owner_id: number }) => {
+  deleteAttendanceTime: async (id: number) => {
     try {
-      const response = await sendRequest(
-        "POST",
-        `/attendance_times/delete`,
-        formData
-      );
+      const response = await sendRequest("POST", `/attendance_times/delete`, {
+        id: id,
+      });
       console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {

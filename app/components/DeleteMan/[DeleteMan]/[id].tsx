@@ -48,52 +48,46 @@ const DeleteMan: React.FC<DeleteManProps> = ({ id, link }) => {
   const [open, setOpen] = React.useState(false);
 
   const handleDeleteMan = async () => {
-    const ownerId = localStorage.getItem("owner_id");
-
-    const formData = {
-      id: id,
-      owner_id: Number(ownerId),
-    };
     // 適切な link によって条件分岐して削除処理を行う
     switch (link) {
       case "/attendance_times" ||
         "/attendanceTimeShots" ||
         "/attendanceTimeStart" ||
         "/attendanceTimeEnd":
-        await dispatch(deleteAttendanceTime(formData) as any);
+        await dispatch(deleteAttendanceTime(id) as any);
         break;
       case "/courses":
-        await dispatch(deleteCourse(formData) as any);
+        await dispatch(deleteCourse(id) as any);
         break;
       case "/customers":
-        await dispatch(deleteCustomer(formData) as any);
+        await dispatch(deleteCustomer(id) as any);
         break;
       case "/hairstyles":
-        await dispatch(deleteHairstyle(formData) as any);
+        await dispatch(deleteHairstyle(id) as any);
         break;
       case "/merchandises":
-        await dispatch(deleteMerchandise(formData) as any);
+        await dispatch(deleteMerchandise(id) as any);
         break;
       case "/options":
-        await dispatch(deleteOption(formData) as any);
+        await dispatch(deleteOption(id) as any);
         break;
       case "/schedules":
-        await dispatch(deleteSchedule(formData) as any);
+        await dispatch(deleteSchedule(id) as any);
         break;
       case "/stocks":
-        await dispatch(deleteStock(formData) as any);
+        await dispatch(deleteStock(id) as any);
         break;
       case "/stock_categories":
-        await dispatch(deleteStockCategory(formData) as any);
+        await dispatch(deleteStockCategory(id) as any);
         break;
       case "/daily_sales":
-        await dispatch(deleteDaily_sales(formData) as any);
+        await dispatch(deleteDaily_sales(id) as any);
         break;
       case "/monthly_sales":
-        await dispatch(deleteMonthly_sales(formData) as any);
+        await dispatch(deleteMonthly_sales(id) as any);
         break;
       case "/yearly_sales":
-        await dispatch(deleteYearly_sales(formData) as any);
+        await dispatch(deleteYearly_sales(id) as any);
         break;
       default:
         break;

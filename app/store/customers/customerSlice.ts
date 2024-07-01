@@ -10,9 +10,9 @@ import {
 
 export const getCustomer = createAsyncThunk(
   "customer/getCustomer",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await customerApi.fetchAllCustomers(owner_id);
+      const response: any = await customerApi.fetchAllCustomers();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -69,7 +69,6 @@ export const createCustomer = createAsyncThunk(
       merchandise_id: number[];
       hairstyle_id: number[];
       user_id: number[];
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -155,7 +154,6 @@ export const updateCustomer = createAsyncThunk(
       merchandise_id: number[];
       hairstyle_id: number[];
       user_id: number[];
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -206,9 +204,9 @@ export const updateCustomer = createAsyncThunk(
 
 export const deleteCustomer = createAsyncThunk(
   "customer/deleteCustomer",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await customerApi.deleteCustomer(formData);
+      const response: any = await customerApi.deleteCustomer(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -263,7 +261,6 @@ export interface CustomerState {
   merchandise_id: number[] | null;
   hairstyle_id: number[] | null;
   user_id: number[] | null;
-  owner_id: number;
 }
 
 export interface RootState {

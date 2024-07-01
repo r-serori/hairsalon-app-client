@@ -23,7 +23,6 @@ const StaffRegisterPage: React.FC = () => {
     password: string;
     role: string;
     isAttendance: boolean;
-    owner_id: number;
   }) => {
     console.log(formData);
     try {

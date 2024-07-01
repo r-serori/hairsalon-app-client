@@ -7,7 +7,7 @@ import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { userKey } from "../../components/Hooks/authSelector";
+import { userKey, permissionStore } from "../../components/Hooks/authSelector";
 import RouterButton from "../../components/elements/button/RouterButton";
 import {
   courseError,
@@ -16,20 +16,11 @@ import {
   coursesStore,
 } from "../../components/Hooks/selector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
 import _ from "lodash";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 const courses: React.FC = () => {
-  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
 
   const router = useRouter();
 
@@ -42,6 +33,7 @@ const courses: React.FC = () => {
   const cError: string | null = useSelector(courseError);
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const courses: CourseState[] = useSelector(coursesStore);
   console.log("coursesです");
@@ -50,27 +42,6 @@ const courses: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              await setOwnerId(ownerId);
-              await setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
         await staffPermission(permission, router);
 
         if (
@@ -79,7 +50,7 @@ const courses: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getCourse(ownerId) as any); // getCourseの非同期処理をawaitする
+          await dispatch(getCourse({}) as any); // getCourseの非同期処理をawaitする
         } else {
           return;
         }
@@ -99,7 +70,7 @@ const courses: React.FC = () => {
     };
 
     fetchData(); // useEffect内で関数を呼び出す
-  }, [dispatch, key, courses, ownerId]); // useEffectの依存リストを指定
+  }, [dispatch, key, courses, permission]); // useEffectの依存リストを指定
 
   const searchItems = [
     { key: "course_name", value: "コース名" },

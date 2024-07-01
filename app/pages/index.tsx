@@ -1,15 +1,11 @@
 import React from "react";
 import RouterButton from "../components/elements/button/RouterButton";
-import { Router } from "react-router-dom";
 import gsap from "gsap";
 import { useEffect } from "react";
-import { useRef } from "react";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { Draggable } from "gsap/dist/Draggable";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import BasicAlerts from "../components/elements/alert/Alert";
-import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import LogoutButton from "../components/elements/button/logoutButton";
 import { userError } from "../components/Hooks/authSelector";

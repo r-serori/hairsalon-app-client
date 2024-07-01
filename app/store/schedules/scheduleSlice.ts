@@ -4,9 +4,9 @@ import RootState from "../../redux/reducers/rootReducer";
 
 export const getSchedule = createAsyncThunk(
   "schedule/getSchedule",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await schedulesApi.fetchAllSchedules(owner_id);
+      const response: any = await schedulesApi.fetchAllSchedules();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -52,9 +52,9 @@ export const getSchedule = createAsyncThunk(
 
 export const selectGetSchedules = createAsyncThunk(
   "schedule/selectGetSchedules",
-  async (formData: { owner_id: number; year: string }, { rejectWithValue }) => {
+  async (year: string, { rejectWithValue }) => {
     try {
-      const response: any = await schedulesApi.selectGetSchedules(formData);
+      const response: any = await schedulesApi.selectGetSchedules(year);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -106,7 +106,6 @@ export const createSchedule = createAsyncThunk(
       start_time: string;
       end_time: string;
       allDay: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -171,7 +170,6 @@ export const createCustomerAndSchedule = createAsyncThunk(
       start_time: string;
       end_time: string;
       allDay: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -255,7 +253,6 @@ export const updateSchedule = createAsyncThunk(
       start_time: string;
       end_time: string;
       allDay: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -322,7 +319,6 @@ export const updateCustomerAndSchedule = createAsyncThunk(
       start_time: string;
       end_time: string;
       allDay: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -390,7 +386,6 @@ export const updateCustomerAndScheduleCreate = createAsyncThunk(
       end_time: string;
       allDay: number;
       customer_id: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -443,9 +438,9 @@ export const updateCustomerAndScheduleCreate = createAsyncThunk(
 
 export const deleteSchedule = createAsyncThunk(
   "schedule/deleteSchedule",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await schedulesApi.deleteSchedule(formData);
+      const response: any = await schedulesApi.deleteSchedule(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -497,7 +492,6 @@ export interface ScheduleState {
   end_time: string | null;
   allDay: number;
   customer_id: number | null;
-  owner_id: number;
 }
 
 export interface RootState {

@@ -1,11 +1,7 @@
 import { sendRequest } from "../requestApi";
 
 export const dailySaleApi = {
-  createDailySales: async (formData: {
-    date: string;
-    daily_sales: number;
-    owner_id: number;
-  }) => {
+  createDailySales: async (formData: { date: string; daily_sales: number }) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -20,12 +16,9 @@ export const dailySaleApi = {
     }
   },
 
-  fetchAllDailySales: async (owner_id: number) => {
+  fetchAllDailySales: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/daily_sales/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/daily_sales/all`);
       // console.log("daily_sales fetched",response);
       return response;
     } catch (error) {
@@ -49,7 +42,6 @@ export const dailySaleApi = {
     id: number;
     date: string;
     daily_sales: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -64,13 +56,11 @@ export const dailySaleApi = {
       return { error: error };
     }
   },
-  deleteDailySales: async (formData: { id: number; owner_id: number }) => {
+  deleteDailySales: async (id: number) => {
     try {
-      const response = await sendRequest(
-        "POST",
-        `/daily_sales/delete`,
-        formData
-      );
+      const response = await sendRequest("POST", `/daily_sales/delete`, {
+        id: id,
+      });
       // console.log("APIのdailySalesDataだよ", response);
       return response;
     } catch (error) {

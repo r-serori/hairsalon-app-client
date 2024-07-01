@@ -13,25 +13,18 @@ import {
   optionStatus,
   optionsStore,
 } from "../../components/Hooks/selector";
-import { userKey } from "../../components/Hooks/authSelector";
+import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
 import _ from "lodash";
 
 const options: React.FC = () => {
   const router = useRouter();
-  const [ownerId, setOwnerId] = useState<number | null>(null);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
 
   const dispatch = useDispatch();
+
+  const options: OptionState[] = useSelector(optionsStore);
 
   const opStatus: string = useSelector(optionStatus);
 
@@ -40,34 +33,12 @@ const options: React.FC = () => {
   const opError: string | null = useSelector(optionError);
 
   const key: string | null = useSelector(userKey);
-
-  const options: OptionState[] = useSelector(optionsStore);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
-        staffPermission(permission, router);
+        await staffPermission(permission, router);
 
         if (
           _.isEmpty(options) &&
@@ -75,27 +46,27 @@ const options: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getOption(ownerId) as any);
+          await dispatch(getOption({}) as any);
         } else {
           return;
         }
 
         if (permission === "オーナー") {
-          setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
+          await setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
         } else if (permission === "マネージャー") {
-          setTHeaderItems(["オプション名", "価格", "編集"]);
+          await setTHeaderItems(["オプション名", "価格", "編集"]);
         } else {
-          setTHeaderItems(["オプション名", "価格"]);
+          await setTHeaderItems(["オプション名", "価格"]);
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
+        await allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, options, ownerId]);
+  }, [dispatch, key, options, permission]);
 
   const searchItems = [
     { key: "option_name", value: "オプション名" },

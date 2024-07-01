@@ -4,7 +4,6 @@ export const merchandiseApi = {
   createMerchandise: async (formData: {
     merchandise_name: string;
     price: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -20,12 +19,9 @@ export const merchandiseApi = {
     }
   },
 
-  fetchAllMerchandises: async (owner_id: number) => {
+  fetchAllMerchandises: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/merchandises/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/merchandises/all`);
       // console.log("merchandises fetched",response);
       return response;
     } catch (error) {
@@ -48,7 +44,6 @@ export const merchandiseApi = {
     id: number;
     merchandise_name: string;
     price: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -64,13 +59,11 @@ export const merchandiseApi = {
     }
   },
 
-  deleteMerchandise: async (formData: { id: number; owner_id: number }) => {
+  deleteMerchandise: async (id: number) => {
     try {
-      const response = await sendRequest(
-        "POST",
-        `/merchandises/delete`,
-        formData
-      );
+      const response = await sendRequest("POST", `/merchandises/delete`, {
+        id: id,
+      });
       // console.log("APIのmerchandiseDataだよ", response);
       return response;
     } catch (error) {

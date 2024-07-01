@@ -6,9 +6,9 @@ import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getOption = createAsyncThunk(
   "options/getOption",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await optionApi.fetchAllOptions(owner_id);
+      const response: any = await optionApi.fetchAllOptions();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -59,7 +59,6 @@ export const createOption = createAsyncThunk(
       id: number;
       option_name: string;
       price: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -139,7 +138,6 @@ export const updateOption = createAsyncThunk(
       id: number;
       option_name: string;
       price: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -190,9 +188,9 @@ export const updateOption = createAsyncThunk(
 
 export const deleteOption = createAsyncThunk(
   "options/deleteOption",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await optionApi.deleteOption(formData);
+      const response: any = await optionApi.deleteOption(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -241,7 +239,6 @@ export interface OptionState {
   id: number;
   option_name: string;
   price: number;
-  owner_id: number;
 }
 
 export interface RootState {

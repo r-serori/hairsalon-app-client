@@ -224,9 +224,9 @@ export const logout = createAsyncThunk(
 
 export const getAttendanceUsers = createAsyncThunk(
   "users/getAttendanceUser",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response = await userApi.getAttendanceUsers(owner_id);
+      const response = await userApi.getAttendanceUsers();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -272,9 +272,9 @@ export const getAttendanceUsers = createAsyncThunk(
 
 export const getUsers = createAsyncThunk(
   "users/getUsers",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response = await userApi.getUsers(owner_id);
+      const response = await userApi.getUsers();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -320,9 +320,9 @@ export const getUsers = createAsyncThunk(
 
 export const showUser = createAsyncThunk(
   "users/showUser",
-  async (id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response = await userApi.showUser(id);
+      const response = await userApi.showUser();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -653,7 +653,7 @@ const usersSlice = createSlice({
       state.error = null;
     },
     changeMessage(state, action) {
-      state.error = action.payload;
+      state.error = String(action.payload);
     },
   },
   extraReducers: (builder) => {

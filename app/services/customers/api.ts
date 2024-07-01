@@ -10,7 +10,6 @@ export const customerApi = {
     merchandise_id: number[];
     hairstyle_id: number[];
     user_id: number[];
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", "/customers/store", formData);
@@ -22,12 +21,9 @@ export const customerApi = {
     }
   },
 
-  fetchAllCustomers: async (owner_id: number) => {
+  fetchAllCustomers: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/customers/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/customers/all`);
       // console.log("customers fetched");
       return response;
     } catch (error) {
@@ -57,7 +53,6 @@ export const customerApi = {
     merchandise_id: number[];
     hairstyle_id: number[];
     user_id: number[];
-    owner_id: number;
   }) => {
     try {
       // console.log("formDataだよ", formData);
@@ -70,9 +65,11 @@ export const customerApi = {
     }
   },
 
-  deleteCustomer: async (formData: { id: number; owner_id: number }) => {
+  deleteCustomer: async (id: number) => {
     try {
-      const response = await sendRequest("POST", `/customers/delete`, formData);
+      const response = await sendRequest("POST", `/customers/delete`, {
+        id: id,
+      });
       // console.log("APIのcustomerDataだよ");
       return response;
     } catch (error) {

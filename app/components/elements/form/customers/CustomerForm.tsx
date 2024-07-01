@@ -149,7 +149,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       user_id: getUsersState
         .filter((user) => users.includes(user.name))
         .map((user) => user.id),
-      owner_id: node ? node.owner_id : 0,
     });
   };
 

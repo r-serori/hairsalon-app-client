@@ -6,9 +6,9 @@ import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getCourse = createAsyncThunk(
   "courses/getCourse",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await courseApi.fetchAllCourses(owner_id);
+      const response: any = await courseApi.fetchAllCourses();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -59,7 +59,6 @@ export const createCourse = createAsyncThunk(
       id: number;
       course_name: string;
       price: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -140,7 +139,6 @@ export const updateCourse = createAsyncThunk(
       id: number;
       course_name: string;
       price: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -191,9 +189,9 @@ export const updateCourse = createAsyncThunk(
 
 export const deleteCourse = createAsyncThunk(
   "courses/deleteCourse",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await courseApi.deleteCourse(formData);
+      const response: any = await courseApi.deleteCourse(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -242,7 +240,6 @@ export interface CourseState {
   id: number;
   course_name: string;
   price: number;
-  owner_id: number;
 }
 
 export interface RootState {

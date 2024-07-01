@@ -4,7 +4,6 @@ export const monthlySaleApi = {
   createMonthlySales: async (formData: {
     year_month: string;
     monthly_sales: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -20,12 +19,9 @@ export const monthlySaleApi = {
     }
   },
 
-  fetchAllMonthlySales: async (owner_id: number) => {
+  fetchAllMonthlySales: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/monthly_sales/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/monthly_sales/all`);
       // console.log("monthly_sales fetched",response);
       return response;
     } catch (error) {
@@ -48,7 +44,6 @@ export const monthlySaleApi = {
     id: number;
     year_month: string;
     monthly_sales: number;
-    owner_id;
   }) => {
     try {
       const response = await sendRequest(
@@ -64,13 +59,11 @@ export const monthlySaleApi = {
     }
   },
 
-  deleteMonthlySales: async (formData: { id: number; owner_id: number }) => {
+  deleteMonthlySales: async (id: number) => {
     try {
-      const response = await sendRequest(
-        "POST",
-        `/monthly_sales/delete`,
-        formData
-      );
+      const response = await sendRequest("POST", `/monthly_sales/delete`, {
+        id: id,
+      });
       // console.log("APIのmonthlySalesDataだよ", response);
       return response;
     } catch (error) {

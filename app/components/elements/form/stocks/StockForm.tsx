@@ -6,6 +6,8 @@ import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { StockState } from "../../../../store/stocks/stockSlice";
+import { stock_categoriesStore } from "../../../Hooks/selector";
+import { Stock_categoryState } from "../../../../store/stocks/stock_categories/stock_categorySlice";
 
 interface StockFormProps {
   node?: StockState;
@@ -14,28 +16,30 @@ interface StockFormProps {
 }
 
 const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
-  const stockCategories = useSelector(
-    (state: RootState) => state.stock_category.stock_category
+  const stockCategories: Stock_categoryState[] = useSelector(
+    stock_categoriesStore
   );
+
   console.log(stockCategories);
 
   const stockCategoryNames = stockCategories.map(
     (category) => category.category
   );
+
   console.log("stockCategoryNamesだよ");
   console.log(stockCategoryNames);
 
-  const [product_name, setProductName] = useState(
+  const [product_name, setProductName] = useState<string>(
     node ? node.product_name : ""
   );
-  const [product_price, setProductPrice] = useState(
+  const [product_price, setProductPrice] = useState<number>(
     node ? node.product_price : 0
   );
-  const [quantity, setQuantity] = useState(node ? node.quantity : 0);
-  const [remarks, setRemark] = useState(node ? node.remarks : "");
-  const [supplier, setSupplier] = useState(node ? node.supplier : "");
-  const [notice, setNotice] = useState(node ? node.notice : 0);
-  const [stockCategoryIdName, setStockCategoryIdName] = useState(
+  const [quantity, setQuantity] = useState<number>(node ? node.quantity : 0);
+  const [remarks, setRemark] = useState<string>(node ? node.remarks : "");
+  const [supplier, setSupplier] = useState<string>(node ? node.supplier : "");
+  const [notice, setNotice] = useState<number>(node ? node.notice : 0);
+  const [stockCategoryIdName, setStockCategoryIdName] = useState<string>(
     node
       ? stockCategories.find(
           (category) => category.id === node.stock_category_id
@@ -56,7 +60,6 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
       stock_category_id: stockCategories.find(
         (category) => category.category === stockCategoryIdName
       )?.id,
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
     });
   };
 

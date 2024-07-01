@@ -1,13 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createOption, getOption } from "../../../store/options/optionSlice";
-import { RootState } from "../../../redux/store";
 import OptionForm from "../../../components/elements/form/options/OptionForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import { optionStatus } from "../../../components/Hooks/selector";
-import { getUserKey } from "../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../components/Hooks/getLocalStorage";
 
 const optionCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -20,14 +17,8 @@ const optionCreate: React.FC = () => {
     id: number;
     option_name: string;
     price: number;
-    owner_id: number;
   }) => {
     try {
-      const userKey: string | null = await getUserKey(dispatch);
-      const ownerId: number | null = await getOwnerId(userKey);
-
-      if (ownerId == null) throw new Error("ownerId is null");
-      formData.owner_id = ownerId;
       await dispatch(createOption(formData) as any);
     } catch (error) {
       console.error(error);

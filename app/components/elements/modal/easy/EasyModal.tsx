@@ -83,25 +83,18 @@ const EasyModal: React.FC<EasyModalProps> = ({
 
   const selectSubmit = async () => {
     try {
-      const ownerId = Number(localStorage.getItem("owner_id"));
       if (whoAreYou === "attendanceTimes") {
         dispatch(
           selectGetAttendanceTimes({
             user_id: whatIsYourId,
             yearMonth: year,
-            owner_id: ownerId,
           }) as any
         );
 
         setOpen(false);
         setYearMonth(year);
       } else {
-        const response = dispatch(
-          selectGetSchedules({
-            owner_id: ownerId,
-            year: year,
-          }) as any
-        );
+        const response = dispatch(selectGetSchedules(year) as any);
         localStorage.setItem("year", year);
         setOpen(false);
       }

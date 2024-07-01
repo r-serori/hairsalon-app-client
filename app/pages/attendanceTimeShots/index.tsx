@@ -17,26 +17,16 @@ import {
 import {
   attendance_timeError,
   attendance_timeMessage,
-  attendance_timesStore,
   attendance_timeStatus,
 } from "../../components/Hooks/selector";
-import { userKey } from "../../components/Hooks/authSelector";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
+import { userKey, permissionStore } from "../../components/Hooks/authSelector";
 import { staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { allLogout } from "../../components/Hooks/useMethod";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 const AttendanceTimeShots = () => {
-  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [firstRender, setFirstRender] = useState(true);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
 
   const router = useRouter();
 
@@ -51,37 +41,17 @@ const AttendanceTimeShots = () => {
   const uError: string | null = useSelector(userError);
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const getStaffs = async () => {
-      const response = await dispatch(getAttendanceUsers(ownerId) as any);
+      const response = await dispatch(getAttendanceUsers({}) as any);
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
     };
 
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
         staffPermission(permission, router);
 
         const userCount = localStorage.getItem("userCount");
@@ -94,7 +64,7 @@ const AttendanceTimeShots = () => {
           userCount === undefined ||
           (users.length < Number(userCount) && firstRender)
         ) {
-          getStaffs();
+          await getStaffs();
         }
       } catch (error) {
         console.log("Error", error);
@@ -106,7 +76,7 @@ const AttendanceTimeShots = () => {
     };
 
     fetchData();
-  }, [dispatch, key, ownerId, permission, users, firstRender]);
+  }, [dispatch, key, permission, users, firstRender]);
 
   const atimeStatus = useSelector(attendance_timeStatus);
 

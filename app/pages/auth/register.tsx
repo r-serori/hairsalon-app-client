@@ -18,10 +18,7 @@ import {
   ownerError,
 } from "../../components/Hooks/authSelector";
 import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
-import {
-  pushOwnerId,
-  pushUserId,
-} from "../../components/Hooks/pushLocalStorage";
+import { pushUserId } from "../../components/Hooks/pushLocalStorage";
 import { vioRoleApi } from "../../services/auth/vioRole";
 import { getPermission } from "../../store/auth/permissionSlice";
 
@@ -64,8 +61,6 @@ const RegisterPage: React.FC = () => {
 
       if (pushUser) {
         await dispatch(isLogin());
-        localStorage.setItem("isLogin", "true");
-        localStorage.removeItem("registerNow");
         router.push("/auth/owner");
       } else {
         throw new Error("e");

@@ -4,7 +4,6 @@ export const yearlySaleApi = {
   createYearlySales: async (formData: {
     year: string;
     yearly_sales: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -20,12 +19,9 @@ export const yearlySaleApi = {
     }
   },
 
-  fetchAllYearlySales: async (owner_id: number) => {
+  fetchAllYearlySales: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/yearly_sales/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/yearly_sales/all`);
       // console.log("yearly_sales fetched", response);
       return response;
     } catch (error) {
@@ -48,7 +44,6 @@ export const yearlySaleApi = {
     id: number;
     year: string;
     yearly_sales: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest(
@@ -64,13 +59,11 @@ export const yearlySaleApi = {
     }
   },
 
-  deleteYearlySales: async (formData: { id: number; owner_id: number }) => {
+  deleteYearlySales: async (id: number) => {
     try {
-      const response = await sendRequest(
-        "POST",
-        `/yearly_sales/delete`,
-        formData
-      );
+      const response = await sendRequest("POST", `/yearly_sales/delete`, {
+        id: id,
+      });
       // console.log("APIのyearlySalesDataだよ", response);
       return response;
     } catch (error) {

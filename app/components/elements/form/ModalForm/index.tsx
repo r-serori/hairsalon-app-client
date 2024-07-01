@@ -281,12 +281,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const ownerId = localStorage.getItem("owner_id");
 
     const updatedNode = {
       ...EditNode,
       [NodesProp]: EditValue,
-      owner_id: ownerId,
     };
     const update = true;
     console.log("updatedNodeだよ");

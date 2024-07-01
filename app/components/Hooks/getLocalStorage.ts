@@ -29,18 +29,3 @@ export const getUserId = (key: string): number | null => {
     return null;
   }
 };
-
-export const getOwnerId = (key: string): number | null => {
-  try {
-    const ownerId = localStorage.getItem("owner_id");
-
-    const bytes = CryptoJS.AES.decrypt(ownerId, key);
-
-    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-    return decryptedData;
-  } catch (error) {
-    console.log("Error", error);
-    return null;
-  }
-};

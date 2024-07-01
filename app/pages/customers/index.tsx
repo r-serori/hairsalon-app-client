@@ -25,14 +25,12 @@ import {
   hairstyle_customersStore,
   customer_usersStore,
 } from "../../components/Hooks/selector";
-import { user, userKey } from "../../components/Hooks/authSelector";
-import { staffPermission } from "../../components/Hooks/useMethod";
-import { getUserKey } from "../../components/Hooks/useMethod";
 import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
+  user,
+  userKey,
+  permissionStore,
+} from "../../components/Hooks/authSelector";
+import { staffPermission } from "../../components/Hooks/useMethod";
 import { allLogout } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { CourseState } from "../../store/courses/courseSlice";
@@ -45,6 +43,7 @@ import { Option_customersState } from "../../store/middleTable/customers/option_
 import { Merchandise_customersState } from "../../store/middleTable/customers/merchandise_customersSlice";
 import { Hairstyle_customersState } from "../../store/middleTable/customers/hairstyle_customersSlice";
 import { Customer_usersState } from "../../store/middleTable/customers/customer_usersSlice";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 interface CustomerProps {
   update?: boolean;
@@ -52,11 +51,7 @@ interface CustomerProps {
 
 const customers: React.FC<CustomerProps> = ({ update }) => {
   const router = useRouter();
-  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
 
   const dispatch = useDispatch();
 
@@ -69,40 +64,19 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
   const cError: string | null = useSelector(customerError);
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
         staffPermission(permission, router);
-
         if (
           _.isEmpty(hairstyles) &&
           (permission === "オーナー" ||
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getCustomer(ownerId) as any);
+          await dispatch(getCustomer({}) as any);
         }
         if (permission === "オーナー") {
           setTHeaderItems([
@@ -149,7 +123,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     };
 
     fetchData();
-  }, [dispatch, key, ownerId, customers]);
+  }, [dispatch, key, permission, customers]);
 
   const courses: CourseState[] = useSelector(coursesStore);
 

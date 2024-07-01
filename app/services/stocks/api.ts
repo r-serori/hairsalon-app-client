@@ -8,7 +8,6 @@ export const stockApi = {
     remarks: string;
     notice: number;
     stock_category_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", "/stocks/store", formData);
@@ -20,12 +19,9 @@ export const stockApi = {
     }
   },
 
-  fetchAllStocks: async (owner_id: number) => {
+  fetchAllStocks: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/stocks/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/stocks/all`);
       // console.log("stocks fetched", response);
       return response;
     } catch (error) {
@@ -52,7 +48,6 @@ export const stockApi = {
     remarks: string;
     notice: number;
     stock_category_id: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/stocks/update`, formData);
@@ -64,9 +59,11 @@ export const stockApi = {
     }
   },
 
-  deleteStock: async (formData: { id: number; owner_id: number }) => {
+  deleteStock: async (id: number) => {
     try {
-      const response = await sendRequest("POST", `/stocks/delete`, formData);
+      const response = await sendRequest("POST", `/stocks/delete`, {
+        id: id,
+      });
       // console.log("APIのstockDataだよ", response);
       return response;
     } catch (error) {

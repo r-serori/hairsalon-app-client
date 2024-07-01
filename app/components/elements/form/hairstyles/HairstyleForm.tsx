@@ -4,9 +4,6 @@ import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
-import { getOwnerId } from "../../../Hooks/getLocalStorage";
-import { useSelector } from "react-redux";
-import { userKey } from "../../../Hooks/authSelector";
 
 interface HairstyleFormProps {
   node?: HairstyleState;
@@ -28,7 +25,6 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
     createHairstyle({
       id: node ? node.id : 0,
       hairstyle_name: hairstyle_name,
-      owner_id: node ? node.owner_id : 0,
     });
   };
 

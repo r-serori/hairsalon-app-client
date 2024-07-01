@@ -4,9 +4,9 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getDaily_sales = createAsyncThunk(
   "daily_sales/getDaily_sales",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await dailySaleApi.fetchAllDailySales(owner_id);
+      const response: any = await dailySaleApi.fetchAllDailySales();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -53,7 +53,7 @@ export const getDaily_sales = createAsyncThunk(
 export const createDaily_sales = createAsyncThunk(
   "daily_sales/createDaily_sales",
   async (
-    formData: { date: string; daily_sales: number; owner_id: number },
+    formData: { date: string; daily_sales: number },
     { rejectWithValue }
   ) => {
     try {
@@ -132,7 +132,6 @@ export const updateDaily_sales = createAsyncThunk(
       id: number;
       date: string;
       daily_sales: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -183,9 +182,9 @@ export const updateDaily_sales = createAsyncThunk(
 
 export const deleteDaily_sales = createAsyncThunk(
   "daily_sales/deleteDaily_sales",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await dailySaleApi.deleteDailySales(formData);
+      const response: any = await dailySaleApi.deleteDailySales(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -234,7 +233,6 @@ export interface Daily_salesState {
   id: number;
   date: string;
   daily_sales: number;
-  owner_id: number;
 }
 
 export interface RootState {

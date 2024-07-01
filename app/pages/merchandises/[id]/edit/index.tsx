@@ -11,13 +11,8 @@ import MerchandiseForm from "../../../../components/elements/form/merchandises/M
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import {
   merchandiseStatus,
-  merchandiseMessage,
-  merchandiseError,
   merchandiseStore,
 } from "../../../../components/Hooks/selector";
-import { userKey } from "../../../../components/Hooks/authSelector";
-import { getUserKey } from "../../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const merchandiseEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,7 +35,6 @@ const merchandiseEdit: React.FC = () => {
     id: number;
     merchandise_name: string;
     price: number;
-    owner_id: number;
   }) => {
     try {
       await dispatch(updateMerchandise(formData) as any);

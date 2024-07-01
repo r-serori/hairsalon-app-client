@@ -1,19 +1,10 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createCustomer,
-  getCustomer,
-} from "../../../store/customers/customerSlice";
-import { RootState } from "../../../redux/store";
+import { createCustomer } from "../../../store/customers/customerSlice";
 import CustomerForm from "../../../components/elements/form/customers/CustomerForm";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
-import {
-  customersStore,
-  customerStatus,
-} from "../../../components/Hooks/selector";
-import { getUserKey } from "../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../components/Hooks/getLocalStorage";
+import { customerStatus } from "../../../components/Hooks/selector";
 
 const customersCreate = () => {
   const dispatch = useDispatch();
@@ -31,12 +22,8 @@ const customersCreate = () => {
     merchandise_id: number[];
     hairstyle_id: number[];
     user_id: number[];
-    owner_id: number;
   }) => {
     try {
-      const userKey: string | null = await getUserKey(dispatch);
-      const ownerId = await getOwnerId(userKey);
-      formData.owner_id = ownerId;
       await dispatch(createCustomer(formData) as any);
     } catch (error) {
       console.error(error);

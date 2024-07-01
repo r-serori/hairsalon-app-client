@@ -26,7 +26,6 @@ const CourseForm: React.FC<CourseFormProps> = ({
       id: node ? node.id : 0,
       course_name: course_name,
       price: price,
-      owner_id: node ? node.owner_id : Number(localStorage.getItem("owner_id")),
     });
   };
 

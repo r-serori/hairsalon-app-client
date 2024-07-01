@@ -8,22 +8,13 @@ import { isLogin, isLogout } from "../../store/auth/isLoginSlice";
 import { clearError, changeMessage } from "../../store/auth/userSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useEffect } from "react";
-import { allLogout } from "../../components/Hooks/useMethod";
-
 import {
-  user,
   userStatus,
   userMessage,
   userError,
-  userKey,
-  userKeyStatus,
 } from "../../components/Hooks/authSelector";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import {
-  pushUserId,
-  pushOwnerId,
-} from "../../components/Hooks/pushLocalStorage";
-import { vioRoleApi } from "../../services/auth/vioRole";
+import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
+import { pushUserId } from "../../components/Hooks/pushLocalStorage";
 import { getPermission } from "../../store/auth/permissionSlice";
 
 const LoginPage: React.FC = () => {
@@ -45,7 +36,6 @@ const LoginPage: React.FC = () => {
     try {
       const response: any = await dispatch(login(formData) as any);
       console.log("Success", response);
-      const ownerId: number = response.payload.responseOwnerId;
       const userId: number = response.payload.responseUser.id;
 
       const userKey: string | null = await getUserKey(dispatch);
@@ -58,22 +48,12 @@ const LoginPage: React.FC = () => {
 
       console.log("pushUser", pushUser);
 
-      const pushOwner: boolean = await pushOwnerId(ownerId, userKey);
-
-      console.log("pushOwner", pushOwner);
-
-      await dispatch(getPermission({}) as any);
-
-      if (pushUser && pushOwner) {
+      if (pushUser) {
         await dispatch(isLogin());
         // 暗号化されたデータをローカルストレージに保存
-        localStorage.setItem("isLogin", "true");
-        localStorage.removeItem("registerNow");
         router.push("/dashboard");
-      } else if (pushUser && !pushOwner) {
+      } else if (pushUser) {
         await dispatch(isLogin());
-        localStorage.setItem("isLogin", "true");
-        localStorage.removeItem("registerNow");
         router.push("/auth/owner");
       } else {
         throw new Error("e");

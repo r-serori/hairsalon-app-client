@@ -75,12 +75,9 @@ export const userApi = {
   },
 
   //オーナーがスタッフの情報を取得 Gate,OWNER
-  getUsers: async (owner_id: number) => {
+  getUsers: async () => {
     try {
-      const response = (await sendRequest(
-        "GET",
-        `api/user/getUsers/${encodeURIComponent(owner_id)}`
-      )) as any;
+      const response = (await sendRequest("GET", `api/user/getUsers`)) as any;
       // console.log("responseGetUsersDataだよ", response);
       return response;
     } catch (error) {
@@ -89,11 +86,11 @@ export const userApi = {
     }
   },
 
-  getAttendanceUsers: async (owner_id: number) => {
+  getAttendanceUsers: async () => {
     try {
       const response = (await sendRequest(
         "GET",
-        `api/user/getAttendanceUsers/${encodeURIComponent(owner_id)}`
+        `api/user/getAttendanceUsers}`
       )) as any;
       // console.log("responseGetUsersDataだよ", response);
       return response;
@@ -104,12 +101,9 @@ export const userApi = {
   },
 
   //各スタッフが自分の情報を取得 Gate,ALL
-  showUser: async (id: number) => {
+  showUser: async () => {
     try {
-      const response = (await sendRequest(
-        "GET",
-        `api/user/showUser/${encodeURIComponent(id)}`
-      )) as any;
+      const response = (await sendRequest("GET", `api/user/showUser`)) as any;
       // console.log("responseShowUserDataだよ", response);
       return response;
     } catch (error) {

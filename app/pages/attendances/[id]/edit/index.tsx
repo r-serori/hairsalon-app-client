@@ -13,31 +13,24 @@ import {
 import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import DeleteButton from "../../../../components/elements/button/DeleteButton";
 import { useState } from "react";
-import { user, userStatus } from "../../../../components/Hooks/authSelector";
+import {
+  user,
+  userStatus,
+  permissionStore,
+} from "../../../../components/Hooks/authSelector";
 import { UserAllState } from "../../../../components/Hooks/interface";
-import {
-  getUserKey,
-  ownerPermission,
-} from "../../../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../../../components/Hooks/getLocalStorage";
+import { ownerPermission } from "../../../../components/Hooks/useMethod";
 import { userKey } from "../../../../components/Hooks/authSelector";
 import { allLogout } from "../../../../components/Hooks/useMethod";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
 
 const attenDanceEdit: React.FC = () => {
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
-  const [ownerId, setOwnerId] = useState<number | null>(null);
-
   const dispatch = useDispatch();
 
   const uStatus: string = useSelector(userStatus);
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const router = useRouter();
 
@@ -45,7 +38,7 @@ const attenDanceEdit: React.FC = () => {
   // console.log("idだよ");
   // console.log({ id });
 
-  let editUser: UserAllState = useSelector(user).find(
+  const editUser: UserAllState = useSelector(user).find(
     (user) => user.id === Number(id)
   );
 
@@ -54,32 +47,10 @@ const attenDanceEdit: React.FC = () => {
     setDispatchLoading(true);
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              await setOwnerId(ownerId);
-              await setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
-        await ownerPermission(permission, ownerId);
+        await ownerPermission(permission, router);
 
         if (!editUser && permission === "オーナー") {
-          const response = await dispatch(showUser(Number(id)) as any);
-          editUser = response.payload.responseUser;
+          await dispatch(showUser(Number(id)) as any);
         } else {
           return;
         }
@@ -93,7 +64,7 @@ const attenDanceEdit: React.FC = () => {
     };
 
     fetchData();
-  }, [user, id, dispatch, key, permission, ownerId]);
+  }, [id, dispatch, key, permission]);
 
   const handleUpdate = async (formData: { id: number; role: string }) => {
     try {

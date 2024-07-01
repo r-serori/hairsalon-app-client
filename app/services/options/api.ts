@@ -1,11 +1,7 @@
 import { sendRequest } from "../requestApi";
 
 export const optionApi = {
-  createOption: async (formData: {
-    option_name: string;
-    price: number;
-    owner_id: number;
-  }) => {
+  createOption: async (formData: { option_name: string; price: number }) => {
     try {
       const response = await sendRequest("POST", "/options/store", formData);
       console.log("APIのoptionDataだよ", response);
@@ -16,12 +12,9 @@ export const optionApi = {
     }
   },
 
-  fetchAllOptions: async (owner_id: number) => {
+  fetchAllOptions: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/options/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/options/all`);
       // console.log("options fetched",response);
       return response;
     } catch (error) {
@@ -44,7 +37,6 @@ export const optionApi = {
     id: number;
     option_name: string;
     price: number;
-    owner_id: number;
   }) => {
     try {
       const response = await sendRequest("POST", `/options/update`, formData);
@@ -56,9 +48,11 @@ export const optionApi = {
     }
   },
 
-  deleteOption: async (formData: { id: number; owner_id: number }) => {
+  deleteOption: async (id: number) => {
     try {
-      const response = await sendRequest("POST", `/options/delete`, formData);
+      const response = await sendRequest("POST", `/options/delete`, {
+        id: id,
+      });
       // console.log("APIのoptionDataだよ", response);
       return response;
     } catch (error) {

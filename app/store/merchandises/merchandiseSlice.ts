@@ -6,9 +6,9 @@ import { getSchedule } from "../schedules/scheduleSlice";
 
 export const getMerchandise = createAsyncThunk(
   "merchandises/getMerchandise",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await merchandiseApi.fetchAllMerchandises(owner_id);
+      const response: any = await merchandiseApi.fetchAllMerchandises();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -59,7 +59,6 @@ export const createMerchandise = createAsyncThunk(
       id: number;
       merchandise_name: string;
       price: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -139,7 +138,6 @@ export const updateMerchandise = createAsyncThunk(
       id: number;
       merchandise_name: string;
       price: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -190,9 +188,9 @@ export const updateMerchandise = createAsyncThunk(
 
 export const deleteMerchandise = createAsyncThunk(
   "merchandises/deleteMerchandise",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await merchandiseApi.deleteMerchandise(formData);
+      const response: any = await merchandiseApi.deleteMerchandise(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -241,7 +239,6 @@ export interface MerchandiseState {
   id: number;
   merchandise_name: string;
   price: number;
-  owner_id: number;
 }
 
 export interface RootState {

@@ -350,7 +350,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
     monthly_sales: number;
     year: string;
     yearly_sales: number;
-    owner_id: number;
   }) => {
     console.log("SalesFormDataだよ", SalesFormData);
     const update = true;
@@ -380,7 +379,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
   };
 
   const SalesSubmit = () => {
-    const ownerId = Number(localStorage.getItem("owner_id"));
     if (whatSales === "日次") {
       SalesCreate({
         date: time.utc().tz("Asia/Tokyo").format("YYYY-MM-DD"),
@@ -389,7 +387,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
         monthly_sales: 0,
         year: "",
         yearly_sales: 0,
-        owner_id: ownerId,
       });
     } else if (whatSales === "月次") {
       SalesCreate({
@@ -399,7 +396,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
         monthly_sales: sumPrice,
         year: "",
         yearly_sales: 0,
-        owner_id: ownerId,
       });
     } else if (whatSales === "年次") {
       SalesCreate({
@@ -409,7 +405,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
         monthly_sales: 0,
         year: time.utc().tz("Asia/Tokyo").format("YYYY"),
         yearly_sales: sumPrice,
-        owner_id: ownerId,
       });
     }
   };

@@ -11,7 +11,6 @@ import {
   userKeyStatus,
 } from "../../components/Hooks/authSelector";
 import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
-import { pushOwnerId } from "../../components/Hooks/pushLocalStorage";
 import { changeMessage } from "../../store/auth/userSlice";
 
 const OwnerPage = () => {
@@ -24,9 +23,6 @@ const OwnerPage = () => {
 
   const UError: string | null = useSelector(userError);
 
-  const keyStatus: string | null = useSelector(userKeyStatus);
-  const key: string | null = useSelector(userKey);
-
   const ownerSubmit = async (formData: {
     store_name: string;
     address: string;
@@ -35,26 +31,13 @@ const OwnerPage = () => {
   }) => {
     console.log(formData);
     try {
-      const response: any = await dispatch(ownerRegister(formData) as any);
-      console.log("Success", response);
-      const ownerId: number = response.payload.responseOwner.id;
-
-      if (key === null) {
-        await getUserKey(dispatch);
-      }
-
-      const pushOwner: boolean = await pushOwnerId(ownerId, key);
-      if (pushOwner) {
-        router.push("/dashboard");
-      } else {
-        throw new Error("オーナー登録に失敗しました");
-      }
+      await dispatch(ownerRegister(formData) as any);
+      console.log("Success");
+      router.push("/dashboard");
     } catch (error) {
       await allLogout(dispatch);
       await dispatch(
-        await dispatch(
-          changeMessage("登録処理に失敗しました！もう一度お試しください！")
-        )
+        changeMessage("登録処理に失敗しました！もう一度お試しください！")
       );
       console.log("Error", error);
       return;

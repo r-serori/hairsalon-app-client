@@ -4,9 +4,9 @@ import RootState from "../../../redux/reducers/rootReducer";
 
 export const getYearly_sales = createAsyncThunk(
   "yearly_sales/getYearly_sales",
-  async (owner_id: number, { rejectWithValue }) => {
+  async (formData: {}, { rejectWithValue }) => {
     try {
-      const response: any = await yearlySaleApi.fetchAllYearlySales(owner_id);
+      const response: any = await yearlySaleApi.fetchAllYearlySales();
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -53,7 +53,7 @@ export const getYearly_sales = createAsyncThunk(
 export const createYearly_sales = createAsyncThunk(
   "yearly_sales/createYearly_sales",
   async (
-    formData: { year: string; yearly_sales: number; owner_id: number },
+    formData: { year: string; yearly_sales: number },
     { rejectWithValue }
   ) => {
     try {
@@ -132,7 +132,6 @@ export const updateYearly_sales = createAsyncThunk(
       id: number;
       year: string;
       yearly_sales: number;
-      owner_id: number;
     },
     { rejectWithValue }
   ) => {
@@ -183,9 +182,9 @@ export const updateYearly_sales = createAsyncThunk(
 
 export const deleteYearly_sales = createAsyncThunk(
   "yearly_sales/deleteYearly_sales",
-  async (formData: { id: number; owner_id: number }, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      const response: any = await yearlySaleApi.deleteYearlySales(formData);
+      const response: any = await yearlySaleApi.deleteYearlySales(id);
 
       if (response.status >= 200 && response.status < 300) {
         // 成功時の処理
@@ -234,7 +233,6 @@ export interface Yearly_salesState {
   id: number;
   year: string;
   yearly_sales: number;
-  owner_id: number;
 }
 
 export interface RootState {

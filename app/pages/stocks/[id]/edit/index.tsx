@@ -14,16 +14,12 @@ import {
   stocksStore,
 } from "../../../../components/Hooks/selector";
 import { userKey } from "../../../../components/Hooks/authSelector";
-import { getUserKey } from "../../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const stockEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
   const sStatus: string = useSelector(stockStatus);
-
-  const key: string | null = useSelector(userKey);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -44,7 +40,6 @@ const stockEdit: React.FC = () => {
     supplier: string;
     notice: number;
     stock_category_id: number;
-    owner_id: number;
   }) => {
     try {
       await dispatch(updateStock(formData) as any);

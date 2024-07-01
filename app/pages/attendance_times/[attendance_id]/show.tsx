@@ -16,19 +16,16 @@ import {
   attendance_timesStore,
   attendance_timeStatus,
 } from "../../../components/Hooks/selector";
-import { userKey } from "../../../components/Hooks/authSelector";
+import {
+  userKey,
+  permissionStore,
+} from "../../../components/Hooks/authSelector";
 import { ownerPermission } from "../../../components/Hooks/useMethod";
-import { getUserKey } from "../../../components/Hooks/useMethod";
-
 import { allLogout } from "../../../components/Hooks/useMethod";
 import _ from "lodash";
-import { getOwnerId } from "../../../components/Hooks/getLocalStorage";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 
 const attendanceTimes: React.FC = () => {
-  const [ownerId, setOwnerId] = useState<number | null>(null);
-  const permission: PermissionsState = useSelector(permissionStore);
-
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -37,6 +34,7 @@ const attendanceTimes: React.FC = () => {
   console.log({ id });
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   // 初回のみデータ取得を行うためのフラグ
   const [attendanceTimeOpen, setAttendanceTimeOpen] = useState<boolean>(false);
@@ -55,20 +53,13 @@ const attendanceTimes: React.FC = () => {
 
   const nowAttendanceTime = async () => {
     try {
-      if (key === null) {
-        const userKey: string = await getUserKey(dispatch);
-
-        const ownerId: number | null = await getOwnerId(userKey);
-
-        await dispatch(
-          selectGetAttendanceTimes({
-            user_id: Number(id),
-            yearMonth: "000111",
-            owner_id: Number(ownerId),
-          }) as any
-        );
-        await setYearMonth("000111");
-      }
+      await dispatch(
+        selectGetAttendanceTimes({
+          user_id: Number(id),
+          yearMonth: "000111",
+        }) as any
+      );
+      await setYearMonth("000111");
     } catch (error) {
       console.error("Error:", error);
       allLogout(dispatch);
@@ -79,22 +70,6 @@ const attendanceTimes: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              await setOwnerId(ownerId);
-              await setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
         await ownerPermission(permission, router);
 
         if (
@@ -108,7 +83,6 @@ const attendanceTimes: React.FC = () => {
             selectGetAttendanceTimes({
               user_id: Number(id),
               yearMonth: yearMonth,
-              owner_id: Number(ownerId),
             }) as any
           );
         } else {
@@ -121,7 +95,7 @@ const attendanceTimes: React.FC = () => {
       }
     };
     fetchData();
-  }, [id, dispatch, key, attendanceTimes, ownerId]);
+  }, [id, dispatch, key, attendanceTimes, permission]);
 
   const searchItems = [
     { key: "start_time", value: "出勤時間" },

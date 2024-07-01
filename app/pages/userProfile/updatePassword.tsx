@@ -1,35 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { updateUserPassword, showUser } from "../../store/auth/userSlice";
-import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import UpdatePasswordForm from "../../components/elements/form/userProfile/UpdatePasswordForm";
 import { useEffect } from "react";
-import { useState } from "react";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import {
-  getUserId,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
 import {
   userError,
   userKey,
   userMessage,
   userStatus,
+  permissionStore,
 } from "../../components/Hooks/authSelector";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 import { staffPermission } from "../../components/Hooks/useMethod";
 
 const updatePasswordPage: React.FC = () => {
-  const [ownerId, setOwnerId] = useState<number | null>(null);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
-  const [userId, setUserId] = useState<number | null>(null);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const uError: string | null = useSelector(userError);
 
@@ -40,37 +30,14 @@ const updatePasswordPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const userId: number | null = await getUserId(userKey);
-
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (ownerId !== null && vioRole !== null && userId !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
-              setUserId(userId);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
-        staffPermission(permission, ownerId);
+        await staffPermission(permission, router);
 
         if (
           permission === "オーナー" ||
           permission === "マネージャー" ||
           permission === "スタッフ"
         ) {
-          const response = dispatch(showUser(Number()) as any);
+          await dispatch(showUser({}) as any);
         } else {
           return;
         }
@@ -81,7 +48,7 @@ const updatePasswordPage: React.FC = () => {
     };
 
     fetchData();
-  }, [key, permission, ownerId, userId]);
+  }, [key, permission, dispatch]);
 
   const handleUpdatePassword = async (formData: {
     current_password: string;
@@ -89,8 +56,8 @@ const updatePasswordPage: React.FC = () => {
   }) => {
     console.log(formData);
     try {
-      const response = await dispatch(updateUserPassword(formData) as any);
-      router.push("/attendances");
+      await dispatch(updateUserPassword(formData) as any);
+      router.push("/dashboard");
     } catch (error) {
       console.log("Error", error);
       return;

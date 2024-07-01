@@ -1,10 +1,7 @@
 import { sendRequest } from "../requestApi";
 
 export const stockCategoryApi = {
-  createStockCategory: async (formData: {
-    category: string;
-    owner_id: number;
-  }) => {
+  createStockCategory: async (formData: { category: string }) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -21,12 +18,9 @@ export const stockCategoryApi = {
     }
   },
 
-  fetchAllStockCategories: async (owner_id: number) => {
+  fetchAllStockCategories: async () => {
     try {
-      const response = await sendRequest(
-        "GET",
-        `/stock_categories/${encodeURIComponent(owner_id)}`
-      );
+      const response = await sendRequest("GET", `/stock_categories/all`);
       // console.log("stock_categories fetched", response);
       return response;
     } catch (error) {
@@ -49,11 +43,7 @@ export const stockCategoryApi = {
   // }
   // },
 
-  updateStockCategory: async (formData: {
-    id: number;
-    category: string;
-    owner_id: number;
-  }) => {
+  updateStockCategory: async (formData: { id: number; category: string }) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -70,13 +60,11 @@ export const stockCategoryApi = {
     }
   },
 
-  deleteStockCategory: async (formData: { id: number; owner_id: number }) => {
+  deleteStockCategory: async (id: number) => {
     try {
-      const response = await sendRequest(
-        "POST",
-        `/stock_categories/delete`,
-        formData
-      );
+      const response = await sendRequest("POST", `/stock_categories/delete`, {
+        id: id,
+      });
       // console.log("APIのstockCategoryDataだよ", response);
       return response;
     } catch (error) {

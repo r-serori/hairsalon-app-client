@@ -11,7 +11,6 @@ interface AuthStaffRegisterFormProps {
     password: string;
     role: string;
     isAttendance: boolean;
-    owner_id: number;
   }) => void;
 }
 
@@ -31,7 +30,7 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
     //   alert("パスワードが一致しません");
     //   return;
     // }
-    const ownerId = localStorage.getItem("owner_id");
+
     onSubmitStaff({
       name: name,
       email: email,
@@ -39,7 +38,6 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
       password: password,
       role: role,
       isAttendance: false,
-      owner_id: Number(ownerId),
     });
   };
 

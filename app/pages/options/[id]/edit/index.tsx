@@ -9,9 +9,6 @@ import {
   optionStatus,
   optionsStore,
 } from "../../../../components/Hooks/selector";
-import { userKey } from "../../../../components/Hooks/authSelector";
-import { getUserKey } from "../../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const optionEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,7 +30,6 @@ const optionEdit: React.FC = () => {
     id: number;
     option_name: string;
     price: number;
-    owner_id: number;
   }) => {
     try {
       await dispatch(updateOption(formData) as any);

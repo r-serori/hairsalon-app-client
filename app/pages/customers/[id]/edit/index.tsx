@@ -19,8 +19,6 @@ import {
   option_customersStore,
 } from "../../../../components/Hooks/selector";
 import { userKey } from "../../../../components/Hooks/authSelector";
-import { getUserKey } from "../../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const customersEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -112,7 +110,6 @@ const customersEdit: React.FC = () => {
     merchandise_id: number[];
     hairstyle_id: number[];
     user_id: number[];
-    owner_id: number;
   }) => {
     try {
       await dispatch(updateCustomer(formData) as any);

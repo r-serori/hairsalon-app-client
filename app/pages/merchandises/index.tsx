@@ -5,7 +5,6 @@ import {
   MerchandiseState,
   getMerchandise,
 } from "../../store/merchandises/merchandiseSlice";
-import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useState } from "react";
@@ -16,23 +15,14 @@ import {
   merchandiseMessage,
   merchandiseError,
 } from "../../components/Hooks/selector";
-import { userKey } from "../../components/Hooks/authSelector";
+import { userKey, permissionStore } from "../../components/Hooks/authSelector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import {
-  getRole,
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
 
 const merchandises = () => {
   const router = useRouter();
-  const [ownerId, setOwnerId] = useState<number | null>(null);
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const [permission, setPermission] = useState<
-    "オーナー" | "マネージャー" | "スタッフ" | null
-  >(null);
   const dispatch = useDispatch();
 
   const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
@@ -45,32 +35,12 @@ const merchandises = () => {
   const mError: string | null = useSelector(merchandiseError);
 
   const key: string | null = useSelector(userKey);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (key === null) {
-          const userKey: string = await getUserKey(dispatch);
-
-          if (userKey !== null) {
-            const roleData: string | null = await getRole(userKey);
-            const ownerId: number | null = await getOwnerId(userKey);
-
-            const vioRole: "オーナー" | "マネージャー" | "スタッフ" | null =
-              await getVioRoleData(userKey);
-
-            if (roleData !== null && ownerId !== null && vioRole !== null) {
-              setOwnerId(ownerId);
-              setPermission(vioRole);
-            } else {
-              throw new Error("RoleData or ownerId is null");
-            }
-          } else {
-            throw new Error("UserKey is null");
-          }
-        }
-
-        staffPermission(permission, router);
+        await staffPermission(permission, router);
 
         if (
           _.isEmpty(merchandises) &&
@@ -78,26 +48,26 @@ const merchandises = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getMerchandise(ownerId) as any);
+          await dispatch(getMerchandise({}) as any);
         } else {
           return;
         }
         if (permission === "オーナー") {
-          setTHeaderItems(["物販名", "価格", "編集", "削除"]);
+          await setTHeaderItems(["物販名", "価格", "編集", "削除"]);
         } else if (permission === "マネージャー") {
-          setTHeaderItems(["物販名", "価格", "編集"]);
+          await setTHeaderItems(["物販名", "価格", "編集"]);
         } else {
-          setTHeaderItems(["物販名", "価格"]);
+          await setTHeaderItems(["物販名", "価格"]);
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
+        await allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, merchandises, ownerId]);
+  }, [dispatch, key, merchandises, permission]);
 
   const searchItems = [
     { key: "merchandise_name", value: "物販名" },

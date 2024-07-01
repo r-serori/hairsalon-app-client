@@ -6,16 +6,9 @@ import BasicAlerts from "../../components/elements/alert/Alert";
 import UpdateInformationForm from "../../components/elements/form/userProfile/UpdateInformationForm";
 import {
   userError,
-  userKey,
   userMessage,
   userStatus,
 } from "../../components/Hooks/authSelector";
-import {
-  getOwnerId,
-  getVioRoleData,
-} from "../../components/Hooks/getLocalStorage";
-import { getUserKey, staffPermission } from "../../components/Hooks/useMethod";
-
 const UpdateUserInformationPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -34,7 +27,7 @@ const UpdateUserInformationPage: React.FC = () => {
     console.log(formData);
     try {
       await dispatch(updateUser(formData) as any);
-      router.push("/attendances");
+      router.push("/dashboard");
     } catch (error) {
       console.log("Error", error);
     }

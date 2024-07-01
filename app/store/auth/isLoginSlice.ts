@@ -20,6 +20,7 @@ export const loginNowSlice = createSlice({
     isLogin: (state) => {
       state.loginNow = true;
       localStorage.setItem("isLogin", "true");
+      localStorage.removeItem("registerNow");
     },
     isLogout: (state) => {
       state.loginNow = false;

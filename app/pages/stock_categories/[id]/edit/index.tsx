@@ -14,7 +14,6 @@ import {
 } from "../../../../components/Hooks/selector";
 import { userKey } from "../../../../components/Hooks/authSelector";
 import { getUserKey } from "../../../../components/Hooks/useMethod";
-import { getOwnerId } from "../../../../components/Hooks/getLocalStorage";
 
 const stockCategoryEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,25 +33,9 @@ const stockCategoryEdit: React.FC = () => {
 
   const key: string | null = useSelector(userKey);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    category: string;
-    owner_id: number;
-  }) => {
+  const handleUpdate = async (formData: { id: number; category: string }) => {
     try {
-      if (formData.owner_id === 0) {
-        if (key === null) {
-          const userKey: string | null = await getUserKey(dispatch);
-          if (userKey !== null) {
-            const ownerId = await getOwnerId(userKey);
-
-            formData.owner_id = ownerId;
-            await dispatch(updateStockCategory(formData) as any);
-          }
-        }
-      } else {
-        await dispatch(updateStockCategory(formData) as any);
-      }
+      await dispatch(updateStockCategory(formData) as any);
     } catch (error) {
       console.error(error);
     }

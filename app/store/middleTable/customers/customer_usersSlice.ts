@@ -49,7 +49,6 @@ export interface Customer_usersState {
   // ステートの型
   customer_id: number;
   user_id: number;
-  owner_id: number;
 }
 
 export interface RootState {

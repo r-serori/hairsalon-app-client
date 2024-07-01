@@ -15,21 +15,3 @@ export const pushUserId = (userId: number, key: string): boolean => {
     return false;
   }
 };
-
-export const pushOwnerId = (ownerId: number, key: string): boolean => {
-  try {
-    if (ownerId === undefined || !ownerId || key === null) return false;
-
-    const ownerIdString = JSON.stringify(ownerId);
-
-    const encryptedOwnerId = CryptoJS.AES.encrypt(
-      ownerIdString,
-      key
-    ).toString();
-
-    localStorage.setItem("owner_id", encryptedOwnerId);
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
