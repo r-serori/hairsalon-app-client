@@ -914,8 +914,6 @@ const usersSlice = createSlice({
               : users
           )
         : state.users;
-
-      state.message = action.payload.message;
     });
   },
 });

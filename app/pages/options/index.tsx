@@ -52,11 +52,11 @@ const options: React.FC = () => {
         }
 
         if (permission === "オーナー") {
-          await setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
+          setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
         } else if (permission === "マネージャー") {
-          await setTHeaderItems(["オプション名", "価格", "編集"]);
+          setTHeaderItems(["オプション名", "価格", "編集"]);
         } else {
-          await setTHeaderItems(["オプション名", "価格"]);
+          setTHeaderItems(["オプション名", "価格"]);
         }
       } catch (error) {
         console.error("Error:", error);

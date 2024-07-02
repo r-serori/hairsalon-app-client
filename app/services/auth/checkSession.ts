@@ -1,8 +1,4 @@
-import Router from "next/router";
 import { sendRequest } from "../requestApi";
-import { isLogout } from "../../store/auth/isLoginSlice";
-import { logout } from "../../store/auth/userSlice";
-import { allLogout } from "../../components/Hooks/useMethod";
 
 export const checkSessionApi = {
   checkSession: async () => {

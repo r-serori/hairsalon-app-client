@@ -1,10 +1,9 @@
 import AuthLoginForm from "../../components/elements/form/auth/AuthLoginForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { RootState } from "../../redux/store";
 import { login } from "../../store/auth/userSlice";
 import BasicAlerts from "../../components/elements/alert/Alert";
-import { isLogin, isLogout } from "../../store/auth/isLoginSlice";
+import { isLogin } from "../../store/auth/isLoginSlice";
 import { clearError, changeMessage } from "../../store/auth/userSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useEffect } from "react";
@@ -15,7 +14,8 @@ import {
 } from "../../components/Hooks/authSelector";
 import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
 import { pushUserId } from "../../components/Hooks/pushLocalStorage";
-import { getPermission } from "../../store/auth/permissionSlice";
+import ContentCutIcon from "@mui/icons-material/ContentCut";
+import StorefrontIcon from "@mui/icons-material/Storefront";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -96,6 +96,15 @@ const LoginPage: React.FC = () => {
             />
           </div>
           <AuthLoginForm onSubmit={handleLogin} />
+
+          <div className="flex justify-center gap-48 ">
+            <div id="active" className="mt-12 text-8xl">
+              <ContentCutIcon className="text-8xl" />
+            </div>
+            <div id="rotate" className="mt-12 text-8xl">
+              <StorefrontIcon className="text-8xl" />
+            </div>
+          </div>
         </div>
       )}
     </div>

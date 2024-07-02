@@ -9,7 +9,7 @@ export const pushUserId = (userId: number, key: string): boolean => {
 
     const encryptedData = CryptoJS.AES.encrypt(dataString, key).toString();
 
-    localStorage.setItem("user_data", encryptedData);
+    localStorage.setItem("user_id", encryptedData);
     return true;
   } catch (error) {
     return false;

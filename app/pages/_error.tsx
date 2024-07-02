@@ -62,12 +62,12 @@ const ErrorPage = () => {
         <LogoutButton className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" />
       </div>
       <div>
-        <h1 className="mt-16 lg:text-8xl text-3xl  text-red-500 ">
+        <h1 className="mt-16 lg:text-4xl text-3xl  text-red-500 ">
           {getMessage()}
         </h1>
       </div>
 
-      <nav className="mt-16">
+      <nav className="mt-24">
         <ul className="flex gap-24 mr-12">
           <li id="active">
             <RouterButton link="auth/register" value="ユーザー登録画面へ" />
@@ -85,10 +85,10 @@ const ErrorPage = () => {
       </nav>
 
       <div className="flex gap-24">
-        <div id="active" className="mt-12 text-8xl">
+        <div id="active" className="mt-24 text-8xl">
           <ContentCutIcon className="text-8xl" />
         </div>
-        <div id="rotate" className="mt-12 text-8xl">
+        <div id="rotate" className="mt-24 text-8xl">
           <StorefrontIcon className="text-8xl" />
         </div>
       </div>

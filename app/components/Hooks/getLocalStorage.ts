@@ -17,13 +17,13 @@ import CryptoJS from "crypto-js";
 
 export const getUserId = (key: string): number | null => {
   try {
-    const userData = localStorage.getItem("user_data");
+    const userId = localStorage.getItem("user_id");
 
-    const bytes = CryptoJS.AES.decrypt(userData, key);
+    const bytes = CryptoJS.AES.decrypt(userId, key);
 
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
-    return decryptedData.user_role;
+    return decryptedData;
   } catch (error) {
     console.log("Error", error);
     return null;

@@ -12,6 +12,7 @@ import { useState } from "react";
 import BasicAlerts from "../../../components/elements/alert/Alert";
 import RouterButton from "../../../components/elements/button/RouterButton";
 import {
+  attendance_timeError,
   attendance_timeMessage,
   attendance_timesStore,
   attendance_timeStatus,
@@ -43,7 +44,7 @@ const attendanceTimes: React.FC = () => {
 
   const atMessage: string | null = useSelector(attendance_timeMessage);
 
-  const atError: string | null = useSelector(attendance_timeMessage);
+  const atError: string | null = useSelector(attendance_timeError);
 
   const attendanceTimes: Attendance_timeState[] = useSelector(
     attendance_timesStore
@@ -95,7 +96,7 @@ const attendanceTimes: React.FC = () => {
       }
     };
     fetchData();
-  }, [id, dispatch, key, attendanceTimes, permission]);
+  }, [id, dispatch, key, permission]);
 
   const searchItems = [
     { key: "start_time", value: "出勤時間" },

@@ -69,7 +69,8 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        staffPermission(permission, router);
+        console.log("permission", permission);
+        await staffPermission(permission, router);
         if (
           _.isEmpty(hairstyles) &&
           (permission === "オーナー" ||

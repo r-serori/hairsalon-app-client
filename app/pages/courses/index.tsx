@@ -26,6 +26,10 @@ const courses: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const courses: CourseState[] = useSelector(coursesStore);
+  console.log("coursesです");
+  console.log(courses);
+
   const cStatus: string = useSelector(courseStatus);
 
   const cMessage: string | null = useSelector(courseMessage);
@@ -35,14 +39,19 @@ const courses: React.FC = () => {
   const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
-  const courses: CourseState[] = useSelector(coursesStore);
-  console.log("coursesです");
-  console.log(courses);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("permission", permission);
+
         await staffPermission(permission, router);
+        if (permission === "オーナー") {
+          await setTHeaderItems(["コース名", "価格", "編集", "削除"]);
+        } else if (permission === "マネージャー") {
+          await setTHeaderItems(["コース名", "価格", "編集"]);
+        } else {
+          await setTHeaderItems(["コース名", "価格"]);
+        }
 
         if (
           _.isEmpty(courses) &&
@@ -54,14 +63,6 @@ const courses: React.FC = () => {
         } else {
           return;
         }
-
-        if (permission === "オーナー") {
-          await setTHeaderItems(["コース名", "価格", "編集", "削除"]);
-        } else if (permission === "マネージャー") {
-          await setTHeaderItems(["コース名", "価格", "編集"]);
-        } else {
-          await setTHeaderItems(["コース名", "価格"]);
-        }
       } catch (error) {
         console.error("Error:", error);
         await allLogout(dispatch);
@@ -70,7 +71,7 @@ const courses: React.FC = () => {
     };
 
     fetchData(); // useEffect内で関数を呼び出す
-  }, [dispatch, key, courses, permission]); // useEffectの依存リストを指定
+  }, [dispatch, key, permission]); // useEffectの依存リストを指定
 
   const searchItems = [
     { key: "course_name", value: "コース名" },
@@ -101,7 +102,7 @@ const courses: React.FC = () => {
         <div className="flex my-4 ml-2">
           <RouterButton link="/courses/create" value="新規作成" />
         </div>
-        {cStatus === "loading" && !tHeaderItems ? (
+        {cStatus === "loading" ? (
           <p>Loading...</p>
         ) : (
           <ComponentTable

@@ -3,19 +3,15 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import LogoutButton from "../../button/logoutButton";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store";
-import { useState } from "react";
 import { useRouter } from "next/router";
-import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
 import { loginNow, userKey } from "../../../Hooks/authSelector";
 import { allLogout, getUserKey } from "../../../Hooks/useMethod";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../Hooks/authSelector";
-import { UserState } from "../../../../store/auth/userSlice";
-import { user } from "../../../Hooks/authSelector";
 import { getPermission } from "../../../../store/auth/permissionSlice";
+import { isLogin } from "../../../../store/auth/isLoginSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -41,32 +37,56 @@ export default function Header() {
         }
       };
 
-      const verifySession = async () => {
-        const response: boolean = await checkSessionApi.checkSession();
-        if (!response) {
-          await allLogout(dispatch);
-          router.push("/login");
+      const getKey = async () => {
+        try {
+          await getUserKey(dispatch);
+        } catch (e) {
+          console.log("Error", e);
+          allLogout(dispatch);
+          router.push("/auth/login");
         }
       };
 
       const IsLoggedIn: boolean =
         localStorage.getItem("isLogin") === "true" ? true : false;
       console.log("isLogin", IsLoggedIn);
+
       if (permission === null && IsLoggedIn) {
         getPermissionData();
       }
+
       console.log("permission", permission);
 
-      if (IsLoggedIn) {
-        verifySession();
+      if (key === null && IsLoggedIn) {
+        getKey();
       }
-
-      const intervalId = setInterval(verifySession, 10 * 60 * 1000); // 5分ごとにチェック
-
-      return () => clearInterval(intervalId);
     }
-  }, [key, permission, dispatch, nowLogin]);
+  }, [dispatch]);
 
+  useEffect(() => {
+    const verifySession = async () => {
+      const response: boolean = await checkSessionApi.checkSession();
+      if (!response) {
+        await allLogout(dispatch);
+        router.push("/login");
+      } else {
+        await dispatch(isLogin());
+        console.log("セッション確認済み");
+      }
+    };
+
+    const IsLoggedIn: boolean =
+      localStorage.getItem("isLogin") === "true" ? true : false;
+    console.log("isLogin", IsLoggedIn);
+
+    if (IsLoggedIn) {
+      verifySession();
+    }
+
+    const intervalId = setInterval(verifySession, 10 * 60 * 1000); // 5分ごとにチェック
+
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
   const navigation =
     permission === "オーナー"
       ? [
