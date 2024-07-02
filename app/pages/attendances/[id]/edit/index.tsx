@@ -42,12 +42,10 @@ const attenDanceEdit: React.FC = () => {
     (user) => user.id === Number(id)
   );
 
-  const [dispatchLoading, setDispatchLoading] = useState<boolean>(false);
   useEffect(() => {
-    setDispatchLoading(true);
     const fetchData = async () => {
       try {
-        await ownerPermission(permission, router);
+        ownerPermission(permission, router);
 
         if (!editUser && permission === "オーナー") {
           await dispatch(showUser(Number(id)) as any);
@@ -56,15 +54,13 @@ const attenDanceEdit: React.FC = () => {
         }
       } catch (error) {
         // console.log("Error", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
-      } finally {
-        setDispatchLoading(false);
       }
     };
 
     fetchData();
-  }, [id, dispatch, key, permission]);
+  }, [dispatch]);
 
   const handleUpdate = async (formData: { id: number; role: string }) => {
     try {
@@ -77,7 +73,14 @@ const attenDanceEdit: React.FC = () => {
 
   const handleDeleteUser = async () => {
     try {
-      await dispatch(deleteUser(editUser.id) as any);
+      confirm(
+        "本当にこのスタッフは退職しますか？今後このスタッフのデータは表示されませんが、よろしいですか？"
+      );
+      if (!confirm) {
+        return;
+      } else {
+        await dispatch(deleteUser(editUser.id) as any);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -94,7 +97,7 @@ const attenDanceEdit: React.FC = () => {
         </div>
       </div>
 
-      {uStatus === "loading" || dispatchLoading || !user ? (
+      {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <div>

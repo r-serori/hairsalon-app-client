@@ -352,11 +352,17 @@ const optionSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.options = [...state.options, ...action.payload.options];
+      state.options =
+        state.options.length === action.payload.options
+          ? state.options
+          : action.payload.options;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.options = [...state.options, ...action.payload.options];
+      state.options =
+        state.options.length === action.payload.options
+          ? state.options
+          : action.payload.options;
     });
   },
 });

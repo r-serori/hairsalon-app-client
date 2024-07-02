@@ -378,7 +378,7 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.customers = [...state.customers, ...action.payload.customers];
+      state.customers = action.payload.customers;
     });
 
     builder.addCase(createCustomerAndSchedule.fulfilled, (state, action) => {

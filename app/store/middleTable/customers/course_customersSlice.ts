@@ -69,17 +69,11 @@ const course_customersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.course_customers = [
-        ...state.course_customers,
-        ...action.payload.course_customers,
-      ];
+      state.course_customers = action.payload.course_customers;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.course_customers = [
-        ...state.course_customers,
-        ...action.payload.course_customers,
-      ];
+      state.course_customers = action.payload.course_customers;
     });
 
     builder.addCase(createCustomer.fulfilled, (state, action) => {

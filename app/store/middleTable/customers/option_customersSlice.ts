@@ -69,17 +69,11 @@ const option_customersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.option_customers = [
-        ...state.option_customers,
-        ...action.payload.option_customers,
-      ];
+      state.option_customers = action.payload.option_customers;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.option_customers = [
-        ...state.option_customers,
-        ...action.payload.option_customers,
-      ];
+      state.option_customers = action.payload.option_customers;
     });
 
     builder.addCase(createCustomer.fulfilled, (state, action) => {

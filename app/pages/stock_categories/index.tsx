@@ -44,8 +44,14 @@ const stock_categories = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await staffPermission(permission, router);
-
+        staffPermission(permission, router);
+        if (permission === "オーナー") {
+          setTHeaderItems(["在庫カテゴリ名", "編集", "削除"]);
+        } else if (permission === "マネージャー") {
+          setTHeaderItems(["在庫カテゴリ名", "編集"]);
+        } else {
+          setTHeaderItems(["在庫カテゴリ名"]);
+        }
         if (
           _.isEmpty(stockCategories) &&
           (permission === "オーナー" ||
@@ -56,22 +62,15 @@ const stock_categories = () => {
         } else {
           return;
         }
-        if (permission === "オーナー") {
-          await setTHeaderItems(["在庫カテゴリ名", "編集", "削除"]);
-        } else if (permission === "マネージャー") {
-          await setTHeaderItems(["在庫カテゴリ名", "編集"]);
-        } else {
-          await setTHeaderItems(["在庫カテゴリ名"]);
-        }
       } catch (error) {
         console.log(error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, stockCategories, permission]);
+  }, [dispatch]);
 
   const searchItems = [{ key: "category", value: "在庫カテゴリ名" }];
 

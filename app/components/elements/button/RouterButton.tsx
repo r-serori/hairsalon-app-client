@@ -6,6 +6,8 @@ interface RouterButtonProps {
   link?: string;
   query?: any;
   value?: string;
+  pxValue?: number;
+  pyValue?: number;
   onChanger?: () => void;
   onChangeAndRouter?: () => void;
 }
@@ -15,6 +17,8 @@ const RouterButton: React.FC<RouterButtonProps> = ({
   onChanger,
   value,
   query,
+  pxValue,
+  pyValue,
   onChangeAndRouter,
 }) => {
   const router = useRouter();
@@ -40,14 +44,20 @@ const RouterButton: React.FC<RouterButtonProps> = ({
       {link ? (
         <button
           onClick={handleRouter}
-          className="md:w-auto text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 rounded-lg text-md font-bold px-4 py-2 text-center cursor-pointer"
+          className={`md:w-auto text-white bg-gradient-to-r from-cyan-500 to-blue-800 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-100 dark:focus:ring-cyan-800 rounded-lg text-md font-bold
+             ${pxValue ? "px-" + pxValue : "px-4"}  
+          ${pyValue ? "py-" + pyValue : "py-2"}
+           text-center cursor-pointer`}
         >
           {value ? value : "戻る"}
         </button>
       ) : (
         <button
           onClick={onChanger}
-          className=" md:w-auto text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 rounded-lg text-md font-bold px-4 py-2 text-center cursor-pointer"
+          className={`md:w-auto text-white bg-gradient-to-r from-cyan-500 to-blue-800 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-100 dark:focus:ring-cyan-800 rounded-lg text-md font-bold ${
+            pxValue ? "px-" + pxValue : "px-4"
+          } ${pxValue ? "py-" + pxValue : "py-2"}
+           text-center cursor-pointer`}
         >
           {value ? value : "戻る"}
         </button>

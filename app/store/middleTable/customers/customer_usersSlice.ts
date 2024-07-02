@@ -70,17 +70,11 @@ const customer_usersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.customer_users = [
-        ...state.customer_users,
-        ...action.payload.customer_users,
-      ];
+      state.customer_users = action.payload.customer_users;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.customer_users = [
-        ...state.customer_users,
-        ...action.payload.customer_users,
-      ];
+      state.customer_users = action.payload.customer_users;
     });
 
     builder.addCase(createCustomer.fulfilled, (state, action) => {

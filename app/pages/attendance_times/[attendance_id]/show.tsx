@@ -60,7 +60,7 @@ const attendanceTimes: React.FC = () => {
           yearMonth: "000111",
         }) as any
       );
-      await setYearMonth("000111");
+      setYearMonth("000111");
     } catch (error) {
       console.error("Error:", error);
       allLogout(dispatch);
@@ -71,7 +71,7 @@ const attendanceTimes: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await ownerPermission(permission, router);
+        ownerPermission(permission, router);
 
         if (
           _.isEmpty(attendanceTimes) &&
@@ -79,7 +79,7 @@ const attendanceTimes: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await setYearMonth("000111");
+          setYearMonth("000111");
           await dispatch(
             selectGetAttendanceTimes({
               user_id: Number(id),
@@ -91,12 +91,12 @@ const attendanceTimes: React.FC = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
     fetchData();
-  }, [id, dispatch, key, permission]);
+  }, [dispatch]);
 
   const searchItems = [
     { key: "start_time", value: "出勤時間" },

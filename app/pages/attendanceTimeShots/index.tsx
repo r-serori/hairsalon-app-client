@@ -26,8 +26,6 @@ import { allLogout } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 
 const AttendanceTimeShots = () => {
-  const [firstRender, setFirstRender] = useState(true);
-
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -40,7 +38,7 @@ const AttendanceTimeShots = () => {
 
   const uError: string | null = useSelector(userError);
 
-  const key: string | null = useSelector(userKey);
+  // const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -62,7 +60,7 @@ const AttendanceTimeShots = () => {
           userCount === null ||
           userCount === "" ||
           userCount === undefined ||
-          (users.length < Number(userCount) && firstRender)
+          users.length < Number(userCount)
         ) {
           await getStaffs();
         }
@@ -71,18 +69,18 @@ const AttendanceTimeShots = () => {
         allLogout(dispatch);
         router.push("/auth/login");
       } finally {
-        setFirstRender(false);
+        localStorage.removeItem("userCount");
       }
     };
 
     fetchData();
-  }, [dispatch, key, permission, users, firstRender]);
+  }, [dispatch]);
 
-  const atimeStatus = useSelector(attendance_timeStatus);
+  // const atimeStatus = useSelector(attendance_timeStatus);
 
-  const atimeMessage = useSelector(attendance_timeMessage);
+  // const atimeMessage = useSelector(attendance_timeMessage);
 
-  const atimeError = useSelector(attendance_timeError);
+  const atimeError: string | null = useSelector(attendance_timeError);
 
   const searchItems = [{ key: "shotUserName", value: "名前" }];
 

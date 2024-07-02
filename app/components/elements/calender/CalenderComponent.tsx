@@ -37,7 +37,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
-  const cStatus = useSelector(customerStatus);
+  const cStatus: string = useSelector(customerStatus);
 
   const eventInputs: EventInput[] = events.map((event) => ({
     id: event.id.toString(),
@@ -105,7 +105,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
   console.log("nextYear", nextYear);
   return (
     <>
-      {cStatus ? (
+      {cStatus === "loading" ? (
         <p>loading...</p>
       ) : (
         // ローディングが終わったらカレンダーを表示する

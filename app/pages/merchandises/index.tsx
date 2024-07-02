@@ -40,8 +40,14 @@ const merchandises = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await staffPermission(permission, router);
-
+        staffPermission(permission, router);
+        if (permission === "オーナー") {
+          setTHeaderItems(["物販名", "価格", "編集", "削除"]);
+        } else if (permission === "マネージャー") {
+          setTHeaderItems(["物販名", "価格", "編集"]);
+        } else {
+          setTHeaderItems(["物販名", "価格"]);
+        }
         if (
           _.isEmpty(merchandises) &&
           (permission === "オーナー" ||
@@ -52,22 +58,15 @@ const merchandises = () => {
         } else {
           return;
         }
-        if (permission === "オーナー") {
-          await setTHeaderItems(["物販名", "価格", "編集", "削除"]);
-        } else if (permission === "マネージャー") {
-          await setTHeaderItems(["物販名", "価格", "編集"]);
-        } else {
-          await setTHeaderItems(["物販名", "価格"]);
-        }
       } catch (error) {
         console.error("Error:", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, merchandises, permission]);
+  }, [dispatch]);
 
   const searchItems = [
     { key: "merchandise_name", value: "物販名" },

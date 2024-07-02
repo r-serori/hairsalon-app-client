@@ -30,7 +30,7 @@ const updatePasswordPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await staffPermission(permission, router);
+        staffPermission(permission, router);
 
         if (
           permission === "オーナー" ||
@@ -48,7 +48,7 @@ const updatePasswordPage: React.FC = () => {
     };
 
     fetchData();
-  }, [key, permission, dispatch]);
+  }, [dispatch]);
 
   const handleUpdatePassword = async (formData: {
     current_password: string;

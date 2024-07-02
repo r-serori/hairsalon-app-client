@@ -90,7 +90,7 @@ export const userApi = {
     try {
       const response = (await sendRequest(
         "GET",
-        `api/user/getAttendanceUsers}`
+        `api/user/getAttendanceUsers`
       )) as any;
       // console.log("responseGetUsersDataだよ", response);
       return response;

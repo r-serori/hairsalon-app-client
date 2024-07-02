@@ -39,7 +39,7 @@ const dashboard: React.FC = () => {
     handleResize(); // コンポーネントがマウントされたときに初期設定を行う
 
     return () => window.removeEventListener("resize", handleResize);
-  }, [permission]);
+  }, []);
 
   return (
     <>
@@ -52,15 +52,12 @@ const dashboard: React.FC = () => {
         />
       )}
 
-      <div className="flex justify-end py-4 mr-4 ">
+      <div className="flex justify-end pt-2 mr-4 ">
         <LogoutButton className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" />
       </div>
       <div className="h-full flex justify-center items-center">
         <nav className={`h-full mt-4`}>
-          <ul
-            className={`flex flex-wrap justify-center h-full
-            ${isFullScreen ? "gap-16" : "gap-4"}`}
-          >
+          <ul className="flex flex-wrap justify-center h-full lg:gap-16 md:gap-8 gap-4 ">
             {permission === "オーナー" ? (
               <NavLink
                 IconName={ManageAccountsIcon}

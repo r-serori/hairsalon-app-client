@@ -24,6 +24,7 @@ body {
     rgba(var(--background-end-rgb), 1)
   );
   font-size: 100%;
+  font-weight: bold;
 }
 @layer utilities {
   .text-balance {
@@ -31,7 +32,15 @@ body {
   }
 }
 
+.user-select-none * {
+  user-select: none;
+}
+
 .fc-daygrid-day {
   border: 2px solid #000;
   /* 日付セルのボーダーの太さと色を変更 */
+}
+
+.break-comma {
+  word-break: break-word;
 }

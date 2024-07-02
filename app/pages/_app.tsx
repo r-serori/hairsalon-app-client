@@ -5,6 +5,7 @@ import { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import store from "../redux/store"; // Assuming your store file is named index.ts or store.ts
 import "../styles/globals.css";
+import "../styles/CustomTable.module.css";
 import Header from "../components/elements/layouts/header";
 import "tailwindcss/tailwind.css";
 import "../styles/CustomTable.module.css";

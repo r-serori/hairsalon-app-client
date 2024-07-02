@@ -749,7 +749,7 @@ const usersSlice = createSlice({
     });
     builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, ...action.payload.responseUsers];
+      state.users = action.payload.responseUsers;
       state.message = action.payload.message;
     });
     builder.addCase(getAttendanceUsers.rejected, (state, action) => {
@@ -764,7 +764,7 @@ const usersSlice = createSlice({
     });
     builder.addCase(showUser.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, action.payload.responseUser];
+      state.users = action.payload.responseUser;
       state.message = "ユーザー情報の取得に成功しました！";
     });
     builder.addCase(showUser.rejected, (state, action) => {
@@ -780,7 +780,11 @@ const usersSlice = createSlice({
     });
     builder.addCase(updateUserPermission.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, action.payload.responseUser];
+      state.users = state.users.map((user) =>
+        user.id === action.payload.responseUser.id
+          ? { ...user, ...action.payload.responseUser }
+          : user
+      );
       state.message = "ユーザー情報の更新に成功しました！";
     });
     builder.addCase(updateUserPermission.rejected, (state, action) => {
@@ -795,7 +799,11 @@ const usersSlice = createSlice({
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, action.payload.responseUser];
+      state.users = state.users.map((user) =>
+        user.id === action.payload.responseUser.id
+          ? { ...user, ...action.payload.responseUser }
+          : user
+      );
       state.message = "ユーザー情報の更新に成功しました！";
     });
     builder.addCase(updateUser.rejected, (state, action) => {
@@ -828,7 +836,6 @@ const usersSlice = createSlice({
     });
     builder.addCase(updateUserPassword.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, action.payload.responseUser];
       state.message = "パスワードの更新に成功しました！";
     });
     builder.addCase(updateUserPassword.rejected, (state, action) => {
@@ -843,7 +850,6 @@ const usersSlice = createSlice({
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, action.payload.responseUser];
       state.message = "パスワードのリセットに成功しました！";
     });
     builder.addCase(resetPassword.rejected, (state, action) => {
@@ -853,20 +859,17 @@ const usersSlice = createSlice({
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, ...action.payload.responseUsers];
-      state.message = action.payload.message;
+      state.users = action.payload.responseUsers;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, ...action.payload.responseUsers];
-      state.message = action.payload.message;
+      state.users = action.payload.responseUsers;
     });
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = [...state.users, ...action.payload.responseUsers];
-      state.message = action.payload.message;
+      state.users = action.payload.responseUsers;
     });
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
@@ -908,10 +911,10 @@ const usersSlice = createSlice({
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
       state.status = "success";
       state.users = action.payload.responseUser
-        ? state.users.map((users) =>
-            users.id === action.payload.responseUser.id
-              ? { ...users, ...action.payload.responseUser }
-              : users
+        ? state.users.map((user) =>
+            user.id === action.payload.responseUser.id
+              ? { ...user, ...action.payload.responseUser }
+              : user
           )
         : state.users;
     });

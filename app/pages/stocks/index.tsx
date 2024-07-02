@@ -48,8 +48,42 @@ const stocks: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await staffPermission(permission, router);
+        staffPermission(permission, router);
 
+        if (permission === "オーナー") {
+          setTHeaderItems([
+            "在庫カテゴリ",
+            "商品名",
+            "価格",
+            "在庫数量",
+            "備考",
+            "仕入れ先",
+            "通知",
+            "編集",
+            "削除",
+          ]);
+        } else if (permission === "マネージャー") {
+          setTHeaderItems([
+            "在庫カテゴリ",
+            "商品名",
+            "価格",
+            "在庫数量",
+            "備考",
+            "仕入れ先",
+            "通知",
+            "編集",
+          ]);
+        } else if (permission === "スタッフ") {
+          setTHeaderItems([
+            "在庫カテゴリ",
+            "商品名",
+            "価格",
+            "在庫数量",
+            "備考",
+            "仕入れ先",
+            "通知",
+          ]);
+        }
         if (
           _.isEmpty(stocks) &&
           _.isEmpty(stockCategories) &&
@@ -62,50 +96,15 @@ const stocks: React.FC = () => {
         } else {
           return;
         }
-
-        if (permission === "オーナー") {
-          await setTHeaderItems([
-            "在庫カテゴリ",
-            "商品名",
-            "価格",
-            "在庫数量",
-            "備考",
-            "仕入れ先",
-            "通知",
-            "編集",
-            "削除",
-          ]);
-        } else if (permission === "マネージャー") {
-          await setTHeaderItems([
-            "在庫カテゴリ",
-            "商品名",
-            "価格",
-            "在庫数量",
-            "備考",
-            "仕入れ先",
-            "通知",
-            "編集",
-          ]);
-        } else if (permission === "スタッフ") {
-          await setTHeaderItems([
-            "在庫カテゴリ",
-            "商品名",
-            "価格",
-            "在庫数量",
-            "備考",
-            "仕入れ先",
-            "通知",
-          ]);
-        }
       } catch (error) {
         console.log(error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, stocks, stockCategories, permission]);
+  }, [dispatch]);
 
   const searchItems = [
     { key: "category_name", value: "在庫カテゴリ" },

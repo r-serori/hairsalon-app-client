@@ -27,7 +27,7 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-12">
+        <form onSubmit={handleSubmit} className="space-y-12 mx-4">
           <BasicTextField
             type="text"
             placeholder="メールアドレス"

@@ -36,7 +36,7 @@ const courses: React.FC = () => {
 
   const cError: string | null = useSelector(courseError);
 
-  const key: string | null = useSelector(userKey);
+  // const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -44,13 +44,13 @@ const courses: React.FC = () => {
       try {
         console.log("permission", permission);
 
-        await staffPermission(permission, router);
+        staffPermission(permission, router);
         if (permission === "オーナー") {
-          await setTHeaderItems(["コース名", "価格", "編集", "削除"]);
+          setTHeaderItems(["コース名", "価格", "編集", "削除"]);
         } else if (permission === "マネージャー") {
-          await setTHeaderItems(["コース名", "価格", "編集"]);
+          setTHeaderItems(["コース名", "価格", "編集"]);
         } else {
-          await setTHeaderItems(["コース名", "価格"]);
+          setTHeaderItems(["コース名", "価格"]);
         }
 
         if (
@@ -65,13 +65,13 @@ const courses: React.FC = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData(); // useEffect内で関数を呼び出す
-  }, [dispatch, key, permission]); // useEffectの依存リストを指定
+  }, [dispatch]); // useEffectの依存リストを指定
 
   const searchItems = [
     { key: "course_name", value: "コース名" },

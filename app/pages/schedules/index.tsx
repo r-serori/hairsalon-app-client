@@ -42,7 +42,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await staffPermission(permission, router);
+        staffPermission(permission, router);
 
         if (
           _.isEmpty(schedules) &&
@@ -54,8 +54,10 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
         }
       } catch (error) {
         console.log(error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
+      } finally {
+        localStorage.removeItem("userCount");
       }
     };
     fetchData();

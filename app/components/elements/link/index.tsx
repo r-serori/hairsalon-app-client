@@ -15,10 +15,13 @@ const NavLink: React.FC<NavLinkProps> = ({
   label,
 }) => {
   return (
-    <li className="w-40 h-40 bg-gray-400 flex justify-center items-center rounded-lg">
+    <li className="lg:w-40 lg:h-40 md:w-32 md:h-32 w-24 h-24 bg-gray-400 flex justify-center items-center rounded-lg">
       <Link href={href}>
-        <IconName src={iconSrc} className="w-20 h-20" />
-        <span className="mt-2 block text-center" style={{ fontSize: "1.2rem" }}>
+        <IconName
+          src={iconSrc}
+          className="lg:w-20 lg:h-20 md:w-16 md:h-16 w-12 h-12 "
+        />
+        <span className="mt-2 block text-center font-medium lg:text-lg sm:text-sm  ">
           {label}
         </span>
       </Link>

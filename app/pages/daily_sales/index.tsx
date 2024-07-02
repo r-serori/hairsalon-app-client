@@ -43,10 +43,10 @@ const daily_sales: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await ownerPermission(permission, router);
+        ownerPermission(permission, router);
 
         if (permission === "オーナー") {
-          await setTHeaderItems(["日付", "売上", "編集", "削除"]);
+          setTHeaderItems(["日付", "売上", "編集", "削除"]);
         } else {
           throw new Error("Permission is not オーナー");
         }
@@ -56,13 +56,13 @@ const daily_sales: React.FC = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, daily_sales, permission]);
+  }, [dispatch]);
 
   const searchItems = [
     { key: "date", value: "日付" },

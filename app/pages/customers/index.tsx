@@ -70,15 +70,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     const fetchData = async () => {
       try {
         console.log("permission", permission);
-        await staffPermission(permission, router);
-        if (
-          _.isEmpty(hairstyles) &&
-          (permission === "オーナー" ||
-            permission === "マネージャー" ||
-            permission === "スタッフ")
-        ) {
-          await dispatch(getCustomer({}) as any);
-        }
+        staffPermission(permission, router);
         if (permission === "オーナー") {
           setTHeaderItems([
             "顧客名",
@@ -116,15 +108,25 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
             "担当者名",
           ]);
         }
+        if (
+          _.isEmpty(hairstyles) &&
+          (permission === "オーナー" ||
+            permission === "マネージャー" ||
+            permission === "スタッフ")
+        ) {
+          await dispatch(getCustomer({}) as any);
+        }
       } catch (error) {
         console.log(error);
         allLogout(dispatch);
         router.push("/auth/login");
+      } finally {
+        localStorage.removeItem("userCount");
       }
     };
 
     fetchData();
-  }, [dispatch, key, permission, customers]);
+  }, [dispatch]);
 
   const courses: CourseState[] = useSelector(coursesStore);
 

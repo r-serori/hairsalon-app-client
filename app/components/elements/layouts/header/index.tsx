@@ -12,6 +12,7 @@ import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../Hooks/authSelector";
 import { getPermission } from "../../../../store/auth/permissionSlice";
 import { isLogin } from "../../../../store/auth/isLoginSlice";
+import Link from "next/link";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -20,6 +21,7 @@ function classNames(...classes) {
 export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const currentPath = router.pathname;
   const nowLogin: boolean = useSelector(loginNow);
   const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
@@ -90,30 +92,118 @@ export default function Header() {
   const navigation =
     permission === "オーナー"
       ? [
-          { name: "一覧画面", href: "/dashboard", current: false },
-          { name: "スタッフ管理", href: "/attendances", current: false },
-          { name: "勤怠管理", href: "/attendanceTimeShots", current: false },
-          { name: "顧客管理", href: "/customers", current: false },
-          { name: "予約表", href: "/schedules", current: false },
-          { name: "在庫管理", href: "/stocks", current: false },
-          { name: "コース", href: "/courses", current: false },
-          { name: "オプション", href: "/options", current: false },
-          { name: "物販", href: "/merchandises", current: false },
-          { name: "髪型", href: "/hairstyles", current: false },
-          { name: "日次売上", href: "/daily_sales", current: false },
-          { name: "月次売上", href: "/monthly_sales", current: false },
-          { name: "年次売上", href: "/yearly_sales", current: false },
+          {
+            name: "一覧画面",
+            href: "/dashboard",
+            current: currentPath === "/dashboard",
+          },
+          {
+            name: "スタッフ管理",
+            href: "/attendances",
+            current: currentPath === "/attendances",
+          },
+          {
+            name: "勤怠管理",
+            href: "/attendanceTimeShots",
+            current: currentPath === "/attendanceTimeShots",
+          },
+          {
+            name: "顧客管理",
+            href: "/customers",
+            current: currentPath === "/customers",
+          },
+          {
+            name: "予約表",
+            href: "/schedules",
+            current: currentPath === "/schedules",
+          },
+          {
+            name: "在庫管理",
+            href: "/stocks",
+            current: currentPath === "/stocks",
+          },
+          {
+            name: "コース",
+            href: "/courses",
+            current: currentPath === "/courses",
+          },
+          {
+            name: "オプション",
+            href: "/options",
+            current: currentPath === "/options",
+          },
+          {
+            name: "物販",
+            href: "/merchandises",
+            current: currentPath === "/merchandises",
+          },
+          {
+            name: "髪型",
+            href: "/hairstyles",
+            current: currentPath === "/hairstyles",
+          },
+          {
+            name: "日次売上",
+            href: "/daily_sales",
+            current: currentPath === "/daily_sales",
+          },
+          {
+            name: "月次売上",
+            href: "/monthly_sales",
+            current: currentPath === "/monthly_sales",
+          },
+          {
+            name: "年次売上",
+            href: "/yearly_sales",
+            current: currentPath === "/yearly_sales",
+          },
         ]
       : [
-          { name: "一覧画面", href: "/dashboard", current: false },
-          { name: "勤怠管理", href: "/attendanceTimeShots", current: false },
-          { name: "顧客管理", href: "/customers", current: false },
-          { name: "予約表", href: "/schedules", current: false },
-          { name: "在庫管理", href: "/stocks", current: false },
-          { name: "コース", href: "/courses", current: false },
-          { name: "オプション", href: "/options", current: false },
-          { name: "物販", href: "/merchandises", current: false },
-          { name: "髪型", href: "/hairstyles", current: false },
+          {
+            name: "一覧画面",
+            href: "/dashboard",
+            current: currentPath === "/dashboard",
+          },
+          {
+            name: "勤怠",
+            href: "/attendanceTimeShots",
+            current: currentPath === "/attendanceTimeShots",
+          },
+          {
+            name: "顧客管理",
+            href: "/customers",
+            current: currentPath === "/customers",
+          },
+          {
+            name: "予約表",
+            href: "/schedules",
+            current: currentPath === "/schedules",
+          },
+          {
+            name: "在庫管理",
+            href: "/stocks",
+            current: currentPath === "/stocks",
+          },
+          {
+            name: "コース",
+            href: "/courses",
+            current: currentPath === "/courses",
+          },
+          {
+            name: "オプション",
+            href: "/options",
+            current: currentPath === "/options",
+          },
+          {
+            name: "物販",
+            href: "/merchandises",
+            current: currentPath === "/merchandises",
+          },
+          {
+            name: "髪型",
+            href: "/hairstyles",
+            current: currentPath === "/hairstyles",
+          },
         ];
 
   const userNavigation = [
@@ -127,28 +217,27 @@ export default function Header() {
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl  sm:px-6 lg:px-8">
                   <div className="flex h-16 items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0"></div>
+                    <div className="flex items-center ">
                       <div className="hidden md:block">
-                        <div className="ml-8 flex items-baseline space-x-4">
-                          {navigation.map((item) => (
-                            <a
-                              key={item.name}
-                              href={item.href}
+                        {/* items-baseline: 子要素のベースラインを揃える。テキストのベースラインが均等になる。 */}
+
+                        {navigation.map((item) => (
+                          <Link key={item.name} href={item.href}>
+                            <span
                               className={classNames(
                                 item.current
-                                  ? "bg-gray-900 text-white"
-                                  : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                "rounded-md px-3 py-2 mx-4 text-sm font-medium"
+                                  ? "bg-gray-900 text-blue-600 p-4 "
+                                  : "text-gray-200 hover:bg-gray-700 hover:text-white",
+                                "rounded-md p-4 text-md font-medium"
                               )}
                               aria-current={item.current ? "page" : undefined}
                             >
                               {item.name}
-                            </a>
-                          ))}
-                        </div>
+                            </span>
+                          </Link>
+                        ))}
                       </div>
                     </div>
                     <div className="hidden md:block">
@@ -172,19 +261,15 @@ export default function Header() {
                           >
                             <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                               {userNavigation.map((item) => (
-                                <Menu.Item key={item.name}>
-                                  {({ active }) => (
-                                    <a
-                                      href={item.href}
-                                      className={classNames(
-                                        active ? "bg-gray-100" : "",
-                                        "block px-4 py-2 text-sm text-gray-700"
-                                      )}
-                                    >
-                                      {item.name}
-                                    </a>
-                                  )}
-                                </Menu.Item>
+                                <Link key={item.name} href={item.href}>
+                                  <span
+                                    className={classNames(
+                                      "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    )}
+                                  >
+                                    {item.name}
+                                  </span>
+                                </Link>
                               ))}
                             </Menu.Items>
                           </Transition>
@@ -215,20 +300,19 @@ export default function Header() {
                 <Disclosure.Panel className="md:hidden">
                   <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                     {navigation.map((item) => (
-                      <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "block rounded-md px-3 py-2 text-base font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </Disclosure.Button>
+                      <Link key={item.name} href={item.href}>
+                        <span
+                          className={classNames(
+                            item.current
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "block rounded-md px-3 py-2 text-base font-medium"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
+                          {item.name}
+                        </span>
+                      </Link>
                     ))}
                   </div>
                   <div className="border-t border-gray-700 pb-3 pt-4">
@@ -241,14 +325,15 @@ export default function Header() {
 
                     <div className="mt-3 space-y-1 px-2">
                       {userNavigation.map((item) => (
-                        <Disclosure.Button
-                          key={item.name}
-                          as="a"
-                          href={item.href}
-                          className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                        >
-                          {item.name}
-                        </Disclosure.Button>
+                        <Link key={item.name} href={item.href}>
+                          <span
+                            className={classNames(
+                              "block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                            )}
+                          >
+                            {item.name}
+                          </span>
+                        </Link>
                       ))}
                       <LogoutButton
                         className={

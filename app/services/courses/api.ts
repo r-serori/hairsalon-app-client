@@ -14,7 +14,7 @@ export const courseApi = {
 
   fetchAllCourses: async () => {
     try {
-      const response = await sendRequest("GET", `/course/all`);
+      const response = await sendRequest("GET", `/courses/all`);
       // console.log("courses fetched");
       return response;
     } catch (error) {

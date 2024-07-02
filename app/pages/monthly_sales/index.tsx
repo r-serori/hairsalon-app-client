@@ -45,10 +45,10 @@ const monthly_sales: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await ownerPermission(permission, router);
+        ownerPermission(permission, router);
 
         if (permission === "オーナー") {
-          await setTHeaderItems(["年月", "売上", "編集", "削除"]);
+          setTHeaderItems(["年月", "売上", "編集", "削除"]);
         } else {
           throw new Error("Permission is not オーナー");
         }
@@ -58,12 +58,12 @@ const monthly_sales: React.FC = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
     fetchData();
-  }, [dispatch, key, permission, monthly_sales]);
+  }, [dispatch]);
 
   const searchItems = [
     { key: "year_month", value: "年-月" },

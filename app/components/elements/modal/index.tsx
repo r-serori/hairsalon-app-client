@@ -114,16 +114,19 @@ const BasicModal: React.FC<BasicModalProps> = ({
       {link === "/attendanceTimeShots" ||
       link === "/attendanceTimeStart" ||
       link === "/attendanceTimeEnd" ? (
-        <Button onClick={handleOpenAttendance} className="w-full y-full p-4 ">
-          {editValue}
+        <Button
+          onClick={handleOpenAttendance}
+          className="w-full y-full  font-bold text-md "
+        >
+          <span className="font-bold text-md break-comma">{editValue}</span>
         </Button>
       ) : (
         <Button
           onClick={handleOpen}
           className="text-gray-900 cursor-pointer hover:bg-gray-400 
-          hover:text-white focus:ring-4 focus:ring-gray-300 font-medium text-sm dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 "
+          hover:text-white focus:ring-4 focus:ring-gray-300 font-medium text-md dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 font-bold"
         >
-          {editValue}
+          <span className="font-bold text-md break-comma">{editValue}</span>
         </Button>
       )}
 

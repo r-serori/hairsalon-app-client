@@ -38,7 +38,15 @@ const options: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await staffPermission(permission, router);
+        staffPermission(permission, router);
+
+        if (permission === "オーナー") {
+          setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
+        } else if (permission === "マネージャー") {
+          setTHeaderItems(["オプション名", "価格", "編集"]);
+        } else {
+          setTHeaderItems(["オプション名", "価格"]);
+        }
 
         if (
           _.isEmpty(options) &&
@@ -50,23 +58,15 @@ const options: React.FC = () => {
         } else {
           return;
         }
-
-        if (permission === "オーナー") {
-          setTHeaderItems(["オプション名", "価格", "編集", "削除"]);
-        } else if (permission === "マネージャー") {
-          setTHeaderItems(["オプション名", "価格", "編集"]);
-        } else {
-          setTHeaderItems(["オプション名", "価格"]);
-        }
       } catch (error) {
         console.error("Error:", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, options, permission]);
+  }, [dispatch]);
 
   const searchItems = [
     { key: "option_name", value: "オプション名" },

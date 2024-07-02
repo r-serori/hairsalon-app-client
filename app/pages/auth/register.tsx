@@ -55,19 +55,19 @@ const RegisterPage: React.FC = () => {
       if (userKey === null) {
         throw new Error("e");
       }
-      const pushUser: boolean = await pushUserId(userId, userKey);
+      const pushUser: boolean = pushUserId(userId, userKey);
 
       await dispatch(getPermission({}) as any);
 
       if (pushUser) {
-        await dispatch(isLogin());
+        dispatch(isLogin());
         router.push("/auth/owner");
       } else {
         throw new Error("e");
       }
     } catch (error) {
-      await allLogout(dispatch);
-      await changeMessage("登録処理に失敗しました！もう一度お試しください！");
+      allLogout(dispatch);
+      changeMessage("登録処理に失敗しました！もう一度お試しください！");
       localStorage.removeItem("registerNow");
       console.log("Error", error);
       return;

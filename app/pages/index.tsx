@@ -40,13 +40,10 @@ const HomePage: React.FC = () => {
         <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
       <div className="flex flex-col items-center justify-between container h-full mx-auto overflow-hidden ">
-        <div className="flex justify-end py-4 mr-4 ">
-          <LogoutButton className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" />
-        </div>
         <div>
           <h1
             id="rotate"
-            className={`mt-10 lg:text-8xl text-3xl ${
+            className={`mt-20 lg:text-8xl md:text-6xl sm:text-4xl text-3xl  ${
               uError === null && "rotate-12"
             }`}
           >
@@ -55,12 +52,22 @@ const HomePage: React.FC = () => {
         </div>
 
         <nav className="mt-16">
-          <ul className="flex gap-24 mr-12">
-            <li id="active">
-              <RouterButton link="auth/register" value="ユーザー登録画面へ" />
+          <ul className="flex gap-24 lg:mr-12">
+            <li id="active" className="lg:text-xl text-md">
+              <RouterButton
+                link="auth/register"
+                value="新規登録"
+                pxValue={5}
+                pyValue={4}
+              />
             </li>
-            <li id="active">
-              <RouterButton link="auth/login" value="ログイン画面へ" />
+            <li id="active" className="lg:text-xl text-md">
+              <RouterButton
+                link="auth/login"
+                value="ログイン"
+                pxValue={5}
+                pyValue={4}
+              />
             </li>
           </ul>
         </nav>

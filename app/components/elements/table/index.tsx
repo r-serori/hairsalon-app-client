@@ -31,7 +31,7 @@ interface ComponentTableProps {
   role: string;
 }
 
-const ComponentTable = ({
+const ComponentTable: React.FC<ComponentTableProps> = ({
   nodes,
   searchItems,
   nodesProps,
@@ -96,13 +96,16 @@ const ComponentTable = ({
   };
 
   const pageInfo = {
-    total: data.nodes.length,
-    startSize: pagination.page * pagination.size + 1,
+    total: data.nodes.length || 0,
+    startSize: pagination.page * pagination.size + 1 || 0,
     endSize: Math.min(
-      (pagination.page + 1) * pagination.size,
+      (pagination.page + 1) * pagination.size || 0,
       data.nodes.length
     ),
-    totalPages: Math.ceil(data.nodes.length / pagination.size),
+    totalPages:
+      data.nodes.length < 11
+        ? 0
+        : Math.ceil(data.nodes.length / pagination.size),
   };
 
   const columnCount = tHeaderItems.length;
@@ -132,46 +135,7 @@ const ComponentTable = ({
 
   return (
     <div className="items-center px-2">
-      <div className="flex items-end ">
-        <div>
-          <label htmlFor="searchField" className="items-center block ">
-            検索カテゴリ:
-            <select
-              id="searchField"
-              name="searchField"
-              value={searchField}
-              onChange={(e) => setSearchField(e.target.value)}
-              className="items-center pr-16 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
-            >
-              <option value="">すべて</option>
-              {searchItems.map((searchItem) => {
-                const searchKey = searchItem.key;
-                const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
-                // console.log("searchKeyだよ");
-                // console.log(searchKey); //名前
-
-                return (
-                  <option key={searchKey} value={searchKey}>
-                    {searchValue}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-
-          <label htmlFor="searchText" className="items-center block mt-4">
-            検索ワード名:
-            <input
-              type="text"
-              id="searchText"
-              name="searchText"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)} // イベントオブジェクトを明示的に渡す
-              placeholder="検索ワード"
-              className="items-center py-2 pl-1 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
-            />
-          </label>
-        </div>
+      <div className="flex items-end">
         <div className="ml-auto">
           {link === "/stocks" && data && (
             <StockNotice nodes={nodes} setSearch={setSearchText} />
@@ -183,9 +147,112 @@ const ComponentTable = ({
         </div>
       </div>
 
+      <div className="items-center flex justify-between items-center mb-4  ">
+        <label
+          htmlFor="searchField"
+          className="items-center block font-bold  text-lg"
+        >
+          検索カテゴリ :{" "}
+          <select
+            id="searchField"
+            name="searchField"
+            value={searchField}
+            onChange={(e) => setSearchField(e.target.value)}
+            className="items-center pr-16 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
+          >
+            <option value="">すべて</option>
+            {searchItems.map((searchItem) => {
+              const searchKey = searchItem.key;
+              const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
+              // console.log("searchKeyだよ");
+              // console.log(searchKey); //名前
+
+              return (
+                <option key={searchKey} value={searchKey}>
+                  {searchValue}
+                </option>
+              );
+            })}
+          </select>
+        </label>
+
+        <label
+          htmlFor="searchText"
+          className="items-center block  font-bold text-lg"
+        >
+          検索ワード名 :{" "}
+          <input
+            type="text"
+            id="searchText"
+            name="searchText"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)} // イベントオブジェクトを明示的に渡す
+            placeholder="検索ワード"
+            className="items-center py-2 pl-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
+          />
+        </label>
+
+        <div className="items-center flex space-x-2 ">
+          <div>
+            <span className="items-center text-gray-700  font-medium  text-lg">
+              全件数: {pageInfo.total}件
+            </span>
+          </div>
+          <span className="items-center text-gray-700 text-lg">
+            {pageInfo.startSize}-{pageInfo.endSize} 件目 / 全 {pageInfo.total}{" "}
+            件
+          </span>
+          <div className="items-center flex space-x-2">
+            <button
+              type="button"
+              disabled={pagination.page === 0 || data.nodes.length < 11}
+              className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 
+              focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg
+               dark:shadow-green-800/80  font-medium rounded-lg text-md px-4 py-1.5 text-center "
+            >
+              {"<<"}
+            </button>
+            <button
+              type="button"
+              disabled={pagination.page === 0 || data.nodes.length < 11}
+              onClick={() => handlePageChange(pagination.page - 1)}
+              className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br 
+              focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800
+               shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80  font-medium rounded-lg text-md px-4 py-1.5 text-center "
+            >
+              {"<"}
+            </button>
+            <button
+              type="button"
+              disabled={
+                pagination.page + 1 === pageInfo.totalPages ||
+                data.nodes.length < 11
+              }
+              onClick={() => handlePageChange(pagination.page + 1)}
+              className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br 
+              focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg 
+              dark:shadow-teal-800/80 font-medium rounded-lg text-md px-4 py-1.5 text-center "
+            >
+              {">"}
+            </button>
+            <button
+              type="button"
+              disabled={
+                pagination.page + 1 === pageInfo.total || data.nodes.length < 11
+              }
+              onClick={() => handlePageChange(pageInfo.totalPages - 1)}
+              className="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none 
+              focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-lg text-md px-4 py-1.5 text-center "
+            >
+              {">>"}
+            </button>
+          </div>
+        </div>
+      </div>
+
       <Table
         data={paginatedData}
-        className="items-center rounded-xl border border-gray-300 shadow-md w-full mt-4"
+        className="items-center rounded-xl border border-gray-300 shadow-md w-full mt-2 "
         theme={theme}
         layout={{ custom: true, horizontalScroll: true }}
       >
@@ -197,11 +264,7 @@ const ComponentTable = ({
                 {tHeaderItems.map((tHeaderItem, index) => (
                   <HeaderCell
                     key={`${tHeaderItem} + ${index}`}
-                    className="items-center bg-blue-200 text-blue-700 text-center text-sm "
-                    style={{
-                      whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                      padding: "4px",
-                    }}
+                    className="items-center bg-blue-300 text-blue-800 text-center p-2"
                   >
                     {tHeaderItem}
                   </HeaderCell>
@@ -244,11 +307,7 @@ const ComponentTable = ({
                       return (
                         <Cell
                           key={`${propDate} + ${propName} + ${node.id} + ${index} `}
-                          className="items-center bg-gray-100 text-gray-900 text-sm text-center "
-                          style={{
-                            cursor: "pointer",
-                            whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                          }}
+                          className="items-center bg-gray-100 text-gray-900  text-center"
                         >
                           {propDate}
                         </Cell>
@@ -270,10 +329,7 @@ const ComponentTable = ({
                       return (
                         <Cell
                           key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                          className="items-center bg-gray-100 text-gray-900 text-sm text-center"
-                          style={{
-                            cursor: "pointer",
-                          }}
+                          className="items-center bg-gray-100 text-gray-900  text-center"
                         >
                           {propValue}
                         </Cell>
@@ -285,10 +341,7 @@ const ComponentTable = ({
                       return (
                         <Cell
                           key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                          className="items-center bg-gray-100 text-gray-900 text-xl text-center"
-                          style={{
-                            cursor: "pointer",
-                          }}
+                          className="items-center bg-gray-100 text-gray-900  text-center"
                         >
                           {propValue
                             ? dayjs(propValue)
@@ -309,9 +362,6 @@ const ComponentTable = ({
                               : `${propValue} + ${propName} + ${node.id}+ ${index} + end`
                           }
                           className="items-center bg-gray-100 text-gray-900 text-center pb-1 "
-                          style={{
-                            cursor: "pointer",
-                          }}
                         >
                           <div className="flex justify-center items-center text-center mx-auto">
                             <img
@@ -343,10 +393,7 @@ const ComponentTable = ({
                       return (
                         <Cell
                           key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                          className="items-center bg-gray-100 text-gray-900 text-sm text-center"
-                          style={{
-                            cursor: "pointer",
-                          }}
+                          className="items-center bg-gray-100 text-gray-900 text-xl text-center pointer"
                         >
                           <BasicModal
                             type={propName}
@@ -364,16 +411,18 @@ const ComponentTable = ({
                   tHeaderItems.includes("出勤時間と写真を編集") ? (
                     <Cell
                       className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 "
-                      style={{
-                        whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                      }}
+                      style={
+                        node.attendanceNow === "勤務中"
+                          ? { cursor: "not-allowed" }
+                          : { cursor: "pointer" }
+                      }
                     >
                       {node.attendanceNow === "勤務中" ? (
                         <div className="w-full y-full p-4 ">
                           今日も１日頑張りましょう！！
                         </div>
                       ) : (
-                        <div className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm text-center ml-2　pointer ">
+                        <div className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg  text-center ml-2 pointer ">
                           <BasicModal
                             editValue={
                               link === "/attendance_times"
@@ -402,16 +451,18 @@ const ComponentTable = ({
                   tHeaderItems.includes("退勤時間と写真を編集") ? (
                     <Cell
                       className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
-                      style={{
-                        whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                      }}
+                      style={
+                        node.attendanceNow === "退勤中"
+                          ? { cursor: "not-allowed" }
+                          : { cursor: "pointer" }
+                      }
                     >
                       {node.attendanceNow === "退勤中" ? (
                         <div className="w-full y-full p-4  ">
                           今日も１日お疲れ様でした！！
                         </div>
                       ) : (
-                        <div className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm text-center ml-2 pointer">
+                        <div className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg  text-center ml-2 pointer">
                           <BasicModal
                             editValue={
                               link === "/attendance_times"
@@ -439,16 +490,10 @@ const ComponentTable = ({
                   {tHeaderItems.includes("編集") && (
                     // console.log("編集nodeだよ"),
                     // console.log(node.id),
-                    <Cell
-                      className="items-center bg-gray-100 text-gray-900 pt-1 px-1"
-                      style={{
-                        cursor: "pointer",
-                        whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                      }}
-                    >
+                    <Cell className="items-center bg-gray-100 text-gray-900 pt-1 px-1 pointer">
                       <div className="flex justify-center items-center text-center mx-auto pb-1">
                         <button
-                          className="items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
+                          className="items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg  px-4 py-2 text-center "
                           onClick={() => handleEditManagement(node.id, link)}
                         >
                           編集
@@ -458,13 +503,7 @@ const ComponentTable = ({
                   )}
                   {/* tHeaderItemsに"削除"が含まれていたら作成 */}
                   {tHeaderItems.includes("削除") && (
-                    <Cell
-                      className="items-center bg-gray-100 text-gray-900 py-1 pr-1 "
-                      style={{
-                        cursor: "pointer",
-                        whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                      }}
-                    >
+                    <Cell className="items-center bg-gray-100 text-gray-900 py-1 pr-1 pointer">
                       <div className="items-center mx-auto text-center ">
                         <DeleteMan id={node.id} link={link} />
                       </div>
@@ -473,97 +512,23 @@ const ComponentTable = ({
 
                   {/* tHeaderItemsに"時間管理"が含まれていたら作成 */}
                   {tHeaderItems.includes("勤怠時間管理") && (
-                    <Cell
-                      className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
-                      style={{
-                        cursor: "pointer",
-                        whiteSpace: "pre-wrap", // テキストの自動改行を有効にする
-                      }}
-                    >
+                    <Cell className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 pointer">
                       <div className="flex justify-center items-center text-center mx-auto pb-1">
                         <button
                           onClick={() => handleTimeManagement(node.id)}
-                          className="items-center text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
+                          className="items-center text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg  px-4 py-2 text-center "
                         >
                           勤怠時間管理
                         </button>
                       </div>
                     </Cell>
                   )}
-
-                  {/* tHeaderItemsに"予約"が含まれていたら作成 */}
-                  {/* {tHeaderItems.includes("時間管理") && (
-                      <Cell
-                        className="items-center bg-gray-100 text-gray-900 text-3xl pt-2"
-                        style={{
-                          cursor: "pointer",
-                          overflow: "auto",
-                        }}
-                      >
-                        <div className="items-center text-center mx-auto">
-                          <button
-                            onClick={() => handleReservation(node.id)}
-                            className="items-center text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-3 py-2.5 text-center me-2 mb-2"
-                          >
-                            予約
-                          </button>
-                        </div>
-                      </Cell>
-                    )} */}
                 </Row>
               ))}
             </Body>
           </>
         )}
       </Table>
-
-      <div className="items-center flex justify-between items-center mt-8  ">
-        <div>
-          <span className="items-center text-gray-700">
-            全件数: {pageInfo.total}
-          </span>
-        </div>
-        <div className="items-center flex space-x-2">
-          <span className="items-center text-gray-700">
-            {pageInfo.startSize}-{pageInfo.endSize} 件目 / 全 {pageInfo.total}{" "}
-            件
-          </span>
-          <div className="items-center flex space-x-2">
-            <button
-              type="button"
-              disabled={pagination.page === 0}
-              onClick={() => handlePageChange(0)}
-              className="items-center btn-pagination"
-            >
-              {"|<"}
-            </button>
-            <button
-              type="button"
-              disabled={pagination.page === 0}
-              onClick={() => handlePageChange(pagination.page - 1)}
-              className="items-center btn-pagination "
-            >
-              {"<"}
-            </button>
-            <button
-              type="button"
-              disabled={pagination.page + 1 === pageInfo.totalPages}
-              onClick={() => handlePageChange(pagination.page + 1)}
-              className="items-center btn-pagination"
-            >
-              {">"}
-            </button>
-            <button
-              type="button"
-              disabled={pagination.page + 1 === pageInfo.totalPages}
-              onClick={() => handlePageChange(pageInfo.totalPages - 1)}
-              className="items-center btn-pagination"
-            >
-              {">|"}
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

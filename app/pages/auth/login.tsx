@@ -16,6 +16,7 @@ import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
 import { pushUserId } from "../../components/Hooks/pushLocalStorage";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import StorefrontIcon from "@mui/icons-material/Storefront";
+import { getPermission } from "../../store/auth/permissionSlice";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,26 +45,26 @@ const LoginPage: React.FC = () => {
         console.log("key is null");
         throw new Error("e");
       }
-      const pushUser: boolean = await pushUserId(userId, userKey);
+      const pushUser: boolean = pushUserId(userId, userKey);
 
       console.log("pushUser", pushUser);
 
+      await dispatch(getPermission({}) as any);
+
       if (pushUser) {
-        await dispatch(isLogin());
+        dispatch(isLogin());
         // 暗号化されたデータをローカルストレージに保存
         router.push("/dashboard");
       } else if (pushUser) {
-        await dispatch(isLogin());
+        dispatch(isLogin());
         router.push("/auth/owner");
       } else {
         throw new Error("e");
       }
     } catch (error) {
       localStorage.removeItem("registerNow");
-      await allLogout(dispatch);
-      await changeMessage(
-        "ログイン処理に失敗しました！もう一度お試しください！"
-      );
+      allLogout(dispatch);
+      changeMessage("ログイン処理に失敗しました！もう一度お試しください！");
       console.log("Error", error);
       return;
     }
@@ -88,20 +89,20 @@ const LoginPage: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <div className="mt-4 ml-4">
+          <div className="mt-4 ml-4 ">
             <RouterButton
               link="/"
-              value="ホーム画面へ戻る"
+              value="ホーム画面へ"
               onChangeAndRouter={() => dispatch(clearError())}
             />
           </div>
           <AuthLoginForm onSubmit={handleLogin} />
 
-          <div className="flex justify-center gap-48 ">
-            <div id="active" className="mt-12 text-8xl">
+          <div className="flex justify-center gap-32 ">
+            <div id="active" className="mt-10 text-8xl ">
               <ContentCutIcon className="text-8xl" />
             </div>
-            <div id="rotate" className="mt-12 text-8xl">
+            <div id="rotate" className="mt-10 text-8xl">
               <StorefrontIcon className="text-8xl" />
             </div>
           </div>

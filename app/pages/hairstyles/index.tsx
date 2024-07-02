@@ -19,6 +19,7 @@ import { userKey, permissionStore } from "../../components/Hooks/authSelector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
+import { Await } from "react-router-dom";
 
 const hairstyles: React.FC = () => {
   const router = useRouter();
@@ -40,7 +41,15 @@ const hairstyles: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await staffPermission(permission, router);
+        staffPermission(permission, router);
+
+        if (permission === "オーナー") {
+          setTHeaderItems(["髪型名", "編集", "削除"]);
+        } else if (permission === "マネージャー") {
+          setTHeaderItems(["髪型名", "編集"]);
+        } else {
+          setTHeaderItems(["髪型名"]);
+        }
         if (
           _.isEmpty(hairstyles) &&
           (permission === "オーナー" ||
@@ -51,22 +60,15 @@ const hairstyles: React.FC = () => {
         } else {
           return;
         }
-        if (permission === "オーナー") {
-          await setTHeaderItems(["髪型名", "編集", "削除"]);
-        } else if (permission === "マネージャー") {
-          await setTHeaderItems(["髪型名", "編集"]);
-        } else {
-          await setTHeaderItems(["髪型名"]);
-        }
       } catch (error) {
         console.log(error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
       }
     };
 
     fetchData();
-  }, [dispatch, key, hairstyles, permission]);
+  }, [dispatch]);
 
   const searchItems = [{ key: "hairstyle_name", value: "髪型" }];
 

@@ -35,8 +35,8 @@ const OwnerPage = () => {
       console.log("Success");
       router.push("/dashboard");
     } catch (error) {
-      await allLogout(dispatch);
-      await dispatch(
+      allLogout(dispatch);
+      dispatch(
         changeMessage("登録処理に失敗しました！もう一度お試しください！")
       );
       console.log("Error", error);

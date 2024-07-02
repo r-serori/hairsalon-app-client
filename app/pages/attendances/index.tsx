@@ -22,12 +22,11 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 const Attendances = () => {
   const router = useRouter();
 
-  const [firstRender, setFirstRender] = useState<boolean>(true);
   const dispatch = useDispatch();
 
   const users: UserAllState[] = useSelector(user);
 
-  const key: string | null = useSelector(userKey);
+  // const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ const Attendances = () => {
 
     const fetchData = async () => {
       try {
-        await ownerPermission(permission, router);
+        ownerPermission(permission, router);
 
         const userCount: string = localStorage.getItem("userCount");
         if (
@@ -48,23 +47,19 @@ const Attendances = () => {
           (permission === "オーナー" && userCount === null) ||
           (permission === "オーナー" && userCount === "") ||
           (permission === "オーナー" && userCount === "undefined") ||
-          (users.length < Number(userCount) &&
-            permission === "オーナー" &&
-            firstRender)
+          (users.length < Number(userCount) && permission === "オーナー")
         ) {
           await getStaffs();
         }
       } catch (error) {
         console.log("Error", error);
-        await allLogout(dispatch);
+        allLogout(dispatch);
         router.push("/auth/login");
-      } finally {
-        await setFirstRender(false);
       }
     };
 
     fetchData();
-  }, [dispatch, key, permission, users, firstRender]);
+  }, [dispatch]);
 
   const uStatus: string = useSelector(userStatus);
 
