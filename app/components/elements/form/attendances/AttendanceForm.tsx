@@ -37,19 +37,23 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <BasicTextField
+            id={node.id}
             type="text"
             placeholder="名前"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={true}
+            decideLength={50}
           />
 
           <BasicTextField
+            id={node.id}
             type="text"
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={true}
+            decideLength={20}
           />
 
           <SingleCheckBox

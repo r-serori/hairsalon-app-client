@@ -22,15 +22,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/customers": [
+    "/attendances": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/customers.js"
+      "static/chunks/pages/attendances.js"
     ],
-    "/dashboard": [
+    "/hairstyles": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/dashboard.js"
+      "static/chunks/pages/hairstyles.js"
     ]
   },
   "ampFirstPages": []

@@ -9,6 +9,7 @@ import {
   HeaderCell,
   Cell,
 } from "@table-library/react-table-library/table";
+import { getTheme } from "@table-library/react-table-library/baseline";
 import { useState } from "react";
 import { usePaginationLogic } from "./pagenation";
 import BasicModal from "../modal";
@@ -26,7 +27,7 @@ interface ComponentTableProps {
   nodes: any;
   searchItems: any;
   nodesProps: any;
-  tHeaderItems: any;
+  tHeaderItems: string[];
   link: string;
   role: string;
 }
@@ -96,10 +97,10 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
   };
 
   const pageInfo = {
-    total: data.nodes.length || 0,
-    startSize: pagination.page * pagination.size + 1 || 0,
+    total: data.nodes.length,
+    startSize: pagination.page * pagination.size + 1,
     endSize: Math.min(
-      (pagination.page + 1) * pagination.size || 0,
+      (pagination.page + 1) * pagination.size,
       data.nodes.length
     ),
     totalPages:
@@ -117,6 +118,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
     ${gridTemplateColumns};
     overflow-auto sm:overflow-hidden
   `,
+    BaseRow: `border-b border-gray-900`,
   });
 
   const router = useRouter();
@@ -206,6 +208,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
             <button
               type="button"
               disabled={pagination.page === 0 || data.nodes.length < 11}
+              onClick={() => handlePageChange(pagination.page === 0)}
               className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 
               focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg
                dark:shadow-green-800/80  font-medium rounded-lg text-md px-4 py-1.5 text-center "
@@ -259,7 +262,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
         {(tableList) => (
           <>
             <Header>
-              <HeaderRow>
+              <HeaderRow className="border-b-2 border-gray-900">
                 {/* Headerのカラム数を数える */}
                 {tHeaderItems.map((tHeaderItem, index) => (
                   <HeaderCell
@@ -307,7 +310,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                       return (
                         <Cell
                           key={`${propDate} + ${propName} + ${node.id} + ${index} `}
-                          className="items-center bg-gray-100 text-gray-900  text-center"
+                          className="items-center bg-gray-100 text-gray-900  text-center border-b-2 border-gray-300"
                         >
                           {propDate}
                         </Cell>
@@ -329,7 +332,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                       return (
                         <Cell
                           key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                          className="items-center bg-gray-100 text-gray-900  text-center"
+                          className="items-center bg-gray-100 text-gray-900  text-center border-b-2 border-gray-300"
                         >
                           {propValue}
                         </Cell>
@@ -341,7 +344,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                       return (
                         <Cell
                           key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                          className="items-center bg-gray-100 text-gray-900  text-center"
+                          className="items-center bg-gray-100 text-gray-900  text-center border-b-2 border-gray-300"
                         >
                           {propValue
                             ? dayjs(propValue)
@@ -361,7 +364,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                               ? `${propValue} + ${propName} + ${node.id}+ ${index} + start`
                               : `${propValue} + ${propName} + ${node.id}+ ${index} + end`
                           }
-                          className="items-center bg-gray-100 text-gray-900 text-center pb-1 "
+                          className="items-center bg-gray-100 text-gray-900 text-center pb-1 border-b-2 border-gray-300"
                         >
                           <div className="flex justify-center items-center text-center mx-auto">
                             <img
@@ -393,7 +396,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                       return (
                         <Cell
                           key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
-                          className="items-center bg-gray-100 text-gray-900 text-xl text-center pointer"
+                          className="items-center bg-gray-100 text-gray-900 text-xl text-center pointer  border-b-2 border-gray-300"
                         >
                           <BasicModal
                             type={propName}
@@ -410,7 +413,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                   {tHeaderItems.includes("出勤") ||
                   tHeaderItems.includes("出勤時間と写真を編集") ? (
                     <Cell
-                      className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 "
+                      className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 border-b-2 border-gray-300"
                       style={
                         node.attendanceNow === "勤務中"
                           ? { cursor: "not-allowed" }
@@ -450,7 +453,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                   {tHeaderItems.includes("退勤") ||
                   tHeaderItems.includes("退勤時間と写真を編集") ? (
                     <Cell
-                      className="items-center bg-gray-100 text-gray-900 pt-1 pr-1"
+                      className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 border-b-2 border-gray-300"
                       style={
                         node.attendanceNow === "退勤中"
                           ? { cursor: "not-allowed" }
@@ -458,7 +461,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                       }
                     >
                       {node.attendanceNow === "退勤中" ? (
-                        <div className="w-full y-full p-4  ">
+                        <div className="w-full y-full p-4  text-center ">
                           今日も１日お疲れ様でした！！
                         </div>
                       ) : (
@@ -490,7 +493,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                   {tHeaderItems.includes("編集") && (
                     // console.log("編集nodeだよ"),
                     // console.log(node.id),
-                    <Cell className="items-center bg-gray-100 text-gray-900 pt-1 px-1 pointer">
+                    <Cell className="items-center bg-gray-100 text-gray-900 pt-1 px-1 pointer border-b-2 border-gray-300">
                       <div className="flex justify-center items-center text-center mx-auto pb-1">
                         <button
                           className="items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg  px-4 py-2 text-center "
@@ -503,8 +506,8 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                   )}
                   {/* tHeaderItemsに"削除"が含まれていたら作成 */}
                   {tHeaderItems.includes("削除") && (
-                    <Cell className="items-center bg-gray-100 text-gray-900 py-1 pr-1 pointer">
-                      <div className="items-center mx-auto text-center ">
+                    <Cell className="items-center bg-gray-100 text-gray-900 py-1 pr-1 pointer border-b-2 border-gray-300">
+                      <div className="items-center mx-auto text-center">
                         <DeleteMan id={node.id} link={link} />
                       </div>
                     </Cell>
@@ -512,7 +515,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
 
                   {/* tHeaderItemsに"時間管理"が含まれていたら作成 */}
                   {tHeaderItems.includes("勤怠時間管理") && (
-                    <Cell className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 pointer">
+                    <Cell className="items-center bg-gray-100 text-gray-900 pt-1 pr-1 pointer border-b-2 border-gray-300">
                       <div className="flex justify-center items-center text-center mx-auto pb-1">
                         <button
                           onClick={() => handleTimeManagement(node.id)}

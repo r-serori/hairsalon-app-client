@@ -32,6 +32,8 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  whiteSpace: "pre-wrap", // 改行とスペースを保持
+  wordBreak: "break-all", // 任意の場所で折り返し
 };
 
 const AttendanceStyle = {
@@ -45,6 +47,8 @@ const AttendanceStyle = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  whiteSpace: "pre-wrap", // 改行とスペースを保持
+  wordBreak: "break-all", // 任意の場所で折り返し
 };
 
 interface BasicModalProps {
@@ -84,7 +88,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
 
     const fetchData = async () => {
       try {
-        await ownerPermission(permission, router);
+        ownerPermission(permission, router);
 
         const userCount: string = localStorage.getItem("userCount");
         if (
@@ -97,7 +101,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
         ) {
           await getStaffs();
         } else {
-          await setOpenAttendance(true);
+          setOpenAttendance(true);
         }
       } catch (error) {
         console.log(error);
@@ -116,17 +120,22 @@ const BasicModal: React.FC<BasicModalProps> = ({
       link === "/attendanceTimeEnd" ? (
         <Button
           onClick={handleOpenAttendance}
-          className="w-full y-full  font-bold text-md "
+          className="w-full y-full font-bold text-md "
         >
           <span className="font-bold text-md break-comma">{editValue}</span>
         </Button>
       ) : (
         <Button
           onClick={handleOpen}
-          className="text-gray-900 cursor-pointer hover:bg-gray-400 
-          hover:text-white focus:ring-4 focus:ring-gray-300 font-medium text-md dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800 font-bold"
+          className="
+          text-gray-900 pointer hover:bg-gray-400 
+          hover:text-white focus:ring-4 focus:ring-gray-300 
+          font-medium text-md dark:bg-gray-600 dark:hover:bg-gray-700  
+          dark:focus:ring-gray-800 font-bold overflow-y-scroll"
         >
-          <span className="font-bold text-md break-comma">{editValue}</span>
+          <span className="max-w-80 max-h-16 px-2 whitespace-pre-wrap text-md font-bold ">
+            {editValue}
+          </span>
         </Button>
       )}
 
@@ -160,19 +169,9 @@ const BasicModal: React.FC<BasicModalProps> = ({
           </Box>
         </Modal>
       ) : (
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style} className="rounded-xl ">
+        <Modal open={open} onClose={handleClose} className="break-all">
+          <Box sx={style} className="rounded-xl">
             {/* モーダルのタイトル */}
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              『 {editValue} 』 を編集
-            </Typography>
-            {/* モーダルの内容 */}
-
             <ModalForm
               type={type}
               editValue={editValue}

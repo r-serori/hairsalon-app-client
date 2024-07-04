@@ -199,7 +199,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           const courseInfo = courses.find((c) => c.id === course.course_id);
           return courseInfo ? courseInfo.course_name : ""; // コース名が見つかった場合のみ取得
         })
-        .join(", "); // コース名をカンマ区切りの文字列に変換
+        .join(",\n"); // コース名をカンマ区切りの文字列に変換
       console.log(courseNames);
       // カットとシェービングA
 
@@ -217,7 +217,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           const optionInfo = options.find((o) => o.id === option.option_id);
           return optionInfo ? optionInfo.option_name : ""; // オプション名が見つかった場合のみ取得
         })
-        .join(", "); // オプション名をカンマ区切りの文字列に変換
+        .join(",\n"); // オプション名をカンマ区切りの文字列に変換
       console.log(optionNames);
       // トリートメント, パーマ
 
@@ -237,7 +237,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           );
           return merchandiseInfo ? merchandiseInfo.merchandise_name : ""; // 商品名が見つかった場合のみ取得
         })
-        .join(", "); // 商品名をカンマ区切りの文字列に変換
+        .join(",\n"); // 商品名をカンマ区切りの文字列に変換
       console.log(merchandiseNames);
       // シャンプー, コンディショナー
 
@@ -257,7 +257,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           );
           return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // ヘアスタイル名が見つかった場合のみ取得
         })
-        .join(", "); // ヘアスタイル名をカンマ区切りの文字列に変換
+        .join(",\n"); // ヘアスタイル名をカンマ区切りの文字列に変換
       console.log(hairstyleNames);
       // ショート, ロング
 
@@ -274,7 +274,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           const userInfo = users.find((a) => a.id === user.user_id);
           return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
         })
-        .join(", "); // 担当者名をカンマ区切りの文字列に変換
+        .join(",\n"); // 担当者名をカンマ区切りの文字列に変換
       console.log(userNames);
       // 田中店長
 

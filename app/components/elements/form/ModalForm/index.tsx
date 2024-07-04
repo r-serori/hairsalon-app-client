@@ -66,7 +66,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
       NodesProp === "names"
     ) {
       const slicer = () => {
-        const splitEditValue = EditValue.split(", ");
+        const splitEditValue = EditValue.split(",\n");
         setCheckName(splitEditValue);
         console.log("splitEditValueだよ");
         console.log(splitEditValue);
@@ -149,7 +149,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(changeCourses_id());
 
     const defaultChangeCourses_id = () => {
-      const courses = EditNode.course.split(", ");
+      const courses = EditNode.course.split(",\n");
       const course_id = getCoursesState
         .filter((course) => courses.includes(course.course_name))
         .map((course) => course.id);
@@ -170,7 +170,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(changeOptions_id());
 
     const defaultChangeOptions_id = () => {
-      const options = EditNode.option.split(", ");
+      const options = EditNode.option.split(",\n");
       const option_id = getOptionsState
         .filter((option) => options.includes(option.option_name))
         .map((option) => option.id);
@@ -193,7 +193,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(changeMerchandises_id());
 
     const defaultChangeMerchandises_id = () => {
-      const merchandises = EditNode.merchandise.split(", ");
+      const merchandises = EditNode.merchandise.split(",\n");
       const merchandise_id = getMerchandisesState
         .filter((merchandise) =>
           merchandises.includes(merchandise.merchandise_name)
@@ -216,7 +216,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(changeHairstyles_id());
 
     const defaultChangeHairstyles_id = () => {
-      const hairstyles = EditNode.hairstyle.split(", ");
+      const hairstyles = EditNode.hairstyle.split(",\n");
       const hairstyle_id = getHairstylesState
         .filter((hairstyle) => hairstyles.includes(hairstyle.hairstyle_name))
         .map((hairstyle) => hairstyle.id);
@@ -237,7 +237,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(changeUsers_id());
 
     const defaultChangeUsers_id = () => {
-      const users = EditNode.names.split(", ");
+      const users = EditNode.names.split(",\n");
       const user_id = getUsersState
         .filter((user) => users.includes(user.name))
         .map((user) => user.id);
@@ -554,9 +554,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
     } = event;
     setCheckName(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      typeof value === "string" ? value.split(",\n") : value
     );
-    setEditNode({ ...EditNode, [NodesProp]: (value as string[]).join(", ") });
+    setEditNode({ ...EditNode, [NodesProp]: (value as string[]).join(",\n") });
   };
 
   const renderComponent = () => {
@@ -633,6 +633,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             placeholder={EditValue}
             value={EditValue}
             onChange={handleChange}
+            nodeProp={NodesProp}
           />
         );
     }
@@ -640,7 +641,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mt-8 border-t  border-gray-300 py-4 flex">
+      <div className="border-gray-300 py-4 flex">
         <input id="updateValueId" type="hidden" value={EditNode.id} />
 
         {renderComponent()}

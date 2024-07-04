@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { UserAllState } from "../../components/Hooks/interface";
-import { getAttendanceUsers } from "../../store/auth/userSlice";
+import { getUsers } from "../../store/auth/userSlice";
 import { useRouter } from "next/router";
 import {
   user,
@@ -43,7 +43,7 @@ const AttendanceTimeShots = () => {
 
   useEffect(() => {
     const getStaffs = async () => {
-      const response = await dispatch(getAttendanceUsers({}) as any);
+      const response = await dispatch(getUsers({}) as any);
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
     };
@@ -68,8 +68,6 @@ const AttendanceTimeShots = () => {
         console.log("Error", error);
         allLogout(dispatch);
         router.push("/auth/login");
-      } finally {
-        localStorage.removeItem("userCount");
       }
     };
 

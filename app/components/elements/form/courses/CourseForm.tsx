@@ -39,17 +39,21 @@ const CourseForm: React.FC<CourseFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4 ">
           <BasicTextField
+            id={node ? node.id : 0}
             type="text"
             placeholder="コース名"
             value={course_name}
             onChange={(e) => setCourse_name(e.target.value)}
+            decideLength={100}
           />
 
           <BasicTextField
+            id={node ? node.id : 0}
             type="number"
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}
+            decideLength={100}
           />
 
           <PrimaryButton value={"コース新規作成"} />

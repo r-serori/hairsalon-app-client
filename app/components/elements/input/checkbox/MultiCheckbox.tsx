@@ -6,6 +6,8 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
+import { CollectionsOutlined } from "@mui/icons-material";
+import Typography from "@mui/material/Typography";
 
 const MenuProps = {
   PaperProps: {
@@ -29,7 +31,6 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
   role,
 }) => {
   const names = [];
-
   const fieldName = [];
 
   switch (nodesProp) {
@@ -67,9 +68,20 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
       break;
   }
 
+  console.log("names", names);
+  console.log("fieldName", fieldName);
+  console.log("optionName", optionName);
+
   return (
     <FormControl sx={{ width: "100%", marginTop: 0.5 }}>
-      <InputLabel id="demo-multiple-checkbox-label" sx={{ width: "100%" }}>
+      <InputLabel
+        id="demo-multiple-checkbox-label"
+        sx={{
+          width: "100%",
+          fontWeight: "bold",
+          color: "blue",
+        }}
+      >
         {fieldName[0]}
       </InputLabel>
       <Select
@@ -79,21 +91,41 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
         value={optionName ? optionName : names}
         onChange={onChanger}
         input={<OutlinedInput label={fieldName[0]} />}
-        renderValue={(selected) => selected.join(", ")}
+        renderValue={(selected) => (
+          <div style={{ whiteSpace: "no-wrap" }}>
+            {selected.map((value) => (
+              <div className="font-bold" key={value}>
+                {value}
+              </div>
+            ))}
+          </div>
+        )}
         MenuProps={MenuProps}
         disabled={role === "スタッフ" ? true : false}
+        sx={{
+          whiteSpace: "normal",
+          wordBreak: "break-all",
+        }}
       >
         {names.map((name, index) => (
           <MenuItem key={index} value={name}>
             <Checkbox
-              id={`${name} - ${index}`}
+              id={`${name}-${index}`}
               checked={
                 optionName
                   ? optionName.indexOf(name) > -1
                   : names.indexOf(name) > -1
               }
+
+              // checked={names.indexOf(name) > -1 ? true : false}
             />
-            <ListItemText primary={name} />
+            <ListItemText
+              primary={
+                <Typography variant="body1" fontWeight="bold">
+                  {name}
+                </Typography>
+              }
+            />
           </MenuItem>
         ))}
       </Select>

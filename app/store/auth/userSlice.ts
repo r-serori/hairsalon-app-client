@@ -749,7 +749,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = action.payload.responseUsers;
+      state.users =
+        state.users.length >= action.payload.responseUsers.length
+          ? state.users
+          : action.payload.responseUsers;
       state.message = action.payload.message;
     });
     builder.addCase(getAttendanceUsers.rejected, (state, action) => {
