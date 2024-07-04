@@ -61,6 +61,7 @@ import { Option_customersState } from "../../../../store/middleTable/customers/o
 import { Merchandise_customersState } from "../../../../store/middleTable/customers/merchandise_customersSlice";
 import { Hairstyle_customersState } from "../../../../store/middleTable/customers/hairstyle_customersSlice";
 import { Customer_usersState } from "../../../../store/middleTable/customers/customer_usersSlice";
+import BasicNumberField from "../../input/BasicNumberField";
 
 const style = {
   position: "absolute" as "absolute",
@@ -735,11 +736,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                 <div className="pt-4 flex justify-center items-center ml-4 mr-4">
                   <div className="w-32 mr-1">タイトル:</div>
                   <BasicTextField
-                    type="text"
+                    id={uniqueId}
                     placeholder="タイトル"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     role={role}
+                    decideLength={50}
                   />
                 </div>
               )}
@@ -761,22 +763,27 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                   </div>
                   <div className="pt-4 flex justify-center items-center ml-4 mr-4">
                     <span className="w-32 flex items-left">電話番号:</span>
-                    <BasicTextField
-                      type="number"
+                    <BasicNumberField
+                      id={uniqueId}
                       placeholder="電話番号"
                       value={phone_number}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       role={role}
+                      required={false}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                     <div className="w-32 mr-1">備考:</div>
                     <BasicTextField
-                      type="text"
+                      id={uniqueId}
                       placeholder="備考"
                       value={remarks}
                       onChange={(e) => setRemarks(e.target.value)}
                       role={role}
+                      decideLength={150}
+                      multiline={true}
+                      rows={4}
+                      required={false}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -836,7 +843,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                   <div className="pt-4 flex justify-center items-center ml-4 mr-4">
                     <span className="w-32 flex items-left">顧客名:</span>
                     <BasicTextField
-                      type="text"
+                      id={uniqueId}
                       placeholder="顧客名"
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
@@ -846,8 +853,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
                   <div className="pt-4 flex justify-center items-center ml-4 mr-4">
                     <span className="w-32 flex items-left">電話番号:</span>
-                    <BasicTextField
-                      type="number"
+                    <BasicNumberField
+                      id={uniqueId}
                       placeholder="電話番号"
                       value={phone_number}
                       onChange={(e) => setPhoneNumber(e.target.value)}
@@ -858,11 +865,15 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                     <span className="w-32 flex items-left">備考:</span>
                     <BasicTextField
-                      type="text"
+                      id={uniqueId}
                       placeholder="備考"
                       value={remarks}
                       onChange={(e) => setRemarks(e.target.value)}
                       role={role}
+                      decideLength={150}
+                      multiline={true}
+                      rows={4}
+                      required={false}
                     />
                   </div>
 

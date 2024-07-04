@@ -30,6 +30,7 @@ import {
   stock_categoriesStore,
 } from "../../../Hooks/selector";
 import { user } from "../../../Hooks/authSelector";
+import BasicNumberField from "../../input/BasicNumberField";
 
 interface ModalFormProps {
   type: any;
@@ -629,11 +630,16 @@ const ModalForm: React.FC<ModalFormProps> = ({
       default:
         return (
           <BasicTextField
-            type={type} // typeに応じた入力タイプを設定
+            id={EditNode.id.toString()}
             placeholder={EditValue}
             value={EditValue}
             onChange={handleChange}
-            nodeProp={NodesProp}
+            decideLength={NodesProp === "remarks" ? 150 : 100}
+            multiline={NodesProp === "remarks" ? true : false}
+            rows={NodesProp === "remarks" ? 4 : 1}
+            required={
+              NodesProp === "remarks" || NodesProp === "supplier" ? false : true
+            }
           />
         );
     }
@@ -643,8 +649,20 @@ const ModalForm: React.FC<ModalFormProps> = ({
     <form onSubmit={handleSubmit}>
       <div className="border-gray-300 py-4 flex">
         <input id="updateValueId" type="hidden" value={EditNode.id} />
+        {type === "text" && renderComponent()}
 
-        {renderComponent()}
+        {type === "number" && (
+          <BasicNumberField
+            id={EditNode.id.toString()}
+            placeholder={EditValue}
+            value={EditValue}
+            onChange={handleChange}
+            maxNumber={
+              NodesProp === "phone_number" ? 999999999999999 : 4294967295
+            }
+            required={NodesProp === "phone_number" ? false : true}
+          />
+        )}
 
         <PrimaryButton value="更新" />
       </div>

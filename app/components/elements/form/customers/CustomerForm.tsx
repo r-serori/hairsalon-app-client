@@ -13,6 +13,7 @@ import {
   optionsStore,
 } from "../../../Hooks/selector";
 import { user } from "../../../Hooks/authSelector";
+import BasicNumberField from "../../input/BasicNumberField";
 
 interface CustomerFormProps {
   node?: CustomerState;
@@ -182,24 +183,29 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <BasicTextField
-            type="text"
+            id={node ? node.id : 0}
             placeholder="顧客名"
             value={customer_name}
             onChange={(e) => setCustomer_Name(e.target.value)}
           />
 
-          <BasicTextField
-            type="number"
+          <BasicNumberField
+            id={node ? node.id : 0}
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
+            maxNumber={999999999999999}
           />
 
           <BasicTextField
-            type="text"
+            id={node ? node.id : 0}
             placeholder="備考"
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
+            multiline={true}
+            rows={4}
+            decideLength={150}
+            required={false}
           />
 
           <MultiCheckbox

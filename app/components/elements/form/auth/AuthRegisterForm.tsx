@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
+import EmailField from "../../input/EmailField";
+import BasicNumberField from "../../input/BasicNumberField";
+import PasswordField from "../../input/PasswordField";
 
 interface AuthRegisterFormProps {
   onSubmitOwner: (formData: {
@@ -54,35 +57,36 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
 
         <form onSubmit={handleSubmitOwner} className="mt-6 space-y-6">
           <BasicTextField
-            type="text"
+            id={0}
             placeholder="名前"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            decideLength={50}
           />
 
-          <BasicTextField
-            type="text"
-            placeholder="メールアドレス"
+          <EmailField
+            id={1}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <BasicTextField
-            type="text"
+          <BasicNumberField
+            id={2}
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
+            maxNumber={999999999999999}
           />
 
-          <BasicTextField
-            type="text"
+          <PasswordField
+            id={3}
             placeholder="パスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <BasicTextField
-            type="text"
+          <PasswordField
+            id={4}
             placeholder="パスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}

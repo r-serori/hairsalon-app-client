@@ -4,6 +4,7 @@ import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import { UserState } from "../../../../store/auth/userSlice";
 import { RoleState, UserAllState } from "../../../Hooks/interface";
+import BasicNumberField from "../../input/BasicNumberField";
 
 interface UserUpdateFormProps {
   onSubmit: (formData: { id: number; role: RoleState }) => void;
@@ -38,7 +39,6 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <BasicTextField
             id={node.id}
-            type="text"
             placeholder="名前"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -46,18 +46,16 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
             decideLength={50}
           />
 
-          <BasicTextField
+          <BasicNumberField
             id={node.id}
-            type="text"
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={true}
-            decideLength={20}
+            maxNumber={999999999999999}
           />
 
           <SingleCheckBox
-            label="役職"
             value={role}
             onChange={(newValue: RoleState) => setRole(newValue)}
             getOptions={["マネージャー", "スタッフ"]}

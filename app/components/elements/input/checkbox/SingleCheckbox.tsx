@@ -4,21 +4,21 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { get } from "http";
 
 interface SingleCheckBoxProps {
-  label: string;
   value?: string;
   onChange: (newValue: string) => void;
   getOptions: string[];
   nodeId?: string;
   role?: string;
+  required?: boolean;
 }
 
 const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
-  label,
   value,
   onChange,
   getOptions,
   nodeId,
   role,
+  required = true,
 }) => {
   // labelに応じてoptionsを設定
 
@@ -30,7 +30,13 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
         options={getOptions}
         value={value}
         onChange={(event, newValue) => onChange(newValue)} // オプションが選択されたときにonChangeを呼び出す
-        renderInput={(params) => <TextField {...params} label={`${value}`} />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={`${value}`}
+            required={required} // TextField に required を設定
+          />
+        )}
         renderOption={(props, option) => (
           <li
             {...props}

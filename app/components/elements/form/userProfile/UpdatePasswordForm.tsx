@@ -5,6 +5,7 @@ import { showUser } from "../../../../store/auth/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
+import PasswordField from "../../input/PasswordField";
 
 interface UpdatePasswordFormProps {
   onSubmitUpdatePassword: (formData: {
@@ -22,10 +23,7 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
 
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (current_password　!== user.password) {
-    //   alert("現在のパスワードが間違えています");
-    //   return;
-    // }
+
     // if (password !== confirmPassword) {
     //   alert("パスワードが一致しません");
     //   return;
@@ -47,22 +45,22 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
         </div>
 
         <form onSubmit={handleSubmitStaff} className="mt-8 space-y-6">
-          <BasicTextField
-            type="text"
+          <PasswordField
+            id={0}
             placeholder="現在のパスワード"
             value={current_password}
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
 
-          <BasicTextField
-            type="text"
+          <PasswordField
+            id={0}
             placeholder="新しいパスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           {/* 
-          <BasicTextField
-            type="text"
+          <PasswordField
+           id={0}
             placeholder="新しいパスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}

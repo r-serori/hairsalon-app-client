@@ -131,9 +131,9 @@ const BasicModal: React.FC<BasicModalProps> = ({
           text-gray-900 pointer hover:bg-gray-400 
           hover:text-white focus:ring-4 focus:ring-gray-300 
           font-medium text-md dark:bg-gray-600 dark:hover:bg-gray-700  
-          dark:focus:ring-gray-800 font-bold overflow-y-scroll"
+          dark:focus:ring-gray-800 font-bold overflow-y-auto"
         >
-          <span className="max-w-80 max-h-16 px-2 whitespace-pre-wrap text-md font-bold ">
+          <span className="max-w-60 max-h-16 min-w-28 min-h-8 px-2 whitespace-pre-wrap text-md font-bold ">
             {editValue}
           </span>
         </Button>

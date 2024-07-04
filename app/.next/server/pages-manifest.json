@@ -2,7 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/hairstyles": "pages/hairstyles.js",
-  "/attendances": "pages/attendances.js",
-  "/courses": "pages/courses.js"
+  "/customers": "pages/customers.js",
+  "/schedules": "pages/schedules.js",
+  "/stocks": "pages/stocks.js",
+  "/dashboard": "pages/dashboard.js",
+  "/auth/login": "pages/auth/login.js"
 }

@@ -4,6 +4,7 @@ import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
+import BasicNumberField from "../../input/BasicNumberField";
 
 interface MerchandiseFormProps {
   node?: MerchandiseState;
@@ -40,14 +41,14 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
-            type="text"
+            id={node ? node.id : 0}
             placeholder="物販名"
             value={merchandise_name}
             onChange={(e) => setMerchandiseName(e.target.value)}
           />
 
-          <BasicTextField
-            type="number"
+          <BasicNumberField
+            id={node ? node.id : 0}
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}

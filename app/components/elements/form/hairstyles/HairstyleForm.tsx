@@ -38,7 +38,7 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <BasicTextField
-            type="text"
+            id={node ? node.id : 0}
             placeholder="ヘアスタイル名"
             value={hairstyle_name}
             onChange={(e) => setHairstyleName(e.target.value)}

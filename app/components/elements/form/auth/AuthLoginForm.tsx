@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
+import EmailField from "../../input/EmailField";
+import PasswordField from "../../input/PasswordField";
 
 interface AuthLoginFormProps {
   onSubmit: (formData: { email: string; password: string }) => void;
@@ -28,15 +30,14 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-12 mx-4">
-          <BasicTextField
-            type="text"
-            placeholder="メールアドレス"
+          <EmailField
+            id={0}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <BasicTextField
-            type="password"
+          <PasswordField
+            id={0}
             placeholder="パスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

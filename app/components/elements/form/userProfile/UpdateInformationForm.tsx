@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
+import EmailField from "../../input/EmailField";
+import BasicNumberField from "../../input/BasicNumberField";
 
 interface UpdateInformationFormProps {
+  node: {
+    name: string;
+    email: string;
+    phone_number: string;
+  };
   onSubmitUserInformation: (formData: {
     name: string;
     email: string;
@@ -12,11 +19,12 @@ interface UpdateInformationFormProps {
 }
 
 const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
+  node,
   onSubmitUserInformation,
 }) => {
-  const [name, setName] = useState("testerStaff");
-  const [email, setEmail] = useState("testerStaff@hairsaron.com");
-  const [phone_number, setPhoneNumber] = useState("07012345678");
+  const [name, setName] = useState(node.name);
+  const [email, setEmail] = useState(node.email);
+  const [phone_number, setPhoneNumber] = useState(node.phone_number);
   const [edit, setEdit] = useState(false);
 
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
@@ -51,23 +59,22 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
 
         <form onSubmit={handleSubmitStaff} className="mt-8 space-y-6">
           <BasicTextField
-            type="text"
+            id={0}
             placeholder="名前"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={edit ? false : true}
           />
 
-          <BasicTextField
-            type="text"
-            placeholder="メールアドレス"
+          <EmailField
+            id={0}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={edit ? false : true}
           />
 
-          <BasicTextField
-            type="text"
+          <BasicNumberField
+            id={0}
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}

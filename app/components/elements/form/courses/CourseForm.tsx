@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PrimaryButton from "../../button/PrimaryButton";
 import { CourseState } from "../../../../store/courses/courseSlice";
 import BasicTextField from "../../input/BasicTextField";
+import BasicNumberField from "../../input/BasicNumberField";
 
 interface CourseFormProps {
   node?: CourseState;
@@ -40,20 +41,16 @@ const CourseForm: React.FC<CourseFormProps> = ({
         <form onSubmit={handleSubmit} className="mt-8 space-y-4 ">
           <BasicTextField
             id={node ? node.id : 0}
-            type="text"
             placeholder="コース名"
             value={course_name}
             onChange={(e) => setCourse_name(e.target.value)}
-            decideLength={100}
           />
 
-          <BasicTextField
+          <BasicNumberField
             id={node ? node.id : 0}
-            type="number"
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}
-            decideLength={100}
           />
 
           <PrimaryButton value={"コース新規作成"} />

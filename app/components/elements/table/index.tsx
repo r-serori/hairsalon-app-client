@@ -255,7 +255,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
 
       <Table
         data={paginatedData}
-        className="items-center rounded-xl border border-gray-300 shadow-md w-full mt-2 "
+        className="items-center rounded-xl border border-gray-300 shadow-md mt-2 overflow-scroll"
         theme={theme}
         layout={{ custom: true, horizontalScroll: true }}
       >

@@ -4,6 +4,7 @@ import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import { OptionState } from "../../../../store/options/optionSlice";
+import BasicNumberField from "../../input/BasicNumberField";
 
 interface OptionFormProps {
   node?: OptionState;
@@ -40,14 +41,14 @@ const optionForm: React.FC<OptionFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
-            type="text"
+            id={node ? node.id : 0}
             placeholder="オプション名"
             value={option_name}
             onChange={(e) => setOptionName(e.target.value)}
           />
 
-          <BasicTextField
-            type="number"
+          <BasicNumberField
+            id={node ? node.id : 0}
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}

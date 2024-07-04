@@ -5,6 +5,8 @@ import { showUser } from "../../../../store/auth/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
+import PasswordField from "../../input/PasswordField";
+import EmailField from "../../input/EmailField";
 
 interface ResetPasswordFormProps {
   onSubmitResetPassword: (formData: { password: string }) => void;
@@ -42,15 +44,14 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
         </div>
 
         <form onSubmit={handleSubmitResetPassword} className="mt-8 space-y-6">
-          <BasicTextField
-            type="text"
-            placeholder="メールアドレス"
+          <EmailField
+            id={0}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <BasicTextField
-            type="text"
+          <PasswordField
+            id={0}
             placeholder="新しいパスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

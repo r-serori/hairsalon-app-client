@@ -21,6 +21,8 @@ interface MultiCheckboxProps {
   onChanger: (event: SelectChangeEvent<string[]>) => void;
   nodesProp: string;
   role?: string;
+  required?: boolean; // 必須フラグ
+  error?: boolean; // エラーフラグ
 }
 
 const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
@@ -29,6 +31,8 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
   onChanger,
   nodesProp,
   role,
+  required = false,
+  error = false,
 }) => {
   const names = [];
   const fieldName = [];
@@ -129,6 +133,11 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           </MenuItem>
         ))}
       </Select>
+      {required && error && (
+        <Typography variant="caption" color="error">
+          {`${fieldName[0]}を選択してください。`}
+        </Typography>
+      )}
     </FormControl>
   );
 };

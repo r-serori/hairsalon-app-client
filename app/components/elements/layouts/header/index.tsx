@@ -213,7 +213,7 @@ export default function Header() {
   return (
     <>
       <div className="min-h-full">
-        {nowLogin && (
+        {nowLogin && currentPath !== "auth/owner" && (
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>

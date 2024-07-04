@@ -36,7 +36,7 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
-            type="text"
+            id={node ? node.id : 0}
             placeholder="カテゴリー名"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
