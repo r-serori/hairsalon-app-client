@@ -6,16 +6,18 @@ interface EmailFieldProps {
   id: number;
   value: string;
   disabled?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onValidationChange: (isValid: boolean) => void;
 }
 
 const EmailField: React.FC<EmailFieldProps> = ({
   id,
   value,
   disabled = false,
-  onChange,
   required = true,
+  onChange,
+  onValidationChange,
 }) => {
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
@@ -25,12 +27,14 @@ const EmailField: React.FC<EmailFieldProps> = ({
       ...e,
       target: { ...e.target, value: newValue },
     });
+    onValidationChange(emailRegex.test(newValue));
   };
 
   return (
     <Box
       sx={{
         "& > :not(style)": { width: "100%" },
+        width: "100%",
       }}
     >
       <TextField

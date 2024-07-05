@@ -55,6 +55,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
   const [EditNode, setEditNode] = useState<any>(editNode);
   const [checkName, setCheckName] = React.useState<string[]>([]);
 
+  const [isValidate, setIsValidate] = useState<boolean>(true);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -282,6 +284,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isValidate === false) return;
 
     const updatedNode = {
       ...EditNode,
@@ -565,20 +568,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
       case "category_name":
         return (
           <SingleCheckBox
-            label={singleCheckBoxLabel}
             value={EditValue}
             nodeId={EditNode.id.toString()}
             getOptions={getOptionCategories}
-            onChange={(newValue) => setEditValue(newValue)}
-          />
-        );
-      case "new_customer":
-        return (
-          <SingleCheckBox
-            label="新規or既存"
-            value={EditValue}
-            nodeId={EditNode.id.toString()}
-            getOptions={["新規", "既存"]}
             onChange={(newValue) => setEditValue(newValue)}
           />
         );
@@ -625,6 +617,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             optionName={checkName}
             onChanger={handleCheckChange}
             nodesProp={NodesProp}
+            onValidationChange={(isValid) => setIsValidate(isValid)}
           />
         );
       default:
@@ -640,6 +633,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             required={
               NodesProp === "remarks" || NodesProp === "supplier" ? false : true
             }
+            onValidationChange={(isValid) => setIsValidate(isValid)}
           />
         );
     }
@@ -661,6 +655,11 @@ const ModalForm: React.FC<ModalFormProps> = ({
               NodesProp === "phone_number" ? 999999999999999 : 4294967295
             }
             required={NodesProp === "phone_number" ? false : true}
+            onValidationChange={
+              NodesProp !== "phoneNumber"
+                ? (isValid) => setIsValidate(isValid)
+                : null
+            }
           />
         )}
 

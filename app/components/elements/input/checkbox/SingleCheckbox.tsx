@@ -10,6 +10,7 @@ interface SingleCheckBoxProps {
   nodeId?: string;
   role?: string;
   required?: boolean;
+  onValidationChange?: (isValid: boolean) => void;
 }
 
 const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
@@ -19,8 +20,16 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
   nodeId,
   role,
   required = true,
+  onValidationChange,
 }) => {
   // labelに応じてoptionsを設定
+
+  const changeValue = (newValue: string) => {
+    onChange(newValue);
+    if (required && newValue === "") {
+      onValidationChange(false);
+    }
+  };
 
   return (
     <div className="w-full mt-1 border-gray-300 focus:outline-none focus:border-blue-500 ">
@@ -29,7 +38,9 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
         id={nodeId}
         options={getOptions}
         value={value}
-        onChange={(event, newValue) => onChange(newValue)} // オプションが選択されたときにonChangeを呼び出す
+        onChange={
+          (event, newValue) => changeValue(newValue) // オプションが選択されたときにonChangeを呼び出す
+        } // オプションが選択されたときにonChangeを呼び出す
         renderInput={(params) => (
           <TextField
             {...params}

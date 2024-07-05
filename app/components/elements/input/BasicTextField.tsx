@@ -14,6 +14,7 @@ interface BasicTextFieldProps {
   regex?: RegExp;
   required?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onValidationChange?: (isValid: boolean) => void;
 }
 
 const BasicTextField: React.FC<BasicTextFieldProps> = ({
@@ -28,6 +29,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
   regex = /[<>&'"\\;\s--]/g,
   required = true,
   onChange,
+  onValidationChange,
 }) => {
   const removeInvalidChars = (str: string) => {
     return str.replace(regex, "");
@@ -39,16 +41,20 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
       ...e,
       target: { ...e.target, value: newValue },
     });
+    if (required && newValue === "") {
+      onValidationChange(false);
+    }
   };
 
   return (
     <Box
       sx={{
         "& > :not(style)": { width: "100%" },
+        width: "100%",
       }}
     >
       <TextField
-        id={`${placeholder}_${id}_text`}
+        id={`${id}`}
         type="text"
         label={placeholder}
         onChange={handleChange}
@@ -61,6 +67,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
         error={!value && required} // 必須項目で空の場合エラー表示
         helperText={!value && required ? `${placeholder}は必須です` : ""}
         sx={{
+          width: "100%",
           "& .MuiInputBase-input": {
             fontWeight: "bold",
           },

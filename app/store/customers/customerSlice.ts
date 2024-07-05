@@ -7,6 +7,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../store/schedules/scheduleSlice";
+import { s } from "@fullcalendar/core/internal-common";
 
 export const getCustomer = createAsyncThunk(
   "customer/getCustomer",
@@ -291,7 +292,10 @@ const customerSlice = createSlice({
     });
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
-      state.customers = [...state.customers, ...action.payload.customers];
+
+      state.customers = action.payload.customers
+        ? [...state.customers, ...action.payload.customers]
+        : state.customers;
       state.message = action.payload.message
         ? action.payload.message
         : "顧客情報を取得しました！";

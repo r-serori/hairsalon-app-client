@@ -25,6 +25,11 @@ export const login = createAsyncThunk(
       const response = await userApi.login(formData);
 
       if (response.status >= 200 && response.status < 300) {
+        if (response.status === 299) {
+          // リダイレクト時の処理
+          console.log("response.redirect", response); // リダイレクトメッセージをコンソールに表示するなど、適切な処理を行う
+          return response.data;
+        }
         // 成功時の処理
         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
         return response.data; // response.dataを返すことで、必要なデータのみを返す
@@ -665,10 +670,9 @@ const usersSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.status = "success";
       state.users = [...state.users, action.payload.responseUser];
-      state.message =
-        action.payload.resStatus === "ownerError"
-          ? action.payload.message
-          : `お帰りなさい！ ${action.payload.responseUser.name}さん！`;
+      state.message = action.payload.message
+        ? action.payload.message
+        : `お帰りなさい！ ${action.payload.responseUser.name}さん！`;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.status = "failed";
@@ -735,6 +739,7 @@ const usersSlice = createSlice({
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.status = "success";
       state.users = action.payload.responseUsers;
+      state.message = action.payload.message;
     });
 
     builder.addCase(getUsers.rejected, (state, action) => {
@@ -862,12 +867,16 @@ const usersSlice = createSlice({
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = action.payload.responseUsers;
+      state.users = action.payload.responseUsers
+        ? action.payload.responseUsers
+        : state.users;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = action.payload.responseUsers;
+      state.users = action.payload.responseUsers
+        ? action.payload.responseUsers
+        : state.users;
     });
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {

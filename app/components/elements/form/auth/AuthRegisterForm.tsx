@@ -24,8 +24,16 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
   const [name, setName] = useState<string>("testerOwner");
   const [email, setEmail] = useState<string>("testerOwner@hairsaron.com");
   const [phone_number, setPhoneNumber] = useState<string>("08012345678");
-  const [password, setPassword] = useState<string>("password123");
-  const [confirmPassword, setConfirmPassword] = useState<string>("password123");
+  const [password, setPassword] = useState<string>("Password_123");
+  const [confirmPassword, setConfirmPassword] =
+    useState<string>("Password_123");
+  const [nameValidate, setNameValidate] = useState<boolean>(true);
+  const [emailValidate, setEmailValidate] = useState<boolean>(true);
+  const [phone_numberValidate, setPhoneNumberValidate] =
+    useState<boolean>(true);
+  const [passwordValidate, setPasswordValidate] = useState<boolean>(true);
+  const [confirmPasswordValidate, setConfirmPasswordValidate] =
+    useState<boolean>(true);
 
   // const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -35,6 +43,17 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
     //   alert("パスワードが一致しません");
     //   return;
     // }
+
+    if (
+      !nameValidate ||
+      !emailValidate ||
+      !phone_numberValidate ||
+      !passwordValidate ||
+      !confirmPasswordValidate
+    ) {
+      return;
+    }
+
     onSubmitOwner({
       name: name,
       email: email,
@@ -60,22 +79,25 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
             id={0}
             placeholder="名前"
             value={name}
-            onChange={(e) => setName(e.target.value)}
             decideLength={50}
+            onChange={(e) => setName(e.target.value)}
+            onValidationChange={(isValid) => setNameValidate(isValid)}
           />
 
           <EmailField
             id={1}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onValidationChange={(isValid) => setEmailValidate(isValid)}
           />
 
           <BasicNumberField
             id={2}
             placeholder="電話番号"
             value={phone_number}
-            onChange={(e) => setPhoneNumber(e.target.value)}
             maxNumber={999999999999999}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            onValidationChange={(isValid) => setPhoneNumberValidate(isValid)}
           />
 
           <PasswordField
@@ -83,6 +105,7 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
             placeholder="パスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onValidationChange={(isValid) => setPasswordValidate(isValid)}
           />
 
           <PasswordField
@@ -90,6 +113,9 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
             placeholder="パスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            onValidationChange={(isValid) =>
+              setConfirmPasswordValidate(isValid)
+            }
           />
 
           <PrimaryButton value="登録" />

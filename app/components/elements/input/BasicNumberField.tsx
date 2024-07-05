@@ -11,6 +11,7 @@ interface BasicNumberFieldProps {
   maxNumber?: number;
   required?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onValidationChange?: (isValid: boolean) => void;
 }
 
 const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
@@ -22,6 +23,7 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
   maxNumber = 4294967295,
   required = true,
   onChange,
+  onValidationChange,
 }) => {
   const checkMaxNumber = (inputValue: string) => {
     const numericValue = parseInt(inputValue, 10);
@@ -38,12 +40,16 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
       ...e,
       target: { ...e.target, value: newValue },
     });
+    if (required && newValue === "") {
+      onValidationChange(false);
+    }
   };
 
   return (
     <Box
       sx={{
         "& > :not(style)": { width: "100%" },
+        width: "100%",
       }}
     >
       <TextField

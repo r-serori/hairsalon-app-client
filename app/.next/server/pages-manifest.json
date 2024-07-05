@@ -2,9 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/customers": "pages/customers.js",
   "/schedules": "pages/schedules.js",
-  "/stocks": "pages/stocks.js",
-  "/dashboard": "pages/dashboard.js",
-  "/auth/login": "pages/auth/login.js"
+  "/customers": "pages/customers.js",
+  "/yearly_sales": "pages/yearly_sales.js"
 }

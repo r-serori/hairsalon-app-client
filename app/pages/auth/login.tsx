@@ -51,11 +51,11 @@ const LoginPage: React.FC = () => {
 
       await dispatch(getPermission({}) as any);
 
-      if (pushUser) {
+      if (pushUser && response.payload.status !== 299) {
         dispatch(isLogin());
         // 暗号化されたデータをローカルストレージに保存
         router.push("/dashboard");
-      } else if (pushUser) {
+      } else if (pushUser && response.payload.status === 299) {
         dispatch(isLogin());
         router.push("/auth/owner");
       } else {

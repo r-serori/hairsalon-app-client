@@ -18,8 +18,15 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
 }) => {
   const [category, setCategory] = useState(node ? node.category : "");
 
+  const [categoryValidate, setCategoryValidate] = useState<boolean>(true);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!categoryValidate) {
+      return;
+    }
+
     createStockCategory({
       id: node ? node.id : 0,
       category: category,
@@ -40,6 +47,7 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
             placeholder="カテゴリー名"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
+            onValidationChange={(isValid) => setCategoryValidate(isValid)}
           />
 
           <PrimaryButton value={"作成"} />

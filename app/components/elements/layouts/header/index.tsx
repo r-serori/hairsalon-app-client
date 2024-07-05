@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import LogoutButton from "../../button/logoutButton";
@@ -25,9 +25,29 @@ export default function Header() {
   const nowLogin: boolean = useSelector(loginNow);
   const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
+  const [headerOpenCurrentPath, setHeaderOpenCurrentPath] =
+    useState<boolean>(true); //trueの場合はヘッダーを表示する
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const IsLoggedIn: boolean =
+        localStorage.getItem("isLogin") === "true" ? true : false;
+      console.log("isLogin", IsLoggedIn);
+
+      if (
+        currentPath === "/" ||
+        currentPath === "/auth/owner" ||
+        currentPath === "/auth/login" ||
+        currentPath === "/auth/register"
+      ) {
+        setHeaderOpenCurrentPath(false);
+      } else if (!IsLoggedIn) {
+        setHeaderOpenCurrentPath(false);
+        allLogout(dispatch);
+        router.push("/login");
+      } else {
+        setHeaderOpenCurrentPath(true);
+      }
       console.log("headerrrrrrrrrrrr  ");
       const getPermissionData = async () => {
         try {
@@ -48,10 +68,6 @@ export default function Header() {
           router.push("/auth/login");
         }
       };
-
-      const IsLoggedIn: boolean =
-        localStorage.getItem("isLogin") === "true" ? true : false;
-      console.log("isLogin", IsLoggedIn);
 
       if (permission === null && IsLoggedIn) {
         getPermissionData();
@@ -82,6 +98,7 @@ export default function Header() {
     console.log("isLogin", IsLoggedIn);
 
     if (IsLoggedIn) {
+      isLogin();
       verifySession();
     }
 
@@ -213,7 +230,7 @@ export default function Header() {
   return (
     <>
       <div className="min-h-full">
-        {nowLogin && currentPath !== "auth/owner" && (
+        {nowLogin && headerOpenCurrentPath && (
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>

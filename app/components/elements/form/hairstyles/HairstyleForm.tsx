@@ -20,8 +20,15 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
     node ? node.hairstyle_name : ""
   );
 
+  const [hairstyleNameValidate, setHairstyleNameValidate] =
+    useState<boolean>(true);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!hairstyleNameValidate) {
+      return;
+    }
     createHairstyle({
       id: node ? node.id : 0,
       hairstyle_name: hairstyle_name,
@@ -42,6 +49,7 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
             placeholder="ヘアスタイル名"
             value={hairstyle_name}
             onChange={(e) => setHairstyleName(e.target.value)}
+            onValidationChange={(isValid) => setHairstyleNameValidate(isValid)}
           />
 
           <PrimaryButton value={"ヘアスタイル情報作成"} />

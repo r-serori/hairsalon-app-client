@@ -522,7 +522,10 @@ const scheduleSlice = createSlice({
       })
       .addCase(getSchedule.fulfilled, (state, action) => {
         state.status = "success";
-        state.schedules = [...state.schedules, ...action.payload.schedules];
+
+        state.schedules = action.payload.schedules
+          ? [...state.schedules, ...action.payload.schedules]
+          : state.schedules;
         state.message = action.payload.message
           ? action.payload.message
           : "スケジュールの取得に成功しました！";

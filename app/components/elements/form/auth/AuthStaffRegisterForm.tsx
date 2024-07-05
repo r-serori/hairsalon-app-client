@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
+import EmailField from "../../input/EmailField";
+import BasicNumberField from "../../input/BasicNumberField";
+import PasswordField from "../../input/PasswordField";
 
 interface AuthStaffRegisterFormProps {
   onSubmitStaff: (formData: {
@@ -20,9 +23,19 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
   const [name, setName] = useState<string>("testerStaff");
   const [email, setEmail] = useState<string>("testerStaff@hairsaron.com");
   const [phone_number, setPhoneNumber] = useState<string>("07012345678");
-  const [password, setPassword] = useState<string>("password123");
+  const [password, setPassword] = useState<string>("Password_123");
   const [role, setRole] = useState<string>("スタッフ");
-  const [confirmPassword, setConfirmPassword] = useState<string>("password123");
+  const [confirmPassword, setConfirmPassword] =
+    useState<string>("Password_123");
+
+  const [nameValidate, setNameValidate] = useState<boolean>(true);
+  const [emailValidate, setEmailValidate] = useState<boolean>(true);
+  const [phone_numberValidate, setPhoneNumberValidate] =
+    useState<boolean>(true);
+  const [passwordValidate, setPasswordValidate] = useState<boolean>(true);
+  const [confirmPasswordValidate, setConfirmPasswordValidate] =
+    useState<boolean>(true);
+  const [roleValidate, setRoleValidate] = useState<boolean>(true);
 
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,6 +43,17 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
     //   alert("パスワードが一致しません");
     //   return;
     // }
+
+    if (
+      !nameValidate ||
+      !emailValidate ||
+      !phone_numberValidate ||
+      !passwordValidate ||
+      !confirmPasswordValidate ||
+      !roleValidate
+    ) {
+      return;
+    }
 
     onSubmitStaff({
       name: name,
@@ -52,45 +76,51 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
 
         <form onSubmit={handleSubmitStaff} className="mt-8 space-y-6">
           <BasicTextField
-            type="text"
+            id={0}
             placeholder="名前"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onValidationChange={(isValid) => setNameValidate(isValid)}
           />
 
-          <BasicTextField
-            type="text"
-            placeholder="メールアドレス"
+          <EmailField
+            id={0}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onValidationChange={(isValid) => setEmailValidate(isValid)}
           />
 
-          <BasicTextField
-            type="text"
+          <BasicNumberField
+            id={0}
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
+            onValidationChange={(isValid) => setPhoneNumberValidate(isValid)}
           />
 
-          <BasicTextField
-            type="text"
+          <PasswordField
+            id={0}
             placeholder="パスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onValidationChange={(isValid) => setPasswordValidate(isValid)}
           />
 
-          <BasicTextField
-            type="text"
+          <PasswordField
+            id={1}
             placeholder="パスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            onValidationChange={(isValid) =>
+              setConfirmPasswordValidate(isValid)
+            }
           />
 
           <SingleCheckBox
-            label="役職"
             value={role}
             onChange={(newValue) => setRole(newValue)}
             getOptions={["マネージャー", "スタッフ"]}
+            onValidationChange={(isValid) => setRoleValidate(isValid)}
           />
 
           <PrimaryButton value="登録" />

@@ -16,7 +16,12 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   onSubmitResetPassword,
 }) => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("newPassword123");
+  const [password, setPassword] = useState("newPassword_123");
+  const [confirmPassword, setConfirmPassword] = useState("newPassword_123");
+
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
 
   const handleSubmitResetPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,6 +33,10 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
     //   alert("パスワードが一致しません");
     //   return;
     // }
+
+    if (!isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
+      return;
+    }
 
     onSubmitResetPassword({
       password: password,
@@ -48,6 +57,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             id={0}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onValidationChange={(isValid) => setIsEmailValid(isValid)}
           />
 
           <PasswordField
@@ -55,6 +65,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             placeholder="新しいパスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onValidationChange={(isValid) => setIsPasswordValid(isValid)}
           />
           {/* 
           <BasicTextField
@@ -62,6 +73,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             placeholder="新しいパスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            onValidationChange={(isValid) => setIsConfirmPasswordValid(isValid)}
           /> */}
 
           <PrimaryButton value="登録" />

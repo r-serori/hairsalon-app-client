@@ -22,8 +22,14 @@ const optionForm: React.FC<OptionFormProps> = ({
   );
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
+  const [optionNameValidate, setOptionNameValidate] = useState<boolean>(true);
+  const [priceValidate, setPriceValidate] = useState<boolean>(true);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!optionNameValidate || !priceValidate) {
+      return;
+    }
     createOption({
       id: node ? node.id : 0,
       option_name: option_name,
@@ -45,6 +51,7 @@ const optionForm: React.FC<OptionFormProps> = ({
             placeholder="オプション名"
             value={option_name}
             onChange={(e) => setOptionName(e.target.value)}
+            onValidationChange={(isValid) => setOptionNameValidate(isValid)}
           />
 
           <BasicNumberField
@@ -52,6 +59,7 @@ const optionForm: React.FC<OptionFormProps> = ({
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}
+            onValidationChange={(isValid) => setPriceValidate(isValid)}
           />
 
           <PrimaryButton value={"作成"} />

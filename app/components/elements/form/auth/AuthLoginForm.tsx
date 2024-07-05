@@ -10,10 +10,18 @@ interface AuthLoginFormProps {
 
 const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
   const [email, setEmail] = useState<string>("owner@hairmail.com");
-  const [password, setPassword] = useState<string>("password123");
+  const [password, setPassword] = useState<string>("Password_123");
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // フィールドのバリデーションをチェック
+    if (!isEmailValid || !isPasswordValid) {
+      return;
+    }
+
     onSubmit({
       email: email,
       password: password,
@@ -34,6 +42,7 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
             id={0}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onValidationChange={(isValid) => setIsEmailValid(isValid)}
           />
 
           <PasswordField
@@ -41,6 +50,7 @@ const AuthLoginForm: React.FC<AuthLoginFormProps> = ({ onSubmit }) => {
             placeholder="パスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onValidationChange={(isValid) => setIsPasswordValid(isValid)}
           />
 
           <PrimaryButton value="ログイン" />

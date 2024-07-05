@@ -27,12 +27,21 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
   const [phone_number, setPhoneNumber] = useState(node.phone_number);
   const [edit, setEdit] = useState(false);
 
+  const [nameValidate, setNameValidate] = useState<boolean>(true);
+  const [emailValidate, setEmailValidate] = useState<boolean>(true);
+  const [phone_numberValidate, setPhoneNumberValidate] =
+    useState<boolean>(true);
+
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // if (password !== confirmPassword) {
     //   alert("パスワードが一致しません");
     //   return;
     // }
+
+    if (!nameValidate || !emailValidate || !phone_numberValidate) {
+      return;
+    }
     onSubmitUserInformation({
       name: name,
       email: email,
@@ -64,6 +73,7 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={edit ? false : true}
+            onValidationChange={(isValid) => setNameValidate(isValid)}
           />
 
           <EmailField
@@ -71,6 +81,7 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={edit ? false : true}
+            onValidationChange={(isValid) => setEmailValidate(isValid)}
           />
 
           <BasicNumberField
@@ -79,6 +90,7 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={edit ? false : true}
+            onValidationChange={(isValid) => setPhoneNumberValidate(isValid)}
           />
 
           <PrimaryButton value="登録" />

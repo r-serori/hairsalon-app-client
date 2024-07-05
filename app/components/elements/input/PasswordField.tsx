@@ -10,16 +10,18 @@ interface PasswordFieldProps {
   id: number;
   placeholder: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onValidationChange: (isValid: boolean) => void;
 }
 
 const PasswordField: React.FC<PasswordFieldProps> = ({
   id,
   placeholder,
   value,
-  onChange,
   required = true,
+  onChange,
+  onValidationChange,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -28,7 +30,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
   };
 
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -36,12 +38,14 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
       ...e,
       target: { ...e.target, value: newValue },
     });
+    onValidationChange(passwordRegex.test(newValue));
   };
 
   return (
     <Box
       sx={{
         "& > :not(style)": { width: "100%" },
+        width: "100%",
       }}
     >
       <TextField
@@ -66,7 +70,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
         error={!passwordRegex.test(value)}
         helperText={
           !passwordRegex.test(value)
-            ? "パスワードには英小文字、英大文字、数字、特殊文字をそれぞれ少なくとも1つ含む必要があります"
+            ? "パスワードには英小文字、英大文字、数字、特殊文字(@$!%*?&_)をそれぞれ少なくとも1つ含む必要があります"
             : ""
         }
         InputProps={{

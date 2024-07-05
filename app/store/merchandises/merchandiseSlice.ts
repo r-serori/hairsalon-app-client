@@ -354,17 +354,19 @@ const merchandiseSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.merchandises =
-        state.merchandises.length === action.payload.merchandises
+      state.merchandises = action.payload.merchandises
+        ? state.merchandises.length === action.payload.merchandises
           ? state.merchandises
-          : action.payload.merchandises;
+          : action.payload.merchandises
+        : state.merchandises;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.merchandises =
-        state.merchandises.length === action.payload.merchandises
+      state.merchandises = action.payload.merchandises
+        ? state.merchandises.length === action.payload.merchandises
           ? state.merchandises
-          : action.payload.merchandises;
+          : action.payload.merchandises
+        : state.merchandises;
     });
   },
 });

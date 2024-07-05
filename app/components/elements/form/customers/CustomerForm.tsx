@@ -75,7 +75,9 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getUsersStateだよ");
   console.log(getUsersState);
 
-  const getUsersNames = getUsersState.map((user) => user.name);
+  const getUsersNames = Array.isArray(getUsersState)
+    ? getUsersState.map((user) => user.name)
+    : Object(getUsersState).name;
 
   console.log("getUsersNamesだよ");
   console.log(getUsersNames);
@@ -126,8 +128,16 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       : []
   );
 
+  const [customerNameValidate, setCustomerNameValidate] =
+    useState<boolean>(true);
+  const [usersValidate, setUsersValidate] = useState<boolean>(true);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!customerNameValidate || !usersValidate) {
+      return;
+    }
+
     onSubmit({
       id: node ? node.id : 0,
       customer_name: customer_name,
@@ -187,6 +197,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             placeholder="顧客名"
             value={customer_name}
             onChange={(e) => setCustomer_Name(e.target.value)}
+            onValidationChange={(isValid) => setCustomerNameValidate(isValid)}
           />
 
           <BasicNumberField
@@ -195,6 +206,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
             maxNumber={999999999999999}
+            required={false}
           />
 
           <BasicTextField
@@ -241,6 +253,9 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             optionName={users}
             nodesProp="names"
             onChanger={handleUserChange}
+            onValidationChange={(isValid) => setUsersValidate(isValid)}
+            required={true}
+            error={true}
           />
 
           <PrimaryButton value={"作成"} />

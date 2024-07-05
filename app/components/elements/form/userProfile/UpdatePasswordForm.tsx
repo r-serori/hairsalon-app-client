@@ -21,6 +21,10 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
   const [password, setPassword] = useState("newPassword123");
   const [confirmPassword, setConfirmPassword] = useState("newPassword123");
 
+  const [isCurrentPasswordValid, setIsCurrentPasswordValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -28,6 +32,10 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
     //   alert("パスワードが一致しません");
     //   return;
     // }
+
+    if (!isCurrentPasswordValid || !isPasswordValid) {
+      return;
+    }
 
     onSubmitUpdatePassword({
       current_password: current_password,
@@ -50,6 +58,7 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
             placeholder="現在のパスワード"
             value={current_password}
             onChange={(e) => setCurrentPassword(e.target.value)}
+            onValidationChange={(isValid) => setIsCurrentPasswordValid(isValid)}
           />
 
           <PasswordField
@@ -57,6 +66,7 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
             placeholder="新しいパスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onValidationChange={(isValid) => setIsPasswordValid(isValid)}
           />
           {/* 
           <PasswordField
@@ -64,6 +74,7 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
             placeholder="新しいパスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            onValidationChange={(isValid) => setIsConfirmPasswordValid(isValid)}
           /> */}
 
           <PrimaryButton value="登録" />

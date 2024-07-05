@@ -353,17 +353,19 @@ const courseSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.courses =
-        state.courses.length === action.payload.courses.length
+      state.courses = action.payload.courses
+        ? state.courses.length === action.payload.courses.length
           ? state.courses
-          : action.payload.courses;
+          : action.payload.courses
+        : state.courses;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.courses =
-        state.courses.length === action.payload.courses.length
+      state.courses = action.payload.courses
+        ? state.courses.length === action.payload.courses.length
           ? state.courses
-          : action.payload.courses;
+          : action.payload.courses
+        : state.courses;
     });
   },
 });

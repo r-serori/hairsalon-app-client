@@ -28,18 +28,29 @@ const OwnerPage = () => {
     postal_code: string;
     prefecture: string;
     city: string;
-    address_line1: string;
-    address_line2?: string;
+    addressLine1: string;
+    addressLine2?: string;
     phone_number: string;
     user_id: number;
   }) => {
     console.log(formData);
     try {
-      await dispatch(ownerRegister(formData) as any);
+      const response = await dispatch(ownerRegister(formData) as any);
+      if (
+        response.payload.status === 400 ||
+        response.payload.status === 401 ||
+        response.payload.status === 403 ||
+        response.payload.status === 404 ||
+        response.payload.status === 500
+      ) {
+        throw new Error(response.payload.message);
+      } else if (response.payload.status === 300) {
+        router.push("/auth/owner");
+      }
       console.log("Success");
+
       router.push("/dashboard");
     } catch (error) {
-      allLogout(dispatch);
       dispatch(
         changeMessage("登録処理に失敗しました！もう一度お試しください！")
       );

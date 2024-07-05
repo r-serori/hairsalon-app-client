@@ -48,8 +48,23 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
       : stockCategoryNames[0]
   );
 
+  const [productNameValidate, setProductNameValidate] = useState<boolean>(true);
+  const [productPriceValidate, setProductPriceValidate] =
+    useState<boolean>(true);
+  const [quantityValidate, setQuantityValidate] = useState<boolean>(true);
+  const [noticeValidate, setNoticeValidate] = useState<boolean>(true);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (
+      !productNameValidate ||
+      !productPriceValidate ||
+      !quantityValidate ||
+      !noticeValidate
+    ) {
+      return;
+    }
     createStock({
       id: node ? node.id : 0,
       product_name: product_name,
@@ -78,6 +93,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             placeholder="商品名"
             value={product_name}
             onChange={(e) => setProductName(e.target.value)}
+            onValidationChange={(isValid) => setProductNameValidate(isValid)}
           />
 
           <BasicNumberField
@@ -85,6 +101,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             placeholder="価格"
             value={String(product_price)}
             onChange={(e) => setProductPrice(Number(e.target.value))}
+            onValidationChange={(isValid) => setProductPriceValidate(isValid)}
           />
 
           <BasicNumberField
@@ -92,6 +109,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             placeholder="数量"
             value={String(quantity)}
             onChange={(e) => setQuantity(Number(e.target.value))}
+            onValidationChange={(isValid) => setQuantityValidate(isValid)}
           />
 
           <BasicTextField
@@ -118,10 +136,10 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             placeholder="設定した数量を下回った場合通知します"
             value={String(notice)}
             onChange={(e) => setNotice(Number(e.target.value))}
+            onValidationChange={(isValid) => setNoticeValidate(isValid)}
           />
 
           <SingleCheckBox
-            label={"在庫カテゴリー"}
             getOptions={stockCategoryNames}
             value={stockCategoryIdName}
             nodeId={node ? node.id.toString() : "stock_category_id"}

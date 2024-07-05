@@ -22,8 +22,16 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
   );
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
+  const [merchandiseNameValidate, setMerchandiseNameValidate] =
+    useState<boolean>(true);
+  const [priceValidate, setPriceValidate] = useState<boolean>(true);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!merchandiseNameValidate || !priceValidate) {
+      return;
+    }
     createMerchandise({
       id: node ? node.id : 0,
       merchandise_name: merchandise_name,
@@ -45,6 +53,9 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
             placeholder="物販名"
             value={merchandise_name}
             onChange={(e) => setMerchandiseName(e.target.value)}
+            onValidationChange={(isValid) =>
+              setMerchandiseNameValidate(isValid)
+            }
           />
 
           <BasicNumberField
@@ -52,6 +63,7 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}
+            onValidationChange={(isValid) => setPriceValidate(isValid)}
           />
 
           <PrimaryButton value={"作成"} />

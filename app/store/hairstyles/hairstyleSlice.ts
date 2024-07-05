@@ -349,17 +349,19 @@ const hairstyleSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
-      state.hairstyles =
-        state.hairstyles.length === action.payload.hairstyles
+      state.hairstyles = action.payload.hairstyles
+        ? state.hairstyles.length === action.payload.hairstyles
           ? state.hairstyles
-          : action.payload.hairstyles;
+          : action.payload.hairstyles
+        : state.hairstyles;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
-      state.hairstyles =
-        state.hairstyles.length === action.payload.hairstyles
+      state.hairstyles = action.payload.hairstyles
+        ? state.hairstyles.length === action.payload.hairstyles
           ? state.hairstyles
-          : action.payload.hairstyles;
+          : action.payload.hairstyles
+        : state.hairstyles;
     });
   },
 });

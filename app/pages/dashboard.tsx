@@ -15,6 +15,7 @@ import LogoutButton from "../components/elements/button/logoutButton";
 import { useRouter } from "next/router";
 import BasicAlerts from "../components/elements/alert/Alert";
 import {
+  ownerMessage,
   permissionStore,
   user,
   userKey,
@@ -30,6 +31,7 @@ const dashboard: React.FC = () => {
 
   const permission: PermissionsState = useSelector(permissionStore);
   const uMessage: string | null = useSelector(userMessage);
+  const oMessage: string | null = useSelector(ownerMessage);
 
   useEffect(() => {
     function handleResize() {
@@ -46,6 +48,15 @@ const dashboard: React.FC = () => {
       {uMessage && (
         <BasicAlerts
           message={uMessage}
+          type="success"
+          space={1}
+          padding={0.6}
+        />
+      )}
+
+      {oMessage && (
+        <BasicAlerts
+          message={oMessage}
           type="success"
           space={1}
           padding={0.6}
