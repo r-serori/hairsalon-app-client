@@ -88,19 +88,21 @@ const Attendances = () => {
   ];
 
   // nodesにusersをマップして処理
-  const nodes = users
-    .filter((user: UserAllState) => {
-      return user.role !== "オーナー";
-    })
-    .map((user: UserAllState) => {
-      return {
-        id: user.id,
-        name: user.name,
-        staff_phone_number: user.phone_number,
-        role: user.role,
-        isAttendance: user.isAttendance,
-      };
-    });
+  const nodes = Array.isArray(users)
+    ? users
+        .filter((user: UserAllState) => {
+          return user.role !== "オーナー";
+        })
+        .map((user: UserAllState) => {
+          return {
+            id: user.id,
+            name: user.name,
+            staff_phone_number: user.phone_number,
+            role: user.role,
+            isAttendance: user.isAttendance,
+          };
+        })
+    : [];
 
   return (
     <div>

@@ -183,115 +183,117 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     { text: "names" },
   ];
 
-  const nodes = [
-    ...customers.map((customer) => {
-      // customerは一回一番下まで行く。その後、次のcustomerに行く。
-      // 顧客に関連するコースの情報を取得
-      const customerCourses = course_customers.filter(
-        (course) => course.customer_id === customer.id
-      );
-      console.log(customerCourses);
-      // [{customer_id: 1, course_id: 1}]
-
-      // 顧客に関連するコース名を取得し、カンマ区切りの文字列に変換
-      const courseNames = customerCourses
-        .map((course) => {
-          const courseInfo = courses.find((c) => c.id === course.course_id);
-          return courseInfo ? courseInfo.course_name : ""; // コース名が見つかった場合のみ取得
-        })
-        .join(",\n"); // コース名をカンマ区切りの文字列に変換
-      console.log(courseNames);
-      // カットとシェービングA
-
-      // 顧客に関連するオプションの情報を取得
-      const customerOptions = option_customers.filter(
-        (cus_op) => cus_op.customer_id === customer.id
-      );
-      console.log("CUSOP", customerOptions);
-      // [{customer_id: 1, option_id: 1},
-      // {customer_id: 1, option_id: 2}]
-
-      // 顧客に関連するオプション名を取得し、カンマ区切りの文字列に変換
-      const optionNames = customerOptions
-        .map((option) => {
-          const optionInfo = options.find((o) => o.id === option.option_id);
-          return optionInfo ? optionInfo.option_name : ""; // オプション名が見つかった場合のみ取得
-        })
-        .join(",\n"); // オプション名をカンマ区切りの文字列に変換
-      console.log(optionNames);
-      // トリートメント, パーマ
-
-      // 顧客に関連する商品の情報を取得
-      const customerMerchandises = merchandise_customers.filter(
-        (merchandise) => merchandise.customer_id === customer.id
-      );
-      console.log(customerMerchandises);
-      // [{customer_id: 1, merchandise_id: 1},
-      // {customer_id: 1, merchandise_id: 2}]
-
-      // 顧客に関連する商品名を取得し、カンマ区切りの文字列に変換
-      const merchandiseNames = customerMerchandises
-        .map((merchandise) => {
-          const merchandiseInfo = merchandises.find(
-            (m) => m.id === merchandise.merchandise_id
+  const nodes = Array.isArray(customers)
+    ? [
+        ...customers.map((customer) => {
+          // customerは一回一番下まで行く。その後、次のcustomerに行く。
+          // 顧客に関連するコースの情報を取得
+          const customerCourses = course_customers.filter(
+            (course) => course.customer_id === customer.id
           );
-          return merchandiseInfo ? merchandiseInfo.merchandise_name : ""; // 商品名が見つかった場合のみ取得
-        })
-        .join(",\n"); // 商品名をカンマ区切りの文字列に変換
-      console.log(merchandiseNames);
-      // シャンプー, コンディショナー
+          console.log(customerCourses);
+          // [{customer_id: 1, course_id: 1}]
 
-      // 顧客に関連するヘアスタイルの情報を取得
-      const customerHairstyles = hairstyle_customers.filter(
-        (hairstyle) => hairstyle.customer_id === customer.id
-      );
-      console.log(customerHairstyles);
-      // [{customer_id: 1, hairstyle_id: 1},
-      // {customer_id: 1, hairstyle_id: 2}]
+          // 顧客に関連するコース名を取得し、カンマ区切りの文字列に変換
+          const courseNames = customerCourses
+            .map((course) => {
+              const courseInfo = courses.find((c) => c.id === course.course_id);
+              return courseInfo ? courseInfo.course_name : ""; // コース名が見つかった場合のみ取得
+            })
+            .join(",\n"); // コース名をカンマ区切りの文字列に変換
+          console.log(courseNames);
+          // カットとシェービングA
 
-      // 顧客に関連するヘアスタイル名を取得し、カンマ区切りの文字列に変換
-      const hairstyleNames = customerHairstyles
-        .map((hairstyle) => {
-          const hairstyleInfo = hairstyles.find(
-            (h) => h.id === hairstyle.hairstyle_id
+          // 顧客に関連するオプションの情報を取得
+          const customerOptions = option_customers.filter(
+            (cus_op) => cus_op.customer_id === customer.id
           );
-          return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // ヘアスタイル名が見つかった場合のみ取得
-        })
-        .join(",\n"); // ヘアスタイル名をカンマ区切りの文字列に変換
-      console.log(hairstyleNames);
-      // ショート, ロング
+          console.log("CUSOP", customerOptions);
+          // [{customer_id: 1, option_id: 1},
+          // {customer_id: 1, option_id: 2}]
 
-      // 顧客に関連する担当者の情報を取得
-      const customerUsers = customer_users.filter(
-        (user) => user.customer_id === customer.id
-      );
-      console.log(customerUsers);
-      // [{customer_id: 1, user_id: 1}]
+          // 顧客に関連するオプション名を取得し、カンマ区切りの文字列に変換
+          const optionNames = customerOptions
+            .map((option) => {
+              const optionInfo = options.find((o) => o.id === option.option_id);
+              return optionInfo ? optionInfo.option_name : ""; // オプション名が見つかった場合のみ取得
+            })
+            .join(",\n"); // オプション名をカンマ区切りの文字列に変換
+          console.log(optionNames);
+          // トリートメント, パーマ
 
-      // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
-      const userNames = customerUsers
-        .map((user) => {
-          const userInfo = users.find((a) => a.id === user.user_id);
-          return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
-        })
-        .join(",\n"); // 担当者名をカンマ区切りの文字列に変換
-      console.log(userNames);
-      // 田中店長
+          // 顧客に関連する商品の情報を取得
+          const customerMerchandises = merchandise_customers.filter(
+            (merchandise) => merchandise.customer_id === customer.id
+          );
+          console.log(customerMerchandises);
+          // [{customer_id: 1, merchandise_id: 1},
+          // {customer_id: 1, merchandise_id: 2}]
 
-      // 顧客情報を返す
-      return {
-        id: customer.id,
-        customer_name: customer.customer_name,
-        phone_number: customer.phone_number,
-        remarks: customer.remarks,
-        course: courseNames,
-        option: optionNames,
-        merchandise: merchandiseNames,
-        hairstyle: hairstyleNames,
-        names: userNames,
-      };
-    }),
-  ];
+          // 顧客に関連する商品名を取得し、カンマ区切りの文字列に変換
+          const merchandiseNames = customerMerchandises
+            .map((merchandise) => {
+              const merchandiseInfo = merchandises.find(
+                (m) => m.id === merchandise.merchandise_id
+              );
+              return merchandiseInfo ? merchandiseInfo.merchandise_name : ""; // 商品名が見つかった場合のみ取得
+            })
+            .join(",\n"); // 商品名をカンマ区切りの文字列に変換
+          console.log(merchandiseNames);
+          // シャンプー, コンディショナー
+
+          // 顧客に関連するヘアスタイルの情報を取得
+          const customerHairstyles = hairstyle_customers.filter(
+            (hairstyle) => hairstyle.customer_id === customer.id
+          );
+          console.log(customerHairstyles);
+          // [{customer_id: 1, hairstyle_id: 1},
+          // {customer_id: 1, hairstyle_id: 2}]
+
+          // 顧客に関連するヘアスタイル名を取得し、カンマ区切りの文字列に変換
+          const hairstyleNames = customerHairstyles
+            .map((hairstyle) => {
+              const hairstyleInfo = hairstyles.find(
+                (h) => h.id === hairstyle.hairstyle_id
+              );
+              return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // ヘアスタイル名が見つかった場合のみ取得
+            })
+            .join(",\n"); // ヘアスタイル名をカンマ区切りの文字列に変換
+          console.log(hairstyleNames);
+          // ショート, ロング
+
+          // 顧客に関連する担当者の情報を取得
+          const customerUsers = customer_users.filter(
+            (user) => user.customer_id === customer.id
+          );
+          console.log(customerUsers);
+          // [{customer_id: 1, user_id: 1}]
+
+          // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
+          const userNames = customerUsers
+            .map((user) => {
+              const userInfo = users.find((a) => a.id === user.user_id);
+              return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
+            })
+            .join(",\n"); // 担当者名をカンマ区切りの文字列に変換
+          console.log(userNames);
+          // 田中店長
+
+          // 顧客情報を返す
+          return {
+            id: customer.id,
+            customer_name: customer.customer_name,
+            phone_number: customer.phone_number,
+            remarks: customer.remarks,
+            course: courseNames,
+            option: optionNames,
+            merchandise: merchandiseNames,
+            hairstyle: hairstyleNames,
+            names: userNames,
+          };
+        }),
+      ]
+    : [];
 
   return (
     <div>

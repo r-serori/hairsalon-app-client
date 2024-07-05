@@ -980,6 +980,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       onValidationChange={(newValue) =>
                         setUsernameValidate(newValue)
                       }
+                      required={true}
+                      error={true}
                     />
                   </div>
                 </div>

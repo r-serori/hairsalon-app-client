@@ -86,14 +86,16 @@ const AttendanceTimeShots = () => {
 
   const nodesProps = [{ text: "shotUserName" }, { text: "attendanceNow" }];
 
-  const nodes = users.map((user) => {
-    return {
-      id: user.id,
-      shotUserName: user.name,
-      attendanceNow: user.isAttendance ? "勤務中" : "退勤中",
-      isAttendance: user.isAttendance,
-    };
-  });
+  const nodes = Array.isArray(users)
+    ? users.map((user) => {
+        return {
+          id: user.id,
+          shotUserName: user.name,
+          attendanceNow: user.isAttendance ? "勤務中" : "退勤中",
+          isAttendance: user.isAttendance,
+        };
+      })
+    : [];
   console.log("nodes", nodes);
 
   return (

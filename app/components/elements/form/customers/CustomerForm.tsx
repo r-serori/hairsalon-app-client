@@ -225,6 +225,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             optionName={courses}
             nodesProp="course"
             onChanger={handleCourseChange}
+            required={false}
           />
 
           <MultiCheckbox
@@ -232,6 +233,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             optionName={options}
             nodesProp="option"
             onChanger={handleOptionChange}
+            required={false}
           />
 
           <MultiCheckbox
@@ -239,6 +241,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             optionName={merchandises}
             nodesProp="merchandise"
             onChanger={handleMerchandiseChange}
+            required={false}
           />
 
           <MultiCheckbox
@@ -246,6 +249,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             optionName={hairstyles}
             nodesProp="hairstyle"
             onChanger={handleHairstyleChange}
+            required={false}
           />
 
           <MultiCheckbox
