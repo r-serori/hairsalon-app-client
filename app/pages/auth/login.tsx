@@ -17,6 +17,7 @@ import { pushUserId } from "../../components/Hooks/pushLocalStorage";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { getPermission } from "../../store/auth/permissionSlice";
+import path from "path";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();

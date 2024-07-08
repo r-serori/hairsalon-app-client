@@ -92,7 +92,11 @@ const initialState: RootState = {
 const ownerSlice = createSlice({
   name: "owner",
   initialState,
-  reducers: {},
+  reducers: {
+    oChangeMassage: (state, action: PayloadAction<string>) => {
+      state.message = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(ownerRegister.pending, (state) => {
       state.status = "loading";
@@ -110,6 +114,8 @@ const ownerSlice = createSlice({
     });
   },
 });
+
+export const { oChangeMassage } = ownerSlice.actions;
 
 const ownerReducer = ownerSlice.reducer;
 

@@ -11,6 +11,7 @@ import {
 } from "../attendances/attendance_times/attendance_timesSlice";
 import { isLogout } from "./isLoginSlice";
 import { RoleState } from "../../components/Hooks/interface";
+import { emailVerify } from "../../services/auth/emailVerify";
 
 export const login = createAsyncThunk(
   "login/users",
@@ -624,6 +625,53 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+export const verifyEmail = createAsyncThunk(
+  "users/verifyEmail",
+  async (formData: { id: number; hash: string }, { rejectWithValue }) => {
+    try {
+      const response = await emailVerify(formData);
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
+    }
+  }
+);
+
 export interface UserState {
   // ステートの型
   id: number;
@@ -929,6 +977,22 @@ const usersSlice = createSlice({
               : user
           )
         : state.users;
+    });
+
+    builder.addCase(verifyEmail.pending, (state) => {
+      state.status = "loading";
+      state.message = null;
+      state.error = null;
+    });
+
+    builder.addCase(verifyEmail.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = "メールアドレスの認証が完了しました！";
+    });
+    builder.addCase(verifyEmail.rejected, (state, action) => {
+      state.status = "failed";
+      state.error =
+        "メールアドレスの認証に失敗しました！ログインからやり直してください！";
     });
   },
 });

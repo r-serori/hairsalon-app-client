@@ -60,7 +60,7 @@ const RegisterPage: React.FC = () => {
       if (pushUser) {
         await dispatch(getPermission({}) as any);
         dispatch(isLogin());
-        router.push("/auth/owner");
+        router.push("/auth/emailWait");
       } else {
         throw new Error("e");
       }

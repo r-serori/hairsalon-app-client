@@ -44,8 +44,6 @@ const OwnerPage = () => {
         response.payload.status === 500
       ) {
         throw new Error(response.payload.message);
-      } else if (response.payload.status === 300) {
-        router.push("/auth/owner");
       }
       console.log("Success");
 

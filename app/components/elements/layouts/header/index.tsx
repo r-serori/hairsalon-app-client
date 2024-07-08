@@ -93,7 +93,7 @@ export default function Header() {
   }, [dispatch]);
   const navigation =
     currentPath === "/" ||
-    currentPath === "/auth/owner" ||
+    currentPath === "/auth/owner/[id]" ||
     currentPath === "/auth/login" ||
     currentPath === "/auth/register" ||
     currentPath === "/_error"
