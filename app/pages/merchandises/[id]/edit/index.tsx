@@ -13,6 +13,7 @@ import {
   merchandiseStatus,
   merchandiseStore,
 } from "../../../../components/Hooks/selector";
+import RouterButton from "../../../../components/elements/button/RouterButton";
 
 const merchandiseEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,9 @@ const merchandiseEdit: React.FC = () => {
 
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/merchandises"} />
+      <div className="my-4 mx-4">
+        <RouterButton link={"/merchandises"} value="物販画面に戻る" />
+      </div>
       {mStatus === "loading" ? (
         <p>Loading...</p>
       ) : (

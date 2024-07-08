@@ -118,7 +118,7 @@ const AttendanceTimeShots = () => {
           />
         )}
       </div>
-      <div className="mx-8 mt-4">
+      <div className="my-4 mx-4">
         {uStatus === "loading" || !nodes ? (
           <p className="py-4 text-blue-700">Loading...</p>
         ) : (

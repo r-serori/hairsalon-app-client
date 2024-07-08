@@ -5,6 +5,7 @@ import OptionForm from "../../../components/elements/form/options/OptionForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import { optionStatus } from "../../../components/Hooks/selector";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const optionCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const optionCreate: React.FC = () => {
   return (
     <div className="min-h-full ">
       <div className="ml-4 mt-4 ">
-        <BackAgainButton link={"/options"} />
+        <RouterButton link={"/options"} value="オプション画面に戻る" />
       </div>
       {oStatus === "loading" ? (
         <p>Loading...</p>

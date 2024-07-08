@@ -14,6 +14,7 @@ import {
 } from "../../../../components/Hooks/selector";
 import { userKey } from "../../../../components/Hooks/authSelector";
 import { getUserKey } from "../../../../components/Hooks/useMethod";
+import RouterButton from "../../../../components/elements/button/RouterButton";
 
 const stockCategoryEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -43,7 +44,12 @@ const stockCategoryEdit: React.FC = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/stock_categories"} />
+      <div className="my-4 ml-4">
+        <RouterButton
+          link={"/stock_categories"}
+          value="在庫カテゴリ画面に戻る"
+        />
+      </div>
       {scStatus === "loading" ? (
         <p>Loading...</p>
       ) : (

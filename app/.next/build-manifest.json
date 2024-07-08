@@ -12,6 +12,11 @@
   ],
   "rootMainFiles": [],
   "pages": {
+    "/": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/index.js"
+    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -22,25 +27,20 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/attendanceTimeShots": [
+    "/auth/owner": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/attendanceTimeShots.js"
+      "static/chunks/pages/auth/owner.js"
     ],
-    "/attendances": [
+    "/auth/register": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/attendances.js"
+      "static/chunks/pages/auth/register.js"
     ],
-    "/dashboard": [
+    "/customers/create": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/dashboard.js"
-    ],
-    "/monthly_sales": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/monthly_sales.js"
+      "static/chunks/pages/customers/create.js"
     ]
   },
   "ampFirstPages": []

@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { createTheme } from "@mui/material/styles";
 
 interface EmailFieldProps {
   id: number;
@@ -30,6 +31,18 @@ const EmailField: React.FC<EmailFieldProps> = ({
     onValidationChange(emailRegex.test(newValue));
   };
 
+  const theme = createTheme({
+    palette: {
+      error: {
+        main: "#f44336",
+        light: "#e57373",
+      },
+      primary: {
+        main: "#1976d2",
+      },
+    },
+  });
+
   return (
     <Box
       sx={{
@@ -53,10 +66,17 @@ const EmailField: React.FC<EmailFieldProps> = ({
         sx={{
           "& .MuiInputBase-input": {
             fontWeight: "bold",
+            color: `${
+              !value && required ? theme.palette.error.light : "black"
+            }`,
           },
           "& .MuiInputLabel-root": {
             fontWeight: "bold",
-            color: `${!value && required ? "red" : "blue"}`,
+            color: `${
+              !value && required
+                ? theme.palette.error.main
+                : theme.palette.primary.main
+            }`,
           },
         }}
       />

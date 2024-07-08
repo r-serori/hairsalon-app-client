@@ -131,7 +131,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             required={false}
           />
 
-          <BasicTextField
+          <BasicNumberField
             id={node ? node.id : 0}
             placeholder="設定した数量を下回った場合通知します"
             value={String(notice)}

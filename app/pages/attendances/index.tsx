@@ -118,8 +118,8 @@ const Attendances = () => {
       {uError && (
         <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
-      <div className="mx-8 mt-4">
-        <div className="flex my-4 ml-2">
+      <div className="mx-4">
+        <div className="flex my-4">
           <RouterButton link="/auth/staffRegister" value="ユーザー登録" />
         </div>
         {uStatus === "loading" ? (

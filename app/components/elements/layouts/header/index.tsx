@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
-import { loginNow, userKey } from "../../../Hooks/authSelector";
+import { loginNow, ownerStatus, userKey } from "../../../Hooks/authSelector";
 import { allLogout, getUserKey } from "../../../Hooks/useMethod";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../Hooks/authSelector";
@@ -22,11 +22,10 @@ export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
   const currentPath = router.pathname;
+  console.log("currentPath", currentPath);
   const nowLogin: boolean = useSelector(loginNow);
   const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
-  const [headerOpenCurrentPath, setHeaderOpenCurrentPath] =
-    useState<boolean>(true); //trueの場合はヘッダーを表示する
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -34,20 +33,6 @@ export default function Header() {
         localStorage.getItem("isLogin") === "true" ? true : false;
       console.log("isLogin", IsLoggedIn);
 
-      if (
-        currentPath === "/" ||
-        currentPath === "/auth/owner" ||
-        currentPath === "/auth/login" ||
-        currentPath === "/auth/register"
-      ) {
-        setHeaderOpenCurrentPath(false);
-      } else if (!IsLoggedIn) {
-        setHeaderOpenCurrentPath(false);
-        allLogout(dispatch);
-        router.push("/login");
-      } else {
-        setHeaderOpenCurrentPath(true);
-      }
       console.log("headerrrrrrrrrrrr  ");
       const getPermissionData = async () => {
         try {
@@ -107,25 +92,31 @@ export default function Header() {
     return () => clearInterval(intervalId);
   }, [dispatch]);
   const navigation =
-    permission === "オーナー"
+    currentPath === "/" ||
+    currentPath === "/auth/owner" ||
+    currentPath === "/auth/login" ||
+    currentPath === "/auth/register" ||
+    currentPath === "/_error"
+      ? []
+      : permission === "オーナー"
       ? [
           {
-            name: "一覧画面",
+            name: "一覧",
             href: "/dashboard",
             current: currentPath === "/dashboard",
           },
           {
-            name: "スタッフ管理",
+            name: "スタッフ",
             href: "/attendances",
             current: currentPath === "/attendances",
           },
           {
-            name: "勤怠管理",
+            name: "勤怠",
             href: "/attendanceTimeShots",
             current: currentPath === "/attendanceTimeShots",
           },
           {
-            name: "顧客管理",
+            name: "顧客",
             href: "/customers",
             current: currentPath === "/customers",
           },
@@ -135,7 +126,7 @@ export default function Header() {
             current: currentPath === "/schedules",
           },
           {
-            name: "在庫管理",
+            name: "在庫",
             href: "/stocks",
             current: currentPath === "/stocks",
           },
@@ -174,8 +165,10 @@ export default function Header() {
             href: "/yearly_sales",
             current: currentPath === "/yearly_sales",
           },
+          { name: "Your Profile", href: "/userProfile/updateUserInformation" },
         ]
-      : [
+      : permission === "マネージャー" || permission === "スタッフ"
+      ? [
           {
             name: "一覧画面",
             href: "/dashboard",
@@ -187,7 +180,7 @@ export default function Header() {
             current: currentPath === "/attendanceTimeShots",
           },
           {
-            name: "顧客管理",
+            name: "顧客",
             href: "/customers",
             current: currentPath === "/customers",
           },
@@ -197,7 +190,7 @@ export default function Header() {
             current: currentPath === "/schedules",
           },
           {
-            name: "在庫管理",
+            name: "在庫",
             href: "/stocks",
             current: currentPath === "/stocks",
           },
@@ -221,16 +214,14 @@ export default function Header() {
             href: "/hairstyles",
             current: currentPath === "/hairstyles",
           },
-        ];
-
-  const userNavigation = [
-    { name: "Your Profile", href: "/userProfile/updateUserInformation" },
-  ];
+          { name: "Your Profile", href: "/userProfile/updateUserInformation" },
+        ]
+      : [];
 
   return (
     <>
       <div className="min-h-full">
-        {nowLogin && headerOpenCurrentPath && (
+        {nowLogin && (
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>
@@ -266,30 +257,6 @@ export default function Header() {
                               <span className="sr-only">Open user menu</span>
                             </Menu.Button>
                           </div>
-
-                          <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                          >
-                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {userNavigation.map((item) => (
-                                <Link key={item.name} href={item.href}>
-                                  <span
-                                    className={classNames(
-                                      "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    )}
-                                  >
-                                    {item.name}
-                                  </span>
-                                </Link>
-                              ))}
-                            </Menu.Items>
-                          </Transition>
                         </Menu>
                       </div>
                     </div>
@@ -341,17 +308,6 @@ export default function Header() {
                     </div>
 
                     <div className="mt-3 space-y-1 px-2">
-                      {userNavigation.map((item) => (
-                        <Link key={item.name} href={item.href}>
-                          <span
-                            className={classNames(
-                              "block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                            )}
-                          >
-                            {item.name}
-                          </span>
-                        </Link>
-                      ))}
                       <LogoutButton
                         className={
                           "block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"

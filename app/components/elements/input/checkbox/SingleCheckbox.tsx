@@ -2,6 +2,7 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { get } from "http";
+import { createTheme } from "@mui/material/styles";
 
 interface SingleCheckBoxProps {
   value?: string;
@@ -31,6 +32,18 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
     }
   };
 
+  const theme = createTheme({
+    palette: {
+      error: {
+        main: "#f44336",
+        light: "#e57373",
+      },
+      primary: {
+        main: "#1976d2",
+      },
+    },
+  });
+
   return (
     <div className="w-full mt-1 border-gray-300 focus:outline-none focus:border-blue-500 ">
       <Autocomplete
@@ -44,8 +57,32 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            label={`${value}`}
+            label={`${getOptions.length === 0 ? "選択肢がありません" : value}`}
             required={required} // TextField に required を設定
+            sx={{
+              width: "100%",
+              "& .MuiInputBase-input": {
+                fontWeight: "bold",
+                color: `${
+                  !value && required ? theme.palette.error.light : "black"
+                }`,
+              },
+              "& .MuiInputLabel-root": {
+                fontWeight: "bold",
+                color: `${
+                  !value && required
+                    ? theme.palette.error.main
+                    : theme.palette.primary.main
+                }`,
+              },
+              "& .MuiFormHelperText-root": {
+                color: `${
+                  !value && required
+                    ? theme.palette.error.main
+                    : theme.palette.primary.main
+                }`,
+              },
+            }}
           />
         )}
         renderOption={(props, option) => (
@@ -58,14 +95,13 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
             {option}
           </li>
         )}
-        disabled={role === "スタッフ" ? true : false}
+        disabled={role === "スタッフ" || getOptions.length === 0 ? true : false}
         sx={{
           "& .MuiInputBase-input": {
             fontWeight: "bold",
           },
           "& .MuiInputLabel-root": {
             fontWeight: "bold",
-            color: "blue",
           },
         }}
       />

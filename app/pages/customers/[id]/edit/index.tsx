@@ -19,6 +19,7 @@ import {
   option_customersStore,
 } from "../../../../components/Hooks/selector";
 import { userKey } from "../../../../components/Hooks/authSelector";
+import RouterButton from "../../../../components/elements/button/RouterButton";
 
 const customersEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -120,7 +121,9 @@ const customersEdit: React.FC = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/customers"} />
+      <div className="my-4 ml-4">
+        <RouterButton link={"/customers"} value="顧客画面に戻る" />
+      </div>
       {cStatus === "loading" ? (
         <p>Loading...</p>
       ) : (

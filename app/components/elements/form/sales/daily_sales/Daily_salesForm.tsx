@@ -4,8 +4,10 @@
 // import PrimaryButton from "../../../button/PrimaryButton";
 // import MultiCheckbox from "../../../input/checkbox/MultiCheckbox";
 // import { Daily_salesState } from "../../../../../store/sales/daily_sales/daily_saleSlice";
+// import BasicNumberField from "../../../input/BasicNumberField";
 
 // interface DailySalesFormProps {
+//   node?: Daily_salesState;
 //   createDailySales: (formData: Daily_salesState) => void;
 // }
 
@@ -34,14 +36,13 @@
 //         </div>
 //         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
 //           <BasicTextField
-//             type="date"
 //             placeholder="日付"
 //             value={date}
 //             onChange={(e) => setDate(e.target.value)}
 //           />
 
-//           <BasicTextField
-//             type="number"
+//           <BasicNumberField
+//             id={0}
 //             placeholder="日次売上"
 //             value={daily_sales}
 //             onChange={(e) => setDaily_sales(e.target.value)}

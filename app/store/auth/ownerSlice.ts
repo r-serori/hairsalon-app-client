@@ -95,24 +95,18 @@ const ownerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(ownerRegister.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
     builder.addCase(ownerRegister.fulfilled, (state, action) => {
-      state.status = "failed";
+      state.status = "success";
       state.owner = action.payload;
       state.message = "オーナー登録が完了しました。";
     });
     builder.addCase(ownerRegister.rejected, (state, action) => {
       state.status = "failed";
       state.error = (action.payload as any).message;
-    });
-
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.status = "failed";
-      state.owner = [...state.owner, action.payload.responseOwnerId];
-      state.message = "ログインしました。";
     });
   },
 });

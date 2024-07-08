@@ -51,10 +51,12 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
 
   return (
     <div className="flex items-center justify-center ">
-      <div className="max-w-md w-full space-y-6 mt-4">
+      <div className="max-w-lg w-full space-y-6 mt-4">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            プロフィール更新
+            {edit
+              ? "あなたのプロフィール情報を編集"
+              : "あなたのプロフィール情報"}
           </h2>
         </div>
         <div className="flex justify-center items-center text-center mx-auto pb-1">

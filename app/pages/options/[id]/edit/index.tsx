@@ -9,6 +9,7 @@ import {
   optionStatus,
   optionsStore,
 } from "../../../../components/Hooks/selector";
+import RouterButton from "../../../../components/elements/button/RouterButton";
 
 const optionEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const optionEdit: React.FC = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/options"} />
+      <RouterButton link={"/options"} value="オプション画面に戻る" />
       {oStatus === "loading" ? (
         <p>Loading...</p>
       ) : (

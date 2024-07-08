@@ -73,14 +73,14 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
         staffPermission(permission, router);
         if (permission === "オーナー") {
           setTHeaderItems([
-            "顧客名",
+            "顧客",
             "電話番号",
             "備考",
-            "コース名",
-            "オプション名",
-            "商品名",
-            "ヘアスタイル名",
-            "担当者名",
+            "コース",
+            "オプション",
+            "商品",
+            "髪型",
+            "担当者",
             "編集",
             "削除",
           ]);
@@ -89,27 +89,27 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
             "顧客名",
             "電話番号",
             "備考",
-            "コース名",
-            "オプション名",
-            "商品名",
-            "ヘアスタイル名",
-            "担当者名",
+            "コース",
+            "オプション",
+            "商品",
+            "髪型",
+            "担当者",
             "編集",
           ]);
         } else {
           setTHeaderItems([
-            "顧客名",
+            "顧客",
             "電話番号",
             "備考",
-            "コース名",
-            "オプション名",
-            "商品名",
-            "ヘアスタイル名",
-            "担当者名",
+            "コース",
+            "オプション",
+            "商品",
+            "髪型",
+            "担当者",
           ]);
         }
         if (
-          _.isEmpty(hairstyles) &&
+          _.isEmpty(customers) &&
           (permission === "オーナー" ||
             permission === "マネージャー" ||
             permission === "スタッフ")
@@ -159,17 +159,17 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
     useSelector(customer_usersStore);
 
   const searchItems = [
-    { key: "customer_name", value: "顧客名" },
+    { key: "customer_name", value: "顧客" },
     { key: "phone_number", value: "電話番号" },
     { key: "remarks", value: "備考" },
-    { key: "course", value: "コース名" },
-    { key: "option", value: "オプション名" },
+    { key: "course", value: "コース" },
+    { key: "option", value: "オプション" },
     {
       key: "merchandise",
-      value: "商品名",
+      value: "商品",
     },
-    { key: "hairstyle", value: "ヘアスタイル名" },
-    { key: "names", value: "担当者名" },
+    { key: "hairstyle", value: "髪型" },
+    { key: "names", value: "担当者" },
   ];
 
   const nodesProps = [
@@ -242,7 +242,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           console.log(merchandiseNames);
           // シャンプー, コンディショナー
 
-          // 顧客に関連するヘアスタイルの情報を取得
+          // 顧客に関連する髪型の情報を取得
           const customerHairstyles = hairstyle_customers.filter(
             (hairstyle) => hairstyle.customer_id === customer.id
           );
@@ -250,15 +250,15 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           // [{customer_id: 1, hairstyle_id: 1},
           // {customer_id: 1, hairstyle_id: 2}]
 
-          // 顧客に関連するヘアスタイル名を取得し、カンマ区切りの文字列に変換
+          // 顧客に関連する髪型名を取得し、カンマ区切りの文字列に変換
           const hairstyleNames = customerHairstyles
             .map((hairstyle) => {
               const hairstyleInfo = hairstyles.find(
                 (h) => h.id === hairstyle.hairstyle_id
               );
-              return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // ヘアスタイル名が見つかった場合のみ取得
+              return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // 髪型名が見つかった場合のみ取得
             })
-            .join(",\n"); // ヘアスタイル名をカンマ区切りの文字列に変換
+            .join(",\n"); // 髪型名をカンマ区切りの文字列に変換
           console.log(hairstyleNames);
           // ショート, ロング
 
@@ -270,12 +270,15 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           // [{customer_id: 1, user_id: 1}]
 
           // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
-          const userNames = customerUsers
-            .map((user) => {
-              const userInfo = users.find((a) => a.id === user.user_id);
-              return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
-            })
-            .join(",\n"); // 担当者名をカンマ区切りの文字列に変換
+          const userNames = Array.isArray(users)
+            ? customerUsers
+                .map((user) => {
+                  const userInfo = users.find((a) => a.id === user.user_id);
+                  return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
+                })
+                .join(",\n") // 担当者名をカンマ区切りの文字列に変換
+            : Object(users).name;
+
           console.log(userNames);
           // 田中店長
 
@@ -310,9 +313,9 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           <BasicAlerts type="error" message={cError} space={1} padding={0.6} />
         )}
       </div>
-      <div className="mx-8 mt-4">
-        <div className=" mb-4 ">
-          <RouterButton link="/customers/create" value="新規作成" />
+      <div className="mx-4">
+        <div className="my-4 ">
+          <RouterButton link="/customers/create" value="顧客新規作成" />
         </div>
         {cStatus === "loading" ? (
           <p>Loading...</p>

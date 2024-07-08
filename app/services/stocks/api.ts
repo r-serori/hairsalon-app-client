@@ -7,7 +7,7 @@ export const stockApi = {
     quantity: number;
     remarks: string;
     notice: number;
-    stock_category_id: number;
+    stock_category_id: number | null;
   }) => {
     try {
       const response = await sendRequest("POST", "/stocks/store", formData);
@@ -47,7 +47,7 @@ export const stockApi = {
     quantity: number;
     remarks: string;
     notice: number;
-    stock_category_id: number;
+    stock_category_id: number | null;
   }) => {
     try {
       const response = await sendRequest("POST", `/stocks/update`, formData);

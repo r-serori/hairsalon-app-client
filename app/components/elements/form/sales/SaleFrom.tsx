@@ -133,7 +133,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
       console.log("merchandiseNamesだよ");
       console.log(merchandiseNames);
 
-      // 顧客に関連するヘアスタイルの情報を取得
+      // 顧客に関連する髪型の情報を取得
       const customerHairstyles = hairstyle_customers
         .filter((hairstyle) => hairstyle.customer_id === customer.id)
         .map((hairstyle) => hairstyle.hairstyle_id);

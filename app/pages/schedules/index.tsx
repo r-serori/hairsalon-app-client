@@ -61,7 +61,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
       }
     };
     fetchData();
-  }, [dispatch, permission, router, schedules]);
+  }, [dispatch]);
 
   dayjs.locale("ja");
   dayjs.extend(utc);

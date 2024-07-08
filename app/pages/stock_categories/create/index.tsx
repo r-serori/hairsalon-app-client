@@ -5,6 +5,7 @@ import StockCategoryForm from "../../../components/elements/form/stocks/stock_ca
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import { stock_categoryStatus } from "../../../components/Hooks/selector";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const stockCategoryCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,10 @@ const stockCategoryCreate: React.FC = () => {
   return (
     <div className="min-h-full ">
       <div className="ml-4 mt-4 ">
-        <BackAgainButton link={"/stock_categories"} />
+        <RouterButton
+          link={"/stock_categories"}
+          value="在庫カテゴリ画面に戻る"
+        />
       </div>
       {loading === "loading" ? (
         <p>Loading...</p>

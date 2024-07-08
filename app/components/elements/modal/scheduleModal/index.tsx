@@ -121,7 +121,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   // 商品情報を取得
   const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
 
-  // ヘアスタイル情報を取得
+  // 髪型情報を取得
   const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
 
   // 担当者情報を取得
@@ -202,7 +202,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
           // console.log("merchandiseNamesだよ");
           // console.log(merchandiseNames);
 
-          // 顧客に関連するヘアスタイルの情報を取得
+          // 顧客に関連する髪型の情報を取得
           const customerHairstyles: number[] = hairstyle_customers
             .filter((hairstyle) => hairstyle.customer_id === customer.id)
             .map((hairstyle) => hairstyle.hairstyle_id);
@@ -358,6 +358,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const [title, setTitle] = useState(
     !isCustomer && whoIsEvent === "編集" ? selectedEvent.title : ""
   );
+
+  const [titleValidate, setTitleValidate] = useState<boolean>(false);
   //開始時間を設定
   const [startTime, setStartTime] = useState<Dayjs | null>(
     allDay && whoIsEvent === "クリック"
@@ -611,6 +613,11 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   // console.log("ScheIdです", Sid);
 
   // console.log("uniqueIdです", uniqueId);
+  console.log("coursesです", courses);
+  console.log("optionsです", options);
+  console.log("merchandisesです", merchandises);
+  console.log("hairstylesです", hairstyles);
+  console.log("usersです", users);
 
   return (
     <div>
@@ -776,6 +783,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     onChange={(e) => setTitle(e.target.value)}
                     role={role}
                     decideLength={50}
+                    onValidationChange={(newValue) =>
+                      setTitleValidate(newValue)
+                    }
                   />
                 </div>
               )}
@@ -856,7 +866,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">ヘアスタイル名:</div>
+                    <div className="w-32 mr-2 text-right">髪型名:</div>
                     <MultiCheckbox
                       nodesProp="hairstyle"
                       optionName={hairstyleNames}

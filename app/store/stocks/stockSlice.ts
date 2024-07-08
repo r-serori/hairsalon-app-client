@@ -63,7 +63,7 @@ export const createStock = createAsyncThunk(
       remarks: string;
       supplier: string;
       notice: number;
-      stock_category_id: number;
+      stock_category_id: number | null;
     },
     { rejectWithValue }
   ) => {
@@ -150,7 +150,7 @@ export const updateStock = createAsyncThunk(
       remarks: string;
       supplier: string;
       notice: number;
-      stock_category_id: number;
+      stock_category_id: number | null;
     },
     { rejectWithValue }
   ) => {

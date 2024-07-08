@@ -20,10 +20,12 @@ import _ from "lodash";
 import { allLogout } from "../../components/Hooks/useMethod";
 import { userKey, permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
+import EasyModal from "../../components/elements/modal/easy/EasyModal";
 
 const daily_sales: React.FC = () => {
   const router = useRouter();
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [salesOpen, setSalesOpen] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -87,13 +89,17 @@ const daily_sales: React.FC = () => {
       {dsError && (
         <BasicAlerts type="error" message={dsError} space={1} padding={0.6} />
       )}
-      <div className="mx-8 mt-4">
-        <div className="flex justify-end items-center mb-4">
-          <div className="flex justify-start items-center mb-4 gap-4">
-            <RouterButton link="/monthly_sales" value="月次売上画面へ" />
-            <RouterButton link="/yearly_sales" value="年次売上画面へ" />
-          </div>
+      <div className="mx-4 my-4">
+        <div className="flex justify-end items-center gap-4">
+          <EasyModal
+            open={salesOpen}
+            setOpen={setSalesOpen}
+            whoAreYou="daily"
+          />
+          <RouterButton link="/monthly_sales" value="月次売上画面へ" />
+          <RouterButton link="/yearly_sales" value="年次売上画面へ" />
         </div>
+
         {dsStatus === "loading" ? (
           <p>Loading...</p>
         ) : (

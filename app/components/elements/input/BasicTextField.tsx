@@ -1,11 +1,12 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { createTheme } from "@mui/material/styles";
 
 interface BasicTextFieldProps {
   id: number;
   placeholder: string;
-  value: string;
+  value: string | null;
   disabled?: boolean;
   role?: string;
   decideLength?: number;
@@ -41,10 +42,27 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
       ...e,
       target: { ...e.target, value: newValue },
     });
-    if (required && newValue === "") {
+    if (!required) {
+      return;
+    } else if (required && newValue === "") {
       onValidationChange(false);
+    } else {
+      onValidationChange(true);
     }
+    console.log(newValue);
   };
+
+  const theme = createTheme({
+    palette: {
+      error: {
+        main: "#f44336",
+        light: "#e57373",
+      },
+      primary: {
+        main: "#1976d2",
+      },
+    },
+  });
 
   return (
     <Box
@@ -58,22 +76,36 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
         type="text"
         label={placeholder}
         onChange={handleChange}
-        value={value}
+        value={value === null ? "" : value}
         variant="outlined"
         disabled={disabled || role === "スタッフ"}
         multiline={multiline}
         rows={multiline ? rows : undefined}
         inputProps={{ maxLength: decideLength, required }}
         error={!value && required} // 必須項目で空の場合エラー表示
-        helperText={!value && required ? `${placeholder}は必須です` : ""}
+        helperText={!value && required ? `必須` : "任意"}
         sx={{
           width: "100%",
           "& .MuiInputBase-input": {
             fontWeight: "bold",
+            color: `${
+              !value && required ? theme.palette.error.light : "black"
+            }`,
           },
           "& .MuiInputLabel-root": {
             fontWeight: "bold",
-            color: `${!value && required ? "red" : "blue"}`,
+            color: `${
+              !value && required
+                ? theme.palette.error.main
+                : theme.palette.primary.main
+            }`,
+          },
+          "& .MuiFormHelperText-root": {
+            color: `${
+              !value && required
+                ? theme.palette.error.main
+                : theme.palette.primary.main
+            }`,
           },
         }}
       />

@@ -46,7 +46,7 @@ const hairstyleEdit: React.FC = () => {
   return (
     <div className="min-h-full ">
       <div className="mt-4 ml-4">
-        <RouterButton link={"/hairstyles"} value="へスタイル管理画面に戻る" />
+        <RouterButton link={"/hairstyles"} value="髪型画面に戻る" />
       </div>
       {hStatus === "loading" ? (
         <p>Loading...</p>

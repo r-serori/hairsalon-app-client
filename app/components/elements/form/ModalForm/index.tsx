@@ -33,8 +33,8 @@ import { user } from "../../../Hooks/authSelector";
 import BasicNumberField from "../../input/BasicNumberField";
 
 interface ModalFormProps {
-  type: any;
-  editValue: any;
+  type: string;
+  editValue: string | number | string[] | number[] | null;
   editNode: any;
   NodesProp: string;
   link: string;
@@ -142,9 +142,11 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   const changeMan = () => {
     const changeCourses_id = () => {
-      const course_id = getCoursesState
-        .filter((course) => checkName.includes(course.course_name))
-        .map((course) => course.id);
+      const course_id = Array.isArray(getCoursesState)
+        ? getCoursesState
+            .filter((course) => checkName.includes(course.course_name))
+            .map((course) => course.id)
+        : [Object(getCoursesState).id];
       return course_id;
     };
 
@@ -153,9 +155,11 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
     const defaultChangeCourses_id = () => {
       const courses = EditNode.course.split(",\n");
-      const course_id = getCoursesState
-        .filter((course) => courses.includes(course.course_name))
-        .map((course) => course.id);
+      const course_id = Array.isArray(getCoursesState)
+        ? getCoursesState
+            .filter((course) => courses.includes(course.course_name))
+            .map((course) => course.id)
+        : [Object(getCoursesState).id];
       return course_id;
     };
 
@@ -163,9 +167,11 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(defaultChangeCourses_id());
 
     const changeOptions_id = () => {
-      const option_id = getOptionsState
-        .filter((option) => checkName.includes(option.option_name))
-        .map((option) => option.id);
+      const option_id = Array.isArray(getOptionsState)
+        ? getOptionsState
+            .filter((option) => checkName.includes(option.option_name))
+            .map((option) => option.id)
+        : [Object(getOptionsState).id];
       return option_id;
     };
 
@@ -174,9 +180,11 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
     const defaultChangeOptions_id = () => {
       const options = EditNode.option.split(",\n");
-      const option_id = getOptionsState
-        .filter((option) => options.includes(option.option_name))
-        .map((option) => option.id);
+      const option_id = Array.isArray(getOptionsState)
+        ? getOptionsState
+            .filter((option) => options.includes(option.option_name))
+            .map((option) => option.id)
+        : [Object(getOptionsState).id];
       return option_id;
     };
 
@@ -184,11 +192,14 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(defaultChangeOptions_id());
 
     const changeMerchandises_id = () => {
-      const merchandise_id = getMerchandisesState
-        .filter((merchandise) =>
-          checkName.includes(merchandise.merchandise_name)
-        )
-        .map((merchandise) => merchandise.id);
+      const merchandise_id = Array.isArray(getMerchandisesState)
+        ? getMerchandisesState
+            .filter((merchandise) =>
+              checkName.includes(merchandise.merchandise_name)
+            )
+            .map((merchandise) => merchandise.id)
+        : [Object(getMerchandisesState).id];
+
       return merchandise_id;
     };
 
@@ -197,11 +208,13 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
     const defaultChangeMerchandises_id = () => {
       const merchandises = EditNode.merchandise.split(",\n");
-      const merchandise_id = getMerchandisesState
-        .filter((merchandise) =>
-          merchandises.includes(merchandise.merchandise_name)
-        )
-        .map((merchandise) => merchandise.id);
+      const merchandise_id = Array.isArray(getMerchandisesState)
+        ? getMerchandisesState
+            .filter((merchandise) =>
+              merchandises.includes(merchandise.merchandise_name)
+            )
+            .map((merchandise) => merchandise.id)
+        : [Object(getMerchandisesState).id];
       return merchandise_id;
     };
 
@@ -209,9 +222,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(defaultChangeMerchandises_id());
 
     const changeHairstyles_id = () => {
-      const hairstyle_id = getHairstylesState
-        .filter((hairstyle) => checkName.includes(hairstyle.hairstyle_name))
-        .map((hairstyle) => hairstyle.id);
+      const hairstyle_id = Array.isArray(getHairstylesState)
+        ? getHairstylesState
+            .filter((hairstyle) => checkName.includes(hairstyle.hairstyle_name))
+            .map((hairstyle) => hairstyle.id)
+        : [Object(getHairstylesState).id];
+
       return hairstyle_id;
     };
 
@@ -220,9 +236,13 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
     const defaultChangeHairstyles_id = () => {
       const hairstyles = EditNode.hairstyle.split(",\n");
-      const hairstyle_id = getHairstylesState
-        .filter((hairstyle) => hairstyles.includes(hairstyle.hairstyle_name))
-        .map((hairstyle) => hairstyle.id);
+      const hairstyle_id = Array.isArray(getHairstylesState)
+        ? getHairstylesState
+            .filter((hairstyle) =>
+              hairstyles.includes(hairstyle.hairstyle_name)
+            )
+            .map((hairstyle) => hairstyle.id)
+        : [Object(getHairstylesState).id];
       return hairstyle_id;
     };
 
@@ -230,9 +250,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
     console.log(defaultChangeHairstyles_id());
 
     const changeUsers_id = () => {
-      const user_id = getUsersState
-        .filter((user) => checkName.includes(user.name))
-        .map((user) => user.id);
+      const user_id = Array.isArray(getUsersState)
+        ? getUsersState
+            .filter((user) => checkName.includes(user.name))
+            .map((user) => user.id)
+        : [Object(getUsersState).id];
+
       return user_id;
     };
 
@@ -241,9 +264,11 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
     const defaultChangeUsers_id = () => {
       const users = EditNode.names.split(",\n");
-      const user_id = getUsersState
-        .filter((user) => users.includes(user.name))
-        .map((user) => user.id);
+      const user_id = Array.isArray(getUsersState)
+        ? getUsersState
+            .filter((user) => users.includes(user.name))
+            .map((user) => user.id)
+        : [Object(getUsersState).id];
       return user_id;
     };
 
@@ -316,8 +341,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const { category_name, ...newUpdatedNode } = updatedNode;
             const superUpdatedNode = {
               ...newUpdatedNode,
-              stock_category_id: changeCategoryId(),
+              stock_category_id: changeCategoryId() ? changeCategoryId() : null,
             };
+
             await dispatch(updateStock(superUpdatedNode) as any);
           } else {
             const objInCategoryID = getCheckBoxCategoriesState.find(
@@ -326,7 +352,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             const { category_name, ...newUpdatedNode } = updatedNode;
             const superUpdatedNode = {
               ...newUpdatedNode,
-              stock_category_id: objInCategoryID,
+              stock_category_id: objInCategoryID ? objInCategoryID : null,
             };
             await dispatch(updateStock(superUpdatedNode) as any);
           }
@@ -563,6 +589,10 @@ const ModalForm: React.FC<ModalFormProps> = ({
     setEditNode({ ...EditNode, [NodesProp]: (value as string[]).join(",\n") });
   };
 
+  console.log("EditNodeだよ", EditNode);
+  console.log("EditValueだよ", EditValue);
+  console.log("NodesPropだよ", NodesProp);
+
   const renderComponent = () => {
     switch (NodesProp) {
       case "category_name":
@@ -572,6 +602,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             nodeId={EditNode.id.toString()}
             getOptions={getOptionCategories}
             onChange={(newValue) => setEditValue(newValue)}
+            required={false}
           />
         );
       case "course":
@@ -581,6 +612,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             optionName={checkName}
             onChanger={handleCheckChange}
             nodesProp={NodesProp}
+            required={false}
           />
         );
       case "option":
@@ -590,6 +622,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
             optionName={checkName}
             onChanger={handleCheckChange}
             nodesProp={NodesProp}
+            required={false}
           />
         );
       case "merchandise":
@@ -598,7 +631,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
             getOptions={getMerchandisesState}
             optionName={checkName}
             onChanger={handleCheckChange}
-            nodesProp={NodesProp}
+            nodesProp="merchandise"
+            required={false}
           />
         );
       case "hairstyle":
@@ -607,7 +641,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
             getOptions={getHairstylesState}
             optionName={checkName}
             onChanger={handleCheckChange}
-            nodesProp={NodesProp}
+            nodesProp="hairstyle"
+            required={false}
           />
         );
       case "names":
@@ -618,13 +653,15 @@ const ModalForm: React.FC<ModalFormProps> = ({
             onChanger={handleCheckChange}
             nodesProp={NodesProp}
             onValidationChange={(isValid) => setIsValidate(isValid)}
+            required={true}
+            error={true}
           />
         );
       default:
         return (
           <BasicTextField
             id={EditNode.id.toString()}
-            placeholder={EditValue}
+            placeholder={EditValue === null ? "データがありません" : EditValue}
             value={EditValue}
             onChange={handleChange}
             decideLength={NodesProp === "remarks" ? 150 : 100}
@@ -648,7 +685,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
         {type === "number" && (
           <BasicNumberField
             id={EditNode.id.toString()}
-            placeholder={EditValue}
+            placeholder={EditValue === null ? "データがありません" : EditValue}
             value={EditValue}
             onChange={handleChange}
             maxNumber={

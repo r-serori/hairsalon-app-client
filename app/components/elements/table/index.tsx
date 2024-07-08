@@ -163,14 +163,14 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
             className="items-center pr-16 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
           >
             <option value="">すべて</option>
-            {searchItems.map((searchItem) => {
+            {searchItems.map((searchItem, index) => {
               const searchKey = searchItem.key;
               const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
               // console.log("searchKeyだよ");
               // console.log(searchKey); //名前
 
               return (
-                <option key={searchKey} value={searchKey}>
+                <option key={index} value={searchKey}>
                   {searchValue}
                 </option>
               );
@@ -278,7 +278,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
             <Body>
               {/* Bodyの横行を数える */}
               {tableList.map((node, index) => (
-                <Row key={`${index} `} item={node}>
+                <Row key={`${index} + ${node.id} `} item={node}>
                   {/* nodeの縦列を数える */}
                   {nodesProps.map((nodesProp) => {
                     const propName = Object.keys(nodesProp)[0]; //  Object.keysは()内＝nodesProp　のkeyを取得　[0]は一番上のkeyを取得　mapで一つ一つ取得してるから一番上[0]にあるのは一つだけ
@@ -331,7 +331,8 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                     ) {
                       return (
                         <Cell
-                          key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
+                          key={`${propValue} + ${propName} + ${node.id}+ ${index} + ${propProp}
+                          + ${role}`}
                           className="items-center bg-gray-100 text-gray-900  text-center border-b-2 border-gray-300"
                         >
                           {propValue}
@@ -343,7 +344,8 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                     ) {
                       return (
                         <Cell
-                          key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
+                          key={`${propValue} + ${propName} + ${node.id}+ ${index} + ${propProp}
+                          + ${role}`}
                           className="items-center bg-gray-100 text-gray-900  text-center border-b-2 border-gray-300"
                         >
                           {propValue
@@ -395,7 +397,8 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                     } else {
                       return (
                         <Cell
-                          key={`${propValue} + ${propName} + ${node.id}+ ${index}`}
+                          key={`${propValue} + ${propName} + ${node.id}+ ${index} + ${propProp}
+                          + ${role}`}
                           className="items-center bg-gray-100 text-gray-900 text-xl text-center pointer  border-b-2 border-gray-300"
                         >
                           <BasicModal

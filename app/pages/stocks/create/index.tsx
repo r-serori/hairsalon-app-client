@@ -5,6 +5,7 @@ import StockForm from "../../../components/elements/form/stocks/StockForm";
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import { stockStatus } from "../../../components/Hooks/selector";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const stockCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,9 @@ const stockCreate: React.FC = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/stocks"} />
+      <div className="mt-4 ml-4">
+        <RouterButton link={"/stocks"} value="在庫画面に戻る" />
+      </div>
       {sStatus === "loading" ? (
         <p>Loading...</p>
       ) : (

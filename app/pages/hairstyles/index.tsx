@@ -90,12 +90,9 @@ const hairstyles: React.FC = () => {
         <BasicAlerts type="error" message={hError} space={1} padding={0.6} />
       )}
 
-      <div>
-        <div className="my-4 ml-4">
-          <RouterButton
-            link="/hairstyles/create"
-            value="ヘアスタイル情報新規作成"
-          />
+      <div className="mx-4">
+        <div className="my-4">
+          <RouterButton link="/hairstyles/create" value="髪型情報新規作成" />
         </div>
         {hStatus === "loading" ? (
           <p>Loading...</p>

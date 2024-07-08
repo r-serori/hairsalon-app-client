@@ -162,23 +162,25 @@ const stocks: React.FC = () => {
         <BasicAlerts type="error" message={sError} space={1} padding={0.6} />
       )}
 
-      <div className="flex justify-end items-center gap-4 my-4 mr-4">
-        <RouterButton link="/stocks/create" value="在庫画面へ" />
-        <RouterButton link="/stock_categories" value="在庫カテゴリ画面へ" />
-      </div>
+      <div className="mx-4">
+        <div className="flex justify-between items-center gap-4 my-4 ">
+          <RouterButton link="/stocks/create" value="在庫新規作成画面へ" />
+          <RouterButton link="/stock_categories" value="在庫カテゴリ画面へ" />
+        </div>
 
-      {sStatus === "loading" || scStatus === "loading" ? (
-        <p>Loading...</p>
-      ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/stocks"
-          role={permission}
-        />
-      )}
+        {sStatus === "loading" || scStatus === "loading" ? (
+          <p>Loading...</p>
+        ) : (
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/stocks"
+            role={permission}
+          />
+        )}
+      </div>
     </div>
   );
 };

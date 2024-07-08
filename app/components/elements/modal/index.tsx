@@ -6,28 +6,26 @@ import Modal from "@mui/material/Modal";
 import ModalForm from "../form/ModalForm";
 import AttendanceTimesShotForm from "../form/attendances/AttendanceTimesShotForm";
 import BackAgainButton from "../button/RouterButton";
-import { firstGetAttendanceTime } from "../../../store/attendances/attendance_times/attendance_timesSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 import { getUsers } from "../../../store/auth/userSlice";
-import { get } from "http";
 import { useRouter } from "next/router";
 import RouterButton from "../button/RouterButton";
 import { permissionStore, user } from "../../Hooks/authSelector";
 import { UserAllState } from "../../Hooks/interface";
 import { userKey } from "../../Hooks/authSelector";
-import { getUserKey } from "../../Hooks/useMethod";
-import { useState } from "react";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { ownerPermission } from "../../Hooks/useMethod";
+import { Height, Widgets } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  maxWidth: "70vw",
+  maxHeight: "70vh",
+  width: "100%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,

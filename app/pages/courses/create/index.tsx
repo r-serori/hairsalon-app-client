@@ -30,7 +30,7 @@ const courseCreate: React.FC = () => {
 
   return (
     <div className="min-h-full">
-      <div className="ml-4 mt-4 ">
+      <div className="mx-4 mt-4">
         <RouterButton link="/courses" value="コース画面へ戻る" />
       </div>
       {cStatus === "loading" ? (

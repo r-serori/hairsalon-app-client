@@ -77,10 +77,12 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
 
   const getUsersNames = Array.isArray(getUsersState)
     ? getUsersState.map((user) => user.name)
-    : Object(getUsersState).name;
+    : [Object(getUsersState).name];
 
   console.log("getUsersNamesだよ");
   console.log(getUsersNames);
+
+  console.log("getUsersState", getUsersState);
 
   const [customer_name, setCustomer_Name] = useState<string>(
     node ? node.customer_name : ""
@@ -121,11 +123,16 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       : []
   );
   const [users, setUsers] = useState<string[]>(
-    node
+    !node && getUsersState.length > 1
       ? getUsersState
           .filter((user) => node.user_id.includes(user.id))
           .map((user) => user.name)
-      : []
+      : (node && getUsersState.length > 1) ||
+        (Array.isArray(getUsersState) && getUsersState.length > 1)
+      ? getUsersState
+          .filter((user) => node.user_id.includes(user.id))
+          .map((user) => user.name)
+      : Object(getUsersState).name
   );
 
   const [customerNameValidate, setCustomerNameValidate] =
@@ -143,23 +150,35 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       customer_name: customer_name,
       phone_number: phone_number,
       remarks: remarks,
-      course_id: getCoursesState
-        .filter((course) => courses.includes(course.course_name))
-        .map((course) => course.id),
-      option_id: getOptionsState
-        .filter((option) => options.includes(option.option_name))
-        .map((option) => option.id),
-      merchandise_id: getMerchandisesState
-        .filter((merchandise) =>
-          merchandises.includes(merchandise.merchandise_name)
-        )
-        .map((merchandise) => merchandise.id),
-      hairstyle_id: getHairstylesState
-        .filter((hairstyle) => hairstyles.includes(hairstyle.hairstyle_name))
-        .map((hairstyle) => hairstyle.id),
-      user_id: getUsersState
-        .filter((user) => users.includes(user.name))
-        .map((user) => user.id),
+      course_id: Array.isArray(getCoursesState)
+        ? getCoursesState
+            .filter((course) => courses.includes(course.course_name))
+            .map((course) => course.id)
+        : [Object(getCoursesState).id],
+      option_id: Array.isArray(getOptionsState)
+        ? getOptionsState
+            .filter((option) => options.includes(option.option_name))
+            .map((option) => option.id)
+        : [Object(getOptionsState).id],
+      merchandise_id: Array.isArray(getMerchandisesState)
+        ? getMerchandisesState
+            .filter((merchandise) =>
+              merchandises.includes(merchandise.merchandise_name)
+            )
+            .map((merchandise) => merchandise.id)
+        : [Object(getMerchandisesState).id],
+      hairstyle_id: Array.isArray(getHairstylesState)
+        ? getHairstylesState
+            .filter((hairstyle) =>
+              hairstyles.includes(hairstyle.hairstyle_name)
+            )
+            .map((hairstyle) => hairstyle.id)
+        : [Object(getHairstylesState).id],
+      user_id: Array.isArray(getUsersState)
+        ? getUsersState
+            .filter((user) => users.includes(user.name))
+            .map((user) => user.id)
+        : [Object(getUsersState).id],
     });
   };
 
@@ -184,8 +203,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-center h-full ">
-      <div className="max-w-md w-full ">
+    <div className="flex items-center justify-center  ">
+      <div className="max-w-3xl w-full ">
         <div>
           <h2 className=" text-center text-3xl font-extrabold text-gray-900">
             {edit ? "顧客情報編集" : "顧客情報新規作成"}
@@ -199,7 +218,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             onChange={(e) => setCustomer_Name(e.target.value)}
             onValidationChange={(isValid) => setCustomerNameValidate(isValid)}
           />
-
           <BasicNumberField
             id={node ? node.id : 0}
             placeholder="電話番号"
@@ -208,7 +226,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             maxNumber={999999999999999}
             required={false}
           />
-
           <BasicTextField
             id={node ? node.id : 0}
             placeholder="備考"
@@ -227,7 +244,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             onChanger={handleCourseChange}
             required={false}
           />
-
           <MultiCheckbox
             getOptions={getOptionsState}
             optionName={options}
@@ -235,7 +251,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             onChanger={handleOptionChange}
             required={false}
           />
-
           <MultiCheckbox
             getOptions={getMerchandisesState}
             optionName={merchandises}
@@ -243,7 +258,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             onChanger={handleMerchandiseChange}
             required={false}
           />
-
           <MultiCheckbox
             getOptions={getHairstylesState}
             optionName={hairstyles}
@@ -251,7 +265,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             onChanger={handleHairstyleChange}
             required={false}
           />
-
           <MultiCheckbox
             getOptions={getUsersState}
             optionName={users}
@@ -261,7 +274,6 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             required={true}
             error={true}
           />
-
           <PrimaryButton value={"作成"} />
         </form>
       </div>

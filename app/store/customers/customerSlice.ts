@@ -293,9 +293,13 @@ const customerSlice = createSlice({
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
 
-      state.customers = action.payload.customers
-        ? [...state.customers, ...action.payload.customers]
-        : state.customers;
+      state.customers =
+        action.payload.customers.length === 0
+          ? []
+          : action.payload.customers.length
+          ? [...state.customers, ...action.payload.customers]
+          : state.customers;
+
       state.message = action.payload.message
         ? action.payload.message
         : "顧客情報を取得しました！";
@@ -347,11 +351,14 @@ const customerSlice = createSlice({
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
       state.status = "success";
-      state.customers = state.customers.map((customer) =>
-        customer.id === action.payload.customer.id
-          ? { ...customer, ...action.payload.customer }
-          : customer
-      );
+      state.customers =
+        state.customers.length === 1
+          ? [action.payload.customer]
+          : state.customers.map((customer) =>
+              customer.id === action.payload.customer.id
+                ? { ...customer, ...action.payload.customer }
+                : customer
+            );
       state.message = action.payload.message
         ? action.payload.message
         : "顧客情報を更新しました！";

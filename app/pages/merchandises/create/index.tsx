@@ -5,6 +5,7 @@ import MerchandiseForm from "../../../components/elements/form/merchandises/Merc
 import { useRouter } from "next/router";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import { merchandiseStatus } from "../../../components/Hooks/selector";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const merchandiseCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const merchandiseCreate: React.FC = () => {
   return (
     <div className="min-h-full">
       <div className="ml-4 mt-4">
-        <BackAgainButton link={"/merchandises"} />
+        <RouterButton link={"/merchandises"} value="物販画面に戻る" />
       </div>
       {mStatus === "loading" ? (
         <p>Loading...</p>

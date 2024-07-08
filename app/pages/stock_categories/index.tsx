@@ -92,12 +92,12 @@ const stock_categories = () => {
         <BasicAlerts type="error" message={scError} space={1} padding={0.6} />
       )}
       <div className="mx-4">
-        <div className="flex mb-4">
+        <div className="flex justify-between my-4">
+          <RouterButton link="/stocks" value="在庫画面に戻る" />
           <RouterButton
             link="/stock_categories/create"
             value="在庫カテゴリ新規作成"
           />
-          <RouterButton link="/stocks" value="在庫画面に戻る" />
         </div>
         {scStatus === "loading" ? (
           <p>Loading...</p>

@@ -5,6 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { createTheme } from "@mui/material/styles";
 
 interface PasswordFieldProps {
   id: number;
@@ -41,6 +42,18 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
     onValidationChange(passwordRegex.test(newValue));
   };
 
+  const theme = createTheme({
+    palette: {
+      error: {
+        main: "#f44336",
+        light: "#e57373",
+      },
+      primary: {
+        main: "#1976d2",
+      },
+    },
+  });
+
   return (
     <Box
       sx={{
@@ -60,10 +73,17 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
           sx: {
             "& .MuiInputBase-input": {
               fontWeight: "bold",
+              color: `${
+                !value && required ? theme.palette.error.light : "black"
+              }`,
             },
             "& .MuiInputLabel-root": {
               fontWeight: "bold",
-              color: `${!value && required ? "red" : "blue"}`,
+              color: `${
+                !value && required
+                  ? theme.palette.error.main
+                  : theme.palette.primary.main
+              }`,
             },
           },
         }}

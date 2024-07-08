@@ -59,17 +59,17 @@ export const merchandiseMessage = (state: RootState) =>
 export const merchandiseError = (state: RootState) => state.merchandises.error;
 
 //--------------------------------------------
-//ヘアスタイル情報を取得 配列で取得
+//髪型情報を取得 配列で取得
 export const hairstylesStore = (state: RootState) =>
   state.hairstyles.hairstyles;
 
-//ヘアスタイル情報のステータスを取得
+//髪型情報のステータスを取得
 export const hairstyleStatus = (state: RootState) => state.hairstyles.status;
 
-//ヘアスタイル情報のメッセージを取得
+//髪型情報のメッセージを取得
 export const hairstyleMessage = (state: RootState) => state.hairstyles.message;
 
-//ヘアスタイル情報のエラーを取得
+//髪型情報のエラーを取得
 export const hairstyleError = (state: RootState) => state.hairstyles.error;
 
 //--------------------------------------------

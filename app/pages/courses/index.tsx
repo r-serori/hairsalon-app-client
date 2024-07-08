@@ -98,9 +98,9 @@ const courses: React.FC = () => {
       {cError && (
         <BasicAlerts type="error" message={cError} space={1} padding={0.6} />
       )}
-      <div className="mx-8 mt-4">
-        <div className="flex my-4 ml-2">
-          <RouterButton link="/courses/create" value="新規作成" />
+      <div className="flex mx-4">
+        <div className="my-4">
+          <RouterButton link="/courses/create" value="コース新規作成" />
         </div>
         {cStatus === "loading" ? (
           <p>Loading...</p>

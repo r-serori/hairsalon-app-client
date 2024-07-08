@@ -5,6 +5,7 @@ import { createCustomer } from "../../../store/customers/customerSlice";
 import CustomerForm from "../../../components/elements/form/customers/CustomerForm";
 import BackAgainButton from "../../../components/elements/button/RouterButton";
 import { customerStatus } from "../../../components/Hooks/selector";
+import RouterButton from "../../../components/elements/button/RouterButton";
 
 const customersCreate = () => {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const customersCreate = () => {
   return (
     <div className="min-h-full">
       <div className="mt-4 ml-4">
-        <BackAgainButton link={"/customers"} value="顧客管理画面に戻る" />
+        <RouterButton link={"/customers"} value="顧客画面に戻る" />
       </div>
       {cusStatus === "loading" ? (
         <p>Loading...</p>

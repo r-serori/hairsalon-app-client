@@ -89,8 +89,8 @@ const attenDanceEdit: React.FC = () => {
 
   return (
     <div className="min-h-full ">
-      <div>
-        <div className="flex justify-between mt-4 mx-4">
+      <div className="mx-4">
+        <div className="flex justify-between my-4 ">
           <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
 
           <DeleteButton value="退職する" onClicker={handleDeleteUser} />

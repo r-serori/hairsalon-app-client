@@ -5,10 +5,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import DatePickerValue from "../../input/DatePicker";
-import { RootState } from "../../../../redux/store";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
@@ -17,7 +15,6 @@ import PrimaryButton from "../../button/PrimaryButton";
 import DeleteButton from "../../button/DeleteButton";
 import { selectGetSchedules } from "../../../../store/schedules/scheduleSlice";
 import { selectGetAttendanceTimes } from "../../../../store/attendances/attendance_times/attendance_timesSlice";
-import { ResetTvTwoTone } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",

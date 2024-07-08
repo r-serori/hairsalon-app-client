@@ -13,6 +13,7 @@ import {
 } from "../../../../components/Hooks/selector";
 import { CourseState } from "../../../../store/courses/courseSlice";
 import { userKey } from "../../../../components/Hooks/authSelector";
+import RouterButton from "../../../../components/elements/button/RouterButton";
 
 const courseEdit: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,9 @@ const courseEdit: React.FC = () => {
   };
   return (
     <div className="min-h-full ">
-      <BackAgainButton link={"/courses"} />
+      <div className="mx-4 my-4">
+        <RouterButton link={"/courses"} value="コース画面に戻る" />
+      </div>
       {cStatus === "loading" ? (
         <p>Loading...</p>
       ) : (

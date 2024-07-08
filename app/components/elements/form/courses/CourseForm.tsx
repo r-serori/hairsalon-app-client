@@ -21,10 +21,16 @@ const CourseForm: React.FC<CourseFormProps> = ({
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
   const [courseNameValidate, setCourseNameValidate] = useState<boolean>(true);
+  console.log("courseNameValidate", courseNameValidate);
   const [priceValidate, setPriceValidate] = useState<boolean>(true);
+  console.log("priceValidate", priceValidate);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("course_name", course_name);
+    console.log("price", price);
+    console.log("courseNameValidate", courseNameValidate);
+    console.log("priceValidate", priceValidate);
     if (!courseNameValidate || !priceValidate) {
       return;
     }
