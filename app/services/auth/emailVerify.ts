@@ -5,7 +5,6 @@ export const emailVerify = async (formData: { id: number; hash: string }) => {
     // 実際のパスパラメータを使用してリクエストを送信
     const response = await sendRequest(
       "GET",
-
       `/api/user/verify-email/${encodeURIComponent(
         formData.id
       )}/${encodeURIComponent(formData.hash)}`

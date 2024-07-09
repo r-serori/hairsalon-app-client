@@ -627,7 +627,13 @@ export const deleteUser = createAsyncThunk(
 
 export const verifyEmail = createAsyncThunk(
   "users/verifyEmail",
-  async (formData: { id: number; hash: string }, { rejectWithValue }) => {
+  async (
+    formData: {
+      id: number;
+      hash: string;
+    },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await emailVerify(formData);
       if (response.status >= 200 && response.status < 300) {

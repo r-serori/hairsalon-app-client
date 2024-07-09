@@ -12,8 +12,17 @@ const VerifyEmailComponent = () => {
 
   useEffect(() => {
     const verifyEmailFun = async () => {
+      console.log("id", id);
+      console.log("hash", hash);
       try {
-        const formData = { id: Number(id), hash: String(hash) };
+        if (!id || !hash) {
+          return;
+        }
+        const formData = {
+          id: Number(id),
+          hash: String(hash),
+        };
+
         const response = await dispatch(verifyEmail(formData) as any);
 
         if (response.payload.status === "success") {
@@ -29,7 +38,7 @@ const VerifyEmailComponent = () => {
       }
     };
     verifyEmailFun();
-  }, []);
+  }, [router.query, dispatch]);
 
   return (
     <div>

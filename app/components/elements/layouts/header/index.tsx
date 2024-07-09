@@ -93,10 +93,12 @@ export default function Header() {
   }, [dispatch]);
   const navigation =
     currentPath === "/" ||
-    currentPath === "/auth/owner/[id]" ||
+    currentPath === "/auth/owner" ||
     currentPath === "/auth/login" ||
     currentPath === "/auth/register" ||
-    currentPath === "/_error"
+    currentPath === "/_error" ||
+    currentPath === "/auth/emailWait" ||
+    currentPath === "/auth/emailVerify/[id]/[hash]"
       ? []
       : permission === "オーナー"
       ? [
