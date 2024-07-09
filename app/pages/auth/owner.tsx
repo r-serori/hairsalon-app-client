@@ -59,6 +59,14 @@ const OwnerPage = () => {
 
   return (
     <div>
+      {UStatus == "idle" && (
+        <BasicAlerts
+          message="メールの認証が完了しました！続いて、オーナー登録を行ってください！"
+          type="info"
+          padding={0.8}
+          space={1}
+        />
+      )}
       {UMessage && (
         <BasicAlerts
           message={UMessage}

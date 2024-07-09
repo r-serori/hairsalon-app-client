@@ -393,7 +393,10 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
-      state.customers = [...state.customers, action.payload.customer];
+      state.customers =
+        state.customers.length === 0
+          ? [action.payload.customer]
+          : [...state.customers, action.payload.customer];
     });
 
     builder.addCase(

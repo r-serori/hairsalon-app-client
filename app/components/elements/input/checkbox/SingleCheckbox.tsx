@@ -54,11 +54,17 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
         onChange={
           (event, newValue) => changeValue(newValue) // オプションが選択されたときにonChangeを呼び出す
         } // オプションが選択されたときにonChangeを呼び出す
+        clearOnEscape={false} // 追加
+        clearIcon={null} // 追加
         renderInput={(params) => (
           <TextField
             {...params}
             label={`${getOptions.length === 0 ? "選択肢がありません" : value}`}
             required={required} // TextField に required を設定
+            inputProps={{
+              ...params.inputProps,
+              readOnly: true, // 追加
+            }}
             sx={{
               width: "100%",
               "& .MuiInputBase-input": {

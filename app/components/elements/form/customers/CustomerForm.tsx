@@ -75,11 +75,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   console.log("getUsersStateだよ");
   console.log(getUsersState);
 
-  const getUsersNames = Array.isArray(getUsersState)
-    ? getUsersState.map((user) => user.name)
-    : [Object(getUsersState).name];
-
-  console.log("getUsersNamesだよ");
+  const getUsersNames = console.log("getUsersNamesだよ");
   console.log(getUsersNames);
 
   console.log("getUsersState", getUsersState);
@@ -124,9 +120,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   );
   const [users, setUsers] = useState<string[]>(
     !node && getUsersState.length > 1
-      ? getUsersState
-          .filter((user) => node.user_id.includes(user.id))
-          .map((user) => user.name)
+      ? []
       : (node && getUsersState.length > 1) ||
         (Array.isArray(getUsersState) && getUsersState.length > 1)
       ? getUsersState

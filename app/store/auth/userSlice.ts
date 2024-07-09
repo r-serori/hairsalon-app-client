@@ -935,7 +935,9 @@ const usersSlice = createSlice({
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = action.payload.responseUsers;
+      state.users = action.payload.responseUsers
+        ? action.payload.responseUsers
+        : state.users;
     });
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {

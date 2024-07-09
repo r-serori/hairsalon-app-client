@@ -1,5 +1,5 @@
 import React from "react";
-import MyCalendar from "../../components/elements/calender/CalenderComponent";
+import MyCalendar from "../../components/elements/calender/CalendarComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
@@ -114,7 +114,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
       {sStatus === "loading" ? (
         <p>loading...</p>
       ) : (
-        <MyCalendar events={events} role={permission} />
+        <MyCalendar events={events} />
       )}
     </div>
   );

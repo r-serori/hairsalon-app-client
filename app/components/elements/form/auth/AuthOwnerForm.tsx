@@ -108,7 +108,7 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
             onValidationChange={(isValid) => setStoreNameValidate(isValid)}
           />
 
-          <BasicTextField
+          <BasicNumberField
             id={1}
             placeholder="郵便番号"
             value={postal_code}

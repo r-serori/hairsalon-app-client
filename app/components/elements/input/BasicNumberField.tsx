@@ -78,7 +78,11 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
         disabled={disabled || role === "スタッフ"}
         inputProps={{ max: maxNumber, required, pattern: "\\d*" }}
         error={(!value || value === "0") && required} // 必須項目で空の場合エラー表示
-        helperText={(!value || value === "0") && required ? "必須" : "任意"}
+        helperText={
+          required
+            ? "必須項目です。半角数字でお願いします。"
+            : "任意項目です。半角数字でお願いします。"
+        }
         sx={{
           "& .MuiInputBase-input": {
             fontWeight: "bold",

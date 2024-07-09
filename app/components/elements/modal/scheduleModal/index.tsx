@@ -50,7 +50,7 @@ import {
   option_customersStore,
   optionsStore,
 } from "../../../Hooks/selector";
-import { user } from "../../../Hooks/authSelector";
+import { permissionStore, user } from "../../../Hooks/authSelector";
 import { CourseState } from "../../../../store/courses/courseSlice";
 import { OptionState } from "../../../../store/options/optionSlice";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
@@ -62,6 +62,7 @@ import { Merchandise_customersState } from "../../../../store/middleTable/custom
 import { Hairstyle_customersState } from "../../../../store/middleTable/customers/hairstyle_customersSlice";
 import { Customer_usersState } from "../../../../store/middleTable/customers/customer_usersSlice";
 import BasicNumberField from "../../input/BasicNumberField";
+import { co } from "@fullcalendar/core/internal-common";
 
 const style = {
   position: "absolute" as "absolute",
@@ -86,7 +87,6 @@ interface ScheduleModalProps {
   setSelectedEvent: (value: any) => void;
   isCustomer: boolean;
   setIsCustomer: (value: boolean) => void;
-  role: RoleState;
 }
 
 const ScheduleModal: React.FC<ScheduleModalProps> = ({
@@ -98,7 +98,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   setSelectedEvent,
   isCustomer,
   setIsCustomer,
-  role,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -108,164 +107,179 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const router = useRouter();
 
   const uniqueId = uuidv4();
+  const permission = useSelector(permissionStore);
 
   // 顧客情報を取得
-  const customers: CustomerState[] = useSelector(customersStore);
+  const customers: CustomerState[] = isCustomer
+    ? useSelector(customersStore)
+    : [];
 
   // コース情報を取得
-  const courses: CourseState[] = useSelector(coursesStore);
+  const courses: CourseState[] = isCustomer ? useSelector(coursesStore) : [];
 
   // オプション情報を取得
-  const options: OptionState[] = useSelector(optionsStore);
+  const options: OptionState[] = isCustomer ? useSelector(optionsStore) : [];
 
   // 商品情報を取得
-  const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
+  const merchandises: MerchandiseState[] = isCustomer
+    ? useSelector(merchandiseStore)
+    : [];
 
   // 髪型情報を取得
-  const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
+  const hairstyles: HairstyleState[] = isCustomer
+    ? useSelector(hairstylesStore)
+    : [];
 
   // 担当者情報を取得
-  const users: UserAllState[] = useSelector(user);
-  // console.log("userです", users);
+  const users: UserAllState[] = isCustomer ? useSelector(user) : [];
+  console.log("userです", users);
 
   // 中間テーブルの情報を取得
-  const course_customers: Course_customersState[] = useSelector(
-    course_customersStore
-  );
+  const course_customers: Course_customersState[] = isCustomer
+    ? useSelector(course_customersStore)
+    : [];
 
   // console.log("course_customersだよ");
   // console.log(course_customers);
   // 中間テーブルの情報を取得
-  const option_customers: Option_customersState[] = useSelector(
-    option_customersStore
-  );
+  const option_customers: Option_customersState[] = isCustomer
+    ? useSelector(option_customersStore)
+    : [];
   // 中間テーブルの情報を取得
-  const merchandise_customers: Merchandise_customersState[] = useSelector(
-    merchandise_customersStore
-  );
+  const merchandise_customers: Merchandise_customersState[] = isCustomer
+    ? useSelector(merchandise_customersStore)
+    : [];
   // 中間テーブルの情報を取得
-  const hairstyle_customers: Hairstyle_customersState[] = useSelector(
-    hairstyle_customersStore
-  );
+  const hairstyle_customers: Hairstyle_customersState[] = isCustomer
+    ? useSelector(hairstyle_customersStore)
+    : [];
 
   // 中間テーブルの情報を取得
-  const customer_users: Customer_usersState[] =
-    useSelector(customer_usersStore);
+  const customer_users: Customer_usersState[] = isCustomer
+    ? useSelector(customer_usersStore)
+    : [];
 
   // 顧客情報を取得　上記の情報を元に顧客情報を取得
-  const nodes = customers
-    ? [
-        ...customers.map((customer) => {
-          // customerは一回一番下まで行く。その後、次のcustomerに行く。
-          // 顧客に関連するコースの情報を取得
-          const customerCourses: number[] = course_customers
-            .filter((course) => course.customer_id === customer.id)
-            .map((course) => course.course_id);
+  const nodes =
+    isCustomer && customers
+      ? [
+          ...customers.map((customer) => {
+            // customerは一回一番下まで行く。その後、次のcustomerに行く。
+            // 顧客に関連するコースの情報を取得
+            const customerCourses: number[] = course_customers
+              .filter((course) => course.customer_id === customer.id)
+              .map((course) => course.course_id);
 
-          // console.log(customerCourses);
-          //  [1,2,3]
+            // console.log(customerCourses);
+            //  [1,2,3]
 
-          const courseNames: string[] = courses
-            .filter((course) => customerCourses.includes(course.id))
-            .map((course) => course.course_name);
+            const courseNames: string[] = courses
+              .filter((course) => customerCourses.includes(course.id))
+              .map((course) => course.course_name);
 
-          // console.log("courseNamesだよ");
-          // console.log(courseNames);
+            // console.log("courseNamesだよ");
+            // console.log(courseNames);
 
-          // 顧客に関連するオプションの情報を取得
-          const customerOptions: number[] = option_customers
-            .filter((option) => option.customer_id === customer.id)
-            .map((option) => option.option_id);
+            // 顧客に関連するオプションの情報を取得
+            const customerOptions: number[] = option_customers
+              .filter((option) => option.customer_id === customer.id)
+              .map((option) => option.option_id);
 
-          // console.log(customerOptions);
+            // console.log(customerOptions);
 
-          const optionNames: string[] = options
-            .filter((option) => customerOptions.includes(option.id))
-            .map((option) => option.option_name);
+            const optionNames: string[] = options
+              .filter((option) => customerOptions.includes(option.id))
+              .map((option) => option.option_name);
 
-          // console.log("optionNamesだよ");
-          // console.log(optionNames);
+            // console.log("optionNamesだよ");
+            // console.log(optionNames);
 
-          // 顧客に関連する商品の情報を取得
-          const customerMerchandises: number[] = merchandise_customers
-            .filter((merchandise) => merchandise.customer_id === customer.id)
-            .map((merchandise) => merchandise.merchandise_id);
+            // 顧客に関連する商品の情報を取得
+            const customerMerchandises: number[] = merchandise_customers
+              .filter((merchandise) => merchandise.customer_id === customer.id)
+              .map((merchandise) => merchandise.merchandise_id);
 
-          // console.log(customerMerchandises);
+            // console.log(customerMerchandises);
 
-          const merchandiseNames: string[] = merchandises
-            .filter((merchandise) =>
-              customerMerchandises.includes(merchandise.id)
-            )
-            .map((merchandise) => merchandise.merchandise_name);
+            const merchandiseNames: string[] = merchandises
+              .filter((merchandise) =>
+                customerMerchandises.includes(merchandise.id)
+              )
+              .map((merchandise) => merchandise.merchandise_name);
 
-          // console.log("merchandiseNamesだよ");
-          // console.log(merchandiseNames);
+            // console.log("merchandiseNamesだよ");
+            // console.log(merchandiseNames);
 
-          // 顧客に関連する髪型の情報を取得
-          const customerHairstyles: number[] = hairstyle_customers
-            .filter((hairstyle) => hairstyle.customer_id === customer.id)
-            .map((hairstyle) => hairstyle.hairstyle_id);
+            // 顧客に関連する髪型の情報を取得
+            const customerHairstyles: number[] = hairstyle_customers
+              .filter((hairstyle) => hairstyle.customer_id === customer.id)
+              .map((hairstyle) => hairstyle.hairstyle_id);
 
-          // console.log("cusHair", customerHairstyles);
+            // console.log("cusHair", customerHairstyles);
 
-          // console.log("hairstylesだよ", hairstyles);
+            // console.log("hairstylesだよ", hairstyles);
 
-          const hairstyleNames: string[] = hairstyles
-            .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
-            .map((hairstyle) => hairstyle.hairstyle_name);
+            const hairstyleNames: string[] = hairstyles
+              .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
+              .map((hairstyle) => hairstyle.hairstyle_name);
 
-          // console.log("hairstyleNamesだよ");
+            // console.log("hairstyleNamesだよ");
 
-          // console.log(hairstyleNames);
+            // console.log(hairstyleNames);
 
-          // 顧客に関連する担当者の情報を取得
-          //user_idを配列にしている
-          const customerUsers: number[] = customer_users
-            .filter((user) => user.customer_id === customer.id)
-            .map((user) => user.user_id);
+            // 顧客に関連する担当者の情報を取得
+            //user_idを配列にしている
+            const customerUsers: number[] = customer_users
+              .filter((user) => user.customer_id === customer.id)
+              .map((user) => user.user_id);
 
-          // console.log("customerUsers", customerUsers);
+            // console.log("customerUsers", customerUsers);
 
-          // console.log("users前", users);
+            // console.log("users前", users);
 
-          const userNames: string[] = users
-            .filter((user) => customerUsers.includes(user.id))
-            .map((user) => user.name);
+            const userNames: string[] = Array.isArray(users)
+              ? users
+                  .filter((user) => customerUsers.includes(user.id))
+                  .map((user) => user.name)
+              : [Object(users).name];
 
-          // console.log("userNames", userNames);
+            // console.log("userNames", userNames);
 
-          // 顧客情報を返す
-          return {
-            id: customer.id,
-            customer_name: customer.customer_name,
-            phone_number: customer.phone_number,
-            remarks: customer.remarks,
-            course: courseNames,
-            option: optionNames,
-            merchandise: merchandiseNames,
-            hairstyle: hairstyleNames,
-            names: userNames,
-          };
-        }),
-      ]
-    : [];
+            // 顧客情報を返す
+            return {
+              id: customer.id,
+              customer_name: customer.customer_name,
+              phone_number: customer.phone_number,
+              remarks: customer.remarks,
+              course: courseNames,
+              option: optionNames,
+              merchandise: merchandiseNames,
+              hairstyle: hairstyleNames,
+              names: userNames,
+            };
+          }),
+        ]
+      : [];
 
   // console.log("nodes", nodes);
 
   // 顧客名のみを取得
-  const customersNames: string[] = nodes.map((node) => node.customer_name);
+  const customersNames: string[] = isCustomer
+    ? nodes.map((node) => node.customer_name)
+    : [];
 
   //編集時に顧客名を検索し、存在していればtrueを返す
   const searchCustomer: boolean =
-    whoIsEvent === "編集" && customersNames.includes(selectedEvent.title)
+    isCustomer &&
+    whoIsEvent === "編集" &&
+    customersNames.includes(selectedEvent.title)
       ? true
       : false;
 
   // console.log("searchCustomerだよ", searchCustomer);
 
   //新規予約の場合、初期値として最初の顧客情報を取得
-  const initialCustomer = nodes[0] ? nodes[0] : null;
+  const initialCustomer = isCustomer && nodes[0] ? nodes[0] : null;
 
   const [newReservation, setNewReservation] = useState<boolean>(
     initialCustomer === null ? true : whoIsEvent === "編集" ? false : true
@@ -288,7 +302,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   //
   const [customerName, setCustomerName] = useState<string>(
     //新規顧客、新規予約の場合は初期値としてnode[0]の顧客名を設定
-    initialCustomer === null
+    isCustomer && initialCustomer === null
       ? ""
       : !newCustomer && whoIsEvent !== "編集"
       ? initialCustomer.customer_name
@@ -316,15 +330,23 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [courseNames, setCourseNames] = useState(
-    initialCustomer === null ? [] : !newCustomer ? initialCustomer.course : []
+    initialCustomer === null && courses.length === 0
+      ? []
+      : !newCustomer
+      ? initialCustomer.course
+      : []
   );
 
   const [optionNames, setOptionNames] = useState(
-    initialCustomer === null ? [] : !newCustomer ? initialCustomer.option : []
+    initialCustomer === null && options.length === 0
+      ? []
+      : !newCustomer
+      ? initialCustomer.option
+      : []
   );
 
   const [merchandiseNames, setMerchandiseNames] = useState(
-    initialCustomer === null
+    initialCustomer === null && merchandises.length === 0
       ? []
       : !newCustomer
       ? initialCustomer.merchandise
@@ -332,32 +354,46 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [hairstyleNames, setHairstyleNames] = useState(
-    initialCustomer === null
+    initialCustomer === null && hairstyles.length === 0
       ? []
       : !newCustomer
       ? initialCustomer.hairstyle
       : []
   );
 
-  const [userNames, setUserNames] = useState(
-    initialCustomer === null ? [] : !newCustomer ? initialCustomer.names : []
+  const [userNames, setUserNames] = useState<string[]>(
+    newCustomer && Array.isArray(users) && users.length === 0
+      ? []
+      : newCustomer && !Array.isArray(users) && Object(users)
+      ? [Object(users).name]
+      : !newCustomer && Array.isArray(users) && users.length === 0
+      ? []
+      : !newCustomer && !Array.isArray(users) && Object(users)
+      ? [Object(users).name]
+      : !newCustomer && Array.isArray(users) && users.length === 1
+      ? [users[0].name]
+      : !newCustomer && Array.isArray(users) && users.length > 1
+      ? initialCustomer.names
+      : []
   );
 
   const [customerNameValidate, setCustomerNameValidate] =
-    useState<boolean>(false);
+    useState<boolean>(true);
 
-  const [usernameValidate, setUsernameValidate] = useState<boolean>(false);
+  const [usernameValidate, setUsernameValidate] = useState<boolean>(true);
 
   //編集時に選択したイベントのIDを取得  新規予約の場合は0 scheduleテーブルのID
   const [Sid, setSid] = useState(whoIsEvent === "編集" ? selectedEvent.id : 0);
+  console.log("Sidです", Sid);
 
   //終日予約か時間指定予約かを判定
   const [allDay, setAllDay] = useState(selectedEvent.allDay ? 1 : 0);
 
   //顧客以外の予約の場合、タイトルを設定
   const [title, setTitle] = useState(
-    !isCustomer && whoIsEvent === "編集" ? selectedEvent.title : ""
+    !isCustomer && !newReservation ? selectedEvent.title : ""
   );
+  console.log("titleです", title);
 
   const [titleValidate, setTitleValidate] = useState<boolean>(false);
   //開始時間を設定
@@ -376,11 +412,26 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   //顧客名を変更する際に、顧客情報を取得
   useEffect(() => {
     if (whoIsEvent === "編集") {
+      console.log("selectedEvent.title", selectedEvent.title);
+      setSid(selectedEvent.id);
       changeCustomerState(selectedEvent.title);
     } else {
       return;
     }
-  }, [whoIsEvent]);
+  }, [
+    showModal,
+    customers,
+    users,
+    courses,
+    options,
+    merchandises,
+    hairstyles,
+    course_customers,
+    option_customers,
+    merchandise_customers,
+    hairstyle_customers,
+    customer_users,
+  ]);
 
   const changeCustomerState = (newValue) => {
     //編集時に選択した顧客情報を取得
@@ -388,16 +439,19 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       (node) => node.customer_name === newValue
     );
 
-    // console.log("useCustomerStateだよ");
-    // console.log(useCustomerState);
+    console.log("useCustomerStateだよ");
+    console.log(useCustomerState);
 
     if (!useCustomerState) {
       setIsCustomer(false);
+      setTitle(newValue);
+      setNewReservation(false);
       return;
     }
 
     // useCustomerStateが存在する場合、顧客情報を設定
     setIsCustomer(true);
+    setNewReservation(false);
     setCustomerId(useCustomerState.id);
     setCustomerName(newValue);
     setPhoneNumber(useCustomerState.phone_number || "");
@@ -476,8 +530,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     try {
       if (
         //新規予約、新規顧客、タイトルなし
-        whoIsEvent !== "編集" &&
         newCustomer &&
+        newReservation &&
         !title
       ) {
         await dispatch(
@@ -491,7 +545,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       } else if (
         //新規予約、既存顧客、タイトルなし
         !newCustomer &&
-        whoIsEvent !== "編集" &&
+        newReservation &&
         !title
       ) {
         await dispatch(
@@ -500,7 +554,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       } else if (
         //予約編集、既存顧客、タイトルなし
         !newCustomer &&
-        whoIsEvent === "編集" &&
+        !newReservation &&
         !title
       ) {
         await dispatch(
@@ -509,14 +563,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       } else if (
         //新規予約、顧客以外、タイトルあり
         !isCustomer &&
-        whoIsEvent !== "編集" &&
+        newReservation &&
         title
       ) {
         await dispatch(createSchedule(scheduleAndCustomerFormData) as any);
       } else if (
         //予約編集、顧客以外、タイトルあり,編集
         !isCustomer &&
-        whoIsEvent === "編集" &&
+        !newReservation &&
         title
       ) {
         await dispatch(updateSchedule(scheduleAndCustomerFormData) as any);
@@ -556,9 +610,11 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
             hairstyleNames.includes(hairstyle.hairstyle_name)
           )
           .map((hairstyle) => hairstyle.id),
-        user_id: users
-          .filter((user) => userNames.includes(user.name))
-          .map((user) => user.id),
+        user_id: Array.isArray(users)
+          ? users
+              .filter((user) => userNames.includes(user.name))
+              .map((user) => user.id)
+          : [Object(users).id],
         Sid: Sid ? Sid : 0,
         title: title ? title : "",
         start_time: dayjs(startTime)
@@ -636,8 +692,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         <Box sx={style} className="rounded-xl">
           {whoIsEvent === "編集" ? (
             <div className="flex justify-between items-center ml-2">
-              {role === "オーナー" ||
-                (role === "マネージャー" && (
+              {permission === "オーナー" ||
+                (permission === "マネージャー" && (
                   <DeleteMan id={Sid} link={"/schedules"} />
                 ))}
               <button
@@ -666,21 +722,21 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
               <div className="flex justify-center items-center  gap-4">
                 <div className="flex justify-center items-center pt-6">
-                  <span className="mr-2 text-right">開始時間:</span>
+                  <span className="mr-2 text-right mb-6 ">開始時間:</span>
                   <DateTimeRangePicker
                     value={startTime}
                     changer={startTimeChange}
                     isAllDay={allDay === 1 ? true : false}
-                    role={role}
+                    role={permission}
                   />
                 </div>
                 <div className="flex justify-center items-center pt-6 ">
-                  <span className=" text-right mr-2">終了時間:</span>
+                  <span className=" text-right mb-6  mr-2">終了時間:</span>
                   <DateTimeRangePicker
                     value={endTime}
                     changer={endTimeChange}
                     isAllDay={allDay === 1 ? true : false}
-                    role={role}
+                    role={permission}
                   />
                 </div>
               </div>
@@ -690,16 +746,16 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                   {whoIsEvent === "編集" && (
                     <div
                       className={`flex justify-center items-center ml-4 ${
-                        newReservation ? "" : "opacity-40"
+                        newReservation ? "opacity-40" : ""
                       } `}
                     >
                       <ControlledCheckbox
                         label="現在の予約を編集"
-                        checked={newReservation ? true : false}
+                        checked={newReservation ? false : true}
                         onChanger={(newValue) => {
-                          setNewReservation(newValue ? true : false);
+                          setNewReservation(newValue ? false : true);
                         }}
-                        role={role}
+                        role={permission}
                       />
                     </div>
                   )}
@@ -707,16 +763,16 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                   {whoIsEvent === "編集" && (
                     <div
                       className={` flex justify-center items-center ml-4 ${
-                        !newReservation ? "" : "opacity-40"
+                        !newReservation ? "opacity-40" : ""
                       } `}
                     >
                       <ControlledCheckbox
                         label="選択中の時間に新規予約を追加"
-                        checked={newReservation ? false : true}
+                        checked={newReservation ? true : false}
                         onChanger={(newValue) => {
-                          setNewReservation(newValue ? false : true);
+                          setNewReservation(newValue ? true : false);
                         }}
-                        role={role}
+                        role={permission}
                       />
                     </div>
                   )}
@@ -743,7 +799,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                           }
                         }}
                         // type={initialCustomer === null ? "disabled" : ""}
-                        role={role}
+                        role={permission}
                       />
                     </div>
                   )}
@@ -765,7 +821,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             changeCustomerState(initialCustomer.customer_name);
                           }
                         }}
-                        role={role}
+                        role={permission}
                         // type={whoIsEvent === "編集" ? "disabled" : ""}
                       />
                     </div>
@@ -775,13 +831,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
               {!isCustomer && (
                 <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                  <div className="w-32 mr-2 text-right">タイトル:</div>
+                  <div className="w-32 mr-2 text-right mb-6 ">タイトル:</div>
                   <BasicTextField
                     id={uniqueId}
                     placeholder="タイトル"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    role={role}
+                    role={permission}
                     decideLength={50}
                     onValidationChange={(newValue) =>
                       setTitleValidate(newValue)
@@ -793,7 +849,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
               {!newCustomer && isCustomer && (
                 <div className="pt-4">
                   <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">顧客名:</div>
+                    <div className="w-32 mr-2 text-right mb-6 ">顧客名:</div>
                     <SingleCheckBox
                       onChange={(newValue) => {
                         changeCustomerState(newValue);
@@ -801,31 +857,33 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       nodeId={customerId + uniqueId}
                       getOptions={customersNames}
                       value={customerName}
-                      role={role}
+                      role={permission}
                       onValidationChange={(newValue) =>
                         setCustomerNameValidate(newValue)
                       }
                     />
                   </div>
                   <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                    <span className="w-32 mr-2 text-right">電話番号:</span>
+                    <span className="w-32 mr-2 text-right mb-6 ">
+                      電話番号:
+                    </span>
                     <BasicNumberField
                       id={uniqueId}
                       placeholder="電話番号"
                       value={phone_number}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      role={role}
+                      role={permission}
                       required={false}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">備考:</div>
+                    <div className="w-32 mr-2 text-right mb-6 ">備考:</div>
                     <BasicTextField
                       id={uniqueId}
                       placeholder="備考"
                       value={remarks}
                       onChange={(e) => setRemarks(e.target.value)}
-                      role={role}
+                      role={permission}
                       decideLength={150}
                       multiline={true}
                       rows={4}
@@ -833,160 +891,59 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">コース名:</div>
+                    <div className="w-32 mr-2 text-right mb-6 ">コース名:</div>
                     <MultiCheckbox
                       nodesProp="course"
                       optionName={courseNames}
                       onChanger={handleCourseChange}
                       getOptions={courses}
-                      role={role}
+                      role={permission}
                       required={false}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">オプション名:</div>
+                    <div className="w-32 mr-2 text-right mb-6 ">
+                      オプション名:
+                    </div>
                     <MultiCheckbox
                       nodesProp="option"
                       optionName={optionNames}
                       onChanger={handleOptionChange}
                       getOptions={options}
-                      role={role}
+                      role={permission}
                       required={false}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">商品名:</div>
+                    <div className="w-32 mr-2 text-right mb-6 ">商品名:</div>
                     <MultiCheckbox
                       nodesProp="merchandise"
                       optionName={merchandiseNames}
                       onChanger={handleMerchandiseChange}
                       getOptions={merchandises}
-                      role={role}
+                      role={permission}
                       required={false}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">髪型名:</div>
+                    <div className="w-32 mr-2 text-right mb-6 ">髪型名:</div>
                     <MultiCheckbox
                       nodesProp="hairstyle"
                       optionName={hairstyleNames}
                       onChanger={handleHairstyleChange}
                       getOptions={hairstyles}
-                      role={role}
+                      role={permission}
                       required={false}
                     />
                   </div>
                   <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">担当者名:</div>
+                    <div className="w-32 mr-2 text-right mb-6 ">担当者名:</div>
                     <MultiCheckbox
                       nodesProp="names"
                       optionName={userNames}
                       onChanger={handleUserChange}
                       getOptions={users}
-                      role={role}
-                      onValidationChange={(newValue) =>
-                        setUsernameValidate(newValue)
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-              {newCustomer && isCustomer && (
-                <div className="w-full">
-                  <div className="pt-4 flex justify-center items-center ml-4 mr-4 ">
-                    <span className="w-32 text-right mr-2 ">顧客名:</span>
-                    <BasicTextField
-                      id={uniqueId}
-                      placeholder="顧客名"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      role={role}
-                      onValidationChange={(newValue) =>
-                        setCustomerNameValidate(newValue)
-                      }
-                    />
-                  </div>
-
-                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                    <span className="w-32 text-right mr-2">電話番号:</span>
-                    <BasicNumberField
-                      id={uniqueId}
-                      placeholder="電話番号"
-                      value={phone_number}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      role={role}
-                      required={false}
-                    />
-                  </div>
-
-                  <div className="pt-6 flex items-center ml-4 mr-4">
-                    <span className="w-32 text-right mr-2">備考:</span>
-                    <BasicTextField
-                      id={uniqueId}
-                      placeholder="備考"
-                      value={remarks}
-                      onChange={(e) => setRemarks(e.target.value)}
-                      role={role}
-                      decideLength={150}
-                      multiline={true}
-                      rows={4}
-                      required={false}
-                    />
-                  </div>
-
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right ">コース:</div>
-                    <MultiCheckbox
-                      nodesProp="course"
-                      optionName={courseNames}
-                      onChanger={handleCourseChange}
-                      getOptions={courses}
-                      role={role}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">オプション:</div>
-                    <MultiCheckbox
-                      nodesProp="option"
-                      optionName={optionNames}
-                      onChanger={handleOptionChange}
-                      getOptions={options}
-                      role={role}
-                      required={false}
-                    />
-                  </div>
-
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">商品:</div>
-                    <MultiCheckbox
-                      nodesProp="merchandise"
-                      optionName={merchandiseNames}
-                      onChanger={handleMerchandiseChange}
-                      getOptions={merchandises}
-                      role={role}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">髪型:</div>
-                    <MultiCheckbox
-                      nodesProp="hairstyle"
-                      optionName={hairstyleNames}
-                      onChanger={handleHairstyleChange}
-                      getOptions={hairstyles}
-                      role={role}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right">担当者:</div>
-                    <MultiCheckbox
-                      nodesProp="names"
-                      optionName={userNames}
-                      onChanger={handleUserChange}
-                      getOptions={users}
-                      role={role}
+                      role={permission}
                       onValidationChange={(newValue) =>
                         setUsernameValidate(newValue)
                       }
@@ -996,14 +953,120 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                   </div>
                 </div>
               )}
-              {role === "オーナー" ||
-                (role === "マネージャー" && (
-                  <div className="flex mt-6 justify-end items-center mr-2">
-                    <PrimaryButton
-                      value={whoIsEvent === "編集" ? "更新" : "作成"}
+              {newCustomer && isCustomer && (
+                <div className="w-full">
+                  <div className="pt-4 flex justify-center items-center ml-4 mr-4 ">
+                    <span className="w-32 text-right mb-6  mr-2 ">顧客名:</span>
+                    <BasicTextField
+                      id={uniqueId}
+                      placeholder="顧客名"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      role={permission}
+                      onValidationChange={(newValue) =>
+                        setCustomerNameValidate(newValue)
+                      }
                     />
                   </div>
-                ))}
+
+                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                    <span className="w-32 text-right mb-6  mr-2">
+                      電話番号:
+                    </span>
+                    <BasicNumberField
+                      id={uniqueId}
+                      placeholder="電話番号"
+                      value={phone_number}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      role={permission}
+                      required={false}
+                    />
+                  </div>
+
+                  <div className="pt-6 flex items-center ml-4 mr-4">
+                    <span className="w-32 text-right mb-6  mr-2">備考:</span>
+                    <BasicTextField
+                      id={uniqueId}
+                      placeholder="備考"
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                      role={permission}
+                      decideLength={150}
+                      multiline={true}
+                      rows={4}
+                      required={false}
+                    />
+                  </div>
+
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-2 text-right mb-6  ">コース:</div>
+                    <MultiCheckbox
+                      nodesProp="course"
+                      optionName={courseNames}
+                      onChanger={handleCourseChange}
+                      getOptions={courses}
+                      role={permission}
+                      required={false}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-2 text-right mb-6 ">
+                      オプション:
+                    </div>
+                    <MultiCheckbox
+                      nodesProp="option"
+                      optionName={optionNames}
+                      onChanger={handleOptionChange}
+                      getOptions={options}
+                      role={permission}
+                      required={false}
+                    />
+                  </div>
+
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-2 text-right mb-6">商品:</div>
+                    <MultiCheckbox
+                      nodesProp="merchandise"
+                      optionName={merchandiseNames}
+                      onChanger={handleMerchandiseChange}
+                      getOptions={merchandises}
+                      role={permission}
+                      required={false}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-2 text-right mb-6 ">髪型:</div>
+                    <MultiCheckbox
+                      nodesProp="hairstyle"
+                      optionName={hairstyleNames}
+                      onChanger={handleHairstyleChange}
+                      getOptions={hairstyles}
+                      role={permission}
+                      required={false}
+                    />
+                  </div>
+                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-2 text-right mb-6 ">担当者:</div>
+                    <MultiCheckbox
+                      nodesProp="names"
+                      optionName={userNames}
+                      onChanger={handleUserChange}
+                      getOptions={users}
+                      role={permission}
+                      onValidationChange={(newValue) =>
+                        setUsernameValidate(newValue)
+                      }
+                      required={true}
+                      error={true}
+                    />
+                  </div>
+                </div>
+              )}
+              {(permission === "オーナー" || permission === "マネージャー") && (
+                <div className="flex mt-6 justify-end items-center mr-2">
+                  <PrimaryButton value={!newReservation ? "更新" : "作成"} />
+                </div>
+              )}
             </form>
           </Typography>
           {/* モーダルの内容 */}

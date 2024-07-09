@@ -83,7 +83,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
         rows={multiline ? rows : undefined}
         inputProps={{ maxLength: decideLength, required }}
         error={!value && required} // 必須項目で空の場合エラー表示
-        helperText={!value && required ? `必須` : "任意"}
+        helperText={required ? `必須` : "任意"}
         sx={{
           width: "100%",
           "& .MuiInputBase-input": {

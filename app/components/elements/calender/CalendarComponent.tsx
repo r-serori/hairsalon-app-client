@@ -19,6 +19,7 @@ import ButtonModal from "../buttonModal/ButtonModal";
 import { el } from "@fullcalendar/core/internal-common";
 import { customerStatus } from "../../Hooks/selector";
 import { RoleState } from "../../Hooks/interface";
+import { permissionStore } from "../../Hooks/authSelector";
 
 interface Event {
   id: number;
@@ -30,10 +31,9 @@ interface Event {
 
 interface OpenCalendarProps {
   events: Event[];
-  role: RoleState;
 }
 
-const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
+const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -50,6 +50,8 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
   const eventBorderColor = "#333";
 
   const [scheduleYear, setScheduleYear] = useState<string>("");
+
+  const permission = useSelector(permissionStore);
 
   useEffect(() => {
     const localYear = localStorage.getItem("year");
@@ -130,7 +132,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
             </div>
           )}
 
-          {role === "オーナー" && (
+          {permission === "オーナー" && (
             <div className="flex justify-start items-center mr-4 gap-4">
               <SalesModal
                 showModal={DailySalesModal}
@@ -197,7 +199,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
             selectable: true, //カレンダーの時間をクリックした際にイベントを追加することができるように設定している
             selectMirror: true, //カレンダーの時間をクリックした際にイベントを追加する際にマウスで選択した時間を表示するかどうかを設定している
             dateClick: function (info) {
-              if (role === "オーナー" || role === "マネージャー") {
+              if (permission === "オーナー" || permission === "マネージャー") {
                 handleEventClick(info);
                 setWhoIsEvent("クリック");
               } else {
@@ -205,7 +207,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
               }
             },
             select: function (info) {
-              if (role === "オーナー" || role === "マネージャー") {
+              if (permission === "オーナー" || permission === "マネージャー") {
                 handleEventClick(info);
                 setWhoIsEvent("選択");
               } else {
@@ -267,7 +269,6 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events, role }) => {
           setWhoIsEvent={setWhoIsEvent}
           isCustomer={isCustomer}
           setIsCustomer={setIsCustomer}
-          role={role}
         />
       )}
       {showButtonModal && selectedEvent && whoIsEvent !== "編集" && (

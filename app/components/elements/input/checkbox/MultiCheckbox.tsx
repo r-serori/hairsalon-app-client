@@ -82,7 +82,10 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
       break;
     case "names":
       console.log("getOptionsだよ", getOptions);
-      Array.isArray(getOptions) && getOptions.length > 1
+
+      Array.isArray(getOptions) && getOptions.length === 1
+        ? names.push(getOptions[0].name)
+        : Array.isArray(getOptions) && getOptions.length > 1
         ? getOptions.forEach((option) => {
             names.push(option.name);
           })
@@ -114,7 +117,8 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
 
   const noArrayAndNoLength =
     (!Array.isArray(getOptions) && required && error) ||
-    (Array.isArray(getOptions) && getOptions.length === 0);
+    (Array.isArray(getOptions) && getOptions.length === 0) ||
+    (Array.isArray(getOptions) && required && error && getOptions.length === 1);
 
   console.log("noArrayAndNoLength", noArrayAndNoLength);
 
@@ -196,7 +200,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           }
 
           // selectedが配列の場合
-          if (Array.isArray(selected) && selected.length > 1) {
+          if (Array.isArray(selected) && selected.length >= 1) {
             return (
               <div style={{ whiteSpace: "no-wrap" }}>
                 {selected.map((value) => (
@@ -256,11 +260,11 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           </MenuItem>
         )}
       </Select>
-      {required && error && !allowed && names.length > 1 ? (
+      {required && error && fieldName[0] === "担当者" && !noArrayAndNoLength ? (
         <Typography variant="caption" color="error">
           <span className="ml-3">必須項目です</span>
         </Typography>
-      ) : fieldName[0] === "担当者" ? (
+      ) : fieldName[0] === "担当者" && noArrayAndNoLength ? (
         <Typography variant="caption" color="error">
           <span className="ml-3">
             必須項目ですが、一人だけなので自動的に選択されています！
