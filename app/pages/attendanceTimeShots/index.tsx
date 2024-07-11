@@ -1,9 +1,6 @@
-import Link from "next/link";
-import { useState } from "react";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import { UserAllState } from "../../components/Hooks/interface";
 import { getUsers } from "../../store/auth/userSlice";
@@ -14,12 +11,8 @@ import {
   userMessage,
   userStatus,
 } from "../../components/Hooks/authSelector";
-import {
-  attendance_timeError,
-  attendance_timeMessage,
-  attendance_timeStatus,
-} from "../../components/Hooks/selector";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { attendance_timeError } from "../../components/Hooks/selector";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import { staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { allLogout } from "../../components/Hooks/useMethod";

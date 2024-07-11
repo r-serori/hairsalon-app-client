@@ -38,6 +38,20 @@ export const dailySaleApi = {
 
   // },
 
+  selectGetDailySales: async (year: string) => {
+    try {
+      const response = await sendRequest(
+        "GET",
+        `/daily_sales/selected/${encodeURIComponent(year)}`
+      );
+      // console.log("APIのdailySalesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
+  },
+
   updateDailySales: async (formData: {
     id: number;
     date: string;

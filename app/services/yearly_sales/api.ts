@@ -40,6 +40,20 @@ export const yearlySaleApi = {
   // }
   // },
 
+  selectGEtYearlySales: async (year: string) => {
+    try {
+      const response = await sendRequest(
+        "GET",
+        `/yearly_sales/selected/${encodeURIComponent(year)}`
+      );
+      // console.log("APIのyearlySalesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
+  },
+
   updateYearlySales: async (formData: {
     id: number;
     year: string;

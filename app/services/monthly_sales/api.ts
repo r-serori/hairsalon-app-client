@@ -40,6 +40,20 @@ export const monthlySaleApi = {
   // }
   // },
 
+  selectGetMonthlySales: async (year: string) => {
+    try {
+      const response = await sendRequest(
+        "GET",
+        `/monthly_sales/selected/${encodeURIComponent(year)}`
+      );
+      // console.log("APIのmonthlySalesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.log("errorだよ", error);
+      return { error: error };
+    }
+  },
+
   updateMonthlySales: async (formData: {
     id: number;
     year_month: string;
