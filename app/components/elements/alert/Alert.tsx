@@ -19,7 +19,10 @@ const BasicAlerts: React.FC<BasicAlertsProps> = ({
   return (
     <Stack sx={{ width: "100%" }} spacing={space}>
       {/* success:緑チェック,info:青i,warning:黄三角!,error:赤円!のどれかを入れてください。 */}
-      <Alert severity={type as AlertColor} sx={{ padding: padding }}>
+      <Alert
+        severity={type as AlertColor}
+        sx={{ padding: padding, fontWeight: "bold" }}
+      >
         {message}
       </Alert>
     </Stack>

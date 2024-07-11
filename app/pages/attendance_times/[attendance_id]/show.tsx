@@ -163,20 +163,20 @@ const attendanceTimes: React.FC = () => {
             setYearMonth={setYearMonth}
           />
         </div>
-
-        {atStatus === "loading" ? (
-          <p>loading...</p>
-        ) : (
-          <ComponentTable
-            nodes={nodes}
-            searchItems={searchItems}
-            nodesProps={nodesProps}
-            tHeaderItems={tHeaderItems}
-            link="/attendance_times"
-            role={permission}
-          />
-        )}
       </div>
+
+      {atStatus === "loading" ? (
+        <p>loading...</p>
+      ) : (
+        <ComponentTable
+          nodes={nodes}
+          searchItems={searchItems}
+          nodesProps={nodesProps}
+          tHeaderItems={tHeaderItems}
+          link="/attendance_times"
+          role={permission}
+        />
+      )}
     </div>
   );
 };

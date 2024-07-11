@@ -15,6 +15,9 @@ import PrimaryButton from "../../button/PrimaryButton";
 import DeleteButton from "../../button/DeleteButton";
 import { selectGetSchedules } from "../../../../store/schedules/scheduleSlice";
 import { selectGetAttendanceTimes } from "../../../../store/attendances/attendance_times/attendance_timesSlice";
+import { selectGetDaily_sales } from "../../../../store/sales/daily_sales/daily_saleSlice";
+import { selectGetMonthly_sales } from "../../../../store/sales/monthly_sales/monthly_saleSlice";
+import { selectGetYearly_sales } from "../../../../store/sales/yearly_sales/yearly_saleSlice";
 
 const style = {
   position: "absolute" as "absolute",
@@ -33,7 +36,12 @@ const style = {
 interface EasyModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  whoAreYou?: string;
+  whoAreYou:
+    | "attendanceTimes"
+    | "schedules"
+    | "dailySales"
+    | "monthlySales"
+    | "yearlySales";
   whatIsYourId?: number;
   setYearMonth?: (yearMonth: string) => void;
   setScheduleYear?: (year: string) => void;
@@ -64,10 +72,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
       : dayjs().utc().tz("Asia/Tokyo").format("YYYY")
   );
 
-  let message =
-    whoAreYou === "attendanceTimes"
-      ? "去年以前、または来年以降の年を選択してください！"
-      : "去年以前、または再来年以降の年を選択してください！";
+  let message = "去年以前、または来年以降の年を選択してください！";
 
   const resetState = () => {
     setSelectDate(dayjs().utc().tz("Asia/Tokyo"));
@@ -87,13 +92,24 @@ const EasyModal: React.FC<EasyModalProps> = ({
             yearMonth: year,
           }) as any
         );
-
         setOpen(false);
         setYearMonth(year);
-      } else {
+      } else if (whoAreYou === "schedules") {
         const response = dispatch(selectGetSchedules(year) as any);
         localStorage.setItem("year", year);
         setOpen(false);
+      } else if (whoAreYou === "dailySales") {
+        dispatch(selectGetDaily_sales(year) as any);
+        setOpen(false);
+      } else if (whoAreYou === "monthlySales") {
+        dispatch(selectGetMonthly_sales(year) as any);
+        setOpen(false);
+      } else if (whoAreYou === "yearlySales") {
+        dispatch(selectGetYearly_sales(year) as any);
+        setOpen(false);
+      } else {
+        console.log("whoAreYouが不正です");
+        throw new Error("whoAreYouが不正です");
       }
     } catch (e) {
       console.log(e);
@@ -114,14 +130,26 @@ const EasyModal: React.FC<EasyModalProps> = ({
         >
           去年以前か来年以降の勤怠時間を確認,編集
         </Button>
-      ) : (
+      ) : whoAreYou === "schedules" ? (
         <Button
           onClick={() => setOpen(true)}
           className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-lg text-md font-bold px-4 py-2 text-center"
         >
           去年以前か来年以降の予約を確認,編集
         </Button>
+      ) : (
+        (whoAreYou === "dailySales" ||
+          whoAreYou === "monthlySales" ||
+          whoAreYou === "yearlySales") && (
+          <Button
+            onClick={() => setOpen(true)}
+            className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-lg text-md font-bold px-4 py-2 text-center"
+          >
+            去年以前か来年以降の売上を確認,編集
+          </Button>
+        )
       )}
+
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -157,14 +185,17 @@ const EasyModal: React.FC<EasyModalProps> = ({
 
                 <div className="flex justify-center pt-8">
                   {(year === dayjs().utc().tz("Asia/Tokyo").format("YYYY") &&
-                    whoAreYou !== "attendanceTimes") ||
+                    (whoAreYou === "schedules" ||
+                      whoAreYou === "dailySales" ||
+                      whoAreYou === "monthlySales" ||
+                      whoAreYou === "yearlySales")) ||
                   (year ===
                     dayjs()
                       .utc()
                       .tz("Asia/Tokyo")
                       .add(1, "year")
                       .format("YYYY") &&
-                    whoAreYou !== "attendanceTimes") ||
+                    whoAreYou === "schedules") ||
                   (year === dayjs().utc().tz("Asia/Tokyo").format("YYYY-MM") &&
                     whoAreYou === "attendanceTimes") ? (
                     <>
@@ -180,7 +211,9 @@ const EasyModal: React.FC<EasyModalProps> = ({
                       <p className="text-red-500 text-center mr-12">
                         {whoAreYou === "attendanceTimes"
                           ? "選択中の勤怠時間は既に表示しています。"
-                          : "今年と来年の予約は既に表示しています。"}
+                          : whoAreYou === "schedules"
+                          ? "選択中の予約は既に表示しています。"
+                          : "選択中の売上は既に表示しています。"}
                       </p>
                     </>
                   ) : (

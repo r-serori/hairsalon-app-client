@@ -24,10 +24,13 @@ import {
 import _ from "lodash";
 import { userKey, permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
+import EasyModal from "../../components/elements/modal/easy/EasyModal";
 
 const monthly_sales: React.FC = () => {
   const router = useRouter();
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [salesOpen, setSalesOpen] = useState<boolean>(false);
+  const [yearMonth, setYearMonth] = useState<string>("");
 
   const dispatch = useDispatch();
 
@@ -41,6 +44,17 @@ const monthly_sales: React.FC = () => {
 
   const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
+
+  const nowMonthlySales = async () => {
+    try {
+      await dispatch(getMonthly_sales({}) as any);
+      setYearMonth("");
+    } catch (error) {
+      console.error("Error:", error);
+      allLogout(dispatch);
+      router.push("/auth/login");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,9 +103,30 @@ const monthly_sales: React.FC = () => {
         <BasicAlerts type="error" message={msError} space={1} padding={0.6} />
       )}
       <div className="mx-4">
-        <div className="flex justify-end items-center gap-4  my-4">
-          <RouterButton link="/daily_sales" value="日次売上画面へ" />
-          <RouterButton link="/yearly_sales" value="年次売上画面へ" />
+        <div className="flex justify-between items-center my-4">
+          <div className="flex justify-start items-center gap-4 ">
+            <EasyModal
+              open={salesOpen}
+              setOpen={setSalesOpen}
+              whoAreYou="monthlySales"
+              setYearMonth={setYearMonth}
+            />
+
+            {yearMonth !== "" && (
+              <button
+                className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
+                onClick={() => {
+                  nowMonthlySales();
+                }}
+              >
+                現在の年月に戻す
+              </button>
+            )}
+          </div>
+          <div className="flex justify-end items-center gap-4">
+            <RouterButton link="/daily_sales" value="日次売上画面へ" />
+            <RouterButton link="/yearly_sales" value="年次売上画面へ" />
+          </div>
         </div>
 
         {msStatus === "loading" ? (

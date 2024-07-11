@@ -20,20 +20,50 @@ import { el } from "@fullcalendar/core/internal-common";
 import { customerStatus } from "../../Hooks/selector";
 import { RoleState } from "../../Hooks/interface";
 import { permissionStore } from "../../Hooks/authSelector";
+import { UserAllState } from "../../Hooks/interface";
+import { CourseState } from "../../../store/courses/courseSlice";
+import { OptionState } from "../../../store/options/optionSlice";
+import { MerchandiseState } from "../../../store/merchandises/merchandiseSlice";
+import { HairstyleState } from "../../../store/hairstyles/hairstyleSlice";
 
-interface Event {
+export interface CalendarEvent {
   id: number;
   title: string;
+  phone_number?: string;
+  remarks?: string;
   start: string;
   end: string;
-  allDay: number;
+  allDay: boolean;
+  course?: string[];
+  option?: string[];
+  merchandise?: string[];
+  hairstyle?: string[];
+  names?: string[];
+  customer_id?: number;
+  isCustomer: boolean;
 }
 
 interface OpenCalendarProps {
-  events: Event[];
+  events: CalendarEvent[];
+  nodes: any;
+  users: UserAllState[];
+  courses: CourseState[];
+  options: OptionState[];
+  merchandises: MerchandiseState[];
+  hairstyles: HairstyleState[];
+  customerNames: string[];
 }
 
-const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
+const MyCalendar: React.FC<OpenCalendarProps> = ({
+  events,
+  nodes,
+  users,
+  courses,
+  options,
+  merchandises,
+  hairstyles,
+  customerNames,
+}) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -44,7 +74,18 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
     title: event.title,
     start: event.start,
     end: event.end,
-    allDay: event.allDay === 1 ? true : false,
+    allDay: event.allDay,
+    extendedProps: {
+      phone_number: event.phone_number ? event.phone_number : "",
+      remarks: event.remarks ? event.remarks : "",
+      course: event.course ? event.course : [],
+      option: event.option ? event.option : [],
+      merchandise: event.merchandise ? event.merchandise : [],
+      hairstyle: event.hairstyle ? event.hairstyle : [],
+      names: event.names ? event.names : [],
+      isCustomer: event.isCustomer,
+      customer_id: event.customer_id ? event.customer_id : 0,
+    },
   }));
 
   const eventBorderColor = "#333";
@@ -74,7 +115,9 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   // イベントをクリックした際にどのようなイベントをクリックしたかを格納するstate
-  const [whoIsEvent, setWhoIsEvent] = useState("");
+  const [whoIsEvent, setWhoIsEvent] = useState<
+    "編集" | "クリック" | "選択" | ""
+  >("");
 
   // 日次、月次、年次の売上を表示するためのstate
   const [DailySalesModal, setDailySalesModal] = useState(false);
@@ -128,6 +171,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
                 open={easyOpen}
                 setOpen={setEasyOpen}
                 setScheduleYear={setScheduleYear}
+                whoAreYou="schedules"
               />
             </div>
           )}
@@ -137,22 +181,34 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
               <SalesModal
                 showModal={DailySalesModal}
                 setShowModal={setDailySalesModal}
-                events={eventInputs}
+                events={events}
                 whatSales="日次"
+                nodes={nodes}
+                courses={courses}
+                options={options}
+                merchandises={merchandises}
               />
 
               <SalesModal
                 showModal={monthlySalesModal}
                 setShowModal={setMonthlySalesModal}
-                events={eventInputs}
+                events={events}
                 whatSales="月次"
+                nodes={nodes}
+                courses={courses}
+                options={options}
+                merchandises={merchandises}
               />
 
               <SalesModal
                 showModal={yearlySalesModal}
                 setShowModal={setYearlySalesModal}
-                events={eventInputs}
+                events={events}
                 whatSales="年次"
+                nodes={nodes}
+                courses={courses}
+                options={options}
+                merchandises={merchandises}
               />
             </div>
           )}
@@ -267,8 +323,14 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({ events }) => {
           setSelectedEvent={setSelectedEvent}
           whoIsEvent={whoIsEvent}
           setWhoIsEvent={setWhoIsEvent}
-          isCustomer={isCustomer}
-          setIsCustomer={setIsCustomer}
+          isCustomerProp={isCustomer}
+          nodes={nodes}
+          users={users}
+          courses={courses}
+          options={options}
+          merchandises={merchandises}
+          hairstyles={hairstyles}
+          customerNames={customerNames}
         />
       )}
       {showButtonModal && selectedEvent && whoIsEvent !== "編集" && (

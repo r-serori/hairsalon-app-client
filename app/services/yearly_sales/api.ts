@@ -40,7 +40,7 @@ export const yearlySaleApi = {
   // }
   // },
 
-  selectGEtYearlySales: async (year: string) => {
+  selectGetYearlySales: async (year: string) => {
     try {
       const response = await sendRequest(
         "GET",

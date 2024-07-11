@@ -50,6 +50,54 @@ export const getMonthly_sales = createAsyncThunk(
   }
 );
 
+export const selectGetMonthly_sales = createAsyncThunk(
+  "monthly_sales/selectGetMonthly_sales",
+  async (year: string, { rejectWithValue }) => {
+    try {
+      const response: any = await monthlySaleApi.selectGetMonthlySales(year);
+
+      if (response.status >= 200 && response.status < 300) {
+        // 成功時の処理
+        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+        return response.data; // response.dataを返すことで、必要なデータのみを返す
+      } else if (response.status >= 400 && response.status < 500) {
+        // クライアントエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        if (
+          response.status === 401 ||
+          response.status === 403 ||
+          response.status === 404
+        ) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else if (response.status >= 500) {
+        if (response.status === 500) {
+          return rejectWithValue({
+            status: response.status,
+            message: response.data.message,
+          }); // rejectWithValueでエラーメッセージを返す
+        }
+        // サーバーエラー時の処理
+        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+      } else {
+        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
+      }
+    } catch (err) {
+      console.log("errだよ", err);
+      return rejectWithValue(
+        err.response
+          ? err.response.data
+          : { message: "予期しないエラーが発生しました" }
+      );
+    }
+  }
+);
+
 export const createMonthly_sales = createAsyncThunk(
   "monthly_sales/createMonthly_sales",
   async (
@@ -253,7 +301,12 @@ export const initialState: RootState = {
 const monthly_salesSlice = createSlice({
   name: "monthly_sales",
   initialState,
-  reducers: {},
+  reducers: {
+    changeMonthlySaleMessage: (state, action: PayloadAction<string>) => {
+      state.message = action.payload;
+      state.error = null;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getMonthly_sales.pending, (state, action) => {
       state.status = "success";
@@ -271,6 +324,26 @@ const monthly_salesSlice = createSlice({
         : "月次売上の取得に成功しました！";
     });
     builder.addCase(getMonthly_sales.rejected, (state, action) => {
+      state.status = "success";
+      state.error = (action.payload as any).message;
+    });
+
+    builder.addCase(selectGetMonthly_sales.pending, (state, action) => {
+      state.status = "success";
+      state.error = null;
+      state.message = null;
+    });
+    builder.addCase(selectGetMonthly_sales.fulfilled, (state, action) => {
+      state.status = "success";
+      state.monthly_sales = [
+        ...state.monthly_sales,
+        ...action.payload.monthlySales,
+      ];
+      state.message = action.payload.message
+        ? action.payload.message
+        : "月次売上の取得に成功しました！";
+    });
+    builder.addCase(selectGetMonthly_sales.rejected, (state, action) => {
       state.status = "success";
       state.error = (action.payload as any).message;
     });
@@ -356,6 +429,8 @@ const monthly_salesSlice = createSlice({
     });
   },
 });
+
+export const { changeMonthlySaleMessage } = monthly_salesSlice.actions;
 
 const monthly_salesReducer = monthly_salesSlice.reducer;
 

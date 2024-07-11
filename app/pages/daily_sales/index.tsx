@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import {
   daily_saleError,
   daily_saleMessage,
+  daily_salesStore,
   daily_saleStatus,
 } from "../../components/Hooks/selector";
 import { getUserKey, ownerPermission } from "../../components/Hooks/useMethod";
@@ -26,12 +27,11 @@ const daily_sales: React.FC = () => {
   const router = useRouter();
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const [salesOpen, setSalesOpen] = useState<boolean>(false);
+  const [yearMonth, setYearMonth] = useState<string>("");
 
   const dispatch = useDispatch();
 
-  const daily_sales: Daily_salesState[] = useSelector(
-    (state: RootState) => state.daily_sales.daily_sales
-  );
+  const daily_sales: Daily_salesState[] = useSelector(daily_salesStore);
 
   const dsStatus: string | null = useSelector(daily_saleStatus);
 
@@ -41,6 +41,17 @@ const daily_sales: React.FC = () => {
 
   const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
+
+  const nowDailySales = async () => {
+    try {
+      await dispatch(getDaily_sales({}) as any);
+      setYearMonth("");
+    } catch (error) {
+      console.error("Error:", error);
+      allLogout(dispatch);
+      router.push("/auth/login");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +65,7 @@ const daily_sales: React.FC = () => {
         }
 
         if (_.isEmpty(daily_sales) && permission === "オーナー") {
+          setYearMonth("");
           await dispatch(getDaily_sales({}) as any);
         }
       } catch (error) {
@@ -85,19 +97,33 @@ const daily_sales: React.FC = () => {
           padding={0.6}
         />
       )}
-
       {dsError && (
         <BasicAlerts type="error" message={dsError} space={1} padding={0.6} />
       )}
-      <div className="mx-4 my-4">
-        <div className="flex justify-end items-center gap-4">
-          <EasyModal
-            open={salesOpen}
-            setOpen={setSalesOpen}
-            whoAreYou="daily"
-          />
-          <RouterButton link="/monthly_sales" value="月次売上画面へ" />
-          <RouterButton link="/yearly_sales" value="年次売上画面へ" />
+      <div className="mx-4">
+        <div className="flex justify-between items-center my-4">
+          <div className="flex justify-start items-center gap-4 ">
+            <EasyModal
+              open={salesOpen}
+              setOpen={setSalesOpen}
+              whoAreYou="dailySales"
+              setYearMonth={setYearMonth}
+            />
+            {yearMonth !== "" && (
+              <button
+                className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
+                onClick={() => {
+                  nowDailySales();
+                }}
+              >
+                現在の年月に戻す
+              </button>
+            )}
+          </div>
+          <div className="flex justify-end items-center gap-4">
+            <RouterButton link="/monthly_sales" value="月次売上画面へ" />
+            <RouterButton link="/yearly_sales" value="年次売上画面へ" />
+          </div>
         </div>
 
         {dsStatus === "loading" ? (

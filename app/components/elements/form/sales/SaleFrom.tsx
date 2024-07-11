@@ -12,36 +12,52 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import PrimaryButton from "../../button/PrimaryButton";
 import DeleteButton from "../../button/DeleteButton";
-import { createDaily_sales } from "../../../../store/sales/daily_sales/daily_saleSlice";
-import { createMonthly_sales } from "../../../../store/sales/monthly_sales/monthly_saleSlice";
-import { createYearly_sales } from "../../../../store/sales/yearly_sales/yearly_saleSlice";
 import {
-  coursesStore,
+  changeDailySaleMessage,
+  createDaily_sales,
+} from "../../../../store/sales/daily_sales/daily_saleSlice";
+import {
+  changeMonthlySaleMessage,
+  createMonthly_sales,
+} from "../../../../store/sales/monthly_sales/monthly_saleSlice";
+import {
+  changeYearlySaleMessage,
+  createYearly_sales,
+} from "../../../../store/sales/yearly_sales/yearly_saleSlice";
+import {
   customerStatus,
-  customersStore,
-  hairstylesStore,
-  merchandiseStore,
-  optionsStore,
+  daily_saleError,
+  daily_saleStatus,
+  monthly_saleError,
+  monthly_saleStatus,
+  yearly_saleError,
+  yearly_saleStatus,
 } from "../../../Hooks/selector";
-import { CustomerState } from "../../../../store/customers/customerSlice";
 import { CourseState } from "../../../../store/courses/courseSlice";
 import { OptionState } from "../../../../store/options/optionSlice";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
-import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
-import { user } from "../../../Hooks/authSelector";
-import {} from "../../../../store/auth/userSlice";
+import { CalendarEvent } from "../../calender/CalendarComponent";
+import BasicAlerts from "../../alert/Alert";
 
 interface SaleFormProps {
-  events: any;
+  events: CalendarEvent[];
   whatSales: string;
   showModal: boolean;
   setShowModal: (value: boolean) => void;
+  nodes: any;
+  courses: CourseState[];
+  options: OptionState[];
+  merchandises: MerchandiseState[];
 }
 const SaleForm: React.FC<SaleFormProps> = ({
   events,
   whatSales,
   showModal,
   setShowModal,
+  nodes,
+  courses,
+  options,
+  merchandises,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -50,139 +66,21 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const cusStatus: string = useSelector(customerStatus);
+  const dailySalesError = useSelector(daily_saleError);
+  const dailySalesStatus = useSelector(daily_saleStatus);
 
-  const customers: CustomerState[] = useSelector(customersStore);
+  const monthlySalesError = useSelector(monthly_saleError);
+  const monthlySalesStatus = useSelector(monthly_saleStatus);
 
-  const courses: CourseState[] = useSelector(coursesStore);
-
-  const options: OptionState[] = useSelector(optionsStore);
-
-  const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
-
-  const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
-
-  const users = useSelector(user);
-
-  const course_customers = useSelector(
-    (state: RootState) => state.course_customers.course_customers
-  );
-
-  console.log("course_customersだよ");
-  console.log(course_customers);
-
-  const option_customers = useSelector(
-    (state: RootState) => state.option_customers.option_customers
-  );
-
-  const merchandise_customers = useSelector(
-    (state: RootState) => state.merchandise_customers.merchandise_customers
-  );
-
-  const hairstyle_customers = useSelector(
-    (state: RootState) => state.hairstyle_customers.hairstyle_customers
-  );
-
-  const customer_users = useSelector(
-    (state: RootState) => state.customer_users.customer_users
-  );
-
-  const nodes = [
-    ...customers.map((customer) => {
-      // customerは一回一番下まで行く。その後、次のcustomerに行く。
-      // 顧客に関連するコースの情報を取得
-      const customerCourses = course_customers
-        .filter((course) => course.customer_id === customer.id)
-        .map((course) => course.course_id);
-
-      console.log(customerCourses);
-      //  [1,2,3]
-
-      const courseNames = courses
-        .filter((course) => customerCourses.includes(course.id))
-        .map((course) => course.course_name);
-
-      console.log("courseNamesだよ");
-      console.log(courseNames);
-
-      // 顧客に関連するオプションの情報を取得
-      const customerOptions = option_customers
-        .filter((option) => option.customer_id === customer.id)
-        .map((option) => option.option_id);
-
-      console.log(customerOptions);
-
-      const optionNames = options
-        .filter((option) => customerOptions.includes(option.id))
-        .map((option) => option.option_name);
-
-      console.log("optionNamesだよ");
-      console.log(optionNames);
-
-      // 顧客に関連する商品の情報を取得
-      const customerMerchandises = merchandise_customers
-        .filter((merchandise) => merchandise.customer_id === customer.id)
-        .map((merchandise) => merchandise.merchandise_id);
-
-      console.log(customerMerchandises);
-
-      const merchandiseNames = merchandises
-        .filter((merchandise) => customerMerchandises.includes(merchandise.id))
-        .map((merchandise) => merchandise.merchandise_name);
-
-      console.log("merchandiseNamesだよ");
-      console.log(merchandiseNames);
-
-      // 顧客に関連する髪型の情報を取得
-      const customerHairstyles = hairstyle_customers
-        .filter((hairstyle) => hairstyle.customer_id === customer.id)
-        .map((hairstyle) => hairstyle.hairstyle_id);
-
-      console.log(customerHairstyles);
-
-      const hairstyleNames = hairstyles
-        .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
-        .map((hairstyle) => hairstyle.hairstyle_name);
-
-      console.log("hairstyleNamesだよ");
-
-      console.log(hairstyleNames);
-
-      // 顧客に関連する担当者の情報を取得
-
-      const customerUsers = customer_users
-        .filter((user) => user.customer_id === customer.id)
-        .map((user) => user.user_id);
-
-      console.log(customerUsers);
-
-      const userNames = users
-        .filter((user) => customerUsers.includes(user.id))
-        .map((user) => user.name);
-
-      console.log("userNamesだよ");
-      console.log(userNames);
-
-      // 顧客情報を返す
-      return {
-        id: customer.id,
-        customer_name: customer.customer_name,
-        phone_number: customer.phone_number,
-        remarks: customer.remarks,
-        course: courseNames,
-        option: optionNames,
-        merchandise: merchandiseNames,
-        hairstyle: hairstyleNames,
-        user: userNames,
-      };
-    }),
-  ];
+  const yearlySalesError = useSelector(yearly_saleError);
+  const yearlySalesStatus = useSelector(yearly_saleStatus);
 
   const [time, setTime] = React.useState<Dayjs | null>(
     dayjs().utc().tz("Asia/Tokyo")
   );
 
-  const [sumPrice, setSumPrice] = React.useState<number | null>(0);
+  const [sumPrice, setSumPrice] = React.useState<number | 0>(0);
+  const [message, setMessage] = React.useState<string>("");
 
   const sumPricer = (updateDate) => {
     //モーダルでDateTimePickerで選択した日付をdayjsでformat()で形を変更している。
@@ -223,24 +121,27 @@ const SaleForm: React.FC<SaleFormProps> = ({
         console.log("sameDateEventsだよ", sameDateEvents);
       }
 
-      const sameCustomerEvents = [
-        ...sameDateEvents.map((event) => {
-          const customer = nodes.find(
-            (node) => event.title === node.customer_name
-          );
+      if (sameDateEvents.length === 0) {
+        setSumPrice(0);
+        setMessage("選択した、時制に予約が入っていないので売上がありません！");
+        return;
+      }
+
+      const sameCustomerEvents = sameDateEvents.filter((event) => {
+        if (event.isCustomer) {
           return {
-            course: customer.course,
-            option: customer.option,
-            merchandise: customer.merchandise,
+            course: event.course,
+            option: event.option,
+            merchandise: event.merchandise,
           };
-        }),
-      ];
+        }
+      });
 
       console.log("sameCustomerEventsだよ", sameCustomerEvents);
 
-      //sameCustomerEventsをmapで回して、courseのみを取得。その後、配列内に入れが複数入っている状態になるのでflat()で配列を一つの配列にする。
+      //sameCustomerEventsをmapで回して、courseのみを取得。その後、配列内に配列が複数入っている状態になるのでflat()で配列を一つの配列にする。
       const sameCoursesEvents = sameCustomerEvents
-        .map((node) => node.course)
+        .map((event) => event.course)
         .flat();
 
       console.log("sameCoursesEventsだよ", sameCoursesEvents);
@@ -258,7 +159,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         .map(
           (course) =>
             courseNameAndPrices.find(
-              (courseName) => courseName.courseName === course
+              (courseNameAndPrice) => courseNameAndPrice.courseName === course
             ).coursePrice
         )
         .reduce((acc, cur) => acc + cur, 0);
@@ -267,7 +168,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       //optionも同様にする。
       const sameOptionsEvents = sameCustomerEvents
-        .map((node) => node.option)
+        .map((event) => event.option)
         .flat();
 
       console.log("sameOptionsEventsだよ", sameOptionsEvents);
@@ -283,7 +184,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         .map(
           (option) =>
             optionNameAndPrices.find(
-              (optionName) => optionName.optionName === option
+              (optionNameAndPrice) => optionNameAndPrice.optionName === option
             ).optionPrice
         )
         .reduce((acc, cur) => acc + cur, 0);
@@ -293,7 +194,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
       //merchandiseも同様にする。
 
       const sameMerchandisesEvents = sameCustomerEvents
-        .map((node) => node.merchandise)
+        .map((event) => event.merchandise)
         .flat();
 
       console.log("sameMerchandisesEventsだよ", sameMerchandisesEvents);
@@ -309,8 +210,8 @@ const SaleForm: React.FC<SaleFormProps> = ({
         .map(
           (merchandise) =>
             merchandiseNameAndPrices.find(
-              (merchandiseName) =>
-                merchandiseName.merchandiseName === merchandise
+              (merchandiseNameAndPrice) =>
+                merchandiseNameAndPrice.merchandiseName === merchandise
             ).merchandisePrice
         )
         .reduce((acc, cur) => acc + cur, 0);
@@ -321,7 +222,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         sameCoursesPrice + sameOptionsPrice + sameMerchandisesPrice;
 
       console.log("resultだよ", result);
-
+      setMessage("");
       setSumPrice(result);
     } catch (e) {
       return 0;
@@ -333,11 +234,13 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const allInitialState = () => {
     setTime(dayjs().utc().tz("Asia/Tokyo"));
     setSumPrice(0);
+    setMessage("");
     setShowModal(false);
   };
 
   const InitialState = () => {
     setTime(dayjs().utc().tz("Asia/Tokyo"));
+    setMessage("");
     setSumPrice(0);
   };
 
@@ -351,30 +254,49 @@ const SaleForm: React.FC<SaleFormProps> = ({
     year: string;
     yearly_sales: number;
   }) => {
-    console.log("SalesFormDataだよ", SalesFormData);
-    const update = true;
-    if (whatSales === "日次") {
-      await dispatch(createDaily_sales(SalesFormData) as any);
-      router.push({
-        pathname: "/daily_sales",
-        query: { update },
-      });
-
-      allInitialState();
-    } else if (whatSales === "月次") {
-      await dispatch(createMonthly_sales(SalesFormData) as any);
-      allInitialState();
-      router.push({
-        pathname: "/monthly_sales",
-        query: { update },
-      });
-    } else if (whatSales === "年次") {
-      await dispatch(createYearly_sales(SalesFormData) as any);
-      allInitialState();
-      router.push({
-        pathname: "/yearly_sales",
-        query: { update },
-      });
+    try {
+      console.log("SalesFormDataだよ", SalesFormData);
+      const update = true;
+      if (sumPrice === 0) {
+        setMessage("売上が0円のため、更新できません。");
+        return;
+      }
+      if (whatSales === "日次") {
+        await dispatch(createDaily_sales(SalesFormData) as any);
+        if (dailySalesStatus === "success") {
+          // router.push({
+          //   pathname: "/daily_sales",
+          //   query: { update },
+          // });
+          // allInitialState();
+        } else if (dailySalesStatus === "failed") {
+          throw new Error();
+        }
+      } else if (whatSales === "月次") {
+        await dispatch(createMonthly_sales(SalesFormData) as any);
+        if (monthlySalesStatus === "success") {
+          allInitialState();
+          router.push({
+            pathname: "/monthly_sales",
+            query: { update },
+          });
+        } else if (monthlySalesStatus === "failed") {
+          throw new Error();
+        }
+      } else if (whatSales === "年次") {
+        await dispatch(createYearly_sales(SalesFormData) as any);
+        if (yearlySalesStatus === "success") {
+          allInitialState();
+          router.push({
+            pathname: "/yearly_sales",
+            query: { update },
+          });
+        } else if (yearlySalesStatus === "failed") {
+          throw new Error();
+        }
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -410,82 +332,117 @@ const SaleForm: React.FC<SaleFormProps> = ({
   };
 
   useEffect(() => {
-    if (showModal) {
-      InitialState();
-      sumPricer(time);
-    }
-  }, [showModal]);
+    changeDailySaleMessage("");
+    changeMonthlySaleMessage("");
+    changeYearlySaleMessage("");
+    InitialState();
+    sumPricer(dayjs().utc().tz("Asia/Tokyo"));
+  }, [whatSales]);
 
   return (
     <>
-      {cusStatus === "loading" ? (
-        <div>loading中です。</div>
-      ) : (
-        <>
-          <div className="flex justify-center items-center">
-            <DatePickerValue
-              value={time}
-              changer={(newValue) => {
-                setTime(newValue);
-                sumPricer(newValue);
-              }}
-              whatSales={
-                whatSales === "日次"
-                  ? "日次"
-                  : whatSales === "月次"
-                  ? "月次"
-                  : "年次"
-              }
-            />
-          </div>
-          <div className="p-4 md:p-5 text-center pt-8">
-            {whatSales === "日次" ? (
-              <div>
-                <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                  {time.format("YYYY")}年{time.format("MM")}月
-                  {time.format("DD")}
-                  日の売上合計は
-                  {sumPrice}円でした。
-                </h3>
+      <>
+        {message && (
+          <BasicAlerts message={message} type="warning" space={1} padding={1} />
+        )}
+
+        {dailySalesError && whatSales === "日次" && (
+          <BasicAlerts
+            message={dailySalesError}
+            type="error"
+            space={1}
+            padding={1}
+          />
+        )}
+
+        {monthlySalesError && whatSales === "月次" && (
+          <BasicAlerts
+            message={monthlySalesError}
+            type="error"
+            space={1}
+            padding={1}
+          />
+        )}
+
+        {yearlySalesError && whatSales === "年次" && (
+          <BasicAlerts
+            message={yearlySalesError}
+            type="error"
+            space={1}
+            padding={1}
+          />
+        )}
+
+        <div className="flex justify-center items-center py-4">
+          <DatePickerValue
+            value={time}
+            changer={(newValue) => {
+              setTime(newValue);
+              sumPricer(newValue);
+            }}
+            whatSales={
+              whatSales === "日次"
+                ? "日次"
+                : whatSales === "月次"
+                ? "月次"
+                : "年次"
+            }
+          />
+        </div>
+        <div className="p-4 md:p-5 text-center pt-8">
+          {whatSales === "日次" ? (
+            <div>
+              <h3 className="font-normal text-gray-900 dark:text-gray-400">
+                {time.format("YYYY")}年{time.format("MM")}月{time.format("DD")}
+                日の売上合計は
+                {sumPrice}円でした。
+              </h3>
+              {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">
                   日次売上に更新しますか？
                 </h3>
-              </div>
-            ) : whatSales === "月次" ? (
-              <div>
-                <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                  {time.format("YYYY")}年{time.format("MM")}月の売上合計は
-                  {sumPrice}円でした。
-                </h3>
+              )}
+            </div>
+          ) : whatSales === "月次" ? (
+            <div>
+              <h3 className="font-normal text-gray-900 dark:text-gray-400">
+                {time.format("YYYY")}年{time.format("MM")}月の売上合計は
+                {sumPrice}円でした。
+              </h3>
+              {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">
                   月次売上に更新しますか？
                 </h3>
-              </div>
-            ) : (
-              <div>
-                <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                  {time.format("YYYY")}年の売上合計は
-                  {sumPrice}円でした。
-                </h3>
+              )}
+            </div>
+          ) : (
+            <div>
+              <h3 className="font-normal text-gray-900 dark:text-gray-400">
+                {time.format("YYYY")}年の売上合計は
+                {sumPrice}円でした。
+              </h3>
+              {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">
                   年次売上に更新しますか？
                 </h3>
+              )}
+            </div>
+          )}
+          <div className="flex justify-center pt-8 gap-16">
+            <div>
+              <DeleteButton
+                value={"戻る"}
+                onClicker={() => allInitialState()}
+              />
+            </div>
+            {sumPrice > 0 && (
+              <div>
+                <PrimaryButton value={"更新"} onChanger={SalesSubmit} />
               </div>
             )}
-            <div className="flex justify-center pt-8 gap-16">
-              <div>
-                <DeleteButton
-                  value={"戻る"}
-                  onClicker={() => allInitialState()}
-                />
-              </div>
-              <div>
-                <PrimaryButton value={"更新"} onChanger={SalesSubmit} />　
-              </div>
-            </div>
           </div>
-        </>
-      )}
+        </div>
+      </>
     </>
   );
 };

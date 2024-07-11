@@ -490,7 +490,7 @@ export interface ScheduleState {
   title: string | null;
   start_time: string | null;
   end_time: string | null;
-  allDay: number;
+  allDay: boolean;
   customer_id: number | null;
 }
 

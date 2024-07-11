@@ -38,31 +38,13 @@ import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { v4 as uuidv4 } from "uuid";
-import {
-  course_customersStore,
-  coursesStore,
-  customer_usersStore,
-  customersStore,
-  hairstyle_customersStore,
-  hairstylesStore,
-  merchandiseStore,
-  merchandise_customersStore,
-  option_customersStore,
-  optionsStore,
-} from "../../../Hooks/selector";
 import { permissionStore, user } from "../../../Hooks/authSelector";
 import { CourseState } from "../../../../store/courses/courseSlice";
 import { OptionState } from "../../../../store/options/optionSlice";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
 import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
-import { RoleState, UserAllState } from "../../../Hooks/interface";
-import { Course_customersState } from "../../../../store/middleTable/customers/course_customersSlice";
-import { Option_customersState } from "../../../../store/middleTable/customers/option_customersSlice";
-import { Merchandise_customersState } from "../../../../store/middleTable/customers/merchandise_customersSlice";
-import { Hairstyle_customersState } from "../../../../store/middleTable/customers/hairstyle_customersSlice";
-import { Customer_usersState } from "../../../../store/middleTable/customers/customer_usersSlice";
+import { UserAllState } from "../../../Hooks/interface";
 import BasicNumberField from "../../input/BasicNumberField";
-import { co } from "@fullcalendar/core/internal-common";
 
 const style = {
   position: "absolute" as "absolute",
@@ -81,12 +63,18 @@ const style = {
 interface ScheduleModalProps {
   showModal: boolean;
   selectedEvent: any;
-  whoIsEvent: string;
-  setWhoIsEvent: (value: string) => void;
+  whoIsEvent: "編集" | "クリック" | "選択" | "";
+  setWhoIsEvent: (value: "編集" | "クリック" | "選択" | "") => void;
   setShowModal: (value: boolean) => void;
   setSelectedEvent: (value: any) => void;
-  isCustomer: boolean;
-  setIsCustomer: (value: boolean) => void;
+  isCustomerProp: boolean;
+  nodes: any;
+  users: UserAllState[];
+  courses: CourseState[];
+  options: OptionState[];
+  merchandises: MerchandiseState[];
+  hairstyles: HairstyleState[];
+  customerNames: string[];
 }
 
 const ScheduleModal: React.FC<ScheduleModalProps> = ({
@@ -96,8 +84,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   setWhoIsEvent,
   setShowModal,
   setSelectedEvent,
-  isCustomer,
-  setIsCustomer,
+  isCustomerProp,
+  nodes,
+  users,
+  courses,
+  options,
+  merchandises,
+  hairstyles,
+  customerNames,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -109,174 +103,15 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const uniqueId = uuidv4();
   const permission = useSelector(permissionStore);
 
-  // 顧客情報を取得
-  const customers: CustomerState[] = isCustomer
-    ? useSelector(customersStore)
-    : [];
+  const [firstRender, setFirstRender] = useState<boolean>(true);
 
-  // コース情報を取得
-  const courses: CourseState[] = isCustomer ? useSelector(coursesStore) : [];
-
-  // オプション情報を取得
-  const options: OptionState[] = isCustomer ? useSelector(optionsStore) : [];
-
-  // 商品情報を取得
-  const merchandises: MerchandiseState[] = isCustomer
-    ? useSelector(merchandiseStore)
-    : [];
-
-  // 髪型情報を取得
-  const hairstyles: HairstyleState[] = isCustomer
-    ? useSelector(hairstylesStore)
-    : [];
-
-  // 担当者情報を取得
-  const users: UserAllState[] = isCustomer ? useSelector(user) : [];
-  console.log("userです", users);
-
-  // 中間テーブルの情報を取得
-  const course_customers: Course_customersState[] = isCustomer
-    ? useSelector(course_customersStore)
-    : [];
-
-  // console.log("course_customersだよ");
-  // console.log(course_customers);
-  // 中間テーブルの情報を取得
-  const option_customers: Option_customersState[] = isCustomer
-    ? useSelector(option_customersStore)
-    : [];
-  // 中間テーブルの情報を取得
-  const merchandise_customers: Merchandise_customersState[] = isCustomer
-    ? useSelector(merchandise_customersStore)
-    : [];
-  // 中間テーブルの情報を取得
-  const hairstyle_customers: Hairstyle_customersState[] = isCustomer
-    ? useSelector(hairstyle_customersStore)
-    : [];
-
-  // 中間テーブルの情報を取得
-  const customer_users: Customer_usersState[] = isCustomer
-    ? useSelector(customer_usersStore)
-    : [];
-
-  // 顧客情報を取得　上記の情報を元に顧客情報を取得
-  const nodes =
-    isCustomer && customers
-      ? [
-          ...customers.map((customer) => {
-            // customerは一回一番下まで行く。その後、次のcustomerに行く。
-            // 顧客に関連するコースの情報を取得
-            const customerCourses: number[] = course_customers
-              .filter((course) => course.customer_id === customer.id)
-              .map((course) => course.course_id);
-
-            // console.log(customerCourses);
-            //  [1,2,3]
-
-            const courseNames: string[] = courses
-              .filter((course) => customerCourses.includes(course.id))
-              .map((course) => course.course_name);
-
-            // console.log("courseNamesだよ");
-            // console.log(courseNames);
-
-            // 顧客に関連するオプションの情報を取得
-            const customerOptions: number[] = option_customers
-              .filter((option) => option.customer_id === customer.id)
-              .map((option) => option.option_id);
-
-            // console.log(customerOptions);
-
-            const optionNames: string[] = options
-              .filter((option) => customerOptions.includes(option.id))
-              .map((option) => option.option_name);
-
-            // console.log("optionNamesだよ");
-            // console.log(optionNames);
-
-            // 顧客に関連する商品の情報を取得
-            const customerMerchandises: number[] = merchandise_customers
-              .filter((merchandise) => merchandise.customer_id === customer.id)
-              .map((merchandise) => merchandise.merchandise_id);
-
-            // console.log(customerMerchandises);
-
-            const merchandiseNames: string[] = merchandises
-              .filter((merchandise) =>
-                customerMerchandises.includes(merchandise.id)
-              )
-              .map((merchandise) => merchandise.merchandise_name);
-
-            // console.log("merchandiseNamesだよ");
-            // console.log(merchandiseNames);
-
-            // 顧客に関連する髪型の情報を取得
-            const customerHairstyles: number[] = hairstyle_customers
-              .filter((hairstyle) => hairstyle.customer_id === customer.id)
-              .map((hairstyle) => hairstyle.hairstyle_id);
-
-            // console.log("cusHair", customerHairstyles);
-
-            // console.log("hairstylesだよ", hairstyles);
-
-            const hairstyleNames: string[] = hairstyles
-              .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
-              .map((hairstyle) => hairstyle.hairstyle_name);
-
-            // console.log("hairstyleNamesだよ");
-
-            // console.log(hairstyleNames);
-
-            // 顧客に関連する担当者の情報を取得
-            //user_idを配列にしている
-            const customerUsers: number[] = customer_users
-              .filter((user) => user.customer_id === customer.id)
-              .map((user) => user.user_id);
-
-            // console.log("customerUsers", customerUsers);
-
-            // console.log("users前", users);
-
-            const userNames: string[] = Array.isArray(users)
-              ? users
-                  .filter((user) => customerUsers.includes(user.id))
-                  .map((user) => user.name)
-              : [Object(users).name];
-
-            // console.log("userNames", userNames);
-
-            // 顧客情報を返す
-            return {
-              id: customer.id,
-              customer_name: customer.customer_name,
-              phone_number: customer.phone_number,
-              remarks: customer.remarks,
-              course: courseNames,
-              option: optionNames,
-              merchandise: merchandiseNames,
-              hairstyle: hairstyleNames,
-              names: userNames,
-            };
-          }),
-        ]
-      : [];
-
-  // console.log("nodes", nodes);
-
-  // 顧客名のみを取得
-  const customersNames: string[] = isCustomer
-    ? nodes.map((node) => node.customer_name)
-    : [];
-
-  //編集時に顧客名を検索し、存在していればtrueを返す
-  const searchCustomer: boolean =
-    isCustomer &&
-    whoIsEvent === "編集" &&
-    customersNames.includes(selectedEvent.title)
-      ? true
-      : false;
-
-  // console.log("searchCustomerだよ", searchCustomer);
+  const [isCustomer, setIsCustomer] = useState<boolean>(
+    whoIsEvent === "編集"
+      ? selectedEvent.extendedProps.isCustomer
+      : isCustomerProp
+  );
+  console.log("isCustomerです", isCustomer);
+  console.log("selectedEventです", selectedEvent);
 
   //新規予約の場合、初期値として最初の顧客情報を取得
   const initialCustomer = isCustomer && nodes[0] ? nodes[0] : null;
@@ -287,76 +122,77 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
   //trueは新規顧客、falseは既存顧客 顧客予約の場合はfalse　最初は既存顧客を表示
   const [newCustomer, setNewCustomer] = useState<boolean>(
-    initialCustomer === null ? true : isCustomer ? false : true
+    whoIsEvent === "編集" && isCustomer
+      ? false
+      : initialCustomer === null && isCustomer && whoIsEvent !== "編集"
+      ? true
+      : false
   );
 
   // 既存顧客で新規予約の場合、初期値として最初の顧客情報を取得
   const [customerId, setCustomerId] = useState<number>(
-    initialCustomer === null
-      ? 0
-      : !newCustomer && initialCustomer.id
+    whoIsEvent == "編集" && isCustomer
+      ? selectedEvent.extendedProps.customer_id
+      : !newCustomer && isCustomer && initialCustomer.id
       ? initialCustomer.id
       : 0
   );
 
-  //
   const [customerName, setCustomerName] = useState<string>(
     //新規顧客、新規予約の場合は初期値としてnode[0]の顧客名を設定
-    isCustomer && initialCustomer === null
-      ? ""
-      : !newCustomer && whoIsEvent !== "編集"
-      ? initialCustomer.customer_name
-      : //編集の場合は選択したイベントの顧客名を設定
-      "" || (whoIsEvent === "編集" && searchCustomer)
+    whoIsEvent === "編集" && isCustomer
       ? selectedEvent.title
-      : //終日予約で顧客名がない場合は空文字を設定
-      "" || (selectedEvent.allDay && !searchCustomer)
-      ? ""
+      : !newCustomer && isCustomer && initialCustomer
+      ? initialCustomer.customer_name
       : ""
   );
 
   // console.log("customerNameだよ", customerName);
 
   const [phone_number, setPhoneNumber] = useState<string>(
-    initialCustomer === null
-      ? ""
-      : !newCustomer
+    whoIsEvent === "編集" && isCustomer
+      ? selectedEvent.extendedProps.phone_number
+      : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.phone_number
       : ""
   );
 
   const [remarks, setRemarks] = useState<string>(
-    initialCustomer === null ? "" : !newCustomer ? initialCustomer.remarks : ""
+    whoIsEvent === "編集" && isCustomer
+      ? selectedEvent.extendedProps.remarks
+      : !newCustomer && isCustomer && initialCustomer
+      ? initialCustomer.remarks
+      : ""
   );
 
   const [courseNames, setCourseNames] = useState(
-    initialCustomer === null && courses.length === 0
-      ? []
-      : !newCustomer
+    whoIsEvent === "編集" && isCustomer
+      ? selectedEvent.extendedProps.course
+      : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.course
       : []
   );
 
   const [optionNames, setOptionNames] = useState(
-    initialCustomer === null && options.length === 0
-      ? []
-      : !newCustomer
+    whoIsEvent === "編集" && isCustomer
+      ? selectedEvent.extendedProps.option
+      : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.option
       : []
   );
 
   const [merchandiseNames, setMerchandiseNames] = useState(
-    initialCustomer === null && merchandises.length === 0
-      ? []
-      : !newCustomer
+    whoIsEvent === "編集" && isCustomer
+      ? selectedEvent.extendedProps.merchandise
+      : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.merchandise
       : []
   );
 
   const [hairstyleNames, setHairstyleNames] = useState(
-    initialCustomer === null && hairstyles.length === 0
-      ? []
-      : !newCustomer
+    whoIsEvent === "編集" && isCustomer
+      ? selectedEvent.extendedProps.hairstyle
+      : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.hairstyle
       : []
   );
@@ -372,8 +208,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? [Object(users).name]
       : !newCustomer && Array.isArray(users) && users.length === 1
       ? [users[0].name]
-      : !newCustomer && Array.isArray(users) && users.length > 1
-      ? initialCustomer.names
+      : !newCustomer &&
+        isCustomer &&
+        Array.isArray(users) &&
+        users.length > 1 &&
+        whoIsEvent === "編集"
+      ? selectedEvent.extendedProps.names
       : []
   );
 
@@ -410,28 +250,17 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   //顧客名を変更する際に、顧客情報を取得
-  useEffect(() => {
-    if (whoIsEvent === "編集") {
-      console.log("selectedEvent.title", selectedEvent.title);
-      setSid(selectedEvent.id);
-      changeCustomerState(selectedEvent.title);
-    } else {
-      return;
-    }
-  }, [
-    showModal,
-    customers,
-    users,
-    courses,
-    options,
-    merchandises,
-    hairstyles,
-    course_customers,
-    option_customers,
-    merchandise_customers,
-    hairstyle_customers,
-    customer_users,
-  ]);
+  // useEffect(() => {
+  //   if (whoIsEvent === "編集" && !firstRender) {
+  //     console.log("nodes", nodes);
+  //     console.log("selectedEvent.title", selectedEvent.title);
+  //     setSid(selectedEvent.id);
+  //     changeCustomerState(selectedEvent.title);
+  //   } else {
+  //     setFirstRender(false);
+  //     return;
+  //   }
+  // }, [showModal]);
 
   const changeCustomerState = (newValue) => {
     //編集時に選択した顧客情報を取得
@@ -439,10 +268,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       (node) => node.customer_name === newValue
     );
 
-    console.log("useCustomerStateだよ");
-    console.log(useCustomerState);
-
-    if (!useCustomerState) {
+    if (!isCustomer) {
       setIsCustomer(false);
       setTitle(newValue);
       setNewReservation(false);
@@ -711,363 +537,416 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
           {/* モーダルのタイトル */}
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            <div className="flex justify-center items-center  text-4xl">
-              予約内容
-            </div>
-
-            <form onSubmit={handleSubmit}>
-              <div className="pt-6 flex justify-center items-center ml-4 mr-4 text-3xl">
-                <h2>{allDay === 1 ? "終日" : "時間指定"}</h2>
+            <>
+              <div className="flex justify-center items-center  text-4xl">
+                予約内容
               </div>
 
-              <div className="flex justify-center items-center  gap-4">
-                <div className="flex justify-center items-center pt-6">
-                  <span className="mr-2 text-right mb-6 ">開始時間:</span>
-                  <DateTimeRangePicker
-                    value={startTime}
-                    changer={startTimeChange}
-                    isAllDay={allDay === 1 ? true : false}
-                    role={permission}
-                  />
+              <form onSubmit={handleSubmit}>
+                <div className="pt-6 flex justify-center items-center ml-4 mr-4 text-3xl">
+                  <h2>{allDay === 1 ? "終日" : "時間指定"}</h2>
                 </div>
-                <div className="flex justify-center items-center pt-6 ">
-                  <span className=" text-right mb-6  mr-2">終了時間:</span>
-                  <DateTimeRangePicker
-                    value={endTime}
-                    changer={endTimeChange}
-                    isAllDay={allDay === 1 ? true : false}
-                    role={permission}
-                  />
-                </div>
-              </div>
 
-              <div className="pt-4 flex justify-center items-center ml-4 mr-4 ">
-                <div className="flex justify-center items-center ">
-                  {whoIsEvent === "編集" && (
-                    <div
-                      className={`flex justify-center items-center ml-4 ${
-                        newReservation ? "opacity-40" : ""
-                      } `}
-                    >
-                      <ControlledCheckbox
-                        label="現在の予約を編集"
-                        checked={newReservation ? false : true}
-                        onChanger={(newValue) => {
-                          setNewReservation(newValue ? false : true);
-                        }}
-                        role={permission}
-                      />
-                    </div>
-                  )}
-
-                  {whoIsEvent === "編集" && (
-                    <div
-                      className={` flex justify-center items-center ml-4 ${
-                        !newReservation ? "opacity-40" : ""
-                      } `}
-                    >
-                      <ControlledCheckbox
-                        label="選択中の時間に新規予約を追加"
-                        checked={newReservation ? true : false}
-                        onChanger={(newValue) => {
-                          setNewReservation(newValue ? true : false);
-                        }}
-                        role={permission}
-                      />
-                    </div>
-                  )}
-
-                  {/* 顧客の場合 */}
-                  {isCustomer && initialCustomer && (
-                    <div
-                      className={` flex justify-center items-center ml-4 ${
-                        newCustomer || initialCustomer === null
-                          ? ""
-                          : "opacity-40"
-                      } `}
-                    >
-                      <ControlledCheckbox
-                        label={initialCustomer === null ? "" : "新規顧客:"}
-                        checked={newCustomer ? true : false}
-                        onChanger={(newValue) => {
-                          setNewCustomer(newValue ? true : false);
-                          if (newValue === true) {
-                            clearStates();
-                          } else if (newValue === false) {
-                            setCustomerName(initialCustomer.customer_name);
-                            changeCustomerState(initialCustomer.customer_name);
-                          }
-                        }}
-                        // type={initialCustomer === null ? "disabled" : ""}
-                        role={permission}
-                      />
-                    </div>
-                  )}
-                  {isCustomer && initialCustomer && (
-                    <div
-                      className={` flex justify-center items-center ml-4 ${
-                        !newCustomer ? "" : "opacity-40"
-                      } `}
-                    >
-                      <ControlledCheckbox
-                        label="既存顧客:"
-                        checked={newCustomer ? false : true}
-                        onChanger={(newValue) => {
-                          setNewCustomer(newValue ? false : true);
-                          if (newValue === false) {
-                            clearStates();
-                          } else if (newValue === true) {
-                            setCustomerName(initialCustomer.customer_name);
-                            changeCustomerState(initialCustomer.customer_name);
-                          }
-                        }}
-                        role={permission}
-                        // type={whoIsEvent === "編集" ? "disabled" : ""}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {!isCustomer && (
-                <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                  <div className="w-32 mr-2 text-right mb-6 ">タイトル:</div>
-                  <BasicTextField
-                    id={uniqueId}
-                    placeholder="タイトル"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    role={permission}
-                    decideLength={50}
-                    onValidationChange={(newValue) =>
-                      setTitleValidate(newValue)
-                    }
-                  />
-                </div>
-              )}
-
-              {!newCustomer && isCustomer && (
-                <div className="pt-4">
-                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">顧客名:</div>
-                    <SingleCheckBox
-                      onChange={(newValue) => {
-                        changeCustomerState(newValue);
-                      }}
-                      nodeId={customerId + uniqueId}
-                      getOptions={customersNames}
-                      value={customerName}
+                <div className="flex justify-center items-center  gap-4">
+                  <div className="flex justify-center items-center pt-6">
+                    <span className="mr-2 text-right mb-6 ">開始時間:</span>
+                    <DateTimeRangePicker
+                      value={startTime}
+                      changer={startTimeChange}
+                      isAllDay={allDay === 1 ? true : false}
                       role={permission}
-                      onValidationChange={(newValue) =>
-                        setCustomerNameValidate(newValue)
-                      }
                     />
                   </div>
-                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                    <span className="w-32 mr-2 text-right mb-6 ">
-                      電話番号:
-                    </span>
-                    <BasicNumberField
-                      id={uniqueId}
-                      placeholder="電話番号"
-                      value={phone_number}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
+                  <div className="flex justify-center items-center pt-6 ">
+                    <span className=" text-right mb-6  mr-2">終了時間:</span>
+                    <DateTimeRangePicker
+                      value={endTime}
+                      changer={endTimeChange}
+                      isAllDay={allDay === 1 ? true : false}
                       role={permission}
-                      required={false}
                     />
                   </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">備考:</div>
+                </div>
+
+                <div className="pt-4 flex justify-center items-center ml-4 mr-4 ">
+                  <div className="flex justify-center items-center ">
+                    {whoIsEvent === "編集" && (
+                      <div
+                        className={`flex justify-center items-center ml-4 ${
+                          newReservation ? "opacity-40" : ""
+                        } `}
+                      >
+                        <ControlledCheckbox
+                          label="現在の予約を編集"
+                          checked={newReservation ? false : true}
+                          onChanger={(newValue) => {
+                            setNewReservation(newValue ? false : true);
+                            if (newValue === false) {
+                              clearStates();
+                            } else {
+                              setCustomerName(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                              changeCustomerState(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                            }
+                          }}
+                          role={permission}
+                        />
+                      </div>
+                    )}
+
+                    {whoIsEvent === "編集" && (
+                      <div
+                        className={` flex justify-center items-center ml-4 ${
+                          !newReservation ? "opacity-40" : ""
+                        } `}
+                      >
+                        <ControlledCheckbox
+                          label="選択中の時間に新規予約を追加"
+                          checked={newReservation ? true : false}
+                          onChanger={(newValue) => {
+                            setNewReservation(newValue ? true : false);
+                            if (newValue === true) {
+                              clearStates();
+                            } else {
+                              setCustomerName(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                              changeCustomerState(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                            }
+                          }}
+                          role={permission}
+                        />
+                      </div>
+                    )}
+
+                    {/* 顧客の場合 */}
+                    {isCustomer && initialCustomer && (
+                      <div
+                        className={` flex justify-center items-center ml-4 ${
+                          newCustomer || initialCustomer === null
+                            ? ""
+                            : "opacity-40"
+                        } `}
+                      >
+                        <ControlledCheckbox
+                          label={initialCustomer === null ? "" : "新規顧客:"}
+                          checked={newCustomer ? true : false}
+                          onChanger={(newValue) => {
+                            setNewCustomer(newValue ? true : false);
+                            if (newValue === true) {
+                              clearStates();
+                            } else {
+                              setCustomerName(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                              changeCustomerState(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                            }
+                          }}
+                          // type={initialCustomer === null ? "disabled" : ""}
+                          role={permission}
+                        />
+                      </div>
+                    )}
+                    {isCustomer && initialCustomer && (
+                      <div
+                        className={` flex justify-center items-center ml-4 ${
+                          !newCustomer ? "" : "opacity-40"
+                        } `}
+                      >
+                        <ControlledCheckbox
+                          label="既存顧客:"
+                          checked={newCustomer ? false : true}
+                          onChanger={(newValue) => {
+                            setNewCustomer(newValue ? false : true);
+                            if (newValue === true) {
+                              setCustomerName(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                              changeCustomerState(
+                                whoIsEvent === "編集"
+                                  ? selectedEvent.title
+                                  : initialCustomer.customer_name
+                              );
+                            } else {
+                              clearStates();
+                            }
+                          }}
+                          role={permission}
+                          // type={whoIsEvent === "編集" ? "disabled" : ""}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {!isCustomer && (
+                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                    <div className="w-32 mr-2 text-right mb-6 ">タイトル:</div>
                     <BasicTextField
                       id={uniqueId}
-                      placeholder="備考"
-                      value={remarks}
-                      onChange={(e) => setRemarks(e.target.value)}
+                      placeholder="タイトル"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                       role={permission}
-                      decideLength={150}
-                      multiline={true}
-                      rows={4}
-                      required={false}
+                      decideLength={50}
+                      onValidationChange={(newValue) =>
+                        setTitleValidate(newValue)
+                      }
                     />
                   </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">コース名:</div>
-                    <MultiCheckbox
-                      nodesProp="course"
-                      optionName={courseNames}
-                      onChanger={handleCourseChange}
-                      getOptions={courses}
-                      role={permission}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">
-                      オプション名:
+                )}
+
+                {!newCustomer && isCustomer && (
+                  <div className="pt-4">
+                    <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">顧客名:</div>
+                      <SingleCheckBox
+                        onChange={(newValue) => {
+                          changeCustomerState(newValue);
+                        }}
+                        nodeId={customerId + uniqueId}
+                        getOptions={customerNames}
+                        value={customerName}
+                        role={permission}
+                        onValidationChange={(newValue) =>
+                          setCustomerNameValidate(newValue)
+                        }
+                      />
                     </div>
-                    <MultiCheckbox
-                      nodesProp="option"
-                      optionName={optionNames}
-                      onChanger={handleOptionChange}
-                      getOptions={options}
-                      role={permission}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">商品名:</div>
-                    <MultiCheckbox
-                      nodesProp="merchandise"
-                      optionName={merchandiseNames}
-                      onChanger={handleMerchandiseChange}
-                      getOptions={merchandises}
-                      role={permission}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">髪型名:</div>
-                    <MultiCheckbox
-                      nodesProp="hairstyle"
-                      optionName={hairstyleNames}
-                      onChanger={handleHairstyleChange}
-                      getOptions={hairstyles}
-                      role={permission}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">担当者名:</div>
-                    <MultiCheckbox
-                      nodesProp="names"
-                      optionName={userNames}
-                      onChanger={handleUserChange}
-                      getOptions={users}
-                      role={permission}
-                      onValidationChange={(newValue) =>
-                        setUsernameValidate(newValue)
-                      }
-                      required={true}
-                      error={true}
-                    />
-                  </div>
-                </div>
-              )}
-              {newCustomer && isCustomer && (
-                <div className="w-full">
-                  <div className="pt-4 flex justify-center items-center ml-4 mr-4 ">
-                    <span className="w-32 text-right mb-6  mr-2 ">顧客名:</span>
-                    <BasicTextField
-                      id={uniqueId}
-                      placeholder="顧客名"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      role={permission}
-                      onValidationChange={(newValue) =>
-                        setCustomerNameValidate(newValue)
-                      }
-                    />
-                  </div>
-
-                  <div className="pt-4 flex justify-center items-center ml-4 mr-4">
-                    <span className="w-32 text-right mb-6  mr-2">
-                      電話番号:
-                    </span>
-                    <BasicNumberField
-                      id={uniqueId}
-                      placeholder="電話番号"
-                      value={phone_number}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      role={permission}
-                      required={false}
-                    />
-                  </div>
-
-                  <div className="pt-6 flex items-center ml-4 mr-4">
-                    <span className="w-32 text-right mb-6  mr-2">備考:</span>
-                    <BasicTextField
-                      id={uniqueId}
-                      placeholder="備考"
-                      value={remarks}
-                      onChange={(e) => setRemarks(e.target.value)}
-                      role={permission}
-                      decideLength={150}
-                      multiline={true}
-                      rows={4}
-                      required={false}
-                    />
-                  </div>
-
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6  ">コース:</div>
-                    <MultiCheckbox
-                      nodesProp="course"
-                      optionName={courseNames}
-                      onChanger={handleCourseChange}
-                      getOptions={courses}
-                      role={permission}
-                      required={false}
-                    />
-                  </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">
-                      オプション:
+                    <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                      <span className="w-32 mr-2 text-right mb-6 ">
+                        電話番号:
+                      </span>
+                      <BasicNumberField
+                        id={uniqueId}
+                        placeholder="電話番号"
+                        value={phone_number}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        role={permission}
+                        required={false}
+                      />
                     </div>
-                    <MultiCheckbox
-                      nodesProp="option"
-                      optionName={optionNames}
-                      onChanger={handleOptionChange}
-                      getOptions={options}
-                      role={permission}
-                      required={false}
-                    />
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">備考:</div>
+                      <BasicTextField
+                        id={uniqueId}
+                        placeholder="備考"
+                        value={remarks}
+                        onChange={(e) => setRemarks(e.target.value)}
+                        role={permission}
+                        decideLength={150}
+                        multiline={true}
+                        rows={4}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">
+                        コース名:
+                      </div>
+                      <MultiCheckbox
+                        nodesProp="course"
+                        optionName={courseNames}
+                        onChanger={handleCourseChange}
+                        getOptions={courses}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">
+                        オプション名:
+                      </div>
+                      <MultiCheckbox
+                        nodesProp="option"
+                        optionName={optionNames}
+                        onChanger={handleOptionChange}
+                        getOptions={options}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">商品名:</div>
+                      <MultiCheckbox
+                        nodesProp="merchandise"
+                        optionName={merchandiseNames}
+                        onChanger={handleMerchandiseChange}
+                        getOptions={merchandises}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">髪型名:</div>
+                      <MultiCheckbox
+                        nodesProp="hairstyle"
+                        optionName={hairstyleNames}
+                        onChanger={handleHairstyleChange}
+                        getOptions={hairstyles}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">
+                        担当者名:
+                      </div>
+                      <MultiCheckbox
+                        nodesProp="names"
+                        optionName={userNames}
+                        onChanger={handleUserChange}
+                        getOptions={users}
+                        role={permission}
+                        onValidationChange={(newValue) =>
+                          setUsernameValidate(newValue)
+                        }
+                        required={true}
+                        error={true}
+                      />
+                    </div>
                   </div>
+                )}
+                {newCustomer && isCustomer && (
+                  <div className="w-full">
+                    <div className="pt-4 flex justify-center items-center ml-4 mr-4 ">
+                      <span className="w-32 text-right mb-6  mr-2 ">
+                        顧客名:
+                      </span>
+                      <BasicTextField
+                        id={uniqueId}
+                        placeholder="顧客名"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        role={permission}
+                        onValidationChange={(newValue) =>
+                          setCustomerNameValidate(newValue)
+                        }
+                      />
+                    </div>
 
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6">商品:</div>
-                    <MultiCheckbox
-                      nodesProp="merchandise"
-                      optionName={merchandiseNames}
-                      onChanger={handleMerchandiseChange}
-                      getOptions={merchandises}
-                      role={permission}
-                      required={false}
-                    />
+                    <div className="pt-4 flex justify-center items-center ml-4 mr-4">
+                      <span className="w-32 text-right mb-6  mr-2">
+                        電話番号:
+                      </span>
+                      <BasicNumberField
+                        id={uniqueId}
+                        placeholder="電話番号"
+                        value={phone_number}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+
+                    <div className="pt-6 flex items-center ml-4 mr-4">
+                      <span className="w-32 text-right mb-6  mr-2">備考:</span>
+                      <BasicTextField
+                        id={uniqueId}
+                        placeholder="備考"
+                        value={remarks}
+                        onChange={(e) => setRemarks(e.target.value)}
+                        role={permission}
+                        decideLength={150}
+                        multiline={true}
+                        rows={4}
+                        required={false}
+                      />
+                    </div>
+
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6  ">コース:</div>
+                      <MultiCheckbox
+                        nodesProp="course"
+                        optionName={courseNames}
+                        onChanger={handleCourseChange}
+                        getOptions={courses}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">
+                        オプション:
+                      </div>
+                      <MultiCheckbox
+                        nodesProp="option"
+                        optionName={optionNames}
+                        onChanger={handleOptionChange}
+                        getOptions={options}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6">商品:</div>
+                      <MultiCheckbox
+                        nodesProp="merchandise"
+                        optionName={merchandiseNames}
+                        onChanger={handleMerchandiseChange}
+                        getOptions={merchandises}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">髪型:</div>
+                      <MultiCheckbox
+                        nodesProp="hairstyle"
+                        optionName={hairstyleNames}
+                        onChanger={handleHairstyleChange}
+                        getOptions={hairstyles}
+                        role={permission}
+                        required={false}
+                      />
+                    </div>
+                    <div className="pt-6 flex justify-center items-center ml-4 mr-4">
+                      <div className="w-32 mr-2 text-right mb-6 ">担当者:</div>
+                      <MultiCheckbox
+                        nodesProp="names"
+                        optionName={userNames}
+                        onChanger={handleUserChange}
+                        getOptions={users}
+                        role={permission}
+                        onValidationChange={(newValue) =>
+                          setUsernameValidate(newValue)
+                        }
+                        required={true}
+                        error={true}
+                      />
+                    </div>
                   </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">髪型:</div>
-                    <MultiCheckbox
-                      nodesProp="hairstyle"
-                      optionName={hairstyleNames}
-                      onChanger={handleHairstyleChange}
-                      getOptions={hairstyles}
-                      role={permission}
-                      required={false}
-                    />
+                )}
+                {(permission === "オーナー" ||
+                  permission === "マネージャー") && (
+                  <div className="flex mt-6 justify-end items-center mr-2">
+                    <PrimaryButton value={!newReservation ? "更新" : "作成"} />
                   </div>
-                  <div className="pt-6 flex justify-center items-center ml-4 mr-4">
-                    <div className="w-32 mr-2 text-right mb-6 ">担当者:</div>
-                    <MultiCheckbox
-                      nodesProp="names"
-                      optionName={userNames}
-                      onChanger={handleUserChange}
-                      getOptions={users}
-                      role={permission}
-                      onValidationChange={(newValue) =>
-                        setUsernameValidate(newValue)
-                      }
-                      required={true}
-                      error={true}
-                    />
-                  </div>
-                </div>
-              )}
-              {(permission === "オーナー" || permission === "マネージャー") && (
-                <div className="flex mt-6 justify-end items-center mr-2">
-                  <PrimaryButton value={!newReservation ? "更新" : "作成"} />
-                </div>
-              )}
-            </form>
+                )}
+              </form>
+            </>
           </Typography>
           {/* モーダルの内容 */}
         </Box>
