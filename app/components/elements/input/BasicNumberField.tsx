@@ -11,6 +11,7 @@ interface BasicNumberFieldProps {
   role?: string;
   maxNumber?: number;
   required?: boolean;
+  format: boolean; // カンマ区切りにするかどうか
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onValidationChange?: (isValid: boolean) => void;
 }
@@ -23,6 +24,7 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
   role,
   maxNumber = 4294967295,
   required = true,
+  format = false,
   onChange,
   onValidationChange,
 }) => {
@@ -43,12 +45,19 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
     });
     if (!required) {
       return;
-    } else if (required && (newValue === "" || newValue === "0")) {
+    } else if (
+      required &&
+      (newValue === "" ||
+        newValue === "0" ||
+        newValue === "00" ||
+        newValue === null)
+    ) {
       onValidationChange(false);
     } else {
       onValidationChange(true);
     }
   };
+
   const theme = createTheme({
     palette: {
       error: {
@@ -61,6 +70,13 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
     },
   });
 
+  const formatValue = (value: string | null) => {
+    if (value === null || value === "0" || value === "" || value === "00")
+      return "0";
+    const numericValue = parseInt(value, 10);
+    return new Intl.NumberFormat("ja-JP").format(numericValue);
+  };
+
   return (
     <Box
       sx={{
@@ -70,14 +86,17 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
     >
       <TextField
         id={`${placeholder}_${id}_number`}
-        type="number"
+        type="text" // テキストフィールドに変更
         label={placeholder}
         onChange={handleChange}
-        value={value === null ? "0" : value}
+        value={format ? formatValue(value) : value || "0"}
         variant="outlined"
         disabled={disabled || role === "スタッフ"}
-        inputProps={{ max: maxNumber, required, pattern: "\\d*" }}
-        error={(!value || value === "0") && required} // 必須項目で空の場合エラー表示
+        inputProps={{ max: maxNumber, required: required }}
+        error={
+          (!value || value === "0" || value === "00" || value === null) &&
+          required
+        } // 必須項目で空の場合エラー表示
         helperText={
           required
             ? "必須項目です。半角数字でお願いします。"
@@ -87,7 +106,8 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
           "& .MuiInputBase-input": {
             fontWeight: "bold",
             color: `${
-              (value === "0" || !value) && required
+              (!value || value === "0" || value === "00" || value === null) &&
+              required
                 ? theme.palette.error.light
                 : "black"
             }`,
@@ -95,14 +115,16 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
           "& .MuiInputLabel-root": {
             fontWeight: "bold",
             color: `${
-              (value === "0" || !value) && required
+              (!value || value === "0" || value === "00" || value === null) &&
+              required
                 ? theme.palette.error.main
                 : theme.palette.primary.main
             }`,
           },
           "& .MuiFormHelperText-root": {
             color: `${
-              (value === "0" || !value) && required
+              (!value || value === "0" || value === "00" || value === null) &&
+              required
                 ? theme.palette.error.main
                 : theme.palette.primary.main
             }`,

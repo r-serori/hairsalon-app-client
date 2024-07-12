@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import {
   Attendance_timeState,
   selectGetAttendanceTimes,
-} from "../../../store/attendances/attendance_times/attendance_timesSlice";
+} from "../../../store/attendance_times/attendance_timesSlice";
 import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
 import BasicAlerts from "../../../components/elements/alert/Alert";

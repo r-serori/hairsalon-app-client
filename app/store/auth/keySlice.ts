@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import RootState from "../../redux/reducers/rootReducer";
 import { getKeyApi } from "../../services/auth/key";
+import { handleErrorResponse, handleCatchError } from "../errorHamdler";
 
 export const getKey = createAsyncThunk(
   "key/getKey",
@@ -8,44 +9,9 @@ export const getKey = createAsyncThunk(
     try {
       const response = await getKeyApi.getKey();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );

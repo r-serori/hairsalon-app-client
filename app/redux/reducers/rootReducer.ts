@@ -1,6 +1,6 @@
 // reducers/rootReducer.ts
 import { combineReducers } from "@reduxjs/toolkit";
-import attendance_timeReducer from "../../store/attendances/attendance_times/attendance_timesSlice";
+import attendance_timeReducer from "../../store/attendance_times/attendance_timesSlice";
 import courseReducer from "../../store/courses/courseSlice";
 import optionReducer from "../../store/options/optionSlice";
 import merchandiseReducer from "../../store/merchandises/merchandiseSlice";
@@ -14,9 +14,9 @@ import customer_usersReducer from "../../store/middleTable/customers/customer_us
 import scheduleReducer from "../../store/schedules/scheduleSlice";
 import stockReducer from "../../store/stocks/stockSlice";
 import stock_categoryReducer from "../../store/stocks/stock_categories/stock_categorySlice";
-import daily_salesReducer from "../../store/sales/daily_sales/daily_saleSlice";
-import monthly_salesReducer from "../../store/sales/monthly_sales/monthly_saleSlice";
-import yearly_salesReducer from "../../store/sales/yearly_sales/yearly_saleSlice";
+import daily_salesReducer from "../../store/daily_sales/daily_saleSlice";
+import monthly_salesReducer from "../../store/monthly_sales/monthly_saleSlice";
+import yearly_salesReducer from "../../store/yearly_sales/yearly_saleSlice";
 import authReducer from "../../store/auth/userSlice";
 import ownerReducer from "../../store/auth/ownerSlice";
 import staffReducer from "../../store/auth/staffSlice";

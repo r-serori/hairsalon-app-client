@@ -111,6 +111,10 @@ const BasicModal: React.FC<BasicModalProps> = ({
 
   const handleCloseAttendance = () => setOpenAttendance(false);
 
+  const formatPrice = (value: number) => {
+    return new Intl.NumberFormat("ja-JP").format(value);
+  };
+
   return (
     <>
       {link === "/attendanceTimeShots" ||
@@ -132,7 +136,9 @@ const BasicModal: React.FC<BasicModalProps> = ({
           dark:focus:ring-gray-800 font-bold overflow-y-auto"
         >
           <span className="max-w-60 max-h-16 min-w-28 min-h-8 px-2 whitespace-pre-wrap text-md font-bold ">
-            {editValue}
+            {type === "number" && NodesProp !== "phone_number"
+              ? formatPrice(editValue)
+              : editValue}
           </span>
         </Button>
       )}

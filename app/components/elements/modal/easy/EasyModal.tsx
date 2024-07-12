@@ -14,10 +14,10 @@ import timezone from "dayjs/plugin/timezone";
 import PrimaryButton from "../../button/PrimaryButton";
 import DeleteButton from "../../button/DeleteButton";
 import { selectGetSchedules } from "../../../../store/schedules/scheduleSlice";
-import { selectGetAttendanceTimes } from "../../../../store/attendances/attendance_times/attendance_timesSlice";
-import { selectGetDaily_sales } from "../../../../store/sales/daily_sales/daily_saleSlice";
-import { selectGetMonthly_sales } from "../../../../store/sales/monthly_sales/monthly_saleSlice";
-import { selectGetYearly_sales } from "../../../../store/sales/yearly_sales/yearly_saleSlice";
+import { selectGetAttendanceTimes } from "../../../../store/attendance_times/attendance_timesSlice";
+import { selectGetDaily_sales } from "../../../../store/daily_sales/daily_saleSlice";
+import { selectGetMonthly_sales } from "../../../../store/monthly_sales/monthly_saleSlice";
+import { selectGetYearly_sales } from "../../../../store/yearly_sales/yearly_saleSlice";
 
 const style = {
   position: "absolute" as "absolute",

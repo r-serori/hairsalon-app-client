@@ -11,6 +11,7 @@ import CustomerForm from "../../../../components/elements/form/customers/Custome
 import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import {
   course_customersStore,
+  customerError,
   customerStatus,
   customer_usersStore,
   customersStore,
@@ -20,14 +21,14 @@ import {
 } from "../../../../components/Hooks/selector";
 import { userKey } from "../../../../components/Hooks/authSelector";
 import RouterButton from "../../../../components/elements/button/RouterButton";
+import BasicAlerts from "../../../../components/elements/alert/Alert";
 
 const customersEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const cStatus = useSelector(customerStatus);
-
-  const key: string | null = useSelector(userKey);
+  const cStatus: string = useSelector(customerStatus);
+  const cError: string = useSelector(customerError);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -113,14 +114,23 @@ const customersEdit: React.FC = () => {
     user_id: number[];
   }) => {
     try {
-      await dispatch(updateCustomer(formData) as any);
+      const response = await dispatch(updateCustomer(formData) as any);
+
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("Success", response);
+        router.push("/customers");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.error(error);
     }
-    router.push("/customers");
   };
   return (
     <div className="min-h-full ">
+      {cError && (
+        <BasicAlerts type="error" message={cError} space={1} padding={1} />
+      )}
       <div className="my-4 ml-4">
         <RouterButton link={"/customers"} value="顧客画面に戻る" />
       </div>

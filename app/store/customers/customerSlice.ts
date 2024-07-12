@@ -7,7 +7,8 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../store/schedules/scheduleSlice";
-import { s } from "@fullcalendar/core/internal-common";
+import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { stat } from "fs";
 
 export const getCustomer = createAsyncThunk(
   "customer/getCustomer",
@@ -15,44 +16,9 @@ export const getCustomer = createAsyncThunk(
     try {
       const response: any = await customerApi.fetchAllCustomers();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -76,71 +42,12 @@ export const createCustomer = createAsyncThunk(
     try {
       const response: any = await customerApi.createCustomer(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
-
-// export const getCustomerById = createAsyncThunk(
-//   "customer/getCustomerById",
-//   async (id: number, { rejectWithValue }) => {
-//     const response: any = await customerApi.fetchCustomerById(id);
-//     if (response.resStatus === "error") {
-//       //エラー時の処理
-//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//       return rejectWithValue(response);
-//     } else if (response.data.resStatus === "error") {
-//       //エラー時の処理
-//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//       return rejectWithValue(response.data);
-//     } else if (response.resStatus === "success") {
-//       //成功時の処理
-//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//       return response;
-//     } else if (response.data.resStatus === "success") {
-//       //成功時の処理
-//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//       return response.data;
-//     }
-//   }
-// );
 
 export const updateCustomer = createAsyncThunk(
   "customer/updateCustomer",
@@ -161,44 +68,9 @@ export const updateCustomer = createAsyncThunk(
     try {
       const response: any = await customerApi.updateCustomer(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -209,44 +81,9 @@ export const deleteCustomer = createAsyncThunk(
     try {
       const response: any = await customerApi.deleteCustomer(id);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -286,7 +123,7 @@ const customerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCustomer.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -310,7 +147,7 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(createCustomer.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -326,25 +163,8 @@ const customerSlice = createSlice({
       state.error = (action.payload as any).message;
     });
 
-    // builder.addCase(getCustomerById.pending, (state) => {
-    //   state.status = "success";
-    //   state.message = null;
-    //   state.error = null;
-    // });
-    // builder.addCase(getCustomerById.fulfilled, (state, action) => {
-    //   state.status = "success";
-    //   state.customers = [...state.customers, action.payload.customer];
-    //   state.message = action.payload.message
-    //     ? action.payload.message
-    //     : "顧客情報を取得しました！";
-    // });
-    // builder.addCase(getCustomerById.rejected, (state, action) => {
-    //   state.status = "failed";
-    //   state.error = (action.payload as any).message;
-    // });
-
     builder.addCase(updateCustomer.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -370,7 +190,7 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(deleteCustomer.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -389,10 +209,12 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.status = "success";
       state.customers = action.payload.customers;
     });
 
     builder.addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
+      state.status = "success";
       state.customers =
         state.customers.length === 0
           ? [action.payload.customer]
@@ -402,6 +224,7 @@ const customerSlice = createSlice({
     builder.addCase(
       updateCustomerAndScheduleCreate.fulfilled,
       (state, action) => {
+        state.status = "success";
         state.customers = state.customers.map((customer) =>
           customer.id === action.payload.customer.id
             ? { ...customer, ...action.payload.customer }
@@ -411,6 +234,7 @@ const customerSlice = createSlice({
     );
 
     builder.addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
+      state.status = "success";
       state.customers = state.customers.map((customer) =>
         customer.id === action.payload.customer.id
           ? { ...customer, ...action.payload.customer }

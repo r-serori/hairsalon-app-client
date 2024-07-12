@@ -52,11 +52,14 @@ const resetPasswordPage: React.FC = () => {
   const handleResetPassword = async (formData: { password: string }) => {
     console.log(formData);
     try {
-      await dispatch(resetPassword(formData) as any);
-      router.push("/dashboard");
+      const response = await dispatch(resetPassword(formData) as any);
+      if (response.meta.requestStatus === "fulfilled") {
+        router.push("/dashboard");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.log("Error", error);
-      return;
     }
   };
 

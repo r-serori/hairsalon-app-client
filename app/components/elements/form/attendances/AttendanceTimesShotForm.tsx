@@ -10,7 +10,7 @@ import {
   updateEndTime,
   pleaseEditEndTime,
   Attendance_timeState,
-} from "../../../../store/attendances/attendance_times/attendance_timesSlice";
+} from "../../../../store/attendance_times/attendance_timesSlice";
 import { useDispatch } from "react-redux";
 import Webcam from "react-webcam";
 import { useRef } from "react";

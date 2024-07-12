@@ -27,8 +27,11 @@ const StaffRegisterPage: React.FC = () => {
     console.log(formData);
     try {
       const response: any = await dispatch(staffRegister(formData) as any);
-      console.log("Success", response);
-      router.push("/attendances");
+      if (response.meta.requestStatus === "fulfilled") {
+        router.push("/attendances");
+      } else {
+        throw new Error("e");
+      }
     } catch (error) {
       console.log("Error", error);
       return;

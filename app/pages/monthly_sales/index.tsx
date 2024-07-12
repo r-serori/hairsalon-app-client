@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import {
   Monthly_salesState,
   getMonthly_sales,
-} from "../../store/sales/monthly_sales/monthly_saleSlice";
+} from "../../store/monthly_sales/monthly_saleSlice";
 import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";

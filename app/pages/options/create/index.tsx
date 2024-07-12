@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { createOption, getOption } from "../../../store/options/optionSlice";
 import OptionForm from "../../../components/elements/form/options/OptionForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { optionStatus } from "../../../components/Hooks/selector";
+import { optionStatus, optionError } from "../../../components/Hooks/selector";
 import RouterButton from "../../../components/elements/button/RouterButton";
+import BasicAlerts from "../../../components/elements/alert/Alert";
 
 const optionCreate: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,6 +13,7 @@ const optionCreate: React.FC = () => {
   const router = useRouter();
 
   const oStatus: string = useSelector(optionStatus);
+  const oError: string = useSelector(optionError);
 
   const handleCreate = async (formData: {
     id: number;
@@ -20,14 +21,23 @@ const optionCreate: React.FC = () => {
     price: number;
   }) => {
     try {
-      await dispatch(createOption(formData) as any);
+      const response = await dispatch(createOption(formData) as any);
+
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("Success", response);
+        router.push("/options");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.error(error);
     }
-    router.push("/options"); // Redirect to the option list page after creating a option
   };
   return (
     <div className="min-h-full ">
+      {oError && (
+        <BasicAlerts type="error" message={oError} space={1} padding={1} />
+      )}
       <div className="ml-4 mt-4 ">
         <RouterButton link={"/options"} value="オプション画面に戻る" />
       </div>

@@ -8,10 +8,11 @@ import {
   createStartTime,
   createEndTime,
   selectGetAttendanceTimes,
-} from "../attendances/attendance_times/attendance_timesSlice";
+} from "../attendance_times/attendance_timesSlice";
 import { isLogout } from "./isLoginSlice";
 import { RoleState } from "../../components/Hooks/interface";
 import { emailVerify } from "../../services/auth/emailVerify";
+import { handleErrorResponse, handleCatchError } from "../errorHamdler";
 
 export const login = createAsyncThunk(
   "login/users",
@@ -25,50 +26,9 @@ export const login = createAsyncThunk(
     try {
       const response = await userApi.login(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        if (response.status === 299) {
-          // リダイレクト時の処理
-          console.log("response.redirect", response); // リダイレクトメッセージをコンソールに表示するなど、適切な処理を行う
-          return response.data;
-        }
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404 ||
-          response.status === 419
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500 || response.status === 503) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -90,34 +50,9 @@ export const register = createAsyncThunk(
     try {
       const response = await userApi.register(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({
-          message:
-            "予期しないエラーが発生しました！既にユーザー登録がお済みの場合は、ログインボタン画面からログインしてください！",
-        }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : {
-              message:
-                "予期しないエラーが発生しました！既にユーザー登録がお済みの場合は、ログインボタン画面からログインしてください！",
-            }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -138,44 +73,9 @@ export const staffRegister = createAsyncThunk(
     try {
       const response = await userApi.staffRegister(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -185,45 +85,9 @@ export const logout = createAsyncThunk(
   async (formData: {}, { rejectWithValue }) => {
     try {
       const response = await userApi.logout();
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404 ||
-          response.status === 419
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500 || response.status === 503) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -234,44 +98,9 @@ export const getAttendanceUsers = createAsyncThunk(
     try {
       const response = await userApi.getAttendanceUsers();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -282,44 +111,9 @@ export const getUsers = createAsyncThunk(
     try {
       const response = await userApi.getUsers();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -330,44 +124,9 @@ export const showUser = createAsyncThunk(
     try {
       const response = await userApi.showUser();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -384,44 +143,9 @@ export const updateUserPassword = createAsyncThunk(
     try {
       const response = await userApi.updateUserPassword(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -432,44 +156,9 @@ export const updateUserPermission = createAsyncThunk(
     try {
       const response = await userApi.updateUserPermission(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -487,44 +176,9 @@ export const updateUser = createAsyncThunk(
     try {
       const response = await userApi.updateUser(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -535,44 +189,9 @@ export const resetPassword = createAsyncThunk(
     try {
       const response = await userApi.resetPassword(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -583,44 +202,9 @@ export const deleteUser = createAsyncThunk(
     try {
       const response = await userApi.deleteUser(id);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -636,44 +220,9 @@ export const verifyEmail = createAsyncThunk(
   ) => {
     try {
       const response = await emailVerify(formData);
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -861,12 +410,9 @@ const usersSlice = createSlice({
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users.map((user) =>
-        user.id === action.payload.responseUser.id
-          ? { ...user, ...action.payload.responseUser }
-          : user
-      );
-      state.message = "ユーザー情報の更新に成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "ユーザー情報の更新に成功しました！";
     });
     builder.addCase(updateUser.rejected, (state, action) => {
       state.status = "failed";

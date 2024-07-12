@@ -54,7 +54,6 @@ const LoginPage: React.FC = () => {
 
       if (pushUser && response.payload.status !== 299) {
         dispatch(isLogin());
-        // 暗号化されたデータをローカルストレージに保存
         router.push("/dashboard");
       } else if (pushUser && response.payload.status === 299) {
         dispatch(isLogin());

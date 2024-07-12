@@ -1,21 +1,22 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { updateOption, getOption } from "../../../../store/options/optionSlice";
-import { RootState } from "../../../../redux/store";
+import { updateOption } from "../../../../store/options/optionSlice";
 import OptionForm from "../../../../components/elements/form/options/OptionForm";
-import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import {
   optionStatus,
   optionsStore,
+  optionError,
 } from "../../../../components/Hooks/selector";
 import RouterButton from "../../../../components/elements/button/RouterButton";
+import BasicAlerts from "../../../../components/elements/alert/Alert";
 
 const optionEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
   const oStatus: string = useSelector(optionStatus);
+  const oError: string = useSelector(optionError);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -33,14 +34,23 @@ const optionEdit: React.FC = () => {
     price: number;
   }) => {
     try {
-      await dispatch(updateOption(formData) as any);
+      const response = await dispatch(updateOption(formData) as any);
+
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("Success", response);
+        router.push("/options");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.error(error);
     }
-    router.push("/options"); // Redirect to the option list page after updating a option
   };
   return (
     <div className="min-h-full ">
+      {oError && (
+        <BasicAlerts type="error" message={oError} space={1} padding={1} />
+      )}
       <RouterButton link={"/options"} value="オプション画面に戻る" />
       {oStatus === "loading" ? (
         <p>Loading...</p>

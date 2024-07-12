@@ -3,6 +3,7 @@ import { courseApi } from "../../services/courses/api";
 import RootState from "../../redux/reducers/rootReducer";
 import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
+import { handleErrorResponse, handleCatchError } from "../errorHamdler";
 
 export const getCourse = createAsyncThunk(
   "courses/getCourse",
@@ -10,44 +11,9 @@ export const getCourse = createAsyncThunk(
     try {
       const response: any = await courseApi.fetchAllCourses();
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -65,72 +31,12 @@ export const createCourse = createAsyncThunk(
     try {
       const response: any = await courseApi.createCourse(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
-
-// export const getCourseById = createAsyncThunk(
-//   "courses/getCourseById",
-//   async (id: number, { rejectWithValue }) => {
-//     const response: any = await courseApi.fetchCourseById(id);
-
-//     if (response.resStatus === "error") {
-//       //エラー時の処理
-//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//       return rejectWithValue(response);
-//     } else if (response.data.resStatus === "error") {
-//       //エラー時の処理
-//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//       return rejectWithValue(response.data);
-//     } else if (response.resStatus === "success") {
-//       //成功時の処理
-//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//       return response;
-//     } else if (response.data.resStatus === "success") {
-//       //成功時の処理
-//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//       return response.data;
-//     }
-//   }
-// );
 
 export const updateCourse = createAsyncThunk(
   "courses/updateCourse",
@@ -145,44 +51,9 @@ export const updateCourse = createAsyncThunk(
     try {
       const response: any = await courseApi.updateCourse(formData);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -193,44 +64,9 @@ export const deleteCourse = createAsyncThunk(
     try {
       const response: any = await courseApi.deleteCourse(id);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -264,7 +100,7 @@ const courseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCourse.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -281,7 +117,7 @@ const courseSlice = createSlice({
     });
 
     builder.addCase(createCourse.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -297,22 +133,8 @@ const courseSlice = createSlice({
       state.error = (action.payload as any).message;
     });
 
-    // builder.addCase(getCourseById.pending, (state) => {
-    //   state.status = "success";
-    //   state.message = null;
-    //   state.error = null;
-    // });
-    // builder.addCase(getCourseById.fulfilled, (state, action) => {
-    //   state.status = "success";
-    //   state.courses = [...state.courses, action.payload.course];
-    // });
-    // builder.addCase(getCourseById.rejected, (state, action) => {
-    //   state.status = "success";
-    //   state.error = (action.payload as any).message;
-    // });
-
     builder.addCase(updateCourse.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -333,7 +155,7 @@ const courseSlice = createSlice({
     });
 
     builder.addCase(deleteCourse.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.message = null;
       state.error = null;
     });
@@ -353,6 +175,7 @@ const courseSlice = createSlice({
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
+      state.status = "success";
       state.courses = action.payload.courses
         ? state.courses.length === action.payload.courses.length
           ? state.courses
@@ -361,6 +184,7 @@ const courseSlice = createSlice({
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
+      state.status = "success";
       state.courses = action.payload.courses
         ? state.courses.length === action.payload.courses.length
           ? state.courses

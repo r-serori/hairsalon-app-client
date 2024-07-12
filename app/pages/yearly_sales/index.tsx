@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import {
   Yearly_salesState,
   getYearly_sales,
-} from "../../store/sales/yearly_sales/yearly_saleSlice";
+} from "../../store/yearly_sales/yearly_saleSlice";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { useState } from "react";

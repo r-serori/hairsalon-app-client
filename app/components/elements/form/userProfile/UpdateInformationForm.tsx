@@ -93,6 +93,8 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={edit ? false : true}
             onValidationChange={(isValid) => setPhoneNumberValidate(isValid)}
+            format={false}
+            maxNumber={999999999999999}
           />
 
           <PrimaryButton value="登録" />

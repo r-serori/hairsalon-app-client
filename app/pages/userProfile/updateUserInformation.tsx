@@ -60,8 +60,13 @@ const UpdateUserInformationPage: React.FC = () => {
   }) => {
     console.log(formData);
     try {
-      await dispatch(updateUser(formData) as any);
-      router.push("/dashboard");
+      const response = await dispatch(updateUser(formData) as any);
+
+      if (response.meta.requestStatus === "fulfilled") {
+        router.push("/dashboard");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.log("Error", error);
     }

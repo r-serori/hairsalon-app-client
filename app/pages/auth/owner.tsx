@@ -36,18 +36,12 @@ const OwnerPage = () => {
     console.log(formData);
     try {
       const response = await dispatch(ownerRegister(formData) as any);
-      if (
-        response.payload.status === 400 ||
-        response.payload.status === 401 ||
-        response.payload.status === 403 ||
-        response.payload.status === 404 ||
-        response.payload.status === 500
-      ) {
-        throw new Error(response.payload.message);
-      }
-      console.log("Success");
 
-      router.push("/dashboard");
+      if (response.meta.requestStatus === "fulfilled") {
+        router.push("/dashboard");
+      } else {
+        throw new Error("e");
+      }
     } catch (error) {
       dispatch(
         changeMessage("登録処理に失敗しました！もう一度お試しください！")

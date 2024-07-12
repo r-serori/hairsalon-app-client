@@ -15,15 +15,15 @@ import DeleteButton from "../../button/DeleteButton";
 import {
   changeDailySaleMessage,
   createDaily_sales,
-} from "../../../../store/sales/daily_sales/daily_saleSlice";
+} from "../../../../store/daily_sales/daily_saleSlice";
 import {
   changeMonthlySaleMessage,
   createMonthly_sales,
-} from "../../../../store/sales/monthly_sales/monthly_saleSlice";
+} from "../../../../store/monthly_sales/monthly_saleSlice";
 import {
   changeYearlySaleMessage,
   createYearly_sales,
-} from "../../../../store/sales/yearly_sales/yearly_saleSlice";
+} from "../../../../store/yearly_sales/yearly_saleSlice";
 import {
   customerStatus,
   daily_saleError,
@@ -262,36 +262,33 @@ const SaleForm: React.FC<SaleFormProps> = ({
         return;
       }
       if (whatSales === "日次") {
-        await dispatch(createDaily_sales(SalesFormData) as any);
-        if (dailySalesStatus === "success") {
-          // router.push({
-          //   pathname: "/daily_sales",
-          //   query: { update },
-          // });
-          // allInitialState();
-        } else if (dailySalesStatus === "failed") {
+        const response = await dispatch(
+          createDaily_sales(SalesFormData) as any
+        );
+        if (response.meta.requestStatus === "fulfilled") {
+          allInitialState();
+          router.push("/daily_sales");
+        } else {
           throw new Error();
         }
       } else if (whatSales === "月次") {
-        await dispatch(createMonthly_sales(SalesFormData) as any);
-        if (monthlySalesStatus === "success") {
+        const response = await dispatch(
+          createMonthly_sales(SalesFormData) as any
+        );
+        if (response.meta.requestStatus === "fulfilled") {
           allInitialState();
-          router.push({
-            pathname: "/monthly_sales",
-            query: { update },
-          });
-        } else if (monthlySalesStatus === "failed") {
+          router.push("/monthly_sales");
+        } else {
           throw new Error();
         }
       } else if (whatSales === "年次") {
-        await dispatch(createYearly_sales(SalesFormData) as any);
-        if (yearlySalesStatus === "success") {
+        const response = await dispatch(
+          createYearly_sales(SalesFormData) as any
+        );
+        if (response.meta.requestStatus === "fulfilled") {
           allInitialState();
-          router.push({
-            pathname: "/yearly_sales",
-            query: { update },
-          });
-        } else if (yearlySalesStatus === "failed") {
+          router.push("/yearly_sales");
+        } else {
           throw new Error();
         }
       }
@@ -338,6 +335,10 @@ const SaleForm: React.FC<SaleFormProps> = ({
     InitialState();
     sumPricer(dayjs().utc().tz("Asia/Tokyo"));
   }, [whatSales]);
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("ja-JP").format(price);
+  };
 
   return (
     <>
@@ -395,7 +396,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
                 {time.format("YYYY")}年{time.format("MM")}月{time.format("DD")}
                 日の売上合計は
-                {sumPrice}円でした。
+                {formatPrice(sumPrice)}円でした。
               </h3>
               {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">
@@ -407,7 +408,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
                 {time.format("YYYY")}年{time.format("MM")}月の売上合計は
-                {sumPrice}円でした。
+                {formatPrice(sumPrice)}円でした。
               </h3>
               {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">
@@ -419,7 +420,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
                 {time.format("YYYY")}年の売上合計は
-                {sumPrice}円でした。
+                {formatPrice(sumPrice)}円でした。
               </h3>
               {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">

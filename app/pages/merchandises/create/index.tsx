@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { createMerchandise } from "../../../store/merchandises/merchandiseSlice";
 import MerchandiseForm from "../../../components/elements/form/merchandises/MerchandiseForm";
 import { useRouter } from "next/router";
-import BackAgainButton from "../../../components/elements/button/RouterButton";
-import { merchandiseStatus } from "../../../components/Hooks/selector";
+import {
+  merchandiseStatus,
+  merchandiseError,
+} from "../../../components/Hooks/selector";
 import RouterButton from "../../../components/elements/button/RouterButton";
+import BasicAlerts from "../../../components/elements/alert/Alert";
 
 const merchandiseCreate: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
   const mStatus: string = useSelector(merchandiseStatus);
+  const mError: string = useSelector(merchandiseError);
 
   const handleCreate = async (formData: {
     id: number;
@@ -19,14 +23,23 @@ const merchandiseCreate: React.FC = () => {
     price: number;
   }) => {
     try {
-      await dispatch(createMerchandise(formData) as any);
+      const response = await dispatch(createMerchandise(formData) as any);
+
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("Success", response);
+        router.push("/merchandises");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.error(error);
     }
-    router.push("/merchandises"); // Redirect to the merchandise list page after creating a merchandise
   };
   return (
     <div className="min-h-full">
+      {mError && (
+        <BasicAlerts type="error" message={mError} space={1} padding={1} />
+      )}
       <div className="ml-4 mt-4">
         <RouterButton link={"/merchandises"} value="物販画面に戻る" />
       </div>

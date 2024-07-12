@@ -2,30 +2,28 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { updateCourse, getCourse } from "../../../../store/courses/courseSlice";
-import { RootState } from "../../../../redux/store";
 import CourseForm from "../../../../components/elements/form/courses/CourseForm";
-import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import {
+  courseError,
   coursesStore,
   courseStatus,
-  courseMessage,
-  courseError,
 } from "../../../../components/Hooks/selector";
 import { CourseState } from "../../../../store/courses/courseSlice";
-import { userKey } from "../../../../components/Hooks/authSelector";
 import RouterButton from "../../../../components/elements/button/RouterButton";
+import BasicAlerts from "../../../../components/elements/alert/Alert";
 
 const courseEdit: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
   const cStatus: string = useSelector(courseStatus);
+  const cError: string = useSelector(courseError);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const course = useSelector(coursesStore).find(
+  const course: CourseState = useSelector(coursesStore).find(
     (course: CourseState) => course.id === Number(id)
   );
   console.log("courseです");
@@ -37,14 +35,22 @@ const courseEdit: React.FC = () => {
     price: number;
   }) => {
     try {
-      await dispatch(updateCourse(formData) as any);
+      const response = await dispatch(updateCourse(formData) as any);
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("Success", response);
+        router.push("/courses");
+      } else {
+        throw new Error("e");
+      }
     } catch (error) {
       console.error(error);
     }
-    router.push("/courses");
   };
   return (
     <div className="min-h-full ">
+      {cError && (
+        <BasicAlerts type="error" message={cError} space={1} padding={1} />
+      )}
       <div className="mx-4 my-4">
         <RouterButton link={"/courses"} value="コース画面に戻る" />
       </div>

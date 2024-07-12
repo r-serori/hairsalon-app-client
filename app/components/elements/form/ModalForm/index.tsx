@@ -11,9 +11,9 @@ import { updateHairstyle } from "../../../../store/hairstyles/hairstyleSlice";
 import { updateStockCategory } from "../../../../store/stocks/stock_categories/stock_categorySlice";
 import { updateStock } from "../../../../store/stocks/stockSlice";
 import { updateCustomer } from "../../../../store/customers/customerSlice";
-import { updateDaily_sales } from "../../../../store/sales/daily_sales/daily_saleSlice";
-import { updateMonthly_sales } from "../../../../store/sales/monthly_sales/monthly_saleSlice";
-import { updateYearly_sales } from "../../../../store/sales/yearly_sales/yearly_saleSlice";
+import { updateDaily_sales } from "../../../../store/daily_sales/daily_saleSlice";
+import { updateMonthly_sales } from "../../../../store/monthly_sales/monthly_saleSlice";
+import { updateYearly_sales } from "../../../../store/yearly_sales/yearly_saleSlice";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import BasicTextField from "../../input/BasicTextField";
@@ -697,6 +697,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 ? (isValid) => setIsValidate(isValid)
                 : null
             }
+            format={NodesProp === "phone_number" ? false : true}
           />
         )}
 

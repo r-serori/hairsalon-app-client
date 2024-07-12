@@ -5,14 +5,16 @@ import { RootState } from "../../../redux/store";
 import CourseForm from "../../../components/elements/form/courses/CourseForm";
 import { useRouter } from "next/router";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import { courseStatus } from "../../../components/Hooks/selector";
+import { courseError, courseStatus } from "../../../components/Hooks/selector";
 import { getUserKey } from "../../../components/Hooks/useMethod";
+import BasicAlerts from "../../../components/elements/alert/Alert";
 
 const courseCreate: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const cStatus = useSelector(courseStatus);
+  const cStatus: string = useSelector(courseStatus);
+  const cError: string = useSelector(courseError);
 
   const handleCreate = async (formData: {
     id: number;
@@ -20,16 +22,22 @@ const courseCreate: React.FC = () => {
     price: number;
   }) => {
     try {
-      await dispatch(createCourse(formData) as any);
+      const response = await dispatch(createCourse(formData) as any);
+
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("Success", response);
+        router.push("/courses");
+      } else {
+        throw new Error("e");
+      }
     } catch (error) {
       console.error(error);
-    } finally {
-      router.push("/courses");
     }
   };
 
   return (
     <div className="min-h-full">
+      <BasicAlerts type="error" message={cError} space={1} padding={1} />
       <div className="mx-4 mt-4">
         <RouterButton link="/courses" value="コース画面へ戻る" />
       </div>

@@ -18,7 +18,6 @@ const updatePasswordPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   const uError: string | null = useSelector(userError);
@@ -56,11 +55,15 @@ const updatePasswordPage: React.FC = () => {
   }) => {
     console.log(formData);
     try {
-      await dispatch(updateUserPassword(formData) as any);
-      router.push("/dashboard");
+      const response = await dispatch(updateUserPassword(formData) as any);
+
+      if (response.meta.requestStatus === "fulfilled") {
+        router.push("/dashboard");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.log("Error", error);
-      return;
     }
   };
 

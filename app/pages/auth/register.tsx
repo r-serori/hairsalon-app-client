@@ -53,16 +53,16 @@ const RegisterPage: React.FC = () => {
       const userKey: string | null = await getUserKey(dispatch);
 
       if (userKey === null) {
-        throw new Error("e");
+        throw new Error();
       }
       const pushUser: boolean = pushUserId(userId, userKey);
 
-      if (pushUser) {
+      if (pushUser && response.meta.requestStatus === "fulfilled") {
         await dispatch(getPermission({}) as any);
         dispatch(isLogin());
         router.push("/auth/emailWait");
       } else {
-        throw new Error("e");
+        throw new Error();
       }
     } catch (error) {
       console.log("Error", error);

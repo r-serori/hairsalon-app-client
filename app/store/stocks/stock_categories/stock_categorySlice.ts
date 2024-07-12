@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { stockCategoryApi } from "../../../services/stock_categories/api";
 import RootState from "../../../redux/reducers/rootReducer";
+import { handleErrorResponse, handleCatchError } from "../../errorHamdler";
 
 // APIから在庫カテゴリ情報を取得する非同期アクション//get
 export const getStockCategory = createAsyncThunk(
@@ -9,44 +10,9 @@ export const getStockCategory = createAsyncThunk(
     try {
       const response: any = await stockCategoryApi.fetchAllStockCategories(); // APIからデータを取得
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -66,72 +32,12 @@ export const createStockCategory = createAsyncThunk(
         formData
       );
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
-
-// 在庫カテゴリ情報を取得する非同期アクション//show
-// export const getStockCategoryById = createAsyncThunk(
-//   "stock_categories/getStockCategoryById",
-//   async (id: number, { rejectWithValue }) => {
-//     const response: any = await stockCategoryApi.fetchStockCategoryById(id);
-//     if (response.resStatus === "error") {
-//       //エラー時の処理
-//       console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//       return rejectWithValue(response);
-//     } else if (response.data.resStatus === "error") {
-//       //エラー時の処理
-//       console.log("response.error", response.data); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//       return rejectWithValue(response.data);
-//     } else if (response.resStatus === "success") {
-//       //成功時の処理
-//       console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//       return response;
-//     } else if (response.data.resStatus === "success") {
-//       //成功時の処理
-//       console.log("response.success", response.data); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//       return response.data;
-//     }
-//   }
-// );
 
 // 在庫カテゴリ情報を更新する非同期アクション,put,update
 export const updateStockCategory = createAsyncThunk(
@@ -148,44 +54,9 @@ export const updateStockCategory = createAsyncThunk(
         formData
       );
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -197,44 +68,9 @@ export const deleteStockCategory = createAsyncThunk(
     try {
       const response: any = await stockCategoryApi.deleteStockCategory(id);
 
-      if (response.status >= 200 && response.status < 300) {
-        // 成功時の処理
-        console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-        return response.data; // response.dataを返すことで、必要なデータのみを返す
-      } else if (response.status >= 400 && response.status < 500) {
-        // クライアントエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        if (
-          response.status === 401 ||
-          response.status === 403 ||
-          response.status === 404
-        ) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else if (response.status >= 500) {
-        if (response.status === 500) {
-          return rejectWithValue({
-            status: response.status,
-            message: response.data.message,
-          }); // rejectWithValueでエラーメッセージを返す
-        }
-        // サーバーエラー時の処理
-        console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-        return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-      } else {
-        return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-      }
+      return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
-      console.log("errだよ", err);
-      return rejectWithValue(
-        err.response
-          ? err.response.data
-          : { message: "予期しないエラーが発生しました" }
-      );
+      return handleCatchError(err, rejectWithValue);
     }
   }
 );
@@ -266,7 +102,7 @@ const stock_categorySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getStockCategory.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.error = null;
       state.message = null;
     });
@@ -281,12 +117,12 @@ const stock_categorySlice = createSlice({
         : "在庫カテゴリーの取得に成功しました！";
     });
     builder.addCase(getStockCategory.rejected, (state, action) => {
-      state.status = "success";
+      state.status = "failed";
       state.error = (action.payload as any).message;
     });
 
     builder.addCase(createStockCategory.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.error = null;
       state.message = null;
     });
@@ -305,28 +141,8 @@ const stock_categorySlice = createSlice({
       state.status = "failed";
     });
 
-    // builder.addCase(getStockCategoryById.pending, (state) => {
-    //   state.status = "success";
-    //   state.error = null;
-    //   state.message = null;
-    // });
-    // builder.addCase(getStockCategoryById.fulfilled, (state, action) => {
-    //   state.stock_categories = [
-    //     ...state.stock_categories,
-    //     action.payload.stockCategory,
-    //   ];
-    //   state.status = "success";
-    //   state.message = action.payload.message
-    //     ? action.payload.message
-    //     : "在庫カテゴリーの取得に成功しました！";
-    // });
-    // builder.addCase(getStockCategoryById.rejected, (state, action) => {
-    //   state.error = (action.payload as any).message;;
-    //   state.status = "failed";
-    // });
-
     builder.addCase(updateStockCategory.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.error = null;
       state.message = null;
     });
@@ -347,7 +163,7 @@ const stock_categorySlice = createSlice({
     });
 
     builder.addCase(deleteStockCategory.pending, (state) => {
-      state.status = "success";
+      state.status = "loading";
       state.error = null;
       state.message = null;
     });
