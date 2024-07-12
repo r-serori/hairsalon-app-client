@@ -137,6 +137,7 @@ export const updateUserPassword = createAsyncThunk(
     formData: {
       current_password: string;
       password: string;
+      password_confirmation: string;
     },
     { rejectWithValue }
   ) => {
@@ -183,9 +184,30 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const forgotPassword = createAsyncThunk(
+  "users/forgotPassword",
+  async (email: string, { rejectWithValue }) => {
+    try {
+      const response = await userApi.forgotPassword(email);
+
+      return handleErrorResponse(response, rejectWithValue);
+    } catch (err) {
+      return handleCatchError(err, rejectWithValue);
+    }
+  }
+);
+
 export const resetPassword = createAsyncThunk(
   "users/resetPassword",
-  async (formData: { password: string }, { rejectWithValue }) => {
+  async (
+    formData: {
+      email: string;
+      password: string;
+      password_confirmation: string;
+      token: string;
+    },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await userApi.resetPassword(formData);
 
@@ -458,7 +480,9 @@ const usersSlice = createSlice({
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       state.status = "success";
-      state.message = "パスワードのリセットに成功しました！";
+      state.message = action.payload.message
+        ? action.payload.message
+        : "パスワードのリセットに成功しました！";
     });
     builder.addCase(resetPassword.rejected, (state, action) => {
       state.status = "failed";
@@ -547,6 +571,22 @@ const usersSlice = createSlice({
       state.status = "failed";
       state.error =
         "メールアドレスの認証に失敗しました！ログインからやり直してください！";
+    });
+
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.status = "loading";
+      state.message = null;
+      state.error = null;
+    });
+
+    builder.addCase(forgotPassword.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = action.payload.message;
+    });
+
+    builder.addCase(forgotPassword.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = (action.payload as any).message;
     });
   },
 });

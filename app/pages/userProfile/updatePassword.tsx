@@ -13,6 +13,7 @@ import {
 } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { staffPermission } from "../../components/Hooks/useMethod";
+import { isLogout } from "../../store/auth/isLoginSlice";
 
 const updatePasswordPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -26,39 +27,19 @@ const updatePasswordPage: React.FC = () => {
 
   const uMessage: string | null = useSelector(userMessage);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        staffPermission(permission, router);
-
-        if (
-          permission === "オーナー" ||
-          permission === "マネージャー" ||
-          permission === "スタッフ"
-        ) {
-          await dispatch(showUser({}) as any);
-        } else {
-          return;
-        }
-      } catch (error) {
-        console.log("Error", error);
-        return;
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
-
   const handleUpdatePassword = async (formData: {
     current_password: string;
     password: string;
+    password_confirmation: string;
   }) => {
     console.log(formData);
     try {
       const response = await dispatch(updateUserPassword(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        router.push("/dashboard");
+        dispatch(isLogout());
+        localStorage.clear();
+        router.push("/auth/login");
       } else {
         throw new Error();
       }

@@ -98,7 +98,10 @@ export default function Header() {
     currentPath === "/auth/register" ||
     currentPath === "/_error" ||
     currentPath === "/auth/emailWait" ||
-    currentPath === "/auth/emailVerify/[id]/[hash]"
+    currentPath === "/auth/emailVerify/[id]/[hash]" ||
+    currentPath === "/auth/forgotPassword" ||
+    currentPath === "/auth/resetEmailWait" ||
+    currentPath === "/auth/resetPassword/[token]"
       ? []
       : permission === "オーナー"
       ? [

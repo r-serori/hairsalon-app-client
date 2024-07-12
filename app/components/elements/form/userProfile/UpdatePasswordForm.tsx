@@ -11,15 +11,16 @@ interface UpdatePasswordFormProps {
   onSubmitUpdatePassword: (formData: {
     current_password: string;
     password: string;
+    password_confirmation: string;
   }) => void;
 }
 
 const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
   onSubmitUpdatePassword,
 }) => {
-  const [current_password, setCurrentPassword] = useState("password123");
-  const [password, setPassword] = useState("newPassword123");
-  const [confirmPassword, setConfirmPassword] = useState("newPassword123");
+  const [current_password, setCurrentPassword] = useState("Password_123");
+  const [password, setPassword] = useState("newPassword_123");
+  const [confirmPassword, setConfirmPassword] = useState("newPassword_123");
 
   const [isCurrentPasswordValid, setIsCurrentPasswordValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
@@ -28,18 +29,23 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (password !== confirmPassword) {
-    //   alert("パスワードが一致しません");
-    //   return;
-    // }
+    if (password !== confirmPassword) {
+      alert("新しいパスワードと確認用パスワードが一致しません");
+      return;
+    }
 
-    if (!isCurrentPasswordValid || !isPasswordValid) {
+    if (
+      !isCurrentPasswordValid ||
+      !isPasswordValid ||
+      !isConfirmPasswordValid
+    ) {
       return;
     }
 
     onSubmitUpdatePassword({
       current_password: current_password,
       password: password,
+      password_confirmation: confirmPassword,
     });
   };
 
@@ -62,20 +68,20 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
           />
 
           <PasswordField
-            id={0}
+            id={1}
             placeholder="新しいパスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onValidationChange={(isValid) => setIsPasswordValid(isValid)}
           />
-          {/* 
+
           <PasswordField
-           id={0}
+            id={2}
             placeholder="新しいパスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             onValidationChange={(isValid) => setIsConfirmPasswordValid(isValid)}
-          /> */}
+          />
 
           <PrimaryButton value="登録" />
         </form>

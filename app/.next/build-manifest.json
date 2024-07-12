@@ -12,6 +12,11 @@
   ],
   "rootMainFiles": [],
   "pages": {
+    "/": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/index.js"
+    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -22,20 +27,25 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/dashboard": [
+    "/auth/forgotPassword": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/dashboard.js"
+      "static/chunks/pages/auth/forgotPassword.js"
     ],
-    "/userProfile/updatePassword": [
+    "/auth/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/userProfile/updatePassword.js"
+      "static/chunks/pages/auth/login.js"
     ],
-    "/userProfile/updateUserInformation": [
+    "/auth/resetEmailWait": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/userProfile/updateUserInformation.js"
+      "static/chunks/pages/auth/resetEmailWait.js"
+    ],
+    "/auth/resetPassword/[token]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/auth/resetPassword/[token].js"
     ]
   },
   "ampFirstPages": []

@@ -293,6 +293,10 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                     const imgDecode = decodeURIComponent(propValue);
                     // console.log("imgDecodeだよ", imgDecode);
 
+                    const formatValue = (value: number) => {
+                      return new Intl.NumberFormat("ja-JP").format(value);
+                    };
+
                     if (
                       propProp === "created_at" ||
                       propProp === "updated_at"
@@ -335,7 +339,11 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                           + ${role}`}
                           className="items-center bg-gray-100 text-gray-900  text-center border-b-2 border-gray-300"
                         >
-                          {propValue}
+                          {propProp === "daily_sales" ||
+                          propProp === "monthly_sales" ||
+                          propProp === "yearly_sales"
+                            ? formatValue(propValue)
+                            : propValue}
                         </Cell>
                       );
                     } else if (

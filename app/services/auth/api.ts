@@ -136,6 +136,7 @@ export const userApi = {
   updateUserPassword: async (formData: {
     current_password: string;
     password: string;
+    password_confirmation: string;
   }) => {
     try {
       const response = (await sendRequest(
@@ -151,11 +152,29 @@ export const userApi = {
     }
   },
 
-  resetPassword: async (formData: { password: string }) => {
+  forgotPassword: async (email: string) => {
+    try {
+      const response = (await sendRequest("POST", `api/forgotPassword`, {
+        email: email,
+      })) as any;
+      // console.log("responseForgotPasswordDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
+  },
+
+  resetPassword: async (formData: {
+    email: string;
+    password: string;
+    password_confirmation: string;
+    token: string;
+  }) => {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/user/resetPassword`,
+        `api/resetPassword`,
         formData
       )) as any;
       // console.log("responseResetPasswordDataだよ", response);

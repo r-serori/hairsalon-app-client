@@ -22,9 +22,9 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
   node,
   onSubmitUserInformation,
 }) => {
-  const [name, setName] = useState(node.name);
-  const [email, setEmail] = useState(node.email);
-  const [phone_number, setPhoneNumber] = useState(node.phone_number);
+  const [name, setName] = useState<string>(node.name);
+  const [email, setEmail] = useState<string>(node.email);
+  const [phone_number, setPhoneNumber] = useState<string>(node.phone_number);
   const [edit, setEdit] = useState(false);
 
   const [nameValidate, setNameValidate] = useState<boolean>(true);

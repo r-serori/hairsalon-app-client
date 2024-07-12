@@ -9,37 +9,40 @@ import PasswordField from "../../input/PasswordField";
 import EmailField from "../../input/EmailField";
 
 interface ResetPasswordFormProps {
-  onSubmitResetPassword: (formData: { password: string }) => void;
+  onSubmitResetPassword: (formData: {
+    email: string;
+    password: string;
+    password_confirmation: string;
+  }) => void;
 }
 
 const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   onSubmitResetPassword,
 }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("newPassword_123");
-  const [confirmPassword, setConfirmPassword] = useState("newPassword_123");
+  const [email, setEmail] = useState<string>("owner@hairmail.com");
+  const [password, setPassword] = useState("resetPassword_123");
+  const [confirmPassword, setConfirmPassword] = useState("resetPassword_123");
 
-  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [emailValidate, setEmailValidate] = useState<boolean>(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
 
   const handleSubmitResetPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (email　!== user.email) {
-    //   alert("メールアドレスが間違えています。");
-    //   return;
-    // }
-    // if (password !== confirmPassword) {
-    //   alert("パスワードが一致しません");
-    //   return;
-    // }
 
-    if (!isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
+    if (password !== confirmPassword) {
+      alert("パスワードが一致しません");
+      return;
+    }
+
+    if (!isPasswordValid || !isConfirmPasswordValid || !emailValidate) {
       return;
     }
 
     onSubmitResetPassword({
+      email: email,
       password: password,
+      password_confirmation: confirmPassword,
     });
   };
 
@@ -57,26 +60,25 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             id={0}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            onValidationChange={(isValid) => setIsEmailValid(isValid)}
+            onValidationChange={(isValid) => setEmailValidate(isValid)}
           />
-
           <PasswordField
-            id={0}
+            id={1}
             placeholder="新しいパスワード"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onValidationChange={(isValid) => setIsPasswordValid(isValid)}
           />
-          {/* 
-          <BasicTextField
-            type="text"
+
+          <PasswordField
+            id={2}
             placeholder="新しいパスワード確認"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             onValidationChange={(isValid) => setIsConfirmPasswordValid(isValid)}
-          /> */}
+          />
 
-          <PrimaryButton value="登録" />
+          <PrimaryButton value="パスワードリセット" />
         </form>
       </div>
     </div>

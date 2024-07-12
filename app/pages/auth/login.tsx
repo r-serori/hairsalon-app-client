@@ -18,6 +18,7 @@ import ContentCutIcon from "@mui/icons-material/ContentCut";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { getPermission } from "../../store/auth/permissionSlice";
 import path from "path";
+import ForgotPasswordButton from "../../components/elements/button/ForgotPasswordButton";
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -89,12 +90,13 @@ const LoginPage: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <div className="mt-4 ml-4 ">
+          <div className="mt-4 ml-4 flex justify-between">
             <RouterButton
               link="/"
               value="ホーム画面へ"
               onChangeAndRouter={() => dispatch(clearError())}
             />
+            <ForgotPasswordButton />
           </div>
           <AuthLoginForm onSubmit={handleLogin} />
 
