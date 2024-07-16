@@ -43,7 +43,9 @@ const AttendanceTimeShots = () => {
 
     const fetchData = async () => {
       try {
-        staffPermission(permission, router);
+        if (permission) {
+          staffPermission(permission, router);
+        }
 
         const userCount = localStorage.getItem("userCount");
 
@@ -65,7 +67,7 @@ const AttendanceTimeShots = () => {
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, permission]);
 
   // const atimeStatus = useSelector(attendance_timeStatus);
 

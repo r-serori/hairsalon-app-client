@@ -72,7 +72,7 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
 
   const formatValue = (value: string | null) => {
     if (value === null || value === "0" || value === "" || value === "00")
-      return "0";
+      return "";
     const numericValue = parseInt(value, 10);
     return new Intl.NumberFormat("ja-JP").format(numericValue);
   };
@@ -89,7 +89,7 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
         type="text" // テキストフィールドに変更
         label={placeholder}
         onChange={handleChange}
-        value={format ? formatValue(value) : value || "0"}
+        value={format ? formatValue(value) : value || ""}
         variant="outlined"
         disabled={disabled || role === "スタッフ"}
         inputProps={{ max: maxNumber, required: required }}

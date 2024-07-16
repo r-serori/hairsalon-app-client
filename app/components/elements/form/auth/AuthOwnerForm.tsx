@@ -114,6 +114,7 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
             value={postal_code}
             onChange={handlePostalCodeChange}
             onValidationChange={(isValid) => setPostalCodeValidate(isValid)}
+            format={false}
           />
 
           <BasicTextField
@@ -157,6 +158,7 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
             onChange={(e) => setPhoneNumber(e.target.value)}
             maxNumber={999999999999999}
             onValidationChange={(isValid) => setPhoneNumberValidate(isValid)}
+            format={false}
           />
 
           <PrimaryButton value="オーナー情報登録" />

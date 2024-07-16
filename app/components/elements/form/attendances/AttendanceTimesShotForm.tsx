@@ -248,13 +248,17 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
     try {
       if (edit) {
-        await dispatch(updateStartTime(formData) as any);
+        const response = await dispatch(updateStartTime(formData) as any);
         resetPhoto();
         setOpen(false);
       } else {
-        await dispatch(createStartTime(formData) as any);
-        resetPhoto();
-        setOpen(false);
+        const response = await dispatch(createStartTime(formData) as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          resetPhoto();
+          setOpen(false);
+        } else {
+          throw new Error();
+        }
         // router.push("/attendanceTimeShots");
       }
     } catch (error) {

@@ -166,7 +166,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
             ? true
             : false
         }
-        variant={noArrayAndNoLength ? "standard" : "outlined"}
+        variant={noArrayAndNoLength ? "standard" : "filled"}
       >
         {names.length === 0
           ? `${fieldName[0]}がありません。${fieldName[0]}画面から新規作成してください！`

@@ -202,6 +202,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? []
       : newCustomer && !Array.isArray(users) && Object(users)
       ? [Object(users).name]
+      : newCustomer && Array.isArray(users) && users.length === 1
+      ? [users[0].name]
       : !newCustomer && Array.isArray(users) && users.length === 0
       ? []
       : !newCustomer && !Array.isArray(users) && Object(users)
@@ -745,6 +747,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         role={permission}
                         required={false}
+                        format={false}
                       />
                     </div>
                     <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -857,6 +860,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         role={permission}
                         required={false}
+                        format={false}
                       />
                     </div>
 

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
-import { loginNow, ownerStatus, userKey } from "../../../Hooks/authSelector";
+import { loginNow, userKey } from "../../../Hooks/authSelector";
 import { allLogout, getUserKey } from "../../../Hooks/useMethod";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../Hooks/authSelector";

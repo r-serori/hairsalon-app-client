@@ -64,52 +64,50 @@ const BasicModal: React.FC<BasicModalProps> = ({
   NodesProp,
   link,
 }) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  // const dispatch = useDispatch();
+  // const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [openAttendance, setOpenAttendance] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const users: UserAllState[] = useSelector(user);
+  // const users: UserAllState[] = useSelector(user);
 
-  const key: string | null = useSelector(userKey);
-  const permission: PermissionsState = useSelector(permissionStore);
+  // const key: string | null = useSelector(userKey);
+  // const permission: PermissionsState = useSelector(permissionStore);
 
-  const handleOpenAttendance = () => {
-    const getStaffs = async () => {
-      const response = await dispatch(getUsers({}) as any);
-      console.log("response", response);
-      localStorage.setItem("userCount", response.payload.userCount);
-    };
+  // const handleOpenAttendance = () => {
+  //   const getStaffs = async () => {
+  //     const response = await dispatch(getUsers({}) as any);
+  //     console.log("response", response);
+  //     localStorage.setItem("userCount", response.payload.userCount);
+  //   };
 
-    const fetchData = async () => {
-      try {
-        ownerPermission(permission, router);
+  //   const fetchData = async () => {
+  //     try {
+  //       const userCount: string = localStorage.getItem("userCount");
+  //       if (
+  //         (permission === "オーナー" && !userCount) ||
+  //         (permission === "オーナー" && userCount === undefined) ||
+  //         (permission === "オーナー" && userCount === null) ||
+  //         (permission === "オーナー" && userCount === "") ||
+  //         (permission === "オーナー" && userCount === "undefined") ||
+  //         (users.length < Number(userCount) && permission === "オーナー")
+  //       ) {
+  //         await getStaffs();
+  //       } else {
+  //         setOpenAttendance(true);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //       router.push("/attendances");
+  //     }
+  //   };
+  //   fetchData();
+  // };
 
-        const userCount: string = localStorage.getItem("userCount");
-        if (
-          (permission === "オーナー" && !userCount) ||
-          (permission === "オーナー" && userCount === undefined) ||
-          (permission === "オーナー" && userCount === null) ||
-          (permission === "オーナー" && userCount === "") ||
-          (permission === "オーナー" && userCount === "undefined") ||
-          (users.length < Number(userCount) && permission === "オーナー")
-        ) {
-          await getStaffs();
-        } else {
-          setOpenAttendance(true);
-        }
-      } catch (error) {
-        console.log(error);
-        router.push("/attendances");
-      }
-    };
-    fetchData();
-  };
-
-  const handleCloseAttendance = () => setOpenAttendance(false);
+  // const handleCloseAttendance = () => setOpenAttendance(false);
 
   const formatPrice = (value: number) => {
     return new Intl.NumberFormat("ja-JP").format(value);
@@ -121,7 +119,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
       link === "/attendanceTimeStart" ||
       link === "/attendanceTimeEnd" ? (
         <Button
-          onClick={handleOpenAttendance}
+          onClick={() => setOpenAttendance(true)}
           className="w-full y-full font-bold text-md "
         >
           <span className="font-bold text-md break-comma">{editValue}</span>
@@ -148,7 +146,7 @@ const BasicModal: React.FC<BasicModalProps> = ({
       link === "/attendanceTimeEnd" ? (
         <Modal
           open={openAttendance}
-          onClose={handleCloseAttendance}
+          onClose={() => setOpenAttendance(false)}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
@@ -157,11 +155,10 @@ const BasicModal: React.FC<BasicModalProps> = ({
             <div className="flex justify-between items-center md:mx-4 ">
               <div className="text-3xl bold">{editValue}</div>
               <div className="items-center mr-2 ">
-                <BackAgainButton onChanger={handleCloseAttendance} />
+                <RouterButton onChanger={() => setOpenAttendance(false)} />
               </div>
             </div>
             {/* モーダルの内容 */}
-
             <AttendanceTimesShotForm
               node={editNode}
               link={link}

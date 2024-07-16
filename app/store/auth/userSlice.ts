@@ -512,30 +512,39 @@ const usersSlice = createSlice({
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users.map((users) =>
-        users.id === action.payload.responseUser.id
-          ? { ...users, ...action.payload.responseUser }
-          : users
+      state.users = state.users.map((user) =>
+        user.id === action.payload.responseUser.id
+          ? {
+              ...user,
+              isAttendanceTime: action.payload.responseUser.isAttendance,
+            }
+          : user
       );
       state.message = action.payload.message;
     });
 
     builder.addCase(createStartTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users.map((users) =>
-        users.id === action.payload.responseUser.id
-          ? { ...users, ...action.payload.responseUser }
-          : users
+      state.users = state.users.map((user) =>
+        user.id === action.payload.responseUser.id
+          ? {
+              ...user,
+              isAttendanceTime: action.payload.responseUser.isAttendance,
+            }
+          : user
       );
       state.message = "出勤しました！";
     });
 
     builder.addCase(createEndTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users.map((users) =>
-        users.id === action.payload.responseUser.id
-          ? { ...users, ...action.payload.responseUser }
-          : users
+      state.users = state.users.map((user) =>
+        user.id === action.payload.responseUser.id
+          ? {
+              ...user,
+              isAttendanceTime: action.payload.responseUser.isAttendance,
+            }
+          : user
       );
       state.message = "退勤しました！";
     });

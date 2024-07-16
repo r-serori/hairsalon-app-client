@@ -31,7 +31,7 @@ const Attendances = () => {
 
   useEffect(() => {
     const getStaffs = async () => {
-      const response = await dispatch(getUsers({}) as any);
+      const response = await dispatch(getUsers(true) as any);
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
     };
@@ -89,19 +89,15 @@ const Attendances = () => {
 
   // nodesにusersをマップして処理
   const nodes = Array.isArray(users)
-    ? users
-        .filter((user: UserAllState) => {
-          return user.role !== "オーナー";
-        })
-        .map((user: UserAllState) => {
-          return {
-            id: user.id,
-            name: user.name,
-            staff_phone_number: user.phone_number,
-            role: user.role,
-            isAttendance: user.isAttendance,
-          };
-        })
+    ? users.map((user: UserAllState) => {
+        return {
+          id: user.id,
+          name: user.name,
+          staff_phone_number: user.phone_number,
+          role: user.role,
+          isAttendance: user.isAttendance,
+        };
+      })
     : [];
 
   return (
