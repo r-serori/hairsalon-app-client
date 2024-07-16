@@ -20,9 +20,13 @@ const CourseForm: React.FC<CourseFormProps> = ({
   );
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
-  const [courseNameValidate, setCourseNameValidate] = useState<boolean>(true);
+  const [courseNameValidate, setCourseNameValidate] = useState<boolean>(
+    node.course_name ? true : false
+  );
   console.log("courseNameValidate", courseNameValidate);
-  const [priceValidate, setPriceValidate] = useState<boolean>(true);
+  const [priceValidate, setPriceValidate] = useState<boolean>(
+    node.price ? true : false
+  );
   console.log("priceValidate", priceValidate);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,6 +69,7 @@ const CourseForm: React.FC<CourseFormProps> = ({
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}
             onValidationChange={(isValid) => setPriceValidate(isValid)}
+            format={true}
           />
 
           <PrimaryButton value={"コース新規作成"} />

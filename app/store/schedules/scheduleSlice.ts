@@ -1,161 +1,129 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { schedulesApi } from "../../services/schedules/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { CustomerOnlyState } from "../customers/customerSlice";
+import { CourseState } from "../courses/courseSlice";
+import { OptionState } from "../options/optionSlice";
+import { MerchandiseState } from "../merchandises/merchandiseSlice";
+import { HairstyleState } from "../hairstyles/hairstyleSlice";
+import { UserState } from "../auth/userSlice";
+import { Course_customersState } from "../middleTable/customers/course_customersSlice";
+import { Option_customersState } from "../middleTable/customers/option_customersSlice";
+import { Merchandise_customersState } from "../middleTable/customers/merchandise_customersSlice";
+import { Hairstyle_customersState } from "../middleTable/customers/hairstyle_customersSlice";
+import { Customer_usersState } from "../middleTable/customers/customer_usersSlice";
+import { deleteResponse, ErrorType } from "../../components/Hooks/interface";
 
-export const getSchedule = createAsyncThunk(
-  "schedule/getSchedule",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await schedulesApi.fetchAllSchedules();
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const getSchedule = createAsyncThunk<
+  GetScheduleState,
+  void,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("schedule/getSchedule", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await schedulesApi.fetchAllSchedules();
 
-export const selectGetSchedules = createAsyncThunk(
-  "schedule/selectGetSchedules",
-  async (year: string, { rejectWithValue }) => {
-    try {
-      const response: any = await schedulesApi.selectGetSchedules(year);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const createSchedule = createAsyncThunk(
-  "schedule/createSchedule",
-  async (
-    formData: {
-      title: string;
-      start_time: string;
-      end_time: string;
-      allDay: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await schedulesApi.createSchedule(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const selectGetSchedules = createAsyncThunk<
+  GetScheduleState,
+  string,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("schedule/selectGetSchedules", async (year, { rejectWithValue }) => {
+  try {
+    const response: any = await schedulesApi.selectGetSchedules(year);
 
-export const createCustomerAndSchedule = createAsyncThunk(
-  "schedule/customer/doubleCreate",
-  async (
-    formData: {
-      customer_name: string;
-      phone_number: string | null;
-      remarks: string | null;
-      course_id: number[] | null;
-      option_id: number[] | null;
-      merchandise_id: number[] | null;
-      hairstyle_id: number[] | null;
-      user_id: number[] | null;
-      title: string;
-      start_time: string;
-      end_time: string;
-      allDay: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await schedulesApi.createCustomerAndSchedule(
-        formData
-      );
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const updateSchedule = createAsyncThunk(
-  "schedule/updateSchedule",
-  async (
-    formData: {
-      Sid: number;
-      title: string;
-      start_time: string;
-      end_time: string;
-      allDay: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await schedulesApi.updateSchedule(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createSchedule = createAsyncThunk<
+  PostScheduleOnlyState,
+  ScheduleState,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("schedule/createSchedule", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await schedulesApi.createSchedule(formData);
 
-export const updateCustomerAndSchedule = createAsyncThunk(
-  "schedule/customer/doubleUpdate",
-  async (
-    formData: {
-      customer_id: number; // customer_id
-      customer_name: string;
-      phone_number: string | null;
-      remarks: string | null;
-      course_id: number[] | null;
-      option_id: number[] | null;
-      merchandise_id: number[] | null;
-      hairstyle_id: number[] | null;
-      user_id: number[] | null;
-      Sid: number; // schedule_id
-      title: string;
-      start_time: string;
-      end_time: string;
-      allDay: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await schedulesApi.updateCustomerAndSchedule(
-        formData
-      );
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const updateCustomerAndScheduleCreate = createAsyncThunk(
+export const createCustomerAndSchedule = createAsyncThunk<
+  PostScheduleState,
+  RequestScheduleState,
+  {
+    rejectValue: ErrorType;
+  }
+>("schedule/customer/doubleCreate", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await schedulesApi.createCustomerAndSchedule(
+      formData
+    );
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const updateSchedule = createAsyncThunk<
+  PostScheduleOnlyState,
+  ScheduleState,
+  {
+    rejectValue: ErrorType;
+  }
+>("schedule/updateSchedule", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await schedulesApi.updateSchedule(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const updateCustomerAndSchedule = createAsyncThunk<
+  PostScheduleState,
+  RequestScheduleState,
+  {
+    rejectValue: ErrorType;
+  }
+>("schedule/customer/doubleUpdate", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await schedulesApi.updateCustomerAndSchedule(
+      formData
+    );
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const updateCustomerAndScheduleCreate = createAsyncThunk<
+  PostScheduleState,
+  RequestScheduleState,
+  {
+    rejectValue: ErrorType;
+  }
+>(
   "schedule/customer/updateCustomerAndScheduleCreate",
-  async (
-    formData: {
-      customer_name: string;
-      phone_number: string | null;
-      remarks: string | null;
-      course_id: number[] | null;
-      option_id: number[] | null;
-      merchandise_id: number[] | null;
-      hairstyle_id: number[] | null;
-      user_id: number[] | null;
-      title: string;
-      start_time: string;
-      end_time: string;
-      allDay: number;
-      customer_id: number;
-    },
-    { rejectWithValue }
-  ) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const response: any = await schedulesApi.updateCustomerAndScheduleCreate(
         formData
@@ -168,18 +136,21 @@ export const updateCustomerAndScheduleCreate = createAsyncThunk(
   }
 );
 
-export const deleteSchedule = createAsyncThunk(
-  "schedule/deleteSchedule",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await schedulesApi.deleteSchedule(id);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const deleteSchedule = createAsyncThunk<
+  deleteResponse,
+  number,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("schedule/deleteSchedule", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await schedulesApi.deleteSchedule(id);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 export interface ScheduleState {
   // ステートの型
@@ -191,11 +162,58 @@ export interface ScheduleState {
   customer_id: number | null;
 }
 
+export interface GetScheduleState {
+  schedules: ScheduleState[];
+  customers: CustomerOnlyState[];
+  courses: CourseState[];
+  options: OptionState[];
+  merchandises: MerchandiseState[];
+  hairstyles: HairstyleState[];
+  responseUsers: UserState[];
+  course_customers: Course_customersState[];
+  option_customers: Option_customersState[];
+  merchandise_customers: Merchandise_customersState[];
+  hairstyle_customers: Hairstyle_customersState[];
+  customer_users: Customer_usersState[];
+  message: string;
+}
+export interface PostScheduleState {
+  schedule: ScheduleState;
+  customer: CustomerOnlyState;
+  course_customers: Course_customersState[];
+  option_customers: Option_customersState[];
+  merchandise_customers: Merchandise_customersState[];
+  hairstyle_customers: Hairstyle_customersState[];
+  customer_users: Customer_usersState[];
+  message: string;
+}
+export interface PostScheduleOnlyState {
+  schedule: ScheduleState;
+  message: string;
+}
+
+export interface RequestScheduleState {
+  id: number;
+  customer_id: number;
+  customer_name: string;
+  phone_number: string;
+  remarks: string;
+  course_id: number[];
+  option_id: number[];
+  merchandise_id: number[];
+  hairstyle_id: number[];
+  user_id: number[];
+  title: string;
+  start_time: string;
+  end_time: string;
+  allDay: number;
+}
+
 export interface RootState {
   schedules: ScheduleState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: string | null;
+  error: ErrorType | null;
 }
 
 const initialState: RootState = {
@@ -203,7 +221,10 @@ const initialState: RootState = {
   schedules: [],
   status: "idle",
   message: null,
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const scheduleSlice = createSlice({
@@ -229,7 +250,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(getSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = (action.payload as any).message;
+        state.error = action.payload;
       })
       .addCase(createSchedule.pending, (state) => {
         state.status = "loading";
@@ -245,7 +266,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(createSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = (action.payload as any).message;
+        state.error = action.payload;
       })
       .addCase(createCustomerAndSchedule.pending, (state) => {
         state.status = "loading";
@@ -261,7 +282,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(createCustomerAndSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = (action.payload as any).message;
+        state.error = action.payload;
       })
 
       .addCase(updateSchedule.pending, (state) => {
@@ -285,7 +306,7 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = (action.payload as any).message;
+        state.error = action.payload;
       })
       .addCase(updateCustomerAndSchedule.pending, (state) => {
         state.status = "failed";
@@ -307,7 +328,7 @@ const scheduleSlice = createSlice({
           : "スケジュールと顧客情報の更新に成功しました！";
       })
       .addCase(updateCustomerAndSchedule.rejected, (state, action) => {
-        state.error = (action.payload as any).message;
+        state.error = action.payload;
         state.status = "failed";
       })
 
@@ -324,7 +345,7 @@ const scheduleSlice = createSlice({
           : "顧客情報の更新とスケジュールの作成に成功しました！";
       })
       .addCase(updateCustomerAndScheduleCreate.rejected, (state, action) => {
-        state.error = (action.payload as any).message;
+        state.error = action.payload;
         state.status = "failed";
       })
 
@@ -343,7 +364,7 @@ const scheduleSlice = createSlice({
           : "スケジュールの削除に成功しました！";
       })
       .addCase(deleteSchedule.rejected, (state, action) => {
-        state.error = (action.payload as any).message;
+        state.error = action.payload;
         state.status = "failed";
       });
 
@@ -363,7 +384,7 @@ const scheduleSlice = createSlice({
 
     builder.addCase(selectGetSchedules.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
   },
 });

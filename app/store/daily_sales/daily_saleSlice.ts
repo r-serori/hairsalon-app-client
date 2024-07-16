@@ -1,85 +1,91 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { dailySaleApi } from "../../services/daily_sales/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { deleteResponse, ErrorType } from "../../components/Hooks/interface";
 
-export const getDaily_sales = createAsyncThunk(
-  "daily_sales/getDaily_sales",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await dailySaleApi.fetchAllDailySales();
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const getDaily_sales = createAsyncThunk<
+  GetDailySaleState,
+  void,
+  {
+    rejectValue: ErrorType;
   }
-);
-
-export const selectGetDaily_sales = createAsyncThunk(
-  "daily_sales/selectGetDaily_sales",
-  async (year: string, { rejectWithValue }) => {
-    try {
-      const response: any = await dailySaleApi.selectGetDailySales(year);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      console.log("errだよ", err);
-      return handleCatchError(err, rejectWithValue);
-    }
+>("daily_sales/getDaily_sales", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await dailySaleApi.fetchAllDailySales();
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const createDaily_sales = createAsyncThunk(
-  "daily_sales/createDaily_sales",
-  async (
-    formData: { date: string; daily_sales: number },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await dailySaleApi.createDailySales(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      console.log("errだよ", err);
-      return handleCatchError(err, rejectWithValue);
-    }
+export const selectGetDaily_sales = createAsyncThunk<
+  GetDailySaleState,
+  string,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("daily_sales/selectGetDaily_sales", async (year, { rejectWithValue }) => {
+  try {
+    const response: any = await dailySaleApi.selectGetDailySales(year);
 
-export const updateDaily_sales = createAsyncThunk(
-  "daily_sales/updateDaily_sales",
-  async (
-    formData: {
-      id: number;
-      date: string;
-      daily_sales: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await dailySaleApi.updateDailySales(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      console.log("errだよ", err);
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    console.log("errだよ", err);
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const deleteDaily_sales = createAsyncThunk(
-  "daily_sales/deleteDaily_sales",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await dailySaleApi.deleteDailySales(id);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      console.log("errだよ", err);
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createDaily_sales = createAsyncThunk<
+  PostDailySaleState,
+  Daily_salesState,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("daily_sales/createDaily_sales", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await dailySaleApi.createDailySales(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    console.log("errだよ", err);
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const updateDaily_sales = createAsyncThunk<
+  PostDailySaleState,
+  Daily_salesState,
+  {
+    rejectValue: ErrorType;
+  }
+>("daily_sales/updateDaily_sales", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await dailySaleApi.updateDailySales(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    console.log("errだよ", err);
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const deleteDaily_sales = createAsyncThunk<
+  deleteResponse,
+  number,
+  {
+    rejectValue: ErrorType;
+  }
+>("daily_sales/deleteDaily_sales", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await dailySaleApi.deleteDailySales(id);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    console.log("errだよ", err);
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 export interface Daily_salesState {
   // ステートの型
@@ -88,12 +94,22 @@ export interface Daily_salesState {
   daily_sales: number;
 }
 
+export interface GetDailySaleState {
+  dailySales: Daily_salesState[];
+  message: string;
+}
+
+export interface PostDailySaleState {
+  dailySale: Daily_salesState;
+  message: string;
+}
+
 export interface RootState {
   // ルートステートの型を定義
   daily_sales: Daily_salesState[];
   status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
-  error: string | null; // エラー
+  error: ErrorType | null; // エラー
 }
 
 export const initialState: RootState = {
@@ -101,7 +117,10 @@ export const initialState: RootState = {
   daily_sales: [],
   status: "idle",
   message: null,
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const daily_salesSlice = createSlice({
@@ -127,7 +146,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の取得に成功しました！";
     });
     builder.addCase(getDaily_sales.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
 
@@ -144,7 +163,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の取得に成功しました！";
     });
     builder.addCase(selectGetDaily_sales.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
 
@@ -161,7 +180,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の作成に成功しました！";
     });
     builder.addCase(createDaily_sales.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
 
@@ -182,7 +201,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の更新に成功しました！";
     });
     builder.addCase(updateDaily_sales.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
 
@@ -201,7 +220,7 @@ const daily_salesSlice = createSlice({
         : "日次売上の削除に成功しました！";
     });
     builder.addCase(deleteDaily_sales.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
   },

@@ -21,8 +21,9 @@ const MonthlySalesForm: React.FC<MonthlySalesFormProps> = ({
     node.monthly_sales ? node.monthly_sales : 0
   );
 
-  const [monthlySalesValidate, setMonthlySalesValidate] =
-    useState<boolean>(true);
+  const [monthlySalesValidate, setMonthlySalesValidate] = useState<boolean>(
+    node.monthly_sales ? true : false
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -22,8 +22,12 @@ const optionForm: React.FC<OptionFormProps> = ({
   );
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
-  const [optionNameValidate, setOptionNameValidate] = useState<boolean>(true);
-  const [priceValidate, setPriceValidate] = useState<boolean>(true);
+  const [optionNameValidate, setOptionNameValidate] = useState<boolean>(
+    node.option_name ? true : false
+  );
+  const [priceValidate, setPriceValidate] = useState<boolean>(
+    node.price ? true : false
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,6 +64,7 @@ const optionForm: React.FC<OptionFormProps> = ({
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}
             onValidationChange={(isValid) => setPriceValidate(isValid)}
+            format={true}
           />
 
           <PrimaryButton value={"作成"} />

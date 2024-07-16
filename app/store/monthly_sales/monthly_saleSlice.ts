@@ -1,40 +1,44 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { monthlySaleApi } from "../../services/monthly_sales/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { ErrorType, deleteResponse } from "../../components/Hooks/interface";
 
-export const getMonthly_sales = createAsyncThunk(
-  "monthly_sales/getMonthly_sales",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await monthlySaleApi.fetchAllMonthlySales();
+export const getMonthly_sales = createAsyncThunk<
+  GetMonthlySaleState,
+  void,
+  { rejectValue: ErrorType }
+>("monthly_sales/getMonthly_sales", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await monthlySaleApi.fetchAllMonthlySales();
 
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const selectGetMonthly_sales = createAsyncThunk(
-  "monthly_sales/selectGetMonthly_sales",
-  async (year: string, { rejectWithValue }) => {
-    try {
-      const response: any = await monthlySaleApi.selectGetMonthlySales(year);
+export const selectGetMonthly_sales = createAsyncThunk<
+  GetMonthlySaleState,
+  string,
+  { rejectValue: ErrorType }
+>("monthly_sales/selectGetMonthly_sales", async (year, { rejectWithValue }) => {
+  try {
+    const response: any = await monthlySaleApi.selectGetMonthlySales(year);
 
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const createMonthly_sales = createAsyncThunk(
+export const createMonthly_sales = createAsyncThunk<
+  PostMonthlySaleState,
+  Monthly_salesState,
+  { rejectValue: ErrorType }
+>(
   "monthly_sales/createMonthly_sales",
-  async (
-    formData: { year_month: string; monthly_sales: number },
-    { rejectWithValue }
-  ) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const response: any = await monthlySaleApi.createMonthlySales(formData);
 
@@ -45,16 +49,13 @@ export const createMonthly_sales = createAsyncThunk(
   }
 );
 
-export const updateMonthly_sales = createAsyncThunk(
+export const updateMonthly_sales = createAsyncThunk<
+  PostMonthlySaleState,
+  Monthly_salesState,
+  { rejectValue: ErrorType }
+>(
   "monthly_sales/updateMonthly_sales",
-  async (
-    formData: {
-      id: number;
-      year_month: string;
-      monthly_sales: number;
-    },
-    { rejectWithValue }
-  ) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const response: any = await monthlySaleApi.updateMonthlySales(formData);
 
@@ -65,17 +66,18 @@ export const updateMonthly_sales = createAsyncThunk(
   }
 );
 
-export const deleteMonthly_sales = createAsyncThunk(
-  "monthly_sales/deleteMonthly_sales",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await monthlySaleApi.deleteMonthlySales(id);
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const deleteMonthly_sales = createAsyncThunk<
+  deleteResponse,
+  number,
+  { rejectValue: ErrorType }
+>("monthly_sales/deleteMonthly_sales", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await monthlySaleApi.deleteMonthlySales(id);
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
 export interface Monthly_salesState {
   // ステートの型
@@ -84,19 +86,31 @@ export interface Monthly_salesState {
   monthly_sales: number;
 }
 
+export interface GetMonthlySaleState {
+  monthlySales: Monthly_salesState[];
+  message: string;
+}
+export interface PostMonthlySaleState {
+  monthlySale: Monthly_salesState;
+  message: string;
+}
+
 export interface RootState {
   // ルートステートの型を定義
   monthly_sales: Monthly_salesState[];
   status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
-  error: string | null; // エラー
+  error: ErrorType | null; // エラー
 }
 
 export const initialState: RootState = {
   monthly_sales: [],
   status: "idle",
   message: null,
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const monthly_salesSlice = createSlice({
@@ -126,7 +140,7 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(getMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(selectGetMonthly_sales.pending, (state, action) => {
@@ -146,7 +160,7 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(selectGetMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(createMonthly_sales.pending, (state, action) => {
@@ -166,7 +180,7 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(createMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(updateMonthly_sales.pending, (state, action) => {
@@ -187,7 +201,7 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(updateMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(deleteMonthly_sales.pending, (state, action) => {
@@ -206,7 +220,7 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(deleteMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
   },
 });

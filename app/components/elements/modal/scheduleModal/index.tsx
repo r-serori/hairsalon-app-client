@@ -18,6 +18,7 @@ import {
   updateCustomerAndSchedule,
   deleteSchedule,
   updateCustomerAndScheduleCreate,
+  RequestScheduleState,
 } from "../../../../store/schedules/scheduleSlice";
 import { RootState } from "../../../../redux/store";
 import { useSelector } from "react-redux";
@@ -219,8 +220,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : []
   );
 
-  const [customerNameValidate, setCustomerNameValidate] =
-    useState<boolean>(true);
+  const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
+    isCustomer && selectedEvent.title ? true : false
+  );
 
   const [usernameValidate, setUsernameValidate] = useState<boolean>(true);
 
@@ -237,7 +239,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
   console.log("titleです", title);
 
-  const [titleValidate, setTitleValidate] = useState<boolean>(false);
+  const [titleValidate, setTitleValidate] = useState<boolean>(
+    !isCustomer && selectedEvent.title ? true : false
+  );
   //開始時間を設定
   const [startTime, setStartTime] = useState<Dayjs | null>(
     allDay && whoIsEvent === "クリック"
@@ -336,24 +340,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   };
 
   const customerAndScheduleCreate = async (
-    scheduleAndCustomerFormData: {
-      id: number;
-      customer_name: string;
-      phone_number: string;
-      remarks: string;
-      course_id: number[];
-      option_id: number[];
-      merchandise_id: number[];
-      hairstyle_id: number[];
-      user_id: number[];
-      Sid: number;
-      title: string;
-      start_time: string;
-      end_time: string;
-      allDay: number;
-      customer_id: number;
-    },
-    newCustomer
+    scheduleAndCustomerFormData: RequestScheduleState
   ) => {
     try {
       if (
@@ -416,48 +403,45 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       return;
     }
 
-    customerAndScheduleCreate(
-      {
-        id: !newCustomer ? customerId : 0,
-        customer_name: customerName,
-        phone_number: phone_number,
-        remarks: remarks,
-        course_id: courses
-          .filter((course) => courseNames.includes(course.course_name))
-          .map((course) => course.id),
-        option_id: options
-          .filter((option) => optionNames.includes(option.option_name))
-          .map((option) => option.id),
-        merchandise_id: merchandises
-          .filter((merchandise) =>
-            merchandiseNames.includes(merchandise.merchandise_name)
-          )
-          .map((merchandise) => merchandise.id),
-        hairstyle_id: hairstyles
-          .filter((hairstyle) =>
-            hairstyleNames.includes(hairstyle.hairstyle_name)
-          )
-          .map((hairstyle) => hairstyle.id),
-        user_id: Array.isArray(users)
-          ? users
-              .filter((user) => userNames.includes(user.name))
-              .map((user) => user.id)
-          : [Object(users).id],
-        Sid: Sid ? Sid : 0,
-        title: title ? title : "",
-        start_time: dayjs(startTime)
-          .utc()
-          .tz("Asia/Tokyo")
-          .format("YYYY-MM-DD hh:mm:ss"),
-        end_time: dayjs(endTime)
-          .utc()
-          .tz("Asia/Tokyo")
-          .format("YYYY-MM-DD hh:mm:ss"),
-        allDay: allDay,
-        customer_id: !newCustomer ? customerId : 0,
-      },
-      newCustomer
-    );
+    customerAndScheduleCreate({
+      id: Sid ? Sid : 0,
+      customer_id: !newCustomer ? customerId : 0,
+      customer_name: customerName,
+      phone_number: phone_number,
+      remarks: remarks,
+      course_id: courses
+        .filter((course) => courseNames.includes(course.course_name))
+        .map((course) => course.id),
+      option_id: options
+        .filter((option) => optionNames.includes(option.option_name))
+        .map((option) => option.id),
+      merchandise_id: merchandises
+        .filter((merchandise) =>
+          merchandiseNames.includes(merchandise.merchandise_name)
+        )
+        .map((merchandise) => merchandise.id),
+      hairstyle_id: hairstyles
+        .filter((hairstyle) =>
+          hairstyleNames.includes(hairstyle.hairstyle_name)
+        )
+        .map((hairstyle) => hairstyle.id),
+      user_id: Array.isArray(users)
+        ? users
+            .filter((user) => userNames.includes(user.name))
+            .map((user) => user.id)
+        : [Object(users).id],
+
+      title: title ? title : "",
+      start_time: dayjs(startTime)
+        .utc()
+        .tz("Asia/Tokyo")
+        .format("YYYY-MM-DD hh:mm:ss"),
+      end_time: dayjs(endTime)
+        .utc()
+        .tz("Asia/Tokyo")
+        .format("YYYY-MM-DD hh:mm:ss"),
+      allDay: allDay,
+    });
   };
 
   const BackAgain = () => {

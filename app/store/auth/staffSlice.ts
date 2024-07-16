@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import RootState from "../../redux/reducers/rootReducer";
 import { staffRegister } from "./userSlice";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
 
 export interface StaffState {
   id: number;
@@ -21,20 +21,17 @@ const initialState: RootState = {
   staff: [],
   status: "idle",
   message: null,
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const staffSlice = createSlice({
   name: "staff",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(staffRegister.fulfilled, (state, action) => {
-      state.staff = action.payload.responseStaff;
-      state.status = "success";
-      state.message = "スタッフの登録が完了しました!";
-    });
-  },
+  extraReducers: (builder) => {},
 });
 
 const staffReducer = staffSlice.reducer;

@@ -3,72 +3,72 @@ import { hairstyleApi } from "../../services/hairstyles/api";
 import RootState from "../../redux/reducers/rootReducer";
 import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
-import { stat } from "fs";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { ErrorType, deleteResponse } from "../../components/Hooks/interface";
 
-export const getHairstyle = createAsyncThunk(
-  "hairstyles/getHairstyle",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await hairstyleApi.fetchAllHairstyles();
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const getHairstyle = createAsyncThunk<
+  GetHairstyleState,
+  void,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("hairstyles/getHairstyle", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await hairstyleApi.fetchAllHairstyles();
 
-export const createHairstyle = createAsyncThunk(
-  "hairstyles/createHairstyle",
-  async (
-    formData: {
-      id: number;
-      hairstyle_name: string;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await hairstyleApi.createHairstyle(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const updateHairstyle = createAsyncThunk(
-  "hairstyles/updateHairstyle",
-  async (
-    formData: {
-      id: number;
-      hairstyle_name: string;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await hairstyleApi.updateHairstyle(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createHairstyle = createAsyncThunk<
+  PostHairstyleState,
+  HairstyleState,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("hairstyles/createHairstyle", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await hairstyleApi.createHairstyle(formData);
 
-export const deleteHairstyle = createAsyncThunk(
-  "hairstyles/deleteHairstyle",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await hairstyleApi.deleteHairstyle(id);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
+
+export const updateHairstyle = createAsyncThunk<
+  PostHairstyleState,
+  HairstyleState,
+  {
+    rejectValue: ErrorType;
+  }
+>("hairstyles/updateHairstyle", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await hairstyleApi.updateHairstyle(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const deleteHairstyle = createAsyncThunk<
+  deleteResponse,
+  number,
+  {
+    rejectValue: ErrorType;
+  }
+>("hairstyles/deleteHairstyle", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await hairstyleApi.deleteHairstyle(id);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 export interface HairstyleState {
   // ステートの型
@@ -76,12 +76,21 @@ export interface HairstyleState {
   hairstyle_name: string;
 }
 
+export interface GetHairstyleState {
+  hairstyles: HairstyleState[];
+  message: string;
+}
+export interface PostHairstyleState {
+  hairstyle: HairstyleState;
+  message: string;
+}
+
 export interface RootState {
   // ルートステートの型を定義
   hairstyles: HairstyleState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: string | null;
+  error: ErrorType | null;
 }
 
 const initialState: RootState = {
@@ -89,7 +98,10 @@ const initialState: RootState = {
   hairstyles: [],
   status: "idle",
   message: null,
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const hairstyleSlice = createSlice({
@@ -111,7 +123,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(getHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(createHairstyle.pending, (state) => {
@@ -128,7 +140,7 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(createHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(updateHairstyle.pending, (state) => {
@@ -150,7 +162,7 @@ const hairstyleSlice = createSlice({
 
     builder.addCase(updateHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(deleteHairstyle.pending, (state) => {
@@ -166,13 +178,13 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(deleteHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
       state.hairstyles = action.payload.hairstyles
-        ? state.hairstyles.length === action.payload.hairstyles
+        ? state.hairstyles.length === action.payload.hairstyles.length
           ? state.hairstyles
           : action.payload.hairstyles
         : state.hairstyles;
@@ -181,7 +193,7 @@ const hairstyleSlice = createSlice({
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.status = "success";
       state.hairstyles = action.payload.hairstyles
-        ? state.hairstyles.length === action.payload.hairstyles
+        ? state.hairstyles.length === action.payload.hairstyles.length
           ? state.hairstyles
           : action.payload.hairstyles
         : state.hairstyles;

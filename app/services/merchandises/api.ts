@@ -1,10 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { MerchandiseState } from "../../store/merchandises/merchandiseSlice";
 
 export const merchandiseApi = {
-  createMerchandise: async (formData: {
-    merchandise_name: string;
-    price: number;
-  }) => {
+  createMerchandise: async (formData: MerchandiseState) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -40,11 +38,7 @@ export const merchandiseApi = {
   // }
   // },
 
-  updateMerchandise: async (formData: {
-    id: number;
-    merchandise_name: string;
-    price: number;
-  }) => {
+  updateMerchandise: async (formData: MerchandiseState) => {
     try {
       const response = await sendRequest(
         "POST",

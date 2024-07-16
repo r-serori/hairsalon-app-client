@@ -1,12 +1,24 @@
 import { useRouter } from "next/router";
+import { allLogout } from "../../Hooks/useMethod";
+import { useDispatch } from "react-redux";
 
-const ForgotPasswordButton: React.FC = () => {
+interface ForgotPasswordProps {
+  logout?: boolean;
+}
+
+const ForgotPasswordButton: React.FC<ForgotPasswordProps> = ({
+  logout = false,
+}) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   return (
     <div>
       <button
         onClick={() => {
+          if (logout) {
+            allLogout(dispatch);
+          }
           router.push("/auth/forgotPassword");
         }}
         className={

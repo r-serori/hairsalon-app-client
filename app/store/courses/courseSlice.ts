@@ -3,73 +3,72 @@ import { courseApi } from "../../services/courses/api";
 import RootState from "../../redux/reducers/rootReducer";
 import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { ErrorType, deleteResponse } from "../../components/Hooks/interface";
 
-export const getCourse = createAsyncThunk(
-  "courses/getCourse",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await courseApi.fetchAllCourses();
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const getCourse = createAsyncThunk<
+  GetCourseState,
+  void,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("courses/getCourse", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await courseApi.fetchAllCourses();
 
-export const createCourse = createAsyncThunk(
-  "courses/createCourse",
-  async (
-    formData: {
-      id: number;
-      course_name: string;
-      price: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await courseApi.createCourse(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const updateCourse = createAsyncThunk(
-  "courses/updateCourse",
-  async (
-    formData: {
-      id: number;
-      course_name: string;
-      price: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await courseApi.updateCourse(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createCourse = createAsyncThunk<
+  PostCourseState,
+  CourseState,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("courses/createCourse", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await courseApi.createCourse(formData);
 
-export const deleteCourse = createAsyncThunk(
-  "courses/deleteCourse",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await courseApi.deleteCourse(id);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
+
+export const updateCourse = createAsyncThunk<
+  PostCourseState,
+  CourseState,
+  {
+    rejectValue: ErrorType;
+  }
+>("courses/updateCourse", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await courseApi.updateCourse(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const deleteCourse = createAsyncThunk<
+  deleteResponse,
+  number,
+  {
+    rejectValue: ErrorType;
+  }
+>("courses/deleteCourse", async (id, { rejectWithValue }) => {
+  try {
+    const response = await courseApi.deleteCourse(id);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 export interface CourseState {
   // ステートの型
@@ -78,12 +77,22 @@ export interface CourseState {
   price: number;
 }
 
+export interface GetCourseState {
+  message: string;
+  courses: CourseState[];
+}
+
+export interface PostCourseState {
+  message: string;
+  course: CourseState;
+}
+
 export interface RootState {
   // ルートステートの型を定義
   courses: CourseState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null; // メッセージ
-  error: string | null; // エラーメッセージ
+  error: ErrorType | null; // エラーメッセージ
 }
 
 const initialState: RootState = {
@@ -91,7 +100,10 @@ const initialState: RootState = {
   courses: [],
   status: "idle",
   message: null, // メッセージ
-  error: null, // エラーメッセージ
+  error: {
+    message: "",
+    status: 0,
+  }, // エラーメッセージ
 };
 
 const courseSlice = createSlice({
@@ -113,7 +125,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(getCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(createCourse.pending, (state) => {
@@ -130,7 +142,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(createCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(updateCourse.pending, (state) => {
@@ -151,7 +163,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(updateCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(deleteCourse.pending, (state) => {
@@ -171,7 +183,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(deleteCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {

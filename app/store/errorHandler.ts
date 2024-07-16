@@ -48,3 +48,20 @@ export const handleCatchError = (err: any, rejectWithValue: Function) => {
     message: "予期しないエラーが発生しました",
   });
 };
+
+export const renderError = (errorStatus: number, router) => {
+  switch (errorStatus) {
+    case 403:
+      return "アクセス権限がありません。";
+    case 401:
+      return "認証が必要です。ログイン画面へ移動し、、ログインしてください。";
+    case 503:
+      return "サービスが一時的に利用できません。しばらくしてからもう一度お試しください。";
+    case 419:
+      return "セッションがタイムアウトしました。再度ログインしてください。";
+    case 500:
+      return "サーバーエラーが発生しました。しばらくしてからもう一度お試しください。";
+    default:
+      return;
+  }
+};

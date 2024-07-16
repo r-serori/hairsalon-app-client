@@ -48,11 +48,18 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
       : stockCategoryNames[0]
   );
 
-  const [productNameValidate, setProductNameValidate] = useState<boolean>(true);
-  const [productPriceValidate, setProductPriceValidate] =
-    useState<boolean>(true);
-  const [quantityValidate, setQuantityValidate] = useState<boolean>(true);
-  const [noticeValidate, setNoticeValidate] = useState<boolean>(true);
+  const [productNameValidate, setProductNameValidate] = useState<boolean>(
+    node.product_name ? true : false
+  );
+  const [productPriceValidate, setProductPriceValidate] = useState<boolean>(
+    node.product_price ? true : false
+  );
+  const [quantityValidate, setQuantityValidate] = useState<boolean>(
+    node.quantity ? true : false
+  );
+  const [noticeValidate, setNoticeValidate] = useState<boolean>(
+    node.notice ? true : false
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -102,6 +109,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             value={String(product_price)}
             onChange={(e) => setProductPrice(Number(e.target.value))}
             onValidationChange={(isValid) => setProductPriceValidate(isValid)}
+            format={true}
           />
 
           <BasicNumberField
@@ -110,6 +118,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             value={String(quantity)}
             onChange={(e) => setQuantity(Number(e.target.value))}
             onValidationChange={(isValid) => setQuantityValidate(isValid)}
+            format={true}
           />
 
           <BasicTextField
@@ -137,6 +146,7 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             value={String(notice)}
             onChange={(e) => setNotice(Number(e.target.value))}
             onValidationChange={(isValid) => setNoticeValidate(isValid)}
+            format={true}
           />
 
           <SingleCheckBox

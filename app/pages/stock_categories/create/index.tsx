@@ -37,16 +37,19 @@ const stockCategoryCreate: React.FC = () => {
       {scError && (
         <BasicAlerts type="error" message={scError} space={1} padding={1} />
       )}
-      <div className="ml-4 mt-4 ">
-        <RouterButton
-          link={"/stock_categories"}
-          value="在庫カテゴリ画面に戻る"
-        />
-      </div>
       {scStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <StockCategoryForm createStockCategory={handleCreate} />
+        <div>
+          <div className="ml-4 mt-4">
+            <RouterButton
+              link={"/stock_categories"}
+              value="在庫カテゴリ画面に戻る"
+            />
+          </div>
+
+          <StockCategoryForm createStockCategory={handleCreate} />
+        </div>
       )}
     </div>
   );

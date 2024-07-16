@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getHairstyle_customers = createAsyncThunk(
 //   "hairstyle_customers/getHairstyle_customers",
@@ -55,13 +56,16 @@ export interface RootState {
   // RootStateの型
   hairstyle_customers: Hairstyle_customersState[];
   status: "idle" | "loading" | "success" | "failed";
-  error: string | null;
+  error: ErrorType | null;
 }
 
 export const initialState: RootState = {
   hairstyle_customers: [],
   status: "idle",
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const hairstyle_customersSlice = createSlice({

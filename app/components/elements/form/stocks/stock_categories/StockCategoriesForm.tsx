@@ -18,7 +18,9 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
 }) => {
   const [category, setCategory] = useState(node ? node.category : "");
 
-  const [categoryValidate, setCategoryValidate] = useState<boolean>(true);
+  const [categoryValidate, setCategoryValidate] = useState<boolean>(
+    node.category ? true : false
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

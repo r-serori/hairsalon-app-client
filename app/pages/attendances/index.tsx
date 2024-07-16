@@ -57,9 +57,8 @@ const Attendances = () => {
         router.push("/auth/login");
       }
     };
-
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const uStatus: string = useSelector(userStatus);
 
@@ -114,13 +113,14 @@ const Attendances = () => {
       {uError && (
         <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
-      <div className="mx-4">
-        <div className="flex my-4">
-          <RouterButton link="/auth/staffRegister" value="ユーザー登録" />
-        </div>
-        {uStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
+      {uStatus === "loading" || permission === null || !nodes ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="flex my-4">
+            <RouterButton link="/auth/staffRegister" value="ユーザー登録" />
+          </div>
+
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -129,8 +129,8 @@ const Attendances = () => {
             link="/attendances"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

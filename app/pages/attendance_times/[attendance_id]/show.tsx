@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import {
   Attendance_timeState,
+  GetAttendanceTimeState,
   selectGetAttendanceTimes,
 } from "../../../store/attendance_times/attendance_timesSlice";
 import EasyModal from "../../../components/elements/modal/easy/EasyModal";
@@ -16,15 +17,14 @@ import {
   attendance_timeMessage,
   attendance_timesStore,
   attendance_timeStatus,
+  attendance_timeErrorStatus,
 } from "../../../components/Hooks/selector";
-import {
-  userKey,
-  permissionStore,
-} from "../../../components/Hooks/authSelector";
+import { permissionStore } from "../../../components/Hooks/authSelector";
 import { ownerPermission } from "../../../components/Hooks/useMethod";
 import { allLogout } from "../../../components/Hooks/useMethod";
 import _ from "lodash";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { renderError } from "../../../store/errorHandler";
 
 const attendanceTimes: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,7 +34,6 @@ const attendanceTimes: React.FC = () => {
   console.log("idだよ");
   console.log({ id });
 
-  const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   // 初回のみデータ取得を行うためのフラグ
@@ -45,6 +44,8 @@ const attendanceTimes: React.FC = () => {
   const atMessage: string | null = useSelector(attendance_timeMessage);
 
   const atError: string | null = useSelector(attendance_timeError);
+
+  const atErrorStatus: number | null = useSelector(attendance_timeErrorStatus);
 
   const attendanceTimes: Attendance_timeState[] = useSelector(
     attendance_timesStore
@@ -80,12 +81,17 @@ const attendanceTimes: React.FC = () => {
             permission === "スタッフ")
         ) {
           setYearMonth("000111");
-          await dispatch(
+          const response = await dispatch(
             selectGetAttendanceTimes({
               user_id: Number(id),
               yearMonth: yearMonth,
             }) as any
           );
+          if (response.meta.requestStatus === "fulfilled") {
+            console.log("response", response);
+          } else {
+            renderError(atErrorStatus, router);
+          }
         } else {
           return;
         }
@@ -95,8 +101,8 @@ const attendanceTimes: React.FC = () => {
         router.push("/auth/login");
       }
     };
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const searchItems = [
     { key: "start_time", value: "出勤時間" },
@@ -138,44 +144,46 @@ const attendanceTimes: React.FC = () => {
           <BasicAlerts type="error" message={atError} space={1} padding={0.6} />
         )}
       </div>
-      <div className="flex justify-between my-4 mx-4">
-        <div>
-          <RouterButton link="/attendances" value="スタッフ画面へ戻る" />
-        </div>
-        <div>
-          {yearMonth !== "000111" && (
-            <button
-              className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
-              onClick={() => {
-                nowAttendanceTime();
-              }}
-            >
-              現在の年月に戻す
-            </button>
-          )}
-        </div>
-        <div>
-          <EasyModal
-            open={attendanceTimeOpen}
-            setOpen={setAttendanceTimeOpen}
-            whoAreYou="attendanceTimes"
-            whatIsYourId={Number(id)}
-            setYearMonth={setYearMonth}
-          />
-        </div>
-      </div>
-
-      {atStatus === "loading" ? (
+      {atStatus === "loading" || permission === null || !nodes ? (
         <p>loading...</p>
       ) : (
-        <ComponentTable
-          nodes={nodes}
-          searchItems={searchItems}
-          nodesProps={nodesProps}
-          tHeaderItems={tHeaderItems}
-          link="/attendance_times"
-          role={permission}
-        />
+        <div>
+          <div className="flex justify-between my-4 mx-4">
+            <div>
+              <RouterButton link="/attendances" value="スタッフ画面へ戻る" />
+            </div>
+            <div>
+              {yearMonth !== "000111" && (
+                <button
+                  className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
+                  onClick={() => {
+                    nowAttendanceTime();
+                  }}
+                >
+                  現在の年月に戻す
+                </button>
+              )}
+            </div>
+            <div>
+              <EasyModal
+                open={attendanceTimeOpen}
+                setOpen={setAttendanceTimeOpen}
+                whoAreYou="attendanceTimes"
+                whatIsYourId={Number(id)}
+                setYearMonth={setYearMonth}
+              />
+            </div>
+          </div>
+
+          <ComponentTable
+            nodes={nodes}
+            searchItems={searchItems}
+            nodesProps={nodesProps}
+            tHeaderItems={tHeaderItems}
+            link="/attendance_times"
+            role={permission}
+          />
+        </div>
       )}
     </div>
   );

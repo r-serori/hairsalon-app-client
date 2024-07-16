@@ -69,8 +69,8 @@ const stock_categories = () => {
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const searchItems = [{ key: "category", value: "在庫カテゴリ名" }];
 
@@ -91,17 +91,18 @@ const stock_categories = () => {
       {scError && (
         <BasicAlerts type="error" message={scError} space={1} padding={0.6} />
       )}
-      <div className="mx-4">
-        <div className="flex justify-between my-4">
-          <RouterButton link="/stocks" value="在庫画面に戻る" />
-          <RouterButton
-            link="/stock_categories/create"
-            value="在庫カテゴリ新規作成"
-          />
-        </div>
-        {scStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
+      {scStatus === "loading" ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="flex justify-between my-4">
+            <RouterButton link="/stocks" value="在庫画面に戻る" />
+            <RouterButton
+              link="/stock_categories/create"
+              value="在庫カテゴリ新規作成"
+            />
+          </div>
+
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -110,8 +111,8 @@ const stock_categories = () => {
             link="/stock_categories"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

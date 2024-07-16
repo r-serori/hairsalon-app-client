@@ -14,12 +14,11 @@ import {
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { staffPermission } from "../../components/Hooks/useMethod";
 import { isLogout } from "../../store/auth/isLoginSlice";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const updatePasswordPage: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const permission: PermissionsState = useSelector(permissionStore);
 
   const uError: string | null = useSelector(userError);
 
@@ -66,7 +65,16 @@ const updatePasswordPage: React.FC = () => {
       {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <UpdatePasswordForm onSubmitUpdatePassword={handleUpdatePassword} />
+        <div>
+          <div className="mt-4 ml-4">
+            <RouterButton
+              link={"/userProfile/updateUserInformation"}
+              value="プロフィール画面に戻る"
+            />
+          </div>
+
+          <UpdatePasswordForm onSubmitUpdatePassword={handleUpdatePassword} />
+        </div>
       )}
     </div>
   );

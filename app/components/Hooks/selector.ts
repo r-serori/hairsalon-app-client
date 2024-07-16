@@ -12,9 +12,13 @@ export const attendance_timeStatus = (state: RootState) =>
 export const attendance_timeMessage = (state: RootState) =>
   state.attendance_times.message;
 
-//勤怠時間のエラーを取得
+//勤怠時間のエラーメッセージを取得
 export const attendance_timeError = (state: RootState) =>
-  state.attendance_times.error;
+  state.attendance_times.error.message;
+
+//勤怠時間のエラーステータスを取得
+export const attendance_timeErrorStatus = (state: RootState) =>
+  state.attendance_times.error.status;
 
 //--------------------------------------------
 //コース情報を取得 配列で取得
@@ -27,7 +31,11 @@ export const courseStatus = (state: RootState) => state.courses.status;
 export const courseMessage = (state: RootState) => state.courses.message;
 
 //コース情報のエラーを取得
-export const courseError = (state: RootState) => state.courses.error;
+export const courseError = (state: RootState) => state.courses.error.message;
+
+//コース情報のエラーを取得
+export const courseErrorStatus = (state: RootState) =>
+  state.courses.error.status;
 
 //--------------------------------------------
 //オプション情報を取得 配列で取得
@@ -40,8 +48,10 @@ export const optionStatus = (state: RootState) => state.options.status;
 export const optionMessage = (state: RootState) => state.options.message;
 
 //オプション情報のエラーを取得
-export const optionError = (state: RootState) => state.options.error;
+export const optionError = (state: RootState) => state.options.error.message;
 
+export const optionErrorStatus = (state: RootState) =>
+  state.options.error.status;
 //--------------------------------------------
 //物販情報を取得 配列で取得
 export const merchandiseStore = (state: RootState) =>
@@ -56,7 +66,11 @@ export const merchandiseMessage = (state: RootState) =>
   state.merchandises.message;
 
 //物販情報のエラーを取得
-export const merchandiseError = (state: RootState) => state.merchandises.error;
+export const merchandiseError = (state: RootState) =>
+  state.merchandises.error.message;
+
+export const merchandiseErrorStatus = (state: RootState) =>
+  state.merchandises.error.status;
 
 //--------------------------------------------
 //髪型情報を取得 配列で取得
@@ -70,7 +84,11 @@ export const hairstyleStatus = (state: RootState) => state.hairstyles.status;
 export const hairstyleMessage = (state: RootState) => state.hairstyles.message;
 
 //髪型情報のエラーを取得
-export const hairstyleError = (state: RootState) => state.hairstyles.error;
+export const hairstyleError = (state: RootState) =>
+  state.hairstyles.error.message;
+
+export const hairstyleErrorStatus = (state: RootState) =>
+  state.hairstyles.error.status;
 
 //--------------------------------------------
 //顧客情報を取得 配列で取得
@@ -83,7 +101,11 @@ export const customerStatus = (state: RootState) => state.customers.status;
 export const customerMessage = (state: RootState) => state.customers.message;
 
 //顧客情報のエラーを取得
-export const customerError = (state: RootState) => state.customers.error;
+export const customerError = (state: RootState) =>
+  state.customers.error.message;
+
+export const customerErrorStatus = (state: RootState) =>
+  state.customers.error.status;
 
 //--------------------------------------------
 //在庫情報を取得 配列で取得
@@ -96,7 +118,9 @@ export const stockStatus = (state: RootState) => state.stocks.status;
 export const stockMessage = (state: RootState) => state.stocks.message;
 
 //在庫情報のエラーを取得
-export const stockError = (state: RootState) => state.stocks.error;
+export const stockError = (state: RootState) => state.stocks.error.message;
+
+export const stockErrorStatus = (state: RootState) => state.stocks.error.status;
 
 //--------------------------------------------
 //在庫カテゴリ情報を取得 配列で取得
@@ -113,7 +137,10 @@ export const stock_categoryMessage = (state: RootState) =>
 
 //在庫カテゴリ情報のエラーを取得
 export const stock_categoryError = (state: RootState) =>
-  state.stock_categories.error;
+  state.stock_categories.error.message;
+
+export const stock_categoryErrorStatus = (state: RootState) =>
+  state.stock_categories.error.status;
 
 //--------------------------------------------
 //スケジュール情報を取得 配列で取得
@@ -126,7 +153,11 @@ export const scheduleStatus = (state: RootState) => state.schedules.status;
 export const scheduleMessage = (state: RootState) => state.schedules.message;
 
 //スケジュール情報のエラーを取得
-export const scheduleError = (state: RootState) => state.schedules.error;
+export const scheduleError = (state: RootState) =>
+  state.schedules.error.message;
+
+export const scheduleErrorStatus = (state: RootState) =>
+  state.schedules.error.status;
 
 //--------------------------------------------
 //日次売上情報を取得 配列で取得
@@ -142,7 +173,11 @@ export const daily_saleMessage = (state: RootState) =>
   state.daily_sales.message;
 
 //日次売上情報のエラーを取得
-export const daily_saleError = (state: RootState) => state.daily_sales.error;
+export const daily_saleError = (state: RootState) =>
+  state.daily_sales.error.message;
+
+export const daily_saleErrorStatus = (state: RootState) =>
+  state.daily_sales.error.status;
 
 //--------------------------------------------
 //月次売上情報を取得 配列で取得
@@ -161,7 +196,10 @@ export const monthly_saleMessage = (state: RootState) =>
 //月次売上情報のエラーを取得
 
 export const monthly_saleError = (state: RootState) =>
-  state.monthly_sales.error;
+  state.monthly_sales.error.message;
+
+export const monthly_saleErrorStatus = (state: RootState) =>
+  state.monthly_sales.error.status;
 
 //--------------------------------------------
 //年次売上情報を取得 配列で取得
@@ -177,7 +215,11 @@ export const yearly_saleMessage = (state: RootState) =>
   state.yearly_sales.message;
 
 //年次売上情報のエラーを取得
-export const yearly_saleError = (state: RootState) => state.yearly_sales.error;
+export const yearly_saleError = (state: RootState) =>
+  state.yearly_sales.error.message;
+
+export const yearly_saleErrorStatus = (state: RootState) =>
+  state.yearly_sales.error.status;
 
 //--------------------------------------------
 //中間テーブル情報

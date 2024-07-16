@@ -1,7 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { Stock_categoryState } from "../../store/stocks/stock_categories/stock_categorySlice";
 
 export const stockCategoryApi = {
-  createStockCategory: async (formData: { category: string }) => {
+  createStockCategory: async (formData: Stock_categoryState) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -43,7 +44,7 @@ export const stockCategoryApi = {
   // }
   // },
 
-  updateStockCategory: async (formData: { id: number; category: string }) => {
+  updateStockCategory: async (formData: Stock_categoryState) => {
     try {
       const response = await sendRequest(
         "POST",

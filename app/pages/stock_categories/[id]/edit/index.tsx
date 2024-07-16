@@ -47,20 +47,23 @@ const stockCategoryEdit: React.FC = () => {
       {scError && (
         <BasicAlerts type="error" message={scError} space={1} padding={1} />
       )}
-      <div className="my-4 ml-4">
-        <RouterButton
-          link={"/stock_categories"}
-          value="在庫カテゴリ画面に戻る"
-        />
-      </div>
       {scStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <StockCategoryForm
-          node={stockCategory}
-          createStockCategory={handleUpdate}
-          edit={true}
-        />
+        <div>
+          <div className="mt-4 ml-4">
+            <RouterButton
+              link={"/stock_categories"}
+              value="在庫カテゴリ画面に戻る"
+            />
+          </div>
+
+          <StockCategoryForm
+            node={stockCategory}
+            createStockCategory={handleUpdate}
+            edit={true}
+          />
+        </div>
       )}
     </div>
   );

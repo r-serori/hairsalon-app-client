@@ -59,8 +59,7 @@ const attenDanceEdit: React.FC = () => {
         router.push("/auth/login");
       }
     };
-
-    fetchData();
+    if (permission) fetchData();
   }, [dispatch]);
 
   const handleUpdate = async (formData: { id: number; role: string }) => {
@@ -84,12 +83,16 @@ const attenDanceEdit: React.FC = () => {
       if (!confirm) {
         return;
       } else {
-        await dispatch(deleteUser(editUser.id) as any);
+        const response = await dispatch(deleteUser(editUser.id) as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          router.push("/attendances");
+        } else {
+          throw new Error("削除に失敗しました");
+        }
       }
     } catch (error) {
       console.error(error);
     }
-    router.push("/attendances");
   };
 
   return (
@@ -97,19 +100,22 @@ const attenDanceEdit: React.FC = () => {
       {uError && (
         <BasicAlerts message={uError} type={"error"} padding={1} space={1} />
       )}
-      <div className="mx-4">
-        <div className="flex justify-between my-4 ">
-          <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
-
-          <DeleteButton value="退職する" onClicker={handleDeleteUser} />
-        </div>
-      </div>
 
       {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <div>
-          <UserUpdateForm onSubmit={handleUpdate} node={editUser} />
+          <div className="mx-4">
+            <div className="flex justify-between my-4">
+              <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
+
+              <DeleteButton value="退職する" onClicker={handleDeleteUser} />
+            </div>
+          </div>
+
+          <div>
+            <UserUpdateForm onSubmit={handleUpdate} node={editUser} />
+          </div>
         </div>
       )}
     </div>

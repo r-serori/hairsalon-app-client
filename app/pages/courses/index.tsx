@@ -45,12 +45,17 @@ const courses: React.FC = () => {
         console.log("permission", permission);
 
         staffPermission(permission, router);
-        if (permission === "オーナー") {
-          setTHeaderItems(["コース名", "価格", "編集", "削除"]);
-        } else if (permission === "マネージャー") {
-          setTHeaderItems(["コース名", "価格", "編集"]);
-        } else {
-          setTHeaderItems(["コース名", "価格"]);
+
+        switch (permission) {
+          case "オーナー":
+            setTHeaderItems(["コース名", "価格", "編集", "削除"]);
+            break;
+          case "マネージャー":
+            setTHeaderItems(["コース名", "価格", "編集"]);
+            break;
+          default:
+            setTHeaderItems(["コース名", "価格"]);
+            break;
         }
 
         if (
@@ -69,9 +74,8 @@ const courses: React.FC = () => {
         router.push("/auth/login");
       }
     };
-
-    fetchData(); // useEffect内で関数を呼び出す
-  }, [dispatch]); // useEffectの依存リストを指定
+    if (permission) fetchData(); // useEffect内で関数を呼び出す
+  }, [dispatch, permission]); // useEffectの依存リストを指定
 
   const searchItems = [
     { key: "course_name", value: "コース名" },
@@ -98,13 +102,14 @@ const courses: React.FC = () => {
       {cError && (
         <BasicAlerts type="error" message={cError} space={1} padding={0.6} />
       )}
-      <div className="flex mx-4">
-        <div className="my-4">
-          <RouterButton link="/courses/create" value="コース新規作成" />
-        </div>
-        {cStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
+      {cStatus === "loading" || permission === null || !nodes ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="my-4">
+            <RouterButton link="/courses/create" value="コース新規作成" />
+          </div>
+
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -113,8 +118,8 @@ const courses: React.FC = () => {
             link="/courses"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,16 +1,7 @@
 import { sendRequest } from "../requestApi";
-
+import { OwnerState } from "../../store/auth/ownerSlice";
 export const ownerApi = {
-  ownerRegister: async (formData: {
-    store_name: string;
-    postal_code: string;
-    prefecture: string;
-    city: string;
-    addressLine1: string;
-    addressLine2?: string;
-    phone_number: string;
-    user_id: number;
-  }) => {
+  ownerRegister: async (formData: OwnerState) => {
     try {
       const response = (await sendRequest(
         "POST",

@@ -19,7 +19,6 @@ import { userKey, permissionStore } from "../../components/Hooks/authSelector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
-import { Await } from "react-router-dom";
 
 const hairstyles: React.FC = () => {
   const router = useRouter();
@@ -35,7 +34,6 @@ const hairstyles: React.FC = () => {
 
   const hError: string | null = useSelector(hairstyleError);
 
-  const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -67,8 +65,8 @@ const hairstyles: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const searchItems = [{ key: "hairstyle_name", value: "髪型" }];
 
@@ -89,14 +87,14 @@ const hairstyles: React.FC = () => {
       {hError && (
         <BasicAlerts type="error" message={hError} space={1} padding={0.6} />
       )}
+      {hStatus === "loading" || !nodes || permission === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="my-4">
+            <RouterButton link="/hairstyles/create" value="髪型情報新規作成" />
+          </div>
 
-      <div className="mx-4">
-        <div className="my-4">
-          <RouterButton link="/hairstyles/create" value="髪型情報新規作成" />
-        </div>
-        {hStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -105,8 +103,8 @@ const hairstyles: React.FC = () => {
             link="/hairstyles"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

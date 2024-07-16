@@ -43,9 +43,7 @@ const AttendanceTimeShots = () => {
 
     const fetchData = async () => {
       try {
-        if (permission) {
-          staffPermission(permission, router);
-        }
+        staffPermission(permission, router);
 
         const userCount = localStorage.getItem("userCount");
 
@@ -65,8 +63,7 @@ const AttendanceTimeShots = () => {
         router.push("/auth/login");
       }
     };
-
-    fetchData();
+    if (permission) fetchData();
   }, [dispatch, permission]);
 
   // const atimeStatus = useSelector(attendance_timeStatus);
@@ -114,7 +111,7 @@ const AttendanceTimeShots = () => {
         )}
       </div>
       <div className="my-4 mx-4">
-        {uStatus === "loading" || !nodes ? (
+        {uStatus === "loading" || !nodes || permission === null ? (
           <p className="py-4 text-blue-700">Loading...</p>
         ) : (
           <ComponentTable

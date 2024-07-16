@@ -21,7 +21,9 @@ const DailySalesForm: React.FC<DailySalesFormProps> = ({
     node.daily_sales ? node.daily_sales : 0
   );
 
-  const [dailySalesValidate, setDailySalesValidate] = useState<boolean>(true);
+  const [dailySalesValidate, setDailySalesValidate] = useState<boolean>(
+    node.daily_sales ? true : false
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

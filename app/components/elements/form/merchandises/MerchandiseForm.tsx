@@ -23,8 +23,10 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
   const [merchandiseNameValidate, setMerchandiseNameValidate] =
-    useState<boolean>(true);
-  const [priceValidate, setPriceValidate] = useState<boolean>(true);
+    useState<boolean>(node.merchandise_name ? true : false);
+  const [priceValidate, setPriceValidate] = useState<boolean>(
+    node.price ? true : false
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,6 +66,7 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}
             onValidationChange={(isValid) => setPriceValidate(isValid)}
+            format={true}
           />
 
           <PrimaryButton value={"作成"} />

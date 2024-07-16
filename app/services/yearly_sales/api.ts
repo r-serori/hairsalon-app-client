@@ -1,10 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { Yearly_salesState } from "../../store/yearly_sales/yearly_saleSlice";
 
 export const yearlySaleApi = {
-  createYearlySales: async (formData: {
-    year: string;
-    yearly_sales: number;
-  }) => {
+  createYearlySales: async (formData: Yearly_salesState) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -54,11 +52,7 @@ export const yearlySaleApi = {
     }
   },
 
-  updateYearlySales: async (formData: {
-    id: number;
-    year: string;
-    yearly_sales: number;
-  }) => {
+  updateYearlySales: async (formData: Yearly_salesState) => {
     try {
       const response = await sendRequest(
         "POST",

@@ -1,7 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { HairstyleState } from "../../store/hairstyles/hairstyleSlice";
 
 export const hairstyleApi = {
-  createHairstyle: async (formData: { hairstyle_name: string }) => {
+  createHairstyle: async (formData: HairstyleState) => {
     try {
       const response = await sendRequest("POST", "/hairstyles/store", formData);
       // console.log("APIのhairstyleDataだよ");
@@ -33,7 +34,7 @@ export const hairstyleApi = {
   //   }
   // },
 
-  updateHairstyle: async (formData: { id: number; hairstyle_name: string }) => {
+  updateHairstyle: async (formData: HairstyleState) => {
     try {
       const response = await sendRequest(
         "POST",

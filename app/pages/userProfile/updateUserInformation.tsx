@@ -15,6 +15,7 @@ import { staffPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { showUser } from "../../store/auth/userSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
+import ForgotPasswordButton from "../../components/elements/button/ForgotPasswordButton";
 
 const UpdateUserInformationPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -87,14 +88,12 @@ const UpdateUserInformationPage: React.FC = () => {
       )}
       <div className="mx-4">
         <div className="flex justify-between my-4 ">
+          <RouterButton link={"/dashboard"} value="一覧画面へ戻る" />
           <RouterButton
             link={"/userProfile/updatePassword"}
             value="パスワードを変更する場合はこちら"
           />
-          <RouterButton
-            link={"/userProfile/resetPassword"}
-            value="パスワードを忘れてしまった場合はこちら"
-          />
+          <ForgotPasswordButton logout={true} />
         </div>
 
         {uStatus === "loading" ? (

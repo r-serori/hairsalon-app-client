@@ -1,86 +1,75 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { stockApi } from "../../services/stocks/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { deleteResponse, ErrorType } from "../../components/Hooks/interface";
 // APIから在庫情報を取得する非同期アクション//get
-export const getStock = createAsyncThunk(
-  "stocks/getStock",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await stockApi.fetchAllStocks(); // APIからデータを取得
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const getStock = createAsyncThunk<
+  GetStockState,
+  void,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("stocks/getStock", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await stockApi.fetchAllStocks(); // APIからデータを取得
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 // 新しい在庫情報を作成する非同期アクション//post,store
-export const createStock = createAsyncThunk(
-  "stocks/createStock",
-  async (
-    formData: {
-      id: number;
-      product_name: string;
-      product_price: number;
-      quantity: number;
-      remarks: string;
-      supplier: string;
-      notice: number;
-      stock_category_id: number | null;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await stockApi.createStock(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createStock = createAsyncThunk<
+  PostStockState,
+  StockState,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("stocks/createStock", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await stockApi.createStock(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 // 在庫情報を更新する非同期アクション,put,update
-export const updateStock = createAsyncThunk(
-  "stocks/updateStock",
-  async (
-    formData: {
-      id: number;
-      product_name: string;
-      product_price: number;
-      quantity: number;
-      remarks: string;
-      supplier: string;
-      notice: number;
-      stock_category_id: number | null;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await stockApi.updateStock(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const updateStock = createAsyncThunk<
+  PostStockState,
+  StockState,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("stocks/updateStock", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await stockApi.updateStock(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 // 在庫情報を削除する非同期アクション//delete
-export const deleteStock = createAsyncThunk(
-  "stocks/deleteStock",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await stockApi.deleteStock(id);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const deleteStock = createAsyncThunk<
+  deleteResponse,
+  number,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("stocks/deleteStock", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await stockApi.deleteStock(id);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 export interface StockState {
   // ステートの型
@@ -94,11 +83,21 @@ export interface StockState {
   stock_category_id: number | null; //在庫カテゴリー、外部キー
 }
 
+export interface GetStockState {
+  stocks: StockState[];
+  message: string | null;
+}
+
+export interface PostStockState {
+  stock: StockState;
+  message: string;
+}
+
 export interface RootState {
   stocks: StockState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: string | null;
+  error: ErrorType | null;
 }
 
 const initialState: RootState = {
@@ -106,7 +105,10 @@ const initialState: RootState = {
   stocks: [],
   status: "idle",
   message: null,
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const stockSlice = createSlice({
@@ -129,7 +131,7 @@ const stockSlice = createSlice({
     });
     builder.addCase(getStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(createStock.pending, (state) => {
@@ -146,7 +148,7 @@ const stockSlice = createSlice({
     });
     builder.addCase(createStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(updateStock.pending, (state) => {
@@ -167,7 +169,7 @@ const stockSlice = createSlice({
     });
     builder.addCase(updateStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(deleteStock.pending, (state) => {
@@ -183,7 +185,7 @@ const stockSlice = createSlice({
     });
     builder.addCase(deleteStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
   },
 });

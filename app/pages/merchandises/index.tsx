@@ -65,8 +65,8 @@ const merchandises = () => {
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const searchItems = [
     { key: "merchandise_name", value: "物販名" },
@@ -91,14 +91,17 @@ const merchandises = () => {
       {mError && (
         <BasicAlerts type="error" message={mError} space={1} padding={0.6} />
       )}
+      {mStatus === "loading" || !nodes || permission === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="my-4">
+            <RouterButton
+              link="/merchandises/create"
+              value="物販情報新規作成"
+            />
+          </div>
 
-      <div className="mx-4">
-        <div className="my-4">
-          <RouterButton link="/merchandises/create" value="物販情報新規作成" />
-        </div>
-        {mStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -107,8 +110,8 @@ const merchandises = () => {
             link="/merchandises"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

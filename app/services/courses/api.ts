@@ -1,7 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { CourseState } from "../../store/courses/courseSlice";
 
 export const courseApi = {
-  createCourse: async (formData: { course_name: string; price: number }) => {
+  createCourse: async (formData: CourseState) => {
     try {
       const response = await sendRequest("POST", "/courses/store", formData);
       // console.log("APIのcourseDataだよ");
@@ -30,11 +31,7 @@ export const courseApi = {
   //   return response;
   // },
 
-  updateCourse: async (formData: {
-    id: number;
-    course_name: string;
-    price: number;
-  }) => {
+  updateCourse: async (formData: CourseState) => {
     try {
       const response = await sendRequest("POST", `/courses/update`, formData);
       // console.log("APIのcourseDataだよ");

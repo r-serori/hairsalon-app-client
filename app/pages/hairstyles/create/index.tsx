@@ -37,13 +37,16 @@ const hairstyleCreate = () => {
       {hError && (
         <BasicAlerts type="error" message={hError} space={1} padding={1} />
       )}
-      <div className="mt-4 ml-4">
-        <RouterButton link={"/hairstyles"} value="髪型画面に戻る" />
-      </div>
       {hStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <HairstyleForm createHairstyle={handleCreate} />
+        <div>
+          <div className="mt-4 ml-4">
+            <RouterButton link={"/hairstyles"} value="髪型画面に戻る" />
+          </div>
+
+          <HairstyleForm createHairstyle={handleCreate} />
+        </div>
       )}
     </div>
   );

@@ -52,13 +52,16 @@ const dailySalesEdit: React.FC = () => {
       {dsError && (
         <BasicAlerts type="error" message={dsError} space={1} padding={1} />
       )}
-      <div className="mx-4 my-4">
-        <RouterButton link={"/daily_sales"} value="日別売上画面に戻る" />
-      </div>
       {dsStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <DailySalesForm node={dailySale} createDailySales={handleUpdate} />
+        <div>
+          <div className="mx-4 my-4">
+            <RouterButton link={"/daily_sales"} value="日別売上画面に戻る" />
+          </div>
+
+          <DailySalesForm node={dailySale} createDailySales={handleUpdate} />
+        </div>
       )}
     </div>
   );

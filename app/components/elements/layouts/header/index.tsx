@@ -13,6 +13,7 @@ import { permissionStore } from "../../../Hooks/authSelector";
 import { getPermission } from "../../../../store/auth/permissionSlice";
 import { isLogin } from "../../../../store/auth/isLoginSlice";
 import Link from "next/link";
+import { KeyState } from "../../../../store/auth/keySlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -24,7 +25,7 @@ export default function Header() {
   const currentPath = router.pathname;
   console.log("currentPath", currentPath);
   const nowLogin: boolean = useSelector(loginNow);
-  const key: string | null = useSelector(userKey);
+  const key: KeyState = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function Header() {
       console.log("headerrrrrrrrrrrr  ");
       const getPermissionData = async () => {
         try {
-          await dispatch(getPermission({}) as any);
+          await dispatch(getPermission() as any);
         } catch (e) {
           console.log("Error", e);
           allLogout(dispatch);
@@ -71,7 +72,7 @@ export default function Header() {
       const response: boolean = await checkSessionApi.checkSession();
       if (!response) {
         await allLogout(dispatch);
-        router.push("/login");
+        router.push("/auth/login");
       } else {
         await dispatch(isLogin());
         console.log("セッション確認済み");

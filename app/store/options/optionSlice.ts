@@ -3,73 +3,64 @@ import { optionApi } from "../../services/options/api";
 import RootState from "../../redux/reducers/rootReducer";
 import { getCustomer } from "../customers/customerSlice";
 import { getSchedule } from "../schedules/scheduleSlice";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { ErrorType, deleteResponse } from "../../components/Hooks/interface";
 
-export const getOption = createAsyncThunk(
-  "options/getOption",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await optionApi.fetchAllOptions();
+export const getOption = createAsyncThunk<
+  GetOptionState,
+  void,
+  { rejectValue: ErrorType }
+>("options/getOption", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await optionApi.fetchAllOptions();
 
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const createOption = createAsyncThunk(
-  "options/createOption",
-  async (
-    formData: {
-      id: number;
-      option_name: string;
-      price: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await optionApi.createOption(formData);
+export const createOption = createAsyncThunk<
+  PostOptionState,
+  OptionState,
+  { rejectValue: ErrorType }
+>("options/createOption", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await optionApi.createOption(formData);
 
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const updateOption = createAsyncThunk(
-  "options/updateOption",
-  async (
-    formData: {
-      id: number;
-      option_name: string;
-      price: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await optionApi.updateOption(formData);
+export const updateOption = createAsyncThunk<
+  PostOptionState,
+  OptionState,
+  { rejectValue: ErrorType }
+>("options/updateOption", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await optionApi.updateOption(formData);
 
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const deleteOption = createAsyncThunk(
-  "options/deleteOption",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await optionApi.deleteOption(id);
+export const deleteOption = createAsyncThunk<
+  deleteResponse,
+  number,
+  { rejectValue: ErrorType }
+>("options/deleteOption", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await optionApi.deleteOption(id);
 
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
 export interface OptionState {
   // ステートの型
@@ -78,18 +69,30 @@ export interface OptionState {
   price: number;
 }
 
+export interface GetOptionState {
+  options: OptionState[];
+  message: string;
+}
+export interface PostOptionState {
+  option: OptionState;
+  message: string;
+}
+
 export interface RootState {
   options: OptionState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: string | null;
+  error: ErrorType | null;
 }
 
 const initialState: RootState = {
   options: [],
   status: "idle",
   message: null,
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const optionSlice = createSlice({
@@ -110,7 +113,7 @@ const optionSlice = createSlice({
         : "オプションの取得に成功しました！";
     });
     builder.addCase(getOption.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "success";
     });
 
@@ -127,7 +130,7 @@ const optionSlice = createSlice({
         : "オプションの登録に成功しました！";
     });
     builder.addCase(createOption.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
 
@@ -148,7 +151,7 @@ const optionSlice = createSlice({
         : "オプション情報を更新しました！";
     });
     builder.addCase(updateOption.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
 
@@ -167,14 +170,14 @@ const optionSlice = createSlice({
         : "オプション情報を削除しました！";
     });
     builder.addCase(deleteOption.rejected, (state, action) => {
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
       state.status = "failed";
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
       state.options = action.payload.options
-        ? state.options.length === action.payload.options
+        ? state.options.length === action.payload.options.length
           ? state.options
           : action.payload.options
         : state.options;
@@ -183,7 +186,7 @@ const optionSlice = createSlice({
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.status = "success";
       state.options = action.payload.options
-        ? state.options.length === action.payload.options
+        ? state.options.length === action.payload.options.length
           ? state.options
           : action.payload.options
         : state.options;

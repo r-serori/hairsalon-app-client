@@ -51,13 +51,16 @@ const courseEdit: React.FC = () => {
       {cError && (
         <BasicAlerts type="error" message={cError} space={1} padding={1} />
       )}
-      <div className="mx-4 my-4">
-        <RouterButton link={"/courses"} value="コース画面に戻る" />
-      </div>
       {cStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <CourseForm node={course} createCourse={handleUpdate} edit={true} />
+        <div>
+          <div className="mx-4 my-4">
+            <RouterButton link={"/courses"} value="コース画面に戻る" />
+          </div>
+
+          <CourseForm node={course} createCourse={handleUpdate} edit={true} />
+        </div>
       )}
     </div>
   );

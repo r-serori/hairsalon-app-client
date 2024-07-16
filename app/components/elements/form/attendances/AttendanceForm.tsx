@@ -53,6 +53,7 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={true}
             maxNumber={999999999999999}
+            format={false}
           />
 
           <SingleCheckBox

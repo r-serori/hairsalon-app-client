@@ -54,16 +54,19 @@ const monthlySalesEdit: React.FC = () => {
       {dsError && (
         <BasicAlerts type="error" message={dsError} space={1} padding={1} />
       )}
-      <div className="mx-4 my-4">
-        <RouterButton link={"/monthly_sales"} value="日別売上画面に戻る" />
-      </div>
       {dsStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <MonthlySalesForm
-          node={monthlySale}
-          createMonthlySales={handleUpdate}
-        />
+        <div>
+          <div className="mx-4 my-4">
+            <RouterButton link={"/monthly_sales"} value="日別売上画面に戻る" />
+          </div>
+
+          <MonthlySalesForm
+            node={monthlySale}
+            createMonthlySales={handleUpdate}
+          />
+        </div>
       )}
     </div>
   );

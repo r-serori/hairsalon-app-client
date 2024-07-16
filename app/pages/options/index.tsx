@@ -65,8 +65,8 @@ const options: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const searchItems = [
     { key: "option_name", value: "オプション名" },
@@ -91,15 +91,17 @@ const options: React.FC = () => {
       {opError && (
         <BasicAlerts type="error" message={opError} space={1} padding={0.6} />
       )}
+      {opStatus === "loading" || !nodes || permission === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="my-4">
+            <RouterButton
+              link="/options/create"
+              value="オプション情報新規作成"
+            />
+          </div>
 
-      <div className="mx-4">
-        <div className="my-4">
-          <RouterButton link="/options/create" value="オプション情報新規作成" />
-        </div>
-
-        {opStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -108,8 +110,8 @@ const options: React.FC = () => {
             link="/options"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

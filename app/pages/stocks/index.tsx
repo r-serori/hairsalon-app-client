@@ -42,7 +42,6 @@ const stocks: React.FC = () => {
 
   const scStatus: string = useSelector(stock_categoryStatus);
 
-  const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -103,8 +102,8 @@ const stocks: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const searchItems = [
     { key: "category_name", value: "在庫カテゴリ" },
@@ -161,16 +160,18 @@ const stocks: React.FC = () => {
       {sError && (
         <BasicAlerts type="error" message={sError} space={1} padding={0.6} />
       )}
+      {sStatus === "loading" ||
+      scStatus === "loading" ||
+      !nodes ||
+      permission === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="flex justify-between items-center gap-4 my-4 ">
+            <RouterButton link="/stocks/create" value="在庫新規作成画面へ" />
+            <RouterButton link="/stock_categories" value="在庫カテゴリ画面へ" />
+          </div>
 
-      <div className="mx-4">
-        <div className="flex justify-between items-center gap-4 my-4 ">
-          <RouterButton link="/stocks/create" value="在庫新規作成画面へ" />
-          <RouterButton link="/stock_categories" value="在庫カテゴリ画面へ" />
-        </div>
-
-        {sStatus === "loading" || scStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -179,8 +180,8 @@ const stocks: React.FC = () => {
             link="/stocks"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

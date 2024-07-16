@@ -22,22 +22,25 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
   node,
   onSubmitUserInformation,
 }) => {
-  const [name, setName] = useState<string>(node.name);
-  const [email, setEmail] = useState<string>(node.email);
-  const [phone_number, setPhoneNumber] = useState<string>(node.phone_number);
+  const [name, setName] = useState<string>(node.name || "");
+  const [email, setEmail] = useState<string>(node.email || "");
+  const [phone_number, setPhoneNumber] = useState<string>(
+    node.phone_number || ""
+  );
   const [edit, setEdit] = useState(false);
 
-  const [nameValidate, setNameValidate] = useState<boolean>(true);
-  const [emailValidate, setEmailValidate] = useState<boolean>(true);
-  const [phone_numberValidate, setPhoneNumberValidate] =
-    useState<boolean>(true);
+  const [nameValidate, setNameValidate] = useState<boolean>(
+    node.name ? true : false
+  );
+  const [emailValidate, setEmailValidate] = useState<boolean>(
+    node.email ? true : false
+  );
+  const [phone_numberValidate, setPhoneNumberValidate] = useState<boolean>(
+    node.phone_number ? true : false
+  );
 
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (password !== confirmPassword) {
-    //   alert("パスワードが一致しません");
-    //   return;
-    // }
 
     if (!nameValidate || !emailValidate || !phone_numberValidate) {
       return;

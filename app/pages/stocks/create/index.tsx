@@ -42,13 +42,16 @@ const stockCreate: React.FC = () => {
       {sError && (
         <BasicAlerts type="error" message={sError} space={1} padding={1} />
       )}
-      <div className="mt-4 ml-4">
-        <RouterButton link={"/stocks"} value="在庫画面に戻る" />
-      </div>
       {sStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <StockForm createStock={handleCreate} />
+        <div>
+          <div className="mt-4 ml-4">
+            <RouterButton link={"/stocks"} value="在庫画面に戻る" />
+          </div>
+
+          <StockForm createStock={handleCreate} />
+        </div>
       )}
     </div>
   );

@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getCourse_customers = createAsyncThunk(
 //   "course_customers/getCourse_customers",
@@ -54,13 +55,16 @@ export interface RootState {
   // RootStateの型
   course_customers: Course_customersState[];
   status: "idle" | "loading" | "success" | "failed";
-  error: string | null;
+  error: ErrorType | null;
 }
 
 export const initialState: RootState = {
   course_customers: [],
   status: "idle",
-  error: null,
+  error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const course_customersSlice = createSlice({

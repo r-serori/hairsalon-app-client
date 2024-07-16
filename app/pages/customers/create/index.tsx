@@ -46,14 +46,16 @@ const customersCreate = () => {
       {cError && (
         <BasicAlerts type="error" message={cError} space={1} padding={1} />
       )}
-
-      <div className="mt-4 ml-4">
-        <RouterButton link={"/customers"} value="顧客画面に戻る" />
-      </div>
       {cusStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <CustomerForm onSubmit={handleCreate} />
+        <div>
+          <div className="mt-4 ml-4">
+            <RouterButton link={"/customers"} value="顧客画面に戻る" />
+          </div>
+
+          <CustomerForm onSubmit={handleCreate} />
+        </div>
       )}
     </div>
   );

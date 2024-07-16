@@ -1,14 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { StockState } from "../../store/stocks/stockSlice";
 
 export const stockApi = {
-  createStock: async (formData: {
-    product_name: string;
-    product_price: number;
-    quantity: number;
-    remarks: string;
-    notice: number;
-    stock_category_id: number | null;
-  }) => {
+  createStock: async (formData: StockState) => {
     try {
       const response = await sendRequest("POST", "/stocks/store", formData);
       // console.log("APIのstockDataだよ", response);
@@ -40,15 +34,7 @@ export const stockApi = {
   // }
   // },
 
-  updateStock: async (formData: {
-    id: number;
-    product_name: string;
-    product_price: number;
-    quantity: number;
-    remarks: string;
-    notice: number;
-    stock_category_id: number | null;
-  }) => {
+  updateStock: async (formData: StockState) => {
     try {
       const response = await sendRequest("POST", `/stocks/update`, formData);
       // console.log("APIのstockDataだよ", response);

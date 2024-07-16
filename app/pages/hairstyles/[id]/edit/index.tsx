@@ -55,17 +55,20 @@ const hairstyleEdit: React.FC = () => {
       {hError && (
         <BasicAlerts type="error" message={hError} space={1} padding={1} />
       )}
-      <div className="mt-4 ml-4">
-        <RouterButton link={"/hairstyles"} value="髪型画面に戻る" />
-      </div>
       {hStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <HairstyleForm
-          node={hairstyle}
-          createHairstyle={handleUpdate}
-          edit={true}
-        />
+        <div>
+          <div className="mt-4 ml-4">
+            <RouterButton link={"/hairstyles"} value="髪型画面に戻る" />
+          </div>
+
+          <HairstyleForm
+            node={hairstyle}
+            createHairstyle={handleUpdate}
+            edit={true}
+          />
+        </div>
       )}
     </div>
   );

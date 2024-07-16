@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
 import { CustomerState } from "../../../../store/customers/customerSlice";
 import {
+  courseError,
   coursesStore,
   hairstylesStore,
   merchandiseStore,
@@ -129,8 +130,9 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       : Object(getUsersState).name
   );
 
-  const [customerNameValidate, setCustomerNameValidate] =
-    useState<boolean>(true);
+  const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
+    node.customer_name ? true : false
+  );
   const [usersValidate, setUsersValidate] = useState<boolean>(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -219,6 +221,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             onChange={(e) => setPhoneNumber(e.target.value)}
             maxNumber={999999999999999}
             required={false}
+            format={false}
           />
           <BasicTextField
             id={node ? node.id : 0}

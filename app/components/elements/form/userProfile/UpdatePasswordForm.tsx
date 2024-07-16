@@ -22,9 +22,9 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
   const [password, setPassword] = useState("newPassword_123");
   const [confirmPassword, setConfirmPassword] = useState("newPassword_123");
 
-  const [isCurrentPasswordValid, setIsCurrentPasswordValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  const [isCurrentPasswordValid, setIsCurrentPasswordValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
 
   const handleSubmitStaff = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

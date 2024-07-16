@@ -125,8 +125,8 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
       }
     };
 
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const courses: CourseState[] = useSelector(coursesStore);
 
@@ -313,13 +313,14 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           <BasicAlerts type="error" message={cError} space={1} padding={0.6} />
         )}
       </div>
-      <div className="mx-4">
-        <div className="my-4 ">
-          <RouterButton link="/customers/create" value="顧客新規作成" />
-        </div>
-        {cStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
+      {cStatus === "loading" || !nodes || permission === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="my-4 ">
+            <RouterButton link="/customers/create" value="顧客新規作成" />
+          </div>
+
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -328,8 +329,8 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
             link="/customers"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

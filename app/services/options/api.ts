@@ -1,7 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { OptionState } from "../../store/options/optionSlice";
 
 export const optionApi = {
-  createOption: async (formData: { option_name: string; price: number }) => {
+  createOption: async (formData: OptionState) => {
     try {
       const response = await sendRequest("POST", "/options/store", formData);
       console.log("APIのoptionDataだよ", response);
@@ -33,11 +34,7 @@ export const optionApi = {
   // }
   // },
 
-  updateOption: async (formData: {
-    id: number;
-    option_name: string;
-    price: number;
-  }) => {
+  updateOption: async (formData: OptionState) => {
     try {
       const response = await sendRequest("POST", `/options/update`, formData);
       // console.log("APIのoptionDataだよ", response);

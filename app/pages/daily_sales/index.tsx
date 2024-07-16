@@ -75,7 +75,7 @@ const daily_sales: React.FC = () => {
       }
     };
 
-    fetchData();
+    if (permission) fetchData();
   }, [dispatch]);
 
   const searchItems = [
@@ -100,35 +100,36 @@ const daily_sales: React.FC = () => {
       {dsError && (
         <BasicAlerts type="error" message={dsError} space={1} padding={0.6} />
       )}
-      <div className="mx-4">
-        <div className="flex justify-between items-center my-4">
-          <div className="flex justify-start items-center gap-4 ">
-            <EasyModal
-              open={salesOpen}
-              setOpen={setSalesOpen}
-              whoAreYou="dailySales"
-              setYearMonth={setYearMonth}
-            />
-            {yearMonth !== "" && (
-              <button
-                className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
-                onClick={() => {
-                  nowDailySales();
-                }}
-              >
-                現在の年月に戻す
-              </button>
-            )}
-          </div>
-          <div className="flex justify-end items-center gap-4">
-            <RouterButton link="/monthly_sales" value="月次売上画面へ" />
-            <RouterButton link="/yearly_sales" value="年次売上画面へ" />
-          </div>
-        </div>
 
-        {dsStatus === "loading" ? (
-          <p>Loading...</p>
-        ) : (
+      {dsStatus === "loading" || !nodes || permission === null ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="mx-4">
+          <div className="flex justify-between items-center my-4">
+            <div className="flex justify-start items-center gap-4 ">
+              <EasyModal
+                open={salesOpen}
+                setOpen={setSalesOpen}
+                whoAreYou="dailySales"
+                setYearMonth={setYearMonth}
+              />
+              {yearMonth !== "" && (
+                <button
+                  className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
+                  onClick={() => {
+                    nowDailySales();
+                  }}
+                >
+                  現在の年月に戻す
+                </button>
+              )}
+            </div>
+            <div className="flex justify-end items-center gap-4">
+              <RouterButton link="/monthly_sales" value="月次売上画面へ" />
+              <RouterButton link="/yearly_sales" value="年次売上画面へ" />
+            </div>
+          </div>
+
           <ComponentTable
             nodes={nodes}
             searchItems={searchItems}
@@ -137,8 +138,8 @@ const daily_sales: React.FC = () => {
             link="/daily_sales"
             role={permission}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,18 +1,22 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { attendance_timeApi } from "../../services/attendances/attendance_times/api";
 import RootState from "../../redux/reducers/rootReducer";
-import { getAttendanceUsers } from "../auth/userSlice";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { ErrorType, deleteResponse } from "../../components/Hooks/interface";
+import { UserState } from "../auth/userSlice";
 
-export const selectGetAttendanceTimes = createAsyncThunk(
+export const selectGetAttendanceTimes = createAsyncThunk<
+  GetAttendanceTimeState,
+  {
+    user_id: number;
+    yearMonth: string;
+  },
+  {
+    rejectValue: ErrorType;
+  }
+>(
   "attendance_times/selectGetAttendanceTimes",
-  async (
-    formData: {
-      user_id: number;
-      yearMonth: string;
-    },
-    { rejectWithValue }
-  ) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const response = await attendance_timeApi.selectFetchAttendanceTimes(
         formData
@@ -26,9 +30,15 @@ export const selectGetAttendanceTimes = createAsyncThunk(
   }
 );
 
-export const firstGetAttendanceTime = createAsyncThunk(
+export const firstGetAttendanceTime = createAsyncThunk<
+  GetFirstAttendanceTimeState,
+  number,
+  {
+    rejectValue: ErrorType;
+  }
+>(
   "attendance_times/firstGetAttendanceTime",
-  async (id: number, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const response: any = await attendance_timeApi.firstGetAttendanceTime(
         id as number
@@ -41,17 +51,20 @@ export const firstGetAttendanceTime = createAsyncThunk(
   }
 );
 
-export const pleaseEditEndTime = createAsyncThunk(
+export const pleaseEditEndTime = createAsyncThunk<
+  CreateAttendanceTimeState,
+  {
+    id: number;
+    end_time: string;
+    end_photo_path: string;
+    user_id: number;
+  },
+  {
+    rejectValue: ErrorType;
+  }
+>(
   "attendance_times/pleaseEditEndTime",
-  async (
-    formData: {
-      id: number;
-      end_time: string;
-      end_photo_path: string;
-      user_id: number;
-    },
-    { rejectWithValue }
-  ) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const response: any = await attendance_timeApi.pleaseEditEndTime(
         formData
@@ -63,95 +76,98 @@ export const pleaseEditEndTime = createAsyncThunk(
   }
 );
 
-export const updateStartTime = createAsyncThunk(
-  "attendance_times/updateStartTime",
-  async (
-    formData: {
-      id: number;
-      start_time: string;
-      start_photo_path: string;
-      user_id: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await attendance_timeApi.updateStartTime(formData);
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const updateStartTime = createAsyncThunk<
+  UpdateAttendanceTimeState,
+  {
+    id: number;
+    start_time: string;
+    start_photo_path: string;
+    user_id: number;
+  },
+  {
+    rejectValue: ErrorType;
   }
-);
+>("attendance_times/updateStartTime", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await attendance_timeApi.updateStartTime(formData);
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
-export const updateEndTime = createAsyncThunk(
-  "attendance_times/updateEndTime",
-  async (
-    formData: {
-      id: number;
-      end_time: string;
-      end_photo_path: string;
-      user_id: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await attendance_timeApi.updateEndTime(formData);
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const updateEndTime = createAsyncThunk<
+  UpdateAttendanceTimeState,
+  {
+    id: number;
+    end_time: string;
+    end_photo_path: string;
+    user_id: number;
+  },
+  {
+    rejectValue: ErrorType;
   }
-);
+>("attendance_times/updateEndTime", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await attendance_timeApi.updateEndTime(formData);
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
-export const createStartTime = createAsyncThunk(
-  "attendance_times/createStartTime",
-  async (
-    formData: {
-      start_time: string;
-      start_photo_path: string;
-      user_id: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await attendance_timeApi.createStartTime(formData);
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createStartTime = createAsyncThunk<
+  CreateAttendanceTimeState,
+  {
+    start_time: string;
+    start_photo_path: string;
+    user_id: number;
+  },
+  {
+    rejectValue: ErrorType;
   }
-);
+>("attendance_times/createStartTime", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await attendance_timeApi.createStartTime(formData);
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
-export const createEndTime = createAsyncThunk(
-  "attendance_times/createEndTime",
-  async (
-    formData: {
-      end_time: string;
-      end_photo_path: string;
-      user_id: number;
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await attendance_timeApi.createEndTime(formData);
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createEndTime = createAsyncThunk<
+  CreateAttendanceTimeState,
+  {
+    end_time: string;
+    end_photo_path: string;
+    user_id: number;
+  },
+  {
+    rejectValue: ErrorType;
   }
-);
+>("attendance_times/createEndTime", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await attendance_timeApi.createEndTime(formData);
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
-export const deleteAttendanceTime = createAsyncThunk(
-  "attendance_times/deleteAttendanceTime",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await attendance_timeApi.deleteAttendanceTime(id);
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const deleteAttendanceTime = createAsyncThunk<
+  deleteResponse,
+  number,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("attendance_times/deleteAttendanceTime", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await attendance_timeApi.deleteAttendanceTime(id);
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 export interface Attendance_timeState {
   // ステートの型
@@ -163,12 +179,33 @@ export interface Attendance_timeState {
   user_id: number;
 }
 
+export interface GetAttendanceTimeState {
+  attendanceTimes: Attendance_timeState[];
+  responseUser?: UserState;
+  message: string;
+}
+
+export interface GetFirstAttendanceTimeState {
+  attendanceTime: Attendance_timeState;
+  message: string;
+}
+
+export interface CreateAttendanceTimeState {
+  attendanceTime: Attendance_timeState;
+  responseUser: UserState;
+  message: string;
+}
+export interface UpdateAttendanceTimeState {
+  attendanceTime: Attendance_timeState;
+  message: string;
+}
+
 export interface RootState {
   // ルートステートの型を定義
   attendance_times: Attendance_timeState[]; // 出席情報の配列
   status: "idle" | "loading" | "success" | "failed";
   message: string | null; // メッセージ
-  error: string | null; // エラーメッセージ
+  error: ErrorType | null; // エラーメッセージ
 }
 
 const initialState: RootState = {
@@ -176,7 +213,10 @@ const initialState: RootState = {
   attendance_times: [], // 出席情報の配列
   status: "idle",
   message: null, // メッセージ
-  error: null, // エラーメッセージ
+  error: {
+    message: "",
+    status: 0,
+  }, // エラーメッセージ
 };
 
 const attendance_timeSlice = createSlice({
@@ -198,7 +238,7 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(selectGetAttendanceTimes.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(firstGetAttendanceTime.pending, (state) => {
@@ -212,12 +252,15 @@ const attendance_timeSlice = createSlice({
       state.message = action.payload.message
         ? action.payload.message
         : "最新の勤怠情報を取得しました！";
-      state.attendance_times = action.payload.attendanceTime;
+      state.attendance_times =
+        state.attendance_times.length > 0
+          ? [...state.attendance_times, action.payload.attendanceTime]
+          : [action.payload.attendanceTime];
     });
 
     builder.addCase(firstGetAttendanceTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(pleaseEditEndTime.pending, (state) => {
@@ -240,7 +283,7 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(pleaseEditEndTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(updateStartTime.pending, (state) => {
@@ -264,7 +307,7 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(updateStartTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(updateEndTime.pending, (state) => {
@@ -286,7 +329,7 @@ const attendance_timeSlice = createSlice({
 
     builder.addCase(updateEndTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(createStartTime.pending, (state) => {
@@ -333,7 +376,7 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(createEndTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(deleteAttendanceTime.pending, (state) => {
@@ -354,17 +397,17 @@ const attendance_timeSlice = createSlice({
 
     builder.addCase(deleteAttendanceTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
-    builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
-      state.status = "success";
-      state.message = action.payload.message;
-      state.attendance_times = [
-        ...state.attendance_times,
-        ...action.payload.attendanceTimes,
-      ];
-    });
+    // builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
+    //   state.status = "success";
+    //   state.message = action.payload.message;
+    //   state.attendance_times = [
+    //     ...state.attendance_times,
+    //     ...action.payload.attendanceTimes,
+    //   ];
+    // });
   },
 });
 

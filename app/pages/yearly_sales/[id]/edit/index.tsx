@@ -53,13 +53,16 @@ const yearlySalesEdit: React.FC = () => {
       {ysError && (
         <BasicAlerts type="error" message={ysError} space={1} padding={1} />
       )}
-      <div className="mx-4 my-4">
-        <RouterButton link={"/yearly_sales"} value="年次売上画面に戻る" />
-      </div>
       {ysStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <YearlySalesForm node={yearlySale} createYearlySales={handleUpdate} />
+        <div className="mx-4">
+          <div className=" my-4">
+            <RouterButton link={"/yearly_sales"} value="年次売上画面に戻る" />
+          </div>
+
+          <YearlySalesForm node={yearlySale} createYearlySales={handleUpdate} />
+        </div>
       )}
     </div>
   );

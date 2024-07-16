@@ -1,21 +1,12 @@
 import { sendRequest } from "../requestApi";
+import {
+  ScheduleState,
+  RequestScheduleState,
+} from "../../store/schedules/scheduleSlice";
 
 export const schedulesApi = {
   //両方作成します
-  createCustomerAndSchedule: async (formData: {
-    customer_name: string;
-    phone_number: string | null;
-    remarks: string | null;
-    course_id: number[] | null;
-    option_id: number[] | null;
-    merchandise_id: number[] | null;
-    hairstyle_id: number[] | null;
-    user_id: number[] | null;
-    title: string;
-    start_time: string;
-    end_time: string;
-    allDay: number;
-  }) => {
+  createCustomerAndSchedule: async (formData: RequestScheduleState) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -30,12 +21,7 @@ export const schedulesApi = {
     }
   },
 
-  createSchedule: async (formData: {
-    title: string;
-    start_time: string;
-    end_time: string;
-    allDay: number;
-  }) => {
+  createSchedule: async (formData: ScheduleState) => {
     try {
       const response = await sendRequest("POST", "/schedules/store", formData);
       // console.log("APIのschedulesDataだよ", response);
@@ -81,13 +67,7 @@ export const schedulesApi = {
   // }
   // },
 
-  updateSchedule: async (formData: {
-    Sid: number;
-    title: string;
-    start_time: string;
-    end_time: string;
-    allDay: number;
-  }) => {
+  updateSchedule: async (formData: ScheduleState) => {
     try {
       const response = await sendRequest("POST", `/schedules/update`, formData);
       // console.log("APIのschedulesDataだよ", response);
@@ -99,22 +79,7 @@ export const schedulesApi = {
   },
 
   // 両方更新します
-  updateCustomerAndSchedule: async (formData: {
-    customer_id: number; // customer_id
-    customer_name: string;
-    phone_number: string | null;
-    remarks: string | null;
-    course_id: number[] | null;
-    option_id: number[] | null;
-    merchandise_id: number[] | null;
-    hairstyle_id: number[] | null;
-    user_id: number[] | null;
-    Sid: number; // schedule_id
-    title: string;
-    start_time: string;
-    end_time: string;
-    allDay: number;
-  }) => {
+  updateCustomerAndSchedule: async (formData: RequestScheduleState) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -142,21 +107,7 @@ export const schedulesApi = {
     }
   },
 
-  updateCustomerAndScheduleCreate: async (formData: {
-    customer_name: string;
-    phone_number: string | null;
-    remarks: string | null;
-    course_id: number[] | null;
-    option_id: number[] | null;
-    merchandise_id: number[] | null;
-    hairstyle_id: number[] | null;
-    user_id: number[] | null;
-    title: string;
-    start_time: string;
-    end_time: string;
-    allDay: number;
-    customer_id: number;
-  }) => {
+  updateCustomerAndScheduleCreate: async (formData: RequestScheduleState) => {
     try {
       const response = await sendRequest(
         "POST",

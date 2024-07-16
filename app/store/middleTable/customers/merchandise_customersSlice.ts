@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getMerchandise_customers = createAsyncThunk(
 //   "merchandise_customers/getMerchandise_customers",
@@ -55,13 +56,16 @@ export interface RootState {
   // RootStateの型
   merchandise_customers: Merchandise_customersState[];
   status: "idle" | "loading" | "success" | "failed";
-  error: string | null;
+  error: ErrorType | null;
 }
 
 export const initialState: RootState = {
   merchandise_customers: [],
   status: "idle",
-  error: null,
+    error: {
+    message: "",
+    status: 0,
+  },
 };
 
 const merchandise_customersSlice = createSlice({

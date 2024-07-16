@@ -7,86 +7,82 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../store/schedules/scheduleSlice";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
-import { stat } from "fs";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { deleteResponse, ErrorType } from "../../components/Hooks/interface";
+import { CourseState } from "../courses/courseSlice";
+import { OptionState } from "../options/optionSlice";
+import { MerchandiseState } from "../merchandises/merchandiseSlice";
+import { HairstyleState } from "../hairstyles/hairstyleSlice";
+import { UserState } from "../auth/userSlice";
+import { Course_customersState } from "../middleTable/customers/course_customersSlice";
+import { Option_customersState } from "../middleTable/customers/option_customersSlice";
+import { Merchandise_customersState } from "../middleTable/customers/merchandise_customersSlice";
+import { Hairstyle_customersState } from "../middleTable/customers/hairstyle_customersSlice";
+import { Customer_usersState } from "../middleTable/customers/customer_usersSlice";
 
-export const getCustomer = createAsyncThunk(
-  "customer/getCustomer",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response: any = await customerApi.fetchAllCustomers();
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const getCustomer = createAsyncThunk<
+  GetCustomerState,
+  void,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("customer/getCustomer", async (_, { rejectWithValue }) => {
+  try {
+    const response: any = await customerApi.fetchAllCustomers();
 
-export const createCustomer = createAsyncThunk(
-  "customer/createCustomer",
-  async (
-    formData: {
-      id: number;
-      customer_name: string;
-      phone_number: string;
-      remarks: string;
-      course_id: number[];
-      option_id: number[];
-      merchandise_id: number[];
-      hairstyle_id: number[];
-      user_id: number[];
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await customerApi.createCustomer(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
-export const updateCustomer = createAsyncThunk(
-  "customer/updateCustomer",
-  async (
-    formData: {
-      id: number;
-      customer_name: string;
-      phone_number: string;
-      remarks: string;
-      course_id: number[];
-      option_id: number[];
-      merchandise_id: number[];
-      hairstyle_id: number[];
-      user_id: number[];
-    },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response: any = await customerApi.updateCustomer(formData);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+export const createCustomer = createAsyncThunk<
+  PostCustomerState,
+  CustomerState,
+  {
+    rejectValue: ErrorType;
   }
-);
+>("customer/createCustomer", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await customerApi.createCustomer(formData);
 
-export const deleteCustomer = createAsyncThunk(
-  "customer/deleteCustomer",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response: any = await customerApi.deleteCustomer(id);
-
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
+
+export const updateCustomer = createAsyncThunk<
+  PostCustomerState,
+  CustomerState,
+  {
+    rejectValue: ErrorType;
+  }
+>("customer/updateCustomer", async (formData, { rejectWithValue }) => {
+  try {
+    const response: any = await customerApi.updateCustomer(formData);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const deleteCustomer = createAsyncThunk<
+  deleteResponse,
+  number,
+  {
+    rejectValue: ErrorType;
+  }
+>("customer/deleteCustomer", async (id, { rejectWithValue }) => {
+  try {
+    const response: any = await customerApi.deleteCustomer(id);
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
 
 export interface CustomerState {
   // ステートの型
@@ -101,12 +97,44 @@ export interface CustomerState {
   user_id: number[] | null;
 }
 
+export interface CustomerOnlyState {
+  id: number;
+  customer_name: string;
+  phone_number: string | null;
+  remarks: string | null;
+}
+
+export interface GetCustomerState {
+  customers: CustomerOnlyState[];
+  courses: CourseState[];
+  options: OptionState[];
+  merchandises: MerchandiseState[];
+  hairstyles: HairstyleState[];
+  responseUsers: UserState[];
+  course_customers: Course_customersState[];
+  option_customers: Option_customersState[];
+  merchandise_customers: Merchandise_customersState[];
+  hairstyle_customers: Hairstyle_customersState[];
+  customer_users: Customer_usersState[];
+  message: string;
+}
+
+export interface PostCustomerState {
+  customer: CustomerState;
+  course_customers: Course_customersState[];
+  option_customers: Option_customersState[];
+  merchandise_customers: Merchandise_customersState[];
+  hairstyle_customers: Hairstyle_customersState[];
+  customer_users: Customer_usersState[];
+  message: string;
+}
+
 export interface RootState {
   // ルートステートの型を定義
-  customers: CustomerState[]; // 顧客情報の配列
+  customers: CustomerOnlyState[]; // 顧客情報の配列
   status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
-  error: string | null; // エラーメッセージ
+  error: ErrorType | null; // エラーメッセージ
 }
 
 const initialState: RootState = {
@@ -114,7 +142,10 @@ const initialState: RootState = {
   customers: [], // 顧客情報の配列
   status: "idle", // ローディング状態
   message: null, // メッセージ
-  error: null, // エラーメッセージ
+  error: {
+    message: "",
+    status: 0,
+  }, // エラーメッセージ
 };
 
 const customerSlice = createSlice({
@@ -143,7 +174,7 @@ const customerSlice = createSlice({
     });
     builder.addCase(getCustomer.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(createCustomer.pending, (state) => {
@@ -160,7 +191,7 @@ const customerSlice = createSlice({
     });
     builder.addCase(createCustomer.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(updateCustomer.pending, (state) => {
@@ -186,7 +217,7 @@ const customerSlice = createSlice({
 
     builder.addCase(updateCustomer.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(deleteCustomer.pending, (state) => {
@@ -205,7 +236,7 @@ const customerSlice = createSlice({
     });
     builder.addCase(deleteCustomer.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {

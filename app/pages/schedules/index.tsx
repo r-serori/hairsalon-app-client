@@ -85,8 +85,8 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
         localStorage.removeItem("userCount");
       }
     };
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -286,7 +286,7 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
       {sError && (
         <BasicAlerts type="error" message={sError} space={1} padding={0.6} />
       )}
-      {sStatus === "loading" ? (
+      {sStatus === "loading" || permission === null ? (
         <p>loading...</p>
       ) : (
         <MyCalendar

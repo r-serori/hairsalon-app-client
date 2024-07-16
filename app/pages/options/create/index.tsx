@@ -38,13 +38,15 @@ const optionCreate: React.FC = () => {
       {oError && (
         <BasicAlerts type="error" message={oError} space={1} padding={1} />
       )}
-      <div className="ml-4 mt-4 ">
-        <RouterButton link={"/options"} value="オプション画面に戻る" />
-      </div>
       {oStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <OptionForm createOption={handleCreate} />
+        <div>
+          <div className="ml-4 mt-4 ">
+            <RouterButton link={"/options"} value="オプション画面に戻る" />
+          </div>
+          <OptionForm createOption={handleCreate} />
+        </div>
       )}
     </div>
   );

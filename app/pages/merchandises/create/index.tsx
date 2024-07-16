@@ -40,13 +40,16 @@ const merchandiseCreate: React.FC = () => {
       {mError && (
         <BasicAlerts type="error" message={mError} space={1} padding={1} />
       )}
-      <div className="ml-4 mt-4">
-        <RouterButton link={"/merchandises"} value="物販画面に戻る" />
-      </div>
       {mStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <MerchandiseForm createMerchandise={handleCreate} />
+        <div>
+          <div className="ml-4 mt-4">
+            <RouterButton link={"/merchandises"} value="物販画面に戻る" />
+          </div>
+
+          <MerchandiseForm createMerchandise={handleCreate} />
+        </div>
       )}
     </div>
   );

@@ -37,14 +37,19 @@ const courseCreate: React.FC = () => {
 
   return (
     <div className="min-h-full">
-      <BasicAlerts type="error" message={cError} space={1} padding={1} />
-      <div className="mx-4 mt-4">
-        <RouterButton link="/courses" value="コース画面へ戻る" />
-      </div>
+      {cError && (
+        <BasicAlerts type="error" message={cError} space={1} padding={1} />
+      )}
       {cStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <CourseForm createCourse={handleCreate} />
+        <div>
+          <div className="mx-4 mt-4">
+            <RouterButton link="/courses" value="コース画面へ戻る" />
+          </div>
+
+          <CourseForm createCourse={handleCreate} />
+        </div>
       )}
     </div>
   );

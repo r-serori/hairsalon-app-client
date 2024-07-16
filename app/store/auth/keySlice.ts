@@ -1,27 +1,33 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import RootState from "../../redux/reducers/rootReducer";
 import { getKeyApi } from "../../services/auth/key";
-import { handleErrorResponse, handleCatchError } from "../errorHamdler";
+import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { ErrorType } from "../../components/Hooks/interface";
 
-export const getKey = createAsyncThunk(
-  "key/getKey",
-  async (formData: {}, { rejectWithValue }) => {
-    try {
-      const response = await getKeyApi.getKey();
+export const getKey = createAsyncThunk<
+  GetKeyState,
+  void,
+  { rejectValue: ErrorType }
+>("key/getKey", async (_, { rejectWithValue }) => {
+  try {
+    const response = await getKeyApi.getKey();
 
-      return handleErrorResponse(response, rejectWithValue);
-    } catch (err) {
-      return handleCatchError(err, rejectWithValue);
-    }
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
   }
-);
+});
 
 export interface KeyState {
   key: string | null;
 }
+export interface GetKeyState {
+  roleKey: KeyState;
+  message: string;
+}
 
 export interface RootState {
-  key: string | null;
+  key: KeyState;
   status: "idle" | "loading" | "success" | "failed";
 }
 

@@ -23,9 +23,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   const [password, setPassword] = useState("resetPassword_123");
   const [confirmPassword, setConfirmPassword] = useState("resetPassword_123");
 
-  const [emailValidate, setEmailValidate] = useState<boolean>(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  const [emailValidate, setEmailValidate] = useState<boolean>(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
 
   const handleSubmitResetPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

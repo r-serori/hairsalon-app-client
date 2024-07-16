@@ -11,7 +11,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 }) => {
   const [email, setEmail] = useState<string>("owner@hairmail.com");
 
-  const [emailValidate, setEmailValidate] = useState<boolean>(true);
+  const [emailValidate, setEmailValidate] = useState<boolean>(false);
 
   const handleSubmitForgotPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

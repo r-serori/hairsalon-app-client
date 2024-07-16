@@ -2,11 +2,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import AuthStaffRegisterForm from "../../components/elements/form/auth/AuthStaffRegisterForm";
 import { staffRegister } from "../../store/auth/userSlice";
-import { RootState } from "../../redux/store";
 import BasicAlerts from "../../components/elements/alert/Alert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { userError, userStatus } from "../../components/Hooks/authSelector";
+import {
+  userError,
+  userStatus,
+  permissionStore,
+} from "../../components/Hooks/authSelector";
+import { useEffect } from "react";
+import { ownerPermission } from "../../components/Hooks/useMethod";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 const StaffRegisterPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -15,6 +20,12 @@ const StaffRegisterPage: React.FC = () => {
   const uStatus: string = useSelector(userStatus);
 
   const uError: string | null = useSelector(userError);
+
+  const permission: PermissionsState = useSelector(permissionStore);
+
+  useEffect(() => {
+    if (permission) ownerPermission(permission, router);
+  }, [permission]);
 
   const handleStaffRegister = async (formData: {
     name: string;
@@ -46,7 +57,7 @@ const StaffRegisterPage: React.FC = () => {
       <div className="mt-4 ml-4">
         <RouterButton link={"/attendances"} value="スタッフ画面に戻る" />
       </div>
-      {uStatus === "loading" ? (
+      {uStatus === "loading" || permission === null ? (
         <p>Loading...</p>
       ) : (
         <AuthStaffRegisterForm onSubmitStaff={handleStaffRegister} />

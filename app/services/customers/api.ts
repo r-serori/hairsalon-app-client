@@ -1,16 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { CustomerState } from "../../store/customers/customerSlice";
 
 export const customerApi = {
-  createCustomer: async (formData: {
-    customer_name: string;
-    phone_number: string;
-    remarks: string;
-    course_id: number[];
-    option_id: number[];
-    merchandise_id: number[];
-    hairstyle_id: number[];
-    user_id: number[];
-  }) => {
+  createCustomer: async (formData: CustomerState) => {
     try {
       const response = await sendRequest("POST", "/customers/store", formData);
       // console.log("APIのcustomerDataだよ");
@@ -43,17 +35,7 @@ export const customerApi = {
 
   // },
 
-  updateCustomer: async (formData: {
-    id: number;
-    customer_name: string;
-    phone_number: string;
-    remarks: string;
-    course_id: number[];
-    option_id: number[];
-    merchandise_id: number[];
-    hairstyle_id: number[];
-    user_id: number[];
-  }) => {
+  updateCustomer: async (formData: CustomerState) => {
     try {
       // console.log("formDataだよ", formData);
       const response = await sendRequest("POST", `/customers/update`, formData);

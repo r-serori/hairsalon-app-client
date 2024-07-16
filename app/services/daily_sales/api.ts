@@ -1,7 +1,8 @@
 import { sendRequest } from "../requestApi";
+import { Daily_salesState } from "../../store/daily_sales/daily_saleSlice";
 
 export const dailySaleApi = {
-  createDailySales: async (formData: { date: string; daily_sales: number }) => {
+  createDailySales: async (formData: Daily_salesState) => {
     try {
       const response = await sendRequest(
         "POST",
@@ -52,11 +53,7 @@ export const dailySaleApi = {
     }
   },
 
-  updateDailySales: async (formData: {
-    id: number;
-    date: string;
-    daily_sales: number;
-  }) => {
+  updateDailySales: async (formData: Daily_salesState) => {
     try {
       const response = await sendRequest(
         "POST",
