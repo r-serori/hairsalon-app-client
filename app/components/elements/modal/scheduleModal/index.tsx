@@ -241,9 +241,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
   console.log("titleです", title);
 
-  const [titleValidate, setTitleValidate] = useState<boolean>(
-    !isCustomer && selectedEvent.title ? true : false
-  );
   //開始時間を設定
   const [startTime, setStartTime] = useState<Dayjs | null>(
     allDay && whoIsEvent === "クリック"
@@ -256,6 +253,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? dayjs(selectedEvent.dateStr).add(1, "day").utc().tz("Asia/Tokyo")
       : dayjs(selectedEvent.endStr).utc().tz("Asia/Tokyo")
   );
+
+  const [titleValidate, setTitleValidate] = useState<boolean>(
+    !isCustomer && selectedEvent.title ? true : false
+  );
+
+  const [startTimeValidate, setStartTimeValidate] = useState<boolean>(true);
+
+  const [endTimeValidate, setEndTimeValidate] = useState<boolean>(true);
 
   const changeCustomerState = (newValue) => {
     //編集時に選択した顧客情報を取得
@@ -414,7 +419,18 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isCustomer && (!customerNameValidate || !usernameValidate)) {
+    if (
+      isCustomer &&
+      (!customerNameValidate ||
+        !usernameValidate ||
+        !startTimeValidate ||
+        !endTimeValidate)
+    ) {
+      return;
+    } else if (
+      !isCustomer &&
+      (!titleValidate || !startTimeValidate || !endTimeValidate)
+    ) {
       return;
     }
 
@@ -528,14 +544,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
           {/* モーダルのタイトル */}
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <>
-              {cError && (
-                <BasicAlerts
-                  type="error"
-                  message={cError}
-                  padding={1}
-                  space={1}
-                />
-              )}
               <div className="flex justify-center items-center  text-4xl">
                 予約内容
               </div>
@@ -553,6 +561,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       changer={startTimeChange}
                       isAllDay={allDay ? true : false}
                       role={permission}
+                      onValidateChange={(newValue) =>
+                        setStartTimeValidate(newValue)
+                      }
                     />
                   </div>
                   <div className="flex justify-center items-center pt-6 ">
@@ -562,6 +573,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       changer={endTimeChange}
                       isAllDay={allDay ? true : false}
                       role={permission}
+                      onValidateChange={(newValue) =>
+                        setEndTimeValidate(newValue)
+                      }
                     />
                   </div>
                 </div>

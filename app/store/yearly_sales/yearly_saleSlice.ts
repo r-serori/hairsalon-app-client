@@ -20,22 +20,6 @@ export const getYearly_sales = createAsyncThunk<
   }
 });
 
-export const selectGetYearly_sales = createAsyncThunk<
-  GetYearlySaleState,
-  string,
-  {
-    rejectValue: ErrorType;
-  }
->("yearly_sales/selectGetYearly_sales", async (year, { rejectWithValue }) => {
-  try {
-    const response: any = await yearlySaleApi.selectGetYearlySales(year);
-
-    return handleErrorResponse(response, rejectWithValue);
-  } catch (err) {
-    return handleCatchError(err, rejectWithValue);
-  }
-});
-
 export const createYearly_sales = createAsyncThunk<
   PostYearlySaleState,
   Yearly_salesState,

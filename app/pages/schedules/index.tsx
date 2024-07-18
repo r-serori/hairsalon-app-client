@@ -65,6 +65,24 @@ const schedules: React.FC = () => {
 
   const permission: PermissionsState = useSelector(permissionStore);
 
+  const nowScheduleGetter = async () => {
+    try {
+      const response = await dispatch(getSchedule() as any);
+      if (response.meta.requestStatus === "rejected") {
+        const re = renderError(sErrorStatus, router, dispatch);
+        if (re === null)
+          throw new Error("スケジュール情報の取得に失敗しました");
+      }
+    } catch (error) {
+      console.log(error);
+      allLogout(dispatch);
+      router.push("/auth/login");
+    } finally {
+      localStorage.removeItem("year");
+      localStorage.removeItem("userCount");
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,6 +106,7 @@ const schedules: React.FC = () => {
         allLogout(dispatch);
         router.push("/auth/login");
       } finally {
+        localStorage.removeItem("year");
         localStorage.removeItem("userCount");
       }
     };
@@ -294,6 +313,7 @@ const schedules: React.FC = () => {
           merchandises={merchandises}
           hairstyles={hairstyles}
           customerNames={customerNames}
+          nowScheduleGetter={nowScheduleGetter}
         />
       )}
     </div>

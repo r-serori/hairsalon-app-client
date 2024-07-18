@@ -22,7 +22,7 @@ const yearly_salesForm: React.FC<YearlySalesFormProps> = ({
   );
 
   const [yearlySalesValidate, setYearlySalesValidate] = useState<boolean>(
-    node.yearly_sales ? true : false
+    node && node.yearly_sales ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

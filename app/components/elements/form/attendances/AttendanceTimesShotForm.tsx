@@ -141,6 +141,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       : null
   );
 
+  const [timeValidate, setTimeValidate] = useState<boolean>(true);
+
   // 時間の表示
   const [showTime, setShowTime] = useState<string>(
     link === "/attendanceTimeStart" && node.start_time
@@ -223,6 +225,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   };
 
   const handleStartTime = async () => {
+    if (!timeValidate) return;
     const getTime: string = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
     let formData;
 
@@ -264,6 +267,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   };
 
   const handleEndTime = async () => {
+    if (!timeValidate) return;
     const getTime: string = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
     let formData;
 
@@ -336,7 +340,11 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         "本日の勤怠時間の編集は退勤後にお願いします！"
       ) : (
         <div className="flex justify-center items-center ">
-          <DateTimeRangePicker value={time} changer={setTime} />
+          <DateTimeRangePicker
+            value={time}
+            changer={setTime}
+            onValidateChange={setTimeValidate}
+          />
         </div>
       )}
 

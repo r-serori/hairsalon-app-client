@@ -28,30 +28,6 @@ export const yearlySaleApi = {
     }
   },
 
-  // fetchYearlySalesById: async (id: number) => {
-  // try{
-  //   const response = await sendRequest("GET", `/yearly_sales/${id}`);
-  //   return response;
-  // }catch(error){
-  // console.log("errorだよ", error);
-  //   return {error: error}
-  // }
-  // },
-
-  selectGetYearlySales: async (year: string) => {
-    try {
-      const response = await sendRequest(
-        "GET",
-        `/yearly_sales/selected/${encodeURIComponent(year)}`
-      );
-      // console.log("APIのyearlySalesDataだよ", response);
-      return response;
-    } catch (error) {
-      // console.log("errorだよ", error);
-      return { error: error };
-    }
-  },
-
   updateYearlySales: async (formData: Yearly_salesState) => {
     try {
       const response = await sendRequest(

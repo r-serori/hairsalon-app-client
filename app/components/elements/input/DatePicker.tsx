@@ -12,12 +12,14 @@ interface DatePickerValueProps {
   value: Dayjs;
   changer: (newValue: Dayjs) => void;
   whatSales: string;
+  onValidateChange: (isValid: boolean) => void;
 }
 
 const DatePickerValue: React.FC<DatePickerValueProps> = ({
   value,
   changer,
   whatSales,
+  onValidateChange,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -25,9 +27,30 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
 
   console.log("valueです", value);
 
-  // const dayJsValue = dayjs(value).utc().tz("Asia/Tokyo");
-
-  // console.log("dayJsValueです", dayJsValue);
+  const errorChecker = (newValue) => {
+    console.log(
+      "newValueです",
+      dayjs(newValue).utc().tz("Asia/Tokyo").format("YYYY-MM-DD")
+    );
+    if (
+      dayjs(newValue)
+        .utc()
+        .tz("Asia/Tokyo")
+        .format("YYYY-MM-DD")
+        .includes("Invalid") ||
+      dayjs(newValue)
+        .utc()
+        .tz("Asia/Tokyo")
+        .format("YYYY-MM")
+        .includes("Invalid") ||
+      dayjs(newValue).utc().tz("Asia/Tokyo").format("YYYY").includes("Invalid")
+    ) {
+      onValidateChange(false);
+    } else {
+      onValidateChange(true);
+    }
+    changer(newValue);
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -43,9 +66,7 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
             : "表示したい年月を選択"
         }
         value={dayjs(value).utc().tz("Asia/Tokyo")}
-        onChange={(newValue) => {
-          changer(newValue);
-        }}
+        onChange={errorChecker}
         views={
           whatSales === "日次"
             ? ["year", "month", "day"]

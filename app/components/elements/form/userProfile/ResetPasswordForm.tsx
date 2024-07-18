@@ -19,9 +19,9 @@ interface ResetPasswordFormProps {
 const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   onSubmitResetPassword,
 }) => {
-  const [email, setEmail] = useState<string>("owner@hairmail.com");
-  const [password, setPassword] = useState("resetPassword_123");
-  const [confirmPassword, setConfirmPassword] = useState("resetPassword_123");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const [emailValidate, setEmailValidate] = useState<boolean>(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);

@@ -13,6 +13,7 @@ interface DateTimeRangePickerProps {
   changer: (newValue: Dayjs) => void;
   isAllDay?: boolean; //終日の予定かどうか
   role?: string; //スタッフかどうか
+  onValidateChange: (isValid: boolean) => void;
 }
 
 const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
@@ -20,10 +21,8 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   changer,
   isAllDay,
   role,
+  onValidateChange,
 }) => {
-  // const [value, setValue] = React.useState<Dayjs | null>(
-  //   dayjs("2022-04-17T15:30")
-  // );
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -38,6 +37,24 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   const minTime = dayjs().hour(0).minute(0).utc().tz("Asia/Tokyo");
   const maxTime = dayjs().hour(23).minute(59).utc().tz("Asia/Tokyo");
 
+  const errorChecker = (newValue) => {
+    console.log(
+      "newValueです",
+      dayjs(newValue).utc().tz("Asia/Tokyo").format("YYYY-MM-DD HH:mm")
+    );
+    if (
+      dayjs(newValue)
+        .utc()
+        .tz("Asia/Tokyo")
+        .format("YYYY-MM-DD HH:mm")
+        .includes("Invalid")
+    ) {
+      onValidateChange(false);
+    } else {
+      onValidateChange(true);
+    }
+    changer(newValue);
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
@@ -47,9 +64,7 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
             : "日時を選択してください"
         }
         value={dayJsValue}
-        onChange={(newValue) => {
-          changer(newValue);
-        }}
+        onChange={errorChecker}
         {...(isAllDay || role === "スタッフ" ? { readOnly: true } : {})}
         minTime={minTime}
         maxTime={maxTime}

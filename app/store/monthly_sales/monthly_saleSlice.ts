@@ -136,10 +136,7 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(getMonthly_sales.fulfilled, (state, action) => {
       state.status = "success";
-      state.monthly_sales = [
-        ...state.monthly_sales,
-        ...action.payload.monthlySales,
-      ];
+      state.monthly_sales = action.payload.monthlySales;
       state.message = action.payload.message
         ? action.payload.message
         : "月次売上の取得に成功しました！";
@@ -159,10 +156,7 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(selectGetMonthly_sales.fulfilled, (state, action) => {
       state.status = "success";
-      state.monthly_sales = [
-        ...state.monthly_sales,
-        ...action.payload.monthlySales,
-      ];
+      state.monthly_sales = action.payload.monthlySales;
       state.message = action.payload.message
         ? action.payload.message
         : "月次売上の取得に成功しました！";

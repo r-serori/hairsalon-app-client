@@ -50,6 +50,7 @@ interface OpenCalendarProps {
   merchandises: MerchandiseState[];
   hairstyles: HairstyleState[];
   customerNames: string[];
+  nowScheduleGetter: () => void;
 }
 
 const MyCalendar: React.FC<OpenCalendarProps> = ({
@@ -61,6 +62,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
   merchandises,
   hairstyles,
   customerNames,
+  nowScheduleGetter,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -88,18 +90,11 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
 
   const eventBorderColor = "#333";
 
-  const [scheduleYear, setScheduleYear] = useState<string>("");
+  const [scheduleYear, setScheduleYear] = useState<string>(
+    localStorage.getItem("year") || ""
+  );
 
   const permission: PermissionsState = useSelector(permissionStore);
-
-  useEffect(() => {
-    const localYear = localStorage.getItem("year");
-    if (localYear) {
-      setScheduleYear(localYear);
-    } else {
-      setScheduleYear("");
-    }
-  }, [scheduleYear]);
 
   //予約内容を作成するためのstate
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -157,8 +152,8 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
           {scheduleYear ? (
             <button
               onClick={() => {
-                setScheduleYear(dayjs().utc().tz("Asia/Tokyo").format("YYYY"));
                 localStorage.removeItem("year");
+                nowScheduleGetter();
               }}
             >
               現在の年の予約を表示
@@ -168,7 +163,8 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
               <EasyModal
                 open={easyOpen}
                 setOpen={setEasyOpen}
-                setScheduleYear={setScheduleYear}
+                yearMonth={scheduleYear}
+                setYearMonth={setScheduleYear}
                 whoAreYou="schedules"
               />
             </div>

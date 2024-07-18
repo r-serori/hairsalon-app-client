@@ -146,7 +146,7 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(getDaily_sales.fulfilled, (state, action) => {
       state.status = "success";
-      state.daily_sales = [...state.daily_sales, ...action.payload.dailySales];
+      state.daily_sales = action.payload.dailySales;
       state.message = action.payload.message
         ? action.payload.message
         : "日次売上の取得に成功しました！";
@@ -166,7 +166,7 @@ const daily_salesSlice = createSlice({
     });
     builder.addCase(selectGetDaily_sales.fulfilled, (state, action) => {
       state.status = "success";
-      state.daily_sales = [...state.daily_sales, ...action.payload.dailySales];
+      state.daily_sales = action.payload.dailySales;
       state.message = action.payload.message
         ? action.payload.message
         : "日次売上の取得に成功しました！";

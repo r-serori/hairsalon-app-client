@@ -18,9 +18,9 @@ interface UpdatePasswordFormProps {
 const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({
   onSubmitUpdatePassword,
 }) => {
-  const [current_password, setCurrentPassword] = useState("Password_123");
-  const [password, setPassword] = useState("newPassword_123");
-  const [confirmPassword, setConfirmPassword] = useState("newPassword_123");
+  const [current_password, setCurrentPassword] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const [isCurrentPasswordValid, setIsCurrentPasswordValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);

@@ -5,6 +5,8 @@ import UpdateInformationForm from "../../components/elements/form/userProfile/Up
 import {
   ownerError,
   ownerErrorStatus,
+  ownerMessage,
+  ownerStatus,
   ownerStore,
   permissionStore,
   user,
@@ -33,8 +35,8 @@ const UpdateOwnerInformationPage: React.FC = () => {
 
   const owner: OwnerState = useSelector(ownerStore);
 
-  const oStatus: string = useSelector(userStatus);
-  const oMessage: string | null = useSelector(userMessage);
+  const oStatus: string = useSelector(ownerStatus);
+  const oMessage: string | null = useSelector(ownerMessage);
   const oError: string | null = useSelector(ownerError);
   const oErrorStatus: number = useSelector(ownerErrorStatus);
 
@@ -98,7 +100,7 @@ const UpdateOwnerInformationPage: React.FC = () => {
           <RouterButton link={"/dashboard"} value="一覧画面へ戻る" />
         </div>
 
-        {oStatus === "loading" ? (
+        {oStatus === "loading" || !owner ? (
           <p>Loading...</p>
         ) : permission === null ? (
           <p>あなたに権限はありません。</p>

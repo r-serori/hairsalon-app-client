@@ -17,8 +17,15 @@ import { selectGetSchedules } from "../../../../store/schedules/scheduleSlice";
 import { selectGetAttendanceTimes } from "../../../../store/attendance_times/attendance_timesSlice";
 import { selectGetDaily_sales } from "../../../../store/daily_sales/daily_saleSlice";
 import { selectGetMonthly_sales } from "../../../../store/monthly_sales/monthly_saleSlice";
-import { selectGetYearly_sales } from "../../../../store/yearly_sales/yearly_saleSlice";
 import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { useSelector } from "react-redux";
+import {
+  attendance_timeErrorStatus,
+  daily_saleErrorStatus,
+  monthly_saleErrorStatus,
+  scheduleErrorStatus,
+} from "../../../Hooks/selector";
 
 const style = {
   position: "absolute" as "absolute",
@@ -37,15 +44,11 @@ const style = {
 interface EasyModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  whoAreYou:
-    | "attendanceTimes"
-    | "schedules"
-    | "dailySales"
-    | "monthlySales"
-    | "yearlySales";
+  whoAreYou: "attendanceTimes" | "schedules" | "dailySales" | "monthlySales";
+
   whatIsYourId?: number;
+  yearMonth: string;
   setYearMonth?: (yearMonth: string) => void;
-  setScheduleYear?: (year: string) => void;
 }
 
 const EasyModal: React.FC<EasyModalProps> = ({
@@ -53,8 +56,8 @@ const EasyModal: React.FC<EasyModalProps> = ({
   setOpen,
   whoAreYou,
   whatIsYourId,
+  yearMonth,
   setYearMonth,
-  setScheduleYear,
 }) => {
   dayjs.locale("ja");
   dayjs.extend(utc);
@@ -63,15 +66,26 @@ const EasyModal: React.FC<EasyModalProps> = ({
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
+  const atErrorStatus = useSelector(attendance_timeErrorStatus);
+  const sErrorStatus = useSelector(scheduleErrorStatus);
+  const dsErrorStatus = useSelector(daily_saleErrorStatus);
+  const msErrorStatus = useSelector(monthly_saleErrorStatus);
+
   const [selectDate, setSelectDate] = useState<Dayjs>(
     dayjs().utc().tz("Asia/Tokyo")
   );
 
   const [year, setYear] = useState<string>(
-    whoAreYou === "attendanceTimes"
-      ? dayjs().utc().tz("Asia/Tokyo").format("YYYY-MM")
+    whoAreYou === "attendanceTimes" && yearMonth
+      ? dayjs(yearMonth).utc().tz("Asia/Tokyo").format("YYYY-MM")
+      : whoAreYou === "attendanceTimes" && !yearMonth
+      ? dayjs(yearMonth).utc().tz("Asia/Tokyo").format("YYYY-MM")
+      : whoAreYou !== "attendanceTimes" && yearMonth
+      ? dayjs(yearMonth).utc().tz("Asia/Tokyo").format("YYYY")
       : dayjs().utc().tz("Asia/Tokyo").format("YYYY")
   );
+
+  const [timeValidate, setTimeValidate] = useState<boolean>(true);
 
   let message = "去年以前、または来年以降の年を選択してください！";
 
@@ -86,28 +100,49 @@ const EasyModal: React.FC<EasyModalProps> = ({
 
   const selectSubmit = async () => {
     try {
+      if (!timeValidate) return;
       if (whoAreYou === "attendanceTimes") {
-        dispatch(
+        const response = await dispatch(
           selectGetAttendanceTimes({
             user_id: whatIsYourId,
             yearMonth: year,
           }) as any
         );
-        setOpen(false);
+        if (response.meta.requestStatus === "fulfilled") {
+          setOpen(false);
+        } else {
+          const re = renderError(atErrorStatus, router, dispatch);
+          if (re === null) throw new Error();
+        }
         setYearMonth(year);
       } else if (whoAreYou === "schedules") {
-        const response = dispatch(selectGetSchedules(year) as any);
-        localStorage.setItem("year", year);
-        setOpen(false);
+        const response = await dispatch(selectGetSchedules(year) as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          localStorage.setItem("year", year);
+          setYearMonth(year);
+          setOpen(false);
+        } else {
+          const re = renderError(sErrorStatus, router, dispatch);
+          if (re === null) throw new Error();
+        }
       } else if (whoAreYou === "dailySales") {
-        dispatch(selectGetDaily_sales(year) as any);
-        setOpen(false);
+        const response = await dispatch(selectGetDaily_sales(year) as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          setYearMonth(year);
+          setOpen(false);
+        } else {
+          const re = renderError(dsErrorStatus, router, dispatch);
+          if (re === null) throw new Error();
+        }
       } else if (whoAreYou === "monthlySales") {
-        dispatch(selectGetMonthly_sales(year) as any);
-        setOpen(false);
-      } else if (whoAreYou === "yearlySales") {
-        dispatch(selectGetYearly_sales(year) as any);
-        setOpen(false);
+        const response = await dispatch(selectGetMonthly_sales(year) as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          setYearMonth(year);
+          setOpen(false);
+        } else {
+          const re = renderError(msErrorStatus, router, dispatch);
+          if (re === null) throw new Error();
+        }
       } else {
         console.log("whoAreYouが不正です");
         throw new Error("whoAreYouが不正です");
@@ -171,6 +206,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
                         setYear(newValue.format("YYYY-MM"));
                       }}
                       whatSales="勤怠"
+                      onValidateChange={(validate) => setTimeValidate(validate)}
                     />
                   ) : (
                     <DatePickerValue
@@ -180,6 +216,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
                         setYear(newValue.format("YYYY"));
                       }}
                       whatSales="過去未来"
+                      onValidateChange={(validate) => setTimeValidate(validate)}
                     />
                   )}
                 </div>
@@ -188,8 +225,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
                   {(year === dayjs().utc().tz("Asia/Tokyo").format("YYYY") &&
                     (whoAreYou === "schedules" ||
                       whoAreYou === "dailySales" ||
-                      whoAreYou === "monthlySales" ||
-                      whoAreYou === "yearlySales")) ||
+                      whoAreYou === "monthlySales")) ||
                   (year ===
                     dayjs()
                       .utc()

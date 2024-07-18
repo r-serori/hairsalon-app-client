@@ -249,7 +249,7 @@ export default function Header() {
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>
-                <div className="mx-auto max-w-7xl  sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-7xl sm:px-2 ">
                   <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center ">
                       <div className="hidden md:block">

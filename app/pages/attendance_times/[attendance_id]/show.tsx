@@ -172,15 +172,18 @@ const attendanceTimes: React.FC = () => {
                 </button>
               )}
             </div>
-            <div>
-              <EasyModal
-                open={attendanceTimeOpen}
-                setOpen={setAttendanceTimeOpen}
-                whoAreYou="attendanceTimes"
-                whatIsYourId={Number(id)}
-                setYearMonth={setYearMonth}
-              />
-            </div>
+            {yearMonth === "000111" && (
+              <div>
+                <EasyModal
+                  open={attendanceTimeOpen}
+                  setOpen={setAttendanceTimeOpen}
+                  whoAreYou="attendanceTimes"
+                  whatIsYourId={Number(id)}
+                  yearMonth={yearMonth}
+                  setYearMonth={setYearMonth}
+                />
+              </div>
+            )}
           </div>
 
           <ComponentTable

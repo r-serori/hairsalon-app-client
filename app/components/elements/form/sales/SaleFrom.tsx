@@ -81,10 +81,13 @@ const SaleForm: React.FC<SaleFormProps> = ({
     dayjs().utc().tz("Asia/Tokyo")
   );
 
+  const [timeValidate, setTimeValidate] = React.useState<boolean>(true);
+
   const [sumPrice, setSumPrice] = React.useState<number | 0>(0);
   const [message, setMessage] = React.useState<string>("");
 
   const sumPricer = (updateDate) => {
+    if (!timeValidate) return;
     //モーダルでDateTimePickerで選択した日付をdayjsでformat()で形を変更している。
     let sameDateEvents = [];
     try {
@@ -249,6 +252,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
   console.log("whatSalesだよ", whatSales);
 
   const SalesSubmit = async () => {
+    if (!timeValidate) return;
     try {
       let SalesFormData;
       if (sumPrice === 0) {
@@ -359,6 +363,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
           <DatePickerValue
             value={time}
             changer={(newValue) => {
+              console.log("newValueだよasaasassfasf", newValue);
               setTime(newValue);
               sumPricer(newValue);
             }}
@@ -369,15 +374,23 @@ const SaleForm: React.FC<SaleFormProps> = ({
                 ? "月次"
                 : "年次"
             }
+            onValidateChange={setTimeValidate}
           />
         </div>
         <div className="p-4 md:p-5 text-center pt-8">
           {whatSales === "日次" ? (
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                {time.format("YYYY")}年{time.format("MM")}月{time.format("DD")}
+                {dayjs(time)
+                  .utc()
+                  .tz("Asia/Tokyo")
+                  .format("YYYY-MM-DD")
+                  .includes("Invalid")
+                  ? "日付を正しく入力してください。"
+                  : `${time.format("YYYY")}
+                年${time.format("MM")}月${time.format("DD")}
                 日の売上合計は
-                {formatPrice(sumPrice)}円でした。
+                ${formatPrice(sumPrice)}円でした。`}
               </h3>
               {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">
@@ -388,8 +401,15 @@ const SaleForm: React.FC<SaleFormProps> = ({
           ) : whatSales === "月次" ? (
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                {time.format("YYYY")}年{time.format("MM")}月の売上合計は
-                {formatPrice(sumPrice)}円でした。
+                {dayjs(time)
+                  .utc()
+                  .tz("Asia/Tokyo")
+                  .format("YYYY-MM")
+                  .includes("Invalid")
+                  ? "日付を正しく入力してください。"
+                  : `${time.format("YYYY")}年${time.format(
+                      "MM"
+                    )}月の売上合計は${formatPrice(sumPrice)}円でした。`}
               </h3>
               {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">
@@ -400,8 +420,15 @@ const SaleForm: React.FC<SaleFormProps> = ({
           ) : (
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                {time.format("YYYY")}年の売上合計は
-                {formatPrice(sumPrice)}円でした。
+                {dayjs(time)
+                  .utc()
+                  .tz("Asia/Tokyo")
+                  .format("YYYY")
+                  .includes("Invalid")
+                  ? "日付を正しく入力してください。"
+                  : `${time.format("YYYY")}
+                年の売上合計は
+                ${formatPrice(sumPrice)}円でした。`}
               </h3>
               {sumPrice > 0 && (
                 <h3 className="font-normal text-gray-900 dark:text-gray-400 pt-8">

@@ -42,11 +42,11 @@ const monthly_sales: React.FC = () => {
   const nowMonthlySales = async () => {
     try {
       const response = await dispatch(getMonthly_sales() as any);
-      setYearMonth("");
       if (response.meta.requestStatus === "rejected") {
         const re = renderError(msErrorStatus, router, dispatch);
         if (re === null) throw new Error("月次売上情報の取得に失敗しました");
       }
+      setYearMonth("");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -60,11 +60,12 @@ const monthly_sales: React.FC = () => {
         if (permission === "オーナー") {
           setTHeaderItems(["年月", "売上", "編集", "削除"]);
         } else {
-          throw new Error("Permission is not オーナー");
+          router.push("/dashboard");
         }
 
         if (_.isEmpty(monthly_sales) && permission === "オーナー") {
           const response = await dispatch(getMonthly_sales() as any);
+          setYearMonth("");
           if (response.meta.requestStatus === "rejected") {
             const re = renderError(msErrorStatus, router, dispatch);
             if (re === null)
@@ -109,13 +110,15 @@ const monthly_sales: React.FC = () => {
         <div className="mx-4">
           <div className="flex justify-between items-center my-4">
             <div className="flex justify-start items-center gap-4 ">
-              <EasyModal
-                open={salesOpen}
-                setOpen={setSalesOpen}
-                whoAreYou="monthlySales"
-                setYearMonth={setYearMonth}
-              />
-
+              {yearMonth === "" && (
+                <EasyModal
+                  open={salesOpen}
+                  setOpen={setSalesOpen}
+                  whoAreYou="monthlySales"
+                  yearMonth={yearMonth}
+                  setYearMonth={setYearMonth}
+                />
+              )}
               {yearMonth !== "" && (
                 <button
                   className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "

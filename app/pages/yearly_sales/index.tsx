@@ -29,7 +29,6 @@ const yearly_sales: React.FC = () => {
 
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const [salesOpen, setSalesOpen] = useState<boolean>(false);
-  const [yearMonth, setYearMonth] = useState<string>("");
 
   const yearly_sales: Yearly_salesState[] = useSelector(yearly_salesStore);
   const ysStatus: string = useSelector(yearly_saleStatus);
@@ -42,8 +41,6 @@ const yearly_sales: React.FC = () => {
   const nowYearlySales = async () => {
     try {
       const response = await dispatch(getYearly_sales() as any);
-
-      setYearMonth("");
       if (response.meta.requestStatus === "rejected") {
         const re = renderError(ysErrorStatus, router, dispatch);
         if (re === null) throw new Error("年次売上の取得に失敗しました");
@@ -59,7 +56,7 @@ const yearly_sales: React.FC = () => {
         ownerPermission(permission, router);
 
         if (permission === "オーナー") {
-          setTHeaderItems(["年", "売上", "削除"]);
+          setTHeaderItems(["年", "売上", "編集", "削除"]);
         } else {
           throw new Error("Permission is not オーナー");
         }
@@ -109,29 +106,9 @@ const yearly_sales: React.FC = () => {
         <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
-          <div className="flex justify-between items-center my-4">
-            <div className="flex justify-start items-center gap-4 ">
-              <EasyModal
-                open={salesOpen}
-                setOpen={setSalesOpen}
-                whoAreYou="yearlySales"
-                setYearMonth={setYearMonth}
-              />
-              {yearMonth !== "" && (
-                <button
-                  className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center "
-                  onClick={() => {
-                    nowYearlySales();
-                  }}
-                >
-                  現在の年月に戻す
-                </button>
-              )}
-            </div>
-            <div className="flex justify-end items-center gap-4">
-              <RouterButton link="/daily_sales" value="日次売上画面へ" />
-              <RouterButton link="/monthly_sales" value="月次売上画面へ" />
-            </div>
+          <div className="flex justify-end items-center gap-4">
+            <RouterButton link="/daily_sales" value="日次売上画面へ" />
+            <RouterButton link="/monthly_sales" value="月次売上画面へ" />
           </div>
 
           <ComponentTable
