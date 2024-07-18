@@ -1,39 +1,43 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
 import { getUsers } from "../../store/auth/userSlice";
-import { UserAllState } from "../../components/Hooks/interface";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   user,
   userError,
-  userKey,
   userMessage,
   userStatus,
   permissionStore,
+  userErrorStatus,
 } from "../../components/Hooks/authSelector";
 import { ownerPermission, allLogout } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { PermissionsState } from "../../store/auth/permissionSlice";
+import { UserState } from "../../store/auth/userSlice";
+import { renderError } from "../../store/errorHandler";
+import { AppDispatch } from "../../redux/store";
 
 const Attendances = () => {
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
-  const dispatch = useDispatch();
+  const users: UserState[] = useSelector(user);
+  const uStatus: string = useSelector(userStatus);
+  const uMessage: string | null = useSelector(userMessage);
+  const uError: string | null = useSelector(userError);
+  const uErrorStatus: number = useSelector(userErrorStatus);
 
-  const users: UserAllState[] = useSelector(user);
-
-  // const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const getStaffs = async () => {
-      const response = await dispatch(getUsers(true) as any);
+      const response = await dispatch(getUsers() as any);
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
+      return response;
     };
 
     const fetchData = async () => {
@@ -49,7 +53,12 @@ const Attendances = () => {
           (permission === "オーナー" && userCount === "undefined") ||
           (users.length < Number(userCount) && permission === "オーナー")
         ) {
-          await getStaffs();
+          const response = (await getStaffs()) as any;
+          console.log("response", response);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(uErrorStatus, router, dispatch);
+            if (re === null) throw new Error("更新に失敗しました");
+          }
         }
       } catch (error) {
         console.log("Error", error);
@@ -59,12 +68,6 @@ const Attendances = () => {
     };
     if (permission) fetchData();
   }, [dispatch, permission]);
-
-  const uStatus: string = useSelector(userStatus);
-
-  const uMessage: string | null = useSelector(userMessage);
-
-  const uError: string | null = useSelector(userError);
 
   const searchItems = [
     { key: "name", value: "名前" },
@@ -87,17 +90,18 @@ const Attendances = () => {
   ];
 
   // nodesにusersをマップして処理
-  const nodes = Array.isArray(users)
-    ? users.map((user: UserAllState) => {
-        return {
-          id: user.id,
-          name: user.name,
-          staff_phone_number: user.phone_number,
-          role: user.role,
-          isAttendance: user.isAttendance,
-        };
-      })
-    : [];
+  const nodes =
+    Array.isArray(users) && users.length > 1
+      ? users.map((user: UserState) => {
+          return {
+            id: user.id,
+            name: user.name,
+            staff_phone_number: user.phone_number,
+            role: user.role,
+            isAttendance: user.isAttendance,
+          };
+        })
+      : [];
 
   return (
     <div>
@@ -113,8 +117,10 @@ const Attendances = () => {
       {uError && (
         <BasicAlerts type="error" message={uError} space={1} padding={0.6} />
       )}
-      {uStatus === "loading" || permission === null || !nodes ? (
-        <p>Loading...</p>
+      {uStatus === "loading" || !nodes ? (
+        <p>loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="flex my-4">

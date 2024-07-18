@@ -3,26 +3,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useEffect } from "react";
 import {
-  CustomerState,
-  getCustomer,
-  createCustomer,
-  updateCustomer,
-} from "../../../../store/customers/customerSlice";
-import {
-  getSchedule,
   createSchedule,
   createCustomerAndSchedule,
   updateSchedule,
   updateCustomerAndSchedule,
-  deleteSchedule,
   updateCustomerAndScheduleCreate,
   RequestScheduleState,
 } from "../../../../store/schedules/scheduleSlice";
-import { RootState } from "../../../../redux/store";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import BasicTextField from "../../input/BasicTextField";
@@ -30,9 +19,9 @@ import PrimaryButton from "../../button/PrimaryButton";
 import DeleteMan from "../../../DeleteMan/[DeleteMan]/[id]";
 import BackAgainButton from "../../button/RouterButton";
 import ControlledCheckbox from "../../input/checkbox/SimpleCheckBox";
-import { SelectChangeEvent, dividerClasses } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import DateTimeRangePicker from "../../input/DateTimePicker";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
@@ -44,8 +33,12 @@ import { CourseState } from "../../../../store/courses/courseSlice";
 import { OptionState } from "../../../../store/options/optionSlice";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
 import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
-import { UserAllState } from "../../../Hooks/interface";
 import BasicNumberField from "../../input/BasicNumberField";
+import { UserState } from "../../../../store/auth/userSlice";
+import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { scheduleError, scheduleErrorStatus } from "../../../Hooks/selector";
+import BasicAlerts from "../../alert/BasicAlert";
 
 const style = {
   position: "absolute" as "absolute",
@@ -70,7 +63,7 @@ interface ScheduleModalProps {
   setSelectedEvent: (value: any) => void;
   isCustomerProp: boolean;
   nodes: any;
-  users: UserAllState[];
+  users: UserState[];
   courses: CourseState[];
   options: OptionState[];
   merchandises: MerchandiseState[];
@@ -98,8 +91,11 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+
+  const cError: string = useSelector(scheduleError);
+  const sErrorStatus: number = useSelector(scheduleErrorStatus);
 
   const uniqueId = uuidv4();
   const permission = useSelector(permissionStore);
@@ -217,6 +213,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         users.length > 1 &&
         whoIsEvent === "編集"
       ? selectedEvent.extendedProps.names
+      : isCustomer && Array.isArray(users) && users.length > 1
+      ? initialCustomer.names
       : []
   );
 
@@ -227,14 +225,18 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const [usernameValidate, setUsernameValidate] = useState<boolean>(true);
 
   //編集時に選択したイベントのIDを取得  新規予約の場合は0 scheduleテーブルのID
-  const [Sid, setSid] = useState(whoIsEvent === "編集" ? selectedEvent.id : 0);
+  const [Sid, setSid] = useState<number>(
+    whoIsEvent === "編集" ? selectedEvent.id : 0
+  );
   console.log("Sidです", Sid);
 
   //終日予約か時間指定予約かを判定
-  const [allDay, setAllDay] = useState(selectedEvent.allDay ? 1 : 0);
+  const [allDay, setAllDay] = useState<boolean>(
+    selectedEvent.allDay ? true : false
+  );
 
   //顧客以外の予約の場合、タイトルを設定
-  const [title, setTitle] = useState(
+  const [title, setTitle] = useState<string>(
     !isCustomer && !newReservation ? selectedEvent.title : ""
   );
   console.log("titleです", title);
@@ -254,19 +256,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? dayjs(selectedEvent.dateStr).add(1, "day").utc().tz("Asia/Tokyo")
       : dayjs(selectedEvent.endStr).utc().tz("Asia/Tokyo")
   );
-
-  //顧客名を変更する際に、顧客情報を取得
-  // useEffect(() => {
-  //   if (whoIsEvent === "編集" && !firstRender) {
-  //     console.log("nodes", nodes);
-  //     console.log("selectedEvent.title", selectedEvent.title);
-  //     setSid(selectedEvent.id);
-  //     changeCustomerState(selectedEvent.title);
-  //   } else {
-  //     setFirstRender(false);
-  //     return;
-  //   }
-  // }, [showModal]);
 
   const changeCustomerState = (newValue) => {
     //編集時に選択した顧客情報を取得
@@ -349,52 +338,78 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         newReservation &&
         !title
       ) {
-        await dispatch(
+        const response = await dispatch(
           createCustomerAndSchedule(scheduleAndCustomerFormData) as any
         );
-        // const update = "true";
-        // router.push({
-        //   pathname: "/schedules",
-        //   query: { update },
-        // });
+        if (response.meta.requestStatus === "fulfilled") {
+          handleClose();
+        } else {
+          const re = renderError(sErrorStatus, router, dispatch);
+          if (re === null) throw new Error("予約処理に失敗しました");
+        }
       } else if (
         //新規予約、既存顧客、タイトルなし
         !newCustomer &&
         newReservation &&
         !title
       ) {
-        await dispatch(
+        const response = await dispatch(
           updateCustomerAndScheduleCreate(scheduleAndCustomerFormData) as any
         );
+        if (response.meta.requestStatus === "fulfilled") {
+          handleClose();
+        } else {
+          const re = renderError(sErrorStatus, router, dispatch);
+          if (re === null) throw new Error("予約処理に失敗しました");
+        }
       } else if (
         //予約編集、既存顧客、タイトルなし
         !newCustomer &&
         !newReservation &&
         !title
       ) {
-        await dispatch(
+        const response = await dispatch(
           updateCustomerAndSchedule(scheduleAndCustomerFormData) as any
         );
+        if (response.meta.requestStatus === "fulfilled") {
+          handleClose();
+        } else {
+          const re = renderError(sErrorStatus, router, dispatch);
+          if (re === null) throw new Error("予約処理に失敗しました");
+        }
       } else if (
         //新規予約、顧客以外、タイトルあり
         !isCustomer &&
         newReservation &&
         title
       ) {
-        await dispatch(createSchedule(scheduleAndCustomerFormData) as any);
+        const response = await dispatch(
+          createSchedule(scheduleAndCustomerFormData) as any
+        );
+        if (response.meta.requestStatus === "fulfilled") {
+          handleClose();
+        } else {
+          const re = renderError(sErrorStatus, router, dispatch);
+          if (re === null) throw new Error("予約処理に失敗しました");
+        }
       } else if (
         //予約編集、顧客以外、タイトルあり,編集
         !isCustomer &&
         !newReservation &&
         title
       ) {
-        await dispatch(updateSchedule(scheduleAndCustomerFormData) as any);
+        const response = await dispatch(
+          updateSchedule(scheduleAndCustomerFormData) as any
+        );
+        if (response.meta.requestStatus === "fulfilled") {
+          handleClose();
+        } else {
+          const re = renderError(sErrorStatus, router, dispatch);
+          if (re === null) throw new Error("予約処理に失敗しました");
+        }
       }
     } catch (error) {
-      // console.error(error);
-    } finally {
-      handleClose();
-      // window.location.reload();
+      console.error(error);
     }
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -457,7 +472,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setMerchandiseNames([]);
     setHairstyleNames([]);
     setUserNames([]);
-    setAllDay(0);
+    setAllDay(false);
     setTitle("");
     setStartTime(null);
     setEndTime(null);
@@ -475,17 +490,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const endTimeChange = (e) => {
     setEndTime(dayjs(e).utc().tz("Asia/Tokyo"));
   };
-
-  // console.log("endTimeです", endTime);
-
-  // console.log("ScheIdです", Sid);
-
-  // console.log("uniqueIdです", uniqueId);
-  console.log("coursesです", courses);
-  console.log("optionsです", options);
-  console.log("merchandisesです", merchandises);
-  console.log("hairstylesです", hairstyles);
-  console.log("usersです", users);
 
   return (
     <div>
@@ -524,13 +528,21 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
           {/* モーダルのタイトル */}
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <>
+              {cError && (
+                <BasicAlerts
+                  type="error"
+                  message={cError}
+                  padding={1}
+                  space={1}
+                />
+              )}
               <div className="flex justify-center items-center  text-4xl">
                 予約内容
               </div>
 
               <form onSubmit={handleSubmit}>
                 <div className="pt-6 flex justify-center items-center ml-4 mr-4 text-3xl">
-                  <h2>{allDay === 1 ? "終日" : "時間指定"}</h2>
+                  <h2>{allDay ? "終日" : "時間指定"}</h2>
                 </div>
 
                 <div className="flex justify-center items-center  gap-4">
@@ -539,7 +551,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     <DateTimeRangePicker
                       value={startTime}
                       changer={startTimeChange}
-                      isAllDay={allDay === 1 ? true : false}
+                      isAllDay={allDay ? true : false}
                       role={permission}
                     />
                   </div>
@@ -548,7 +560,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     <DateTimeRangePicker
                       value={endTime}
                       changer={endTimeChange}
-                      isAllDay={allDay === 1 ? true : false}
+                      isAllDay={allDay ? true : false}
                       role={permission}
                     />
                   </div>

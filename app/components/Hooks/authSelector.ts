@@ -4,7 +4,7 @@ import { RootState } from "../../redux/store";
 export const loginNow = (state: RootState) => state.loginNow.loginNow;
 
 //owner情報を取得
-export const owner = (state: RootState) => state.owner.owner;
+export const ownerStore = (state: RootState) => state.owner.owner;
 //owner情報のステータスを取得
 export const ownerStatus = (state: RootState) => state.owner.status;
 

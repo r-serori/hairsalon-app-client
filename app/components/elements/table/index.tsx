@@ -22,6 +22,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import StockNotice from "../../stockNotice/StockNotice";
 import AttendanceTimeResult from "../../attendanceTimeResult/AttendanceTimeResult";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
 
 interface ComponentTableProps {
   nodes: any;
@@ -29,7 +30,7 @@ interface ComponentTableProps {
   nodesProps: any;
   tHeaderItems: string[];
   link: string;
-  role: string;
+  role: PermissionsState;
 }
 
 const ComponentTable: React.FC<ComponentTableProps> = ({
@@ -44,50 +45,27 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
   const [searchField, setSearchField] = useState("");
 
   const { pagination, handlePageChange } = usePaginationLogic();
-  // usePageReload(() => {
-  //   setSearchText("");
-  // });
 
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
-
-  // console.log("nodesだよ");
-  // console.log(nodes); // [{id: 1, attendance_name: "田中店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}, {id: 2, attendance_name: "佐藤店長", phone_number: "090-1234-5678", position: "店長", address: "東京都千代田区"}]
 
   //dataという新しいオブジェクトを作成
   const data = {
     nodes: nodes.filter((node) =>
       nodesProps.some((nodesProp) => {
         const propName = Object.keys(nodesProp)[0];
-        // console.log("propNameだよ");
-        // console.log(propName); //attendance_name
         const propValue = node[nodesProp[propName]];
         const propProp = nodesProp[propName];
-        // console.log("propValueだよ");
-        // console.log(propValue); //attendance_name
 
         const searchResult =
           propProp.toString().includes(searchField || "") &&
           propValue.toString().includes(searchText || "");
 
-        // console.log("searchResultだよ");
-        // console.log(searchResult);
-
         return searchResult;
       })
     ),
   };
-
-  // console.log("searchFieldだよ");
-  // console.log(searchField); //名前
-
-  // console.log("searchTextだよ");
-  // console.log(searchText); //田中
-
-  // console.log("dataだよ");
-  // console.log(data); //{nodes: Array(2)}
-  // 検索処理,onChange処理をカスタムフックで定義,searchの値をstateとして持つ
 
   const paginatedData = {
     nodes: data.nodes.slice(
@@ -130,8 +108,6 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
 
   //編集画面へ遷移
   const handleEditManagement = (nodeId, link) => {
-    // console.log("nodeIdだよヨヨヨ");
-    // console.log(nodeId);
     router.push(`${link}/${nodeId}/edit?id=${nodeId}`);
   };
 
@@ -166,8 +142,6 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
             {searchItems.map((searchItem, index) => {
               const searchKey = searchItem.key;
               const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
-              // console.log("searchKeyだよ");
-              // console.log(searchKey); //名前
 
               return (
                 <option key={index} value={searchKey}>
@@ -188,7 +162,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
             id="searchText"
             name="searchText"
             value={searchText}
-            onChange={(e) => setSearchText(e.target.value)} // イベントオブジェクトを明示的に渡す
+            onChange={(e) => setSearchText(e.target.value)}
             placeholder="検索ワード"
             className="items-center py-2 pl-2 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500"
           />
@@ -288,10 +262,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
 
                     const propProp = nodesProp[propName];
 
-                    const imgUrl = "http://localhost:8000/storage/";
-
-                    const imgDecode = decodeURIComponent(propValue);
-                    // console.log("imgDecodeだよ", imgDecode);
+                    const imgUrl = process.env.NEXT_PUBLIC_BACKEND_IMG_URL;
 
                     const formatValue = (value: number) => {
                       return new Intl.NumberFormat("ja-JP").format(value);

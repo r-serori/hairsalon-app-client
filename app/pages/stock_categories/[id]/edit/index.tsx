@@ -1,34 +1,39 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { updateStockCategory } from "../../../../store/stocks/stock_categories/stock_categorySlice";
+import { useRouter, NextRouter } from "next/router";
+import {
+  Stock_categoryState,
+  updateStockCategory,
+} from "../../../../store/stocks/stock_categories/stock_categorySlice";
 import StockCategoryForm from "../../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
 import {
   stock_categoryStatus,
   stock_categoriesStore,
   stock_categoryError,
+  stock_categoryErrorStatus,
 } from "../../../../components/Hooks/selector";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../../components/Hooks/authSelector";
 
 const stockCategoryEdit: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  const scStatus: string = useSelector(stock_categoryStatus);
-  const scError: string = useSelector(stock_categoryError);
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
 
-  const stockCategory = useSelector(stock_categoriesStore).find(
-    (stockCategory) => stockCategory.id === Number(id)
-  );
-  console.log("stockCategoryだよ");
-  console.log(stockCategory);
+  const stockCategory: Stock_categoryState = useSelector(
+    stock_categoriesStore
+  ).find((stockCategory) => stockCategory.id === Number(id));
+  const scStatus: string = useSelector(stock_categoryStatus);
+  const scError: string = useSelector(stock_categoryError);
+  const scErrorStatus: number = useSelector(stock_categoryErrorStatus);
 
-  const handleUpdate = async (formData: { id: number; category: string }) => {
+  const handleUpdate = async (formData: Stock_categoryState) => {
     try {
       const response = await dispatch(updateStockCategory(formData) as any);
 
@@ -36,7 +41,8 @@ const stockCategoryEdit: React.FC = () => {
         console.log("Success", response);
         router.push("/stock_categories");
       } else {
-        throw new Error();
+        const re = renderError(scErrorStatus, router, dispatch);
+        if (re === null) throw new Error("在庫カテゴリの更新に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -49,6 +55,8 @@ const stockCategoryEdit: React.FC = () => {
       )}
       {scStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="mt-4 ml-4">

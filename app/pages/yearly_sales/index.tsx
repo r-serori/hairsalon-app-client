@@ -1,52 +1,55 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Yearly_salesState,
   getYearly_sales,
 } from "../../store/yearly_sales/yearly_saleSlice";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   yearly_salesStore,
   yearly_saleStatus,
   yearly_saleMessage,
   yearly_saleError,
+  yearly_saleErrorStatus,
 } from "../../components/Hooks/selector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import { allLogout, ownerPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import EasyModal from "../../components/elements/modal/easy/EasyModal";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
 const yearly_sales: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const [salesOpen, setSalesOpen] = useState<boolean>(false);
   const [yearMonth, setYearMonth] = useState<string>("");
 
-  const dispatch = useDispatch();
-  const router = useRouter();
-
   const yearly_sales: Yearly_salesState[] = useSelector(yearly_salesStore);
-
   const ysStatus: string = useSelector(yearly_saleStatus);
-
   const ysMessage: string | null = useSelector(yearly_saleMessage);
-
   const ysError: string | null = useSelector(yearly_saleError);
+  const ysErrorStatus: number = useSelector(yearly_saleErrorStatus);
 
   const permission: PermissionsState = useSelector(permissionStore);
 
   const nowYearlySales = async () => {
     try {
-      await dispatch(getYearly_sales({}) as any);
+      const response = await dispatch(getYearly_sales() as any);
+
       setYearMonth("");
+      if (response.meta.requestStatus === "rejected") {
+        const re = renderError(ysErrorStatus, router, dispatch);
+        if (re === null) throw new Error("年次売上の取得に失敗しました");
+      }
     } catch (error) {
       console.error("Error:", error);
-      allLogout(dispatch);
-      router.push("/auth/login");
     }
   };
 
@@ -62,12 +65,14 @@ const yearly_sales: React.FC = () => {
         }
 
         if (_.isEmpty(yearly_sales) && permission === "オーナー") {
-          await dispatch(getYearly_sales({}) as any);
+          const response = await dispatch(getYearly_sales() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(ysErrorStatus, router, dispatch);
+            if (re === null) throw new Error("年次売上の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
-        router.push("/auth/login");
       }
     };
 
@@ -98,8 +103,10 @@ const yearly_sales: React.FC = () => {
         <BasicAlerts type="error" message={ysError} space={1} padding={0.6} />
       )}
 
-      {ysStatus === "loading" || !nodes || permission === null ? (
+      {ysStatus === "loading" || !nodes ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="flex justify-between items-center my-4">

@@ -1,57 +1,54 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Monthly_salesState,
   getMonthly_sales,
 } from "../../store/monthly_sales/monthly_saleSlice";
-import { RootState } from "../../redux/store";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   monthly_salesStore,
   monthly_saleStatus,
   monthly_saleMessage,
   monthly_saleError,
+  monthly_saleErrorStatus,
 } from "../../components/Hooks/selector";
-import {
-  getUserKey,
-  allLogout,
-  ownerPermission,
-} from "../../components/Hooks/useMethod";
+import { allLogout, ownerPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import EasyModal from "../../components/elements/modal/easy/EasyModal";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
 const monthly_sales: React.FC = () => {
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
   const [salesOpen, setSalesOpen] = useState<boolean>(false);
   const [yearMonth, setYearMonth] = useState<string>("");
 
-  const dispatch = useDispatch();
-
   const monthly_sales: Monthly_salesState[] = useSelector(monthly_salesStore);
-
   const msStatus: string = useSelector(monthly_saleStatus);
-
   const msMessage: string | null = useSelector(monthly_saleMessage);
-
   const msError: string | null = useSelector(monthly_saleError);
+  const msErrorStatus: number = useSelector(monthly_saleErrorStatus);
 
   const permission: PermissionsState = useSelector(permissionStore);
 
   const nowMonthlySales = async () => {
     try {
-      await dispatch(getMonthly_sales({}) as any);
+      const response = await dispatch(getMonthly_sales() as any);
       setYearMonth("");
+      if (response.meta.requestStatus === "rejected") {
+        const re = renderError(msErrorStatus, router, dispatch);
+        if (re === null) throw new Error("月次売上情報の取得に失敗しました");
+      }
     } catch (error) {
       console.error("Error:", error);
-      allLogout(dispatch);
-      router.push("/auth/login");
     }
   };
 
@@ -67,12 +64,15 @@ const monthly_sales: React.FC = () => {
         }
 
         if (_.isEmpty(monthly_sales) && permission === "オーナー") {
-          await dispatch(getMonthly_sales({}) as any);
+          const response = await dispatch(getMonthly_sales() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(msErrorStatus, router, dispatch);
+            if (re === null)
+              throw new Error("月次売上情報の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
-        router.push("/auth/login");
       }
     };
     if (permission) fetchData();
@@ -101,8 +101,10 @@ const monthly_sales: React.FC = () => {
       {msError && (
         <BasicAlerts type="error" message={msError} space={1} padding={0.6} />
       )}
-      {msStatus === "loading" || !nodes || permission === null ? (
+      {msStatus === "loading" || !nodes ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="flex justify-between items-center my-4">

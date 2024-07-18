@@ -5,7 +5,7 @@ import PrimaryButton from "../../../button/PrimaryButton";
 import MultiCheckbox from "../../../input/checkbox/MultiCheckbox";
 import { Yearly_salesState } from "../.../../../../../../store/yearly_sales/yearly_saleSlice";
 import BasicNumberField from "../../../input/BasicNumberField";
-import BasicAlerts from "../../../alert/Alert";
+import BasicAlerts from "../../../alert/BasicAlert";
 
 interface YearlySalesFormProps {
   node: Yearly_salesState;

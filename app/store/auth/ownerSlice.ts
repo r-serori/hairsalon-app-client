@@ -20,14 +20,45 @@ export const ownerRegister = createAsyncThunk<
   }
 });
 
+export const getOwner = createAsyncThunk<
+  PostOwnerState,
+  void,
+  {
+    rejectValue: ErrorType;
+  }
+>("owner/getOwner", async (_, { rejectWithValue }) => {
+  try {
+    const response = await ownerApi.getOwner();
+
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
+export const updateOwner = createAsyncThunk<
+  PostOwnerState,
+  OwnerState,
+  {
+    rejectValue: ErrorType;
+  }
+>("owner/updateOwner", async (formData, { rejectWithValue }) => {
+  try {
+    const response = await ownerApi.updateOwner(formData);
+    return handleErrorResponse(response, rejectWithValue);
+  } catch (err) {
+    return handleCatchError(err, rejectWithValue);
+  }
+});
+
 export interface OwnerState {
   id: number;
   store_name: string;
   postal_code: string;
   prefecture: string;
   city: string;
-  address_line1: string;
-  address_line2?: string;
+  addressLine1: string;
+  addressLine2?: string;
   phone_number: string;
   user_id: number;
 }
@@ -41,7 +72,7 @@ export interface RootState {
   owner: OwnerState;
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -51,8 +82,8 @@ const initialState: RootState = {
     postal_code: "",
     prefecture: "",
     city: "",
-    address_line1: "",
-    address_line2: "",
+    addressLine1: "",
+    addressLine2: "",
     phone_number: "",
     user_id: 0,
   },
@@ -61,7 +92,7 @@ const initialState: RootState = {
   error: {
     message: "",
     status: 0,
-  },
+  }, // エラーメッセージ
 };
 
 const ownerSlice = createSlice({
@@ -76,7 +107,10 @@ const ownerSlice = createSlice({
     builder.addCase(ownerRegister.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(ownerRegister.fulfilled, (state, action) => {
       state.status = "success";
@@ -84,6 +118,43 @@ const ownerSlice = createSlice({
       state.message = "オーナー登録が完了しました。";
     });
     builder.addCase(ownerRegister.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.payload;
+    });
+
+    builder.addCase(getOwner.pending, (state) => {
+      state.status = "loading";
+      state.message = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
+    });
+    builder.addCase(getOwner.fulfilled, (state, action) => {
+      state.status = "success";
+      state.owner = action.payload.owner;
+    });
+    builder.addCase(getOwner.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.payload;
+    });
+
+    builder.addCase(updateOwner.pending, (state) => {
+      state.status = "loading";
+      state.message = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
+    });
+
+    builder.addCase(updateOwner.fulfilled, (state, action) => {
+      state.status = "success";
+      state.owner = action.payload.owner;
+      state.message = "オーナー情報を更新しました。";
+    });
+
+    builder.addCase(updateOwner.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.payload;
     });

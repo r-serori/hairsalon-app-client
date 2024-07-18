@@ -1,30 +1,31 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { updateUserPassword, showUser } from "../../store/auth/userSlice";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import { useRouter, NextRouter } from "next/router";
+import { updateUserPassword } from "../../store/auth/userSlice";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import UpdatePasswordForm from "../../components/elements/form/userProfile/UpdatePasswordForm";
-import { useEffect } from "react";
 import {
+  permissionStore,
   userError,
-  userKey,
+  userErrorStatus,
   userMessage,
   userStatus,
-  permissionStore,
 } from "../../components/Hooks/authSelector";
-import { PermissionsState } from "../../store/auth/permissionSlice";
-import { staffPermission } from "../../components/Hooks/useMethod";
 import { isLogout } from "../../store/auth/isLoginSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 const updatePasswordPage: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  const uError: string | null = useSelector(userError);
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const uStatus: string = useSelector(userStatus);
-
   const uMessage: string | null = useSelector(userMessage);
+  const uError: string | null = useSelector(userError);
+  const uErrorStatus: number = useSelector(userErrorStatus);
+
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const handleUpdatePassword = async (formData: {
     current_password: string;
@@ -40,7 +41,8 @@ const updatePasswordPage: React.FC = () => {
         localStorage.clear();
         router.push("/auth/login");
       } else {
-        throw new Error();
+        const re = renderError(uErrorStatus, router, dispatch);
+        if (re === null) throw new Error("パスワードの変更に失敗しました");
       }
     } catch (error) {
       console.log("Error", error);
@@ -64,6 +66,8 @@ const updatePasswordPage: React.FC = () => {
 
       {uStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="mt-4 ml-4">

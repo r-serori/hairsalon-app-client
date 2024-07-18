@@ -5,7 +5,7 @@ import PrimaryButton from "../../../button/PrimaryButton";
 import MultiCheckbox from "../../../input/checkbox/MultiCheckbox";
 import { Daily_salesState } from "../../../../../store/daily_sales/daily_saleSlice";
 import BasicNumberField from "../../../input/BasicNumberField";
-import BasicAlerts from "../../../alert/Alert";
+import BasicAlerts from "../../../alert/BasicAlert";
 
 interface DailySalesFormProps {
   node: Daily_salesState;
@@ -22,7 +22,7 @@ const DailySalesForm: React.FC<DailySalesFormProps> = ({
   );
 
   const [dailySalesValidate, setDailySalesValidate] = useState<boolean>(
-    node.daily_sales ? true : false
+    node && node.daily_sales ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

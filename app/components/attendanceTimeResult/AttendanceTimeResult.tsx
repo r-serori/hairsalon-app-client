@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import BasicAlerts from "../elements/alert/Alert";
+import BasicAlerts from "../elements/alert/BasicAlert";
 
 interface AttendanceTimeResultProps {
   nodes: any;

@@ -1,22 +1,28 @@
 import React from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { createCustomer } from "../../../store/customers/customerSlice";
 import CustomerForm from "../../../components/elements/form/customers/CustomerForm";
-import BackAgainButton from "../../../components/elements/button/RouterButton";
 import {
   customerStatus,
   customerError,
+  customerErrorStatus,
 } from "../../../components/Hooks/selector";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../redux/store";
+import { renderError } from "../../../store/errorHandler";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../components/Hooks/authSelector";
 
 const customersCreate = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const cusStatus: string = useSelector(customerStatus);
-  const cError: string = useSelector(customerError);
+  const cError: string | null = useSelector(customerError);
+  const cErrorStatus: number = useSelector(customerErrorStatus);
 
   const handleCreate = async (formData: {
     id: number;
@@ -35,7 +41,8 @@ const customersCreate = () => {
         console.log("Success", response);
         router.push("/customers");
       } else {
-        throw new Error();
+        const re = renderError(cErrorStatus, router, dispatch);
+        if (re === null) throw new Error("customersの作成に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -48,6 +55,8 @@ const customersCreate = () => {
       )}
       {cusStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="mt-4 ml-4">

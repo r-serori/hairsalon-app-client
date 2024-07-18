@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { deleteCourse } from "../../courses/courseSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getCourse_customers = createAsyncThunk(
@@ -55,7 +56,7 @@ export interface RootState {
   // RootStateの型
   course_customers: Course_customersState[];
   status: "idle" | "loading" | "success" | "failed";
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 export const initialState: RootState = {
@@ -144,6 +145,13 @@ const course_customersSlice = createSlice({
         ),
         ...action.payload.course_customers,
       ];
+    });
+
+    builder.addCase(deleteCourse.fulfilled, (state, action) => {
+      state.course_customers = state.course_customers.filter(
+        (course_customer) =>
+          course_customer.course_id !== action.payload.deleteId
+      );
     });
   },
 });

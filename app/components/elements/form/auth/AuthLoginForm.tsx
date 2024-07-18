@@ -3,7 +3,6 @@ import BasicTextField from "../../input/BasicTextField";
 import PrimaryButton from "../../button/PrimaryButton";
 import EmailField from "../../input/EmailField";
 import PasswordField from "../../input/PasswordField";
-import ForgotPasswordButton from "../../button/ForgotPasswordButton";
 
 interface AuthLoginFormProps {
   onSubmit: (formData: { email: string; password: string }) => void;

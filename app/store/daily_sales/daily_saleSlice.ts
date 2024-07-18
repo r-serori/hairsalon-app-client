@@ -109,7 +109,7 @@ export interface RootState {
   daily_sales: Daily_salesState[];
   status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
-  error: ErrorType | null; // エラー
+  error: ErrorType; // エラー
 }
 
 export const initialState: RootState = {
@@ -129,13 +129,19 @@ const daily_salesSlice = createSlice({
   reducers: {
     changeDailySaleMessage(state, action: PayloadAction<string>) {
       state.message = action.payload;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getDaily_sales.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(getDaily_sales.fulfilled, (state, action) => {
@@ -152,7 +158,10 @@ const daily_salesSlice = createSlice({
 
     builder.addCase(selectGetDaily_sales.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(selectGetDaily_sales.fulfilled, (state, action) => {
@@ -169,7 +178,10 @@ const daily_salesSlice = createSlice({
 
     builder.addCase(createDaily_sales.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(createDaily_sales.fulfilled, (state, action) => {
@@ -186,7 +198,10 @@ const daily_salesSlice = createSlice({
 
     builder.addCase(updateDaily_sales.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(updateDaily_sales.fulfilled, (state, action) => {
@@ -207,7 +222,10 @@ const daily_salesSlice = createSlice({
 
     builder.addCase(deleteDaily_sales.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(deleteDaily_sales.fulfilled, (state, action) => {

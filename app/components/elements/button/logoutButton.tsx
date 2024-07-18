@@ -2,20 +2,24 @@
 
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { logout } from "../../../store/auth/userSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 import { isLogout } from "../../../store/auth/isLoginSlice";
-import { user } from "../../Hooks/authSelector";
+import { AppDispatch } from "../../../redux/store";
+import { renderError } from "../../../store/errorHandler";
+import { useSelector } from "react-redux";
+import { userErrorStatus } from "../../Hooks/authSelector";
+import { allLogout } from "../../Hooks/useMethod";
 
 interface LogoutProps {
   className?: string;
 }
 
 const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+
+  const uErrorStatus: number = useSelector(userErrorStatus);
 
   const deleteCookie = (name) => {
     document.cookie = `${name}=; Max-Age=0; path=/; domain=${location.hostname}`;
@@ -28,26 +32,15 @@ const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
       return;
     } else {
       try {
-        const response = await dispatch(logout({}) as any);
-        if (response.status) {
-          if (
-            response.status === 401 ||
-            response.status === 403 ||
-            response.status === 404 ||
-            response.status === 500
-          ) {
-            router.push({
-              pathname: "/_error",
-              query: { status: response.status },
-            });
-          }
+        const response = await dispatch(logout() as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          dispatch(isLogout());
+          localStorage.clear();
+          router.push("/auth/login");
+        } else {
+          const re = renderError(uErrorStatus, router, dispatch);
+          if (re === null) throw new Error("ログアウト処理に失敗しました");
         }
-        deleteCookie("laravel_session");
-        deleteCookie("XSRF-TOKEN");
-        localStorage.clear();
-        dispatch(isLogout());
-        console.log("responseindex", response);
-        router.push("/auth/login");
       } catch (error) {
         console.log("Error", error);
         return;

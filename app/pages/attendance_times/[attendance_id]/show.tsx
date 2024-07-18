@@ -2,7 +2,7 @@ import ComponentTable from "../../../components/elements/table";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import {
   Attendance_timeState,
   GetAttendanceTimeState,
@@ -10,7 +10,7 @@ import {
 } from "../../../store/attendance_times/attendance_timesSlice";
 import EasyModal from "../../../components/elements/modal/easy/EasyModal";
 import { useState } from "react";
-import BasicAlerts from "../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../components/elements/alert/BasicAlert";
 import RouterButton from "../../../components/elements/button/RouterButton";
 import {
   attendance_timeError,
@@ -25,10 +25,11 @@ import { allLogout } from "../../../components/Hooks/useMethod";
 import _ from "lodash";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { renderError } from "../../../store/errorHandler";
+import { AppDispatch } from "../../../redux/store";
 
 const attendanceTimes: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -55,13 +56,18 @@ const attendanceTimes: React.FC = () => {
 
   const nowAttendanceTime = async () => {
     try {
-      await dispatch(
+      const response = await dispatch(
         selectGetAttendanceTimes({
           user_id: Number(id),
           yearMonth: "000111",
         }) as any
       );
       setYearMonth("000111");
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("response", response);
+      } else {
+        renderError(atErrorStatus, router, dispatch);
+      }
     } catch (error) {
       console.error("Error:", error);
       allLogout(dispatch);
@@ -90,7 +96,7 @@ const attendanceTimes: React.FC = () => {
           if (response.meta.requestStatus === "fulfilled") {
             console.log("response", response);
           } else {
-            renderError(atErrorStatus, router);
+            renderError(atErrorStatus, router, dispatch);
           }
         } else {
           return;
@@ -146,6 +152,8 @@ const attendanceTimes: React.FC = () => {
       </div>
       {atStatus === "loading" || permission === null || !nodes ? (
         <p>loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="flex justify-between my-4 mx-4">

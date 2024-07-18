@@ -1,38 +1,33 @@
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { ownerRegister } from "../../store/auth/ownerSlice";
+import { ownerRegister, OwnerState } from "../../store/auth/ownerSlice";
 import OwnerRegisterForm from "../../components/elements/form/auth/AuthOwnerForm";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import {
   userStatus,
   userMessage,
   userError,
-  userKey,
-  userKeyStatus,
+  ownerErrorStatus,
+  permissionStore,
 } from "../../components/Hooks/authSelector";
-import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
 import { changeMessage } from "../../store/auth/userSlice";
+import { renderError } from "../../store/errorHandler";
+import { AppDispatch } from "../../redux/store";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 const OwnerPage = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
-  const UStatus: string = useSelector(userStatus);
+  const uStatus: string = useSelector(userStatus);
+  const uMessage: string | null = useSelector(userMessage);
+  const uError: string | null = useSelector(userError);
 
-  const UMessage: string | null = useSelector(userMessage);
+  const oErrorStatus: number = useSelector(ownerErrorStatus);
 
-  const UError: string | null = useSelector(userError);
+  const permission: PermissionsState = useSelector(permissionStore);
 
-  const ownerSubmit = async (formData: {
-    store_name: string;
-    postal_code: string;
-    prefecture: string;
-    city: string;
-    addressLine1: string;
-    addressLine2?: string;
-    phone_number: string;
-    user_id: number;
-  }) => {
+  const ownerSubmit = async (formData: OwnerState) => {
     console.log(formData);
     try {
       const response = await dispatch(ownerRegister(formData) as any);
@@ -40,7 +35,8 @@ const OwnerPage = () => {
       if (response.meta.requestStatus === "fulfilled") {
         router.push("/dashboard");
       } else {
-        throw new Error("e");
+        const re = renderError(oErrorStatus, router, dispatch);
+        if (re === null) throw new Error("パスワードリセットに失敗しました");
       }
     } catch (error) {
       dispatch(
@@ -53,7 +49,7 @@ const OwnerPage = () => {
 
   return (
     <div>
-      {UStatus == "idle" && (
+      {uStatus == "idle" && (
         <BasicAlerts
           message="メールの認証が完了しました！続いて、オーナー登録を行ってください！"
           type="info"
@@ -61,20 +57,22 @@ const OwnerPage = () => {
           space={1}
         />
       )}
-      {UMessage && (
+      {uMessage && (
         <BasicAlerts
-          message={UMessage}
+          message={uMessage}
           type="success"
           padding={0.8}
           space={1}
         />
       )}
-      {UError && (
-        <BasicAlerts message={UError} type="error" padding={0.8} space={1} />
+      {uError && (
+        <BasicAlerts message={uError} type="error" padding={0.8} space={1} />
       )}
 
-      {UStatus == "loading" ? (
+      {uStatus == "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <OwnerRegisterForm onSubmit={ownerSubmit} />
       )}

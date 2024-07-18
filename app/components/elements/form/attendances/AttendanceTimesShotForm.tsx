@@ -19,11 +19,11 @@ import PrimaryButton from "../../button/PrimaryButton";
 import CameraEnhanceIcon from "@mui/icons-material/CameraEnhance";
 import DateTimeRangePicker from "../../input/DateTimePicker";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store";
-import BasicAlerts from "../../alert/Alert";
+import BasicAlerts from "../../alert/BasicAlert";
 import { user } from "../../../Hooks/authSelector";
 import { attendance_timesStore } from "../../../Hooks/selector";
-import { UserAllState } from "../../../../components/Hooks/interface";
+import { UserState } from "../../../../store/auth/userSlice";
+import { AppDispatch } from "../../../../redux/store";
 
 interface UserTimesShotFormProps {
   node: any;
@@ -45,13 +45,10 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
-  console.log("node", node);
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+
   const webcamRef = useRef(null);
-
-  //link === "/attendanceTimeStart" || link === "/attendanceTimeEnd"の時、編集モード
-  //link === "/attendanceTimeShots"の時、撮影モード　スタッフの出勤、退勤時間の登録
 
   // 出勤時間、退勤時間の編集モード
   const [edit, setEdit] = useState<boolean>(
@@ -64,11 +61,11 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
     link === "/attendanceTimeShots" ? node.id : node.user_id;
 
   //ボタンを押したユーザーの情報を取得
-  const attendanceUser: UserAllState = useSelector(user).find(
+  const attendanceUser: UserState = useSelector(user).find(
     (user) => user.id === Number(userId)
   );
 
-  console.log("user", user);
+  // console.log("user", user);
 
   // 編集する時のユーザーが持っている出勤時間、退勤時間の情報を取得
   const attendanceTimes: Attendance_timeState[] = useSelector(
@@ -437,7 +434,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
             src={
               !photo
                 ? "https://dummyimage.com/320x240/000/fff&text=未登録"
-                : "http://localhost:8000/storage/" + decodeURIComponent(photo)
+                : process.env.NEXT_PUBLIC_BACKEND_IMG_URL +
+                  decodeURIComponent(photo)
             }
             alt="写真が無いか、登録されていません"
           />

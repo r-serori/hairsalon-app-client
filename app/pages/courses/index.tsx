@@ -1,16 +1,14 @@
-import Link from "next/link";
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { use, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CourseState, getCourse } from "../../store/courses/courseSlice";
-import { RootState } from "../../redux/store";
-import BasicAlerts from "../../components/elements/alert/Alert";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
+import { useRouter, NextRouter } from "next/router";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import RouterButton from "../../components/elements/button/RouterButton";
 import {
   courseError,
+  courseErrorStatus,
   courseMessage,
   courseStatus,
   coursesStore,
@@ -18,32 +16,26 @@ import {
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { PermissionsState } from "../../store/auth/permissionSlice";
+import { renderError } from "../../store/errorHandler";
+import { AppDispatch } from "../../redux/store";
 
 const courses: React.FC = () => {
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
 
-  const router = useRouter();
-
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const courses: CourseState[] = useSelector(coursesStore);
-  console.log("coursesです");
-  console.log(courses);
-
   const cStatus: string = useSelector(courseStatus);
-
   const cMessage: string | null = useSelector(courseMessage);
-
   const cError: string | null = useSelector(courseError);
+  const cErrorStatus: number = useSelector(courseErrorStatus);
 
-  // const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("permission", permission);
-
         staffPermission(permission, router);
 
         switch (permission) {
@@ -64,7 +56,11 @@ const courses: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getCourse({}) as any); // getCourseの非同期処理をawaitする
+          const response = await dispatch(getCourse() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(cErrorStatus, router, dispatch);
+            if (re === null) throw new Error("コースの取得に失敗しました");
+          }
         } else {
           return;
         }
@@ -102,8 +98,10 @@ const courses: React.FC = () => {
       {cError && (
         <BasicAlerts type="error" message={cError} space={1} padding={0.6} />
       )}
-      {cStatus === "loading" || permission === null || !nodes ? (
+      {cStatus === "loading" || !nodes ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="my-4">

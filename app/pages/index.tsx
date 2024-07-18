@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { Draggable } from "gsap/dist/Draggable";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import BasicAlerts from "../components/elements/alert/Alert";
+import BasicAlerts from "../components/elements/alert/BasicAlert";
 import { useSelector } from "react-redux";
 import LogoutButton from "../components/elements/button/logoutButton";
 import { userError } from "../components/Hooks/authSelector";

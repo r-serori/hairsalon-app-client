@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { deleteOption } from "../../options/optionSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getOption_customers = createAsyncThunk(
@@ -55,13 +56,13 @@ export interface RootState {
   // RootStateの型
   option_customers: Option_customersState[];
   status: "idle" | "loading" | "success" | "failed";
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 export const initialState: RootState = {
   option_customers: [],
   status: "idle",
-    error: {
+  error: {
     message: "",
     status: 0,
   },
@@ -144,6 +145,13 @@ const option_customersSlice = createSlice({
         ),
         ...action.payload.option_customers,
       ];
+    });
+
+    builder.addCase(deleteOption.fulfilled, (state, action) => {
+      state.option_customers = state.option_customers.filter(
+        (option_customer) =>
+          option_customer.option_id !== action.payload.deleteId
+      );
     });
   },
 });

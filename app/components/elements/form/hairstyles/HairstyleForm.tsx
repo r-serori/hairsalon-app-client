@@ -21,7 +21,7 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
   );
 
   const [hairstyleNameValidate, setHairstyleNameValidate] = useState<boolean>(
-    node.hairstyle_name ? true : false
+    node && node.hairstyle_name ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

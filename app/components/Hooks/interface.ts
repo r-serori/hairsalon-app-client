@@ -11,19 +11,10 @@ export interface deleteResponse {
   deleteId: number;
 }
 
-export interface UserAllState {
-  id?: number;
-  name: string;
-  email?: string;
-  phone_number?: string;
-  role: RoleState;
-  isAttendance?: boolean;
-}
-
 export type RoleState = "オーナー" | "マネージャー" | "スタッフ";
 
 // エラーの型定義
 export interface ErrorType {
-  status: number | null;
-  message: string | null;
+  status: number;
+  message: string;
 }

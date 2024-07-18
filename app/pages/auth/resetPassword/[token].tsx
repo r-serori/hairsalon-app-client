@@ -1,28 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { resetPassword, showUser } from "../../../store/auth/userSlice";
-import BasicAlerts from "../../../components/elements/alert/Alert";
+import { useRouter, NextRouter } from "next/router";
+import { resetPassword } from "../../../store/auth/userSlice";
+import BasicAlerts from "../../../components/elements/alert/BasicAlert";
 import ResetPasswordForm from "../../../components/elements/form/userProfile/ResetPasswordForm";
-import { useEffect } from "react";
 import {
   userError,
-  userKey,
   userMessage,
   userStatus,
-  permissionStore,
+  userErrorStatus,
 } from "../../../components/Hooks/authSelector";
+import { renderError } from "../../../store/errorHandler";
+import { AppDispatch } from "../../../redux/store";
 
 const resetPasswordPage: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const { token } = router.query;
 
-  const uError = useSelector(userError);
-
   const uStatus = useSelector(userStatus);
-
   const uMessage = useSelector(userMessage);
+  const uError: string = useSelector(userError);
+  const uErrorStatus: number = useSelector(userErrorStatus);
 
   const handleResetPassword = async (formData: {
     email: string;
@@ -36,7 +35,8 @@ const resetPasswordPage: React.FC = () => {
       if (response.meta.requestStatus === "fulfilled") {
         router.push("/auth/login");
       } else {
-        throw new Error();
+        const re = renderError(uErrorStatus, router, dispatch);
+        if (re === null) throw new Error("パスワードリセットに失敗しました");
       }
     } catch (error) {
       console.log("Error", error);

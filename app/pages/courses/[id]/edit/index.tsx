@@ -1,33 +1,35 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { updateCourse, getCourse } from "../../../../store/courses/courseSlice";
 import CourseForm from "../../../../components/elements/form/courses/CourseForm";
 import {
   courseError,
+  courseErrorStatus,
   coursesStore,
   courseStatus,
 } from "../../../../components/Hooks/selector";
 import { CourseState } from "../../../../store/courses/courseSlice";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../../components/elements/alert/BasicAlert";
+import { renderError } from "../../../../store/errorHandler";
+import { AppDispatch } from "../../../../redux/store";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../../components/Hooks/authSelector";
 
 const courseEdit: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  const cStatus: string = useSelector(courseStatus);
-  const cError: string = useSelector(courseError);
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
 
   const course: CourseState = useSelector(coursesStore).find(
     (course: CourseState) => course.id === Number(id)
   );
-  console.log("courseです");
-  console.log(course);
+  const cStatus: string = useSelector(courseStatus);
+  const cError: string = useSelector(courseError);
+  const cErrorStatus: number = useSelector(courseErrorStatus);
 
   const handleUpdate = async (formData: {
     id: number;
@@ -40,7 +42,8 @@ const courseEdit: React.FC = () => {
         console.log("Success", response);
         router.push("/courses");
       } else {
-        throw new Error("e");
+        const re = renderError(cErrorStatus, router, dispatch);
+        if (re === null) throw new Error("コースの更新に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -53,6 +56,8 @@ const courseEdit: React.FC = () => {
       )}
       {cStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="mx-4 my-4">

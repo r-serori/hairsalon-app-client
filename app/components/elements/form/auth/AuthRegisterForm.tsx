@@ -98,6 +98,7 @@ const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
             maxNumber={999999999999999}
             onChange={(e) => setPhoneNumber(e.target.value)}
             onValidationChange={(isValid) => setPhoneNumberValidate(isValid)}
+            format={false}
           />
 
           <PasswordField

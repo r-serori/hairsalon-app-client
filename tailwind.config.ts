@@ -14,26 +14,8 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            ".break-comma": {
-              wordBreak: "break-word",
-            },
-          },
-        },
-      },
     },
   },
-  plugins: [
-    plugin(function ({ addComponents }) {
-      addComponents({
-        ".break-comma": {
-          wordBreak: "break-word",
-        },
-      });
-    }),
-  ],
 };
 
 export default config;

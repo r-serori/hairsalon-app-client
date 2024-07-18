@@ -2,20 +2,27 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createMerchandise } from "../../../store/merchandises/merchandiseSlice";
 import MerchandiseForm from "../../../components/elements/form/merchandises/MerchandiseForm";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   merchandiseStatus,
   merchandiseError,
+  merchandiseErrorStatus,
 } from "../../../components/Hooks/selector";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../redux/store";
+import { renderError } from "../../../store/errorHandler";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../components/Hooks/authSelector";
 
 const merchandiseCreate: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const mStatus: string = useSelector(merchandiseStatus);
   const mError: string = useSelector(merchandiseError);
+  const mErrorStatus: number = useSelector(merchandiseErrorStatus);
 
   const handleCreate = async (formData: {
     id: number;
@@ -29,7 +36,8 @@ const merchandiseCreate: React.FC = () => {
         console.log("Success", response);
         router.push("/merchandises");
       } else {
-        throw new Error();
+        const re = renderError(mErrorStatus, router, dispatch);
+        if (re === null) throw new Error("物販の作成に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -42,6 +50,8 @@ const merchandiseCreate: React.FC = () => {
       )}
       {mStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="ml-4 mt-4">

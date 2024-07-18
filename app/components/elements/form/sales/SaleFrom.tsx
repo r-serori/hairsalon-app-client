@@ -15,6 +15,7 @@ import DeleteButton from "../../button/DeleteButton";
 import {
   changeDailySaleMessage,
   createDaily_sales,
+  PostDailySaleState,
 } from "../../../../store/daily_sales/daily_saleSlice";
 import {
   changeMonthlySaleMessage,
@@ -37,7 +38,8 @@ import { CourseState } from "../../../../store/courses/courseSlice";
 import { OptionState } from "../../../../store/options/optionSlice";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
 import { CalendarEvent } from "../../calender/CalendarComponent";
-import BasicAlerts from "../../alert/Alert";
+import BasicAlerts from "../../alert/BasicAlert";
+import { ErrorType } from "../../../Hooks/interface";
 
 interface SaleFormProps {
   events: CalendarEvent[];
@@ -246,22 +248,20 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
   console.log("whatSalesだよ", whatSales);
 
-  const SalesCreate = async (SalesFormData: {
-    date: string;
-    daily_sales: number;
-    year_month: string;
-    monthly_sales: number;
-    year: string;
-    yearly_sales: number;
-  }) => {
+  const SalesSubmit = async () => {
     try {
-      console.log("SalesFormDataだよ", SalesFormData);
-      const update = true;
+      let SalesFormData;
       if (sumPrice === 0) {
         setMessage("売上が0円のため、更新できません。");
         return;
       }
       if (whatSales === "日次") {
+        SalesFormData = {
+          id: 0,
+          date: time.utc().tz("Asia/Tokyo").format("YYYY-MM-DD"),
+          daily_sales: sumPrice,
+        };
+
         const response = await dispatch(
           createDaily_sales(SalesFormData) as any
         );
@@ -272,6 +272,12 @@ const SaleForm: React.FC<SaleFormProps> = ({
           throw new Error();
         }
       } else if (whatSales === "月次") {
+        SalesFormData = {
+          id: 0,
+          year_month: time.utc().tz("Asia/Tokyo").format("YYYY-MM"),
+          monthly_sales: sumPrice,
+        };
+
         const response = await dispatch(
           createMonthly_sales(SalesFormData) as any
         );
@@ -282,6 +288,12 @@ const SaleForm: React.FC<SaleFormProps> = ({
           throw new Error();
         }
       } else if (whatSales === "年次") {
+        SalesFormData = {
+          id: 0,
+          year: time.utc().tz("Asia/Tokyo").format("YYYY"),
+          yearly_sales: sumPrice,
+        };
+
         const response = await dispatch(
           createYearly_sales(SalesFormData) as any
         );
@@ -294,37 +306,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
       }
     } catch (e) {
       console.log(e);
-    }
-  };
-
-  const SalesSubmit = () => {
-    if (whatSales === "日次") {
-      SalesCreate({
-        date: time.utc().tz("Asia/Tokyo").format("YYYY-MM-DD"),
-        daily_sales: sumPrice,
-        year_month: "",
-        monthly_sales: 0,
-        year: "",
-        yearly_sales: 0,
-      });
-    } else if (whatSales === "月次") {
-      SalesCreate({
-        date: "",
-        daily_sales: 0,
-        year_month: time.utc().tz("Asia/Tokyo").format("YYYY-MM"),
-        monthly_sales: sumPrice,
-        year: "",
-        yearly_sales: 0,
-      });
-    } else if (whatSales === "年次") {
-      SalesCreate({
-        date: "",
-        daily_sales: 0,
-        year_month: "",
-        monthly_sales: 0,
-        year: time.utc().tz("Asia/Tokyo").format("YYYY"),
-        yearly_sales: sumPrice,
-      });
     }
   };
 

@@ -1,45 +1,44 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { StockState, getStock } from "../../store/stocks/stockSlice";
 import {
   Stock_categoryState,
   getStockCategory,
 } from "../../store/stocks/stock_categories/stock_categorySlice";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   stockError,
+  stockErrorStatus,
   stockMessage,
   stockStatus,
   stock_categoriesStore,
   stock_categoryStatus,
   stocksStore,
 } from "../../components/Hooks/selector";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
 const stocks: React.FC = () => {
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const dispatch = useDispatch();
 
   const stocks: StockState[] = useSelector(stocksStore);
-
   const sStatus: string = useSelector(stockStatus);
-
   const sMessage: string | null = useSelector(stockMessage);
-
   const sError: string | null = useSelector(stockError);
+  const sErrorStatus: number = useSelector(stockErrorStatus);
 
   const stockCategories: Stock_categoryState[] = useSelector(
     stock_categoriesStore
   );
-
   const scStatus: string = useSelector(stock_categoryStatus);
 
   const permission: PermissionsState = useSelector(permissionStore);
@@ -90,15 +89,20 @@ const stocks: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getStock({}) as any);
-          await dispatch(getStockCategory({}) as any);
-        } else {
-          return;
+          const response = await dispatch(getStock() as any);
+          const res = await dispatch(getStockCategory() as any);
+          if (res.meta.requestStatus === "rejected") {
+            const re = renderError(sErrorStatus, router, dispatch);
+            if (re === null)
+              throw new Error("在庫カテゴリ情報の取得に失敗しました");
+          }
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(sErrorStatus, router, dispatch);
+            if (re === null) throw new Error("在庫情報の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.log(error);
-        allLogout(dispatch);
-        router.push("/auth/login");
       }
     };
 
@@ -165,6 +169,8 @@ const stocks: React.FC = () => {
       !nodes ||
       permission === null ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="flex justify-between items-center gap-4 my-4 ">

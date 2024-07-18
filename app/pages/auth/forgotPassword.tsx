@@ -1,26 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
-import { forgotPassword, showUser } from "../../store/auth/userSlice";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import { useRouter, NextRouter } from "next/router";
+import { forgotPassword } from "../../store/auth/userSlice";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import ForgotPasswordForm from "../../components/elements/form/userProfile/ForgotPasswordForm";
-import { useEffect } from "react";
 import {
   userError,
-  userKey,
   userMessage,
   userStatus,
-  permissionStore,
+  userErrorStatus,
 } from "../../components/Hooks/authSelector";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
 const forgotPasswordPage: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
-  const uError = useSelector(userError);
-
-  const uStatus = useSelector(userStatus);
-
-  const uMessage = useSelector(userMessage);
+  const uStatus: string = useSelector(userStatus);
+  const uMessage: string | null = useSelector(userMessage);
+  const uError: string | null = useSelector(userError);
+  const uErrorStatus: number = useSelector(userErrorStatus);
 
   const handleForgotPassword = async (email: string) => {
     try {
@@ -28,7 +27,9 @@ const forgotPasswordPage: React.FC = () => {
       if (response.meta.requestStatus === "fulfilled") {
         router.push("/auth/resetEmailWait");
       } else {
-        throw new Error();
+        const re = renderError(uErrorStatus, router, dispatch);
+        if (re === null)
+          throw new Error("forgotPassのリクエストに失敗しました");
       }
     } catch (error) {
       console.log("Error", error);

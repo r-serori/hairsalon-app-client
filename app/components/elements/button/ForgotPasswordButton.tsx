@@ -1,6 +1,7 @@
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { allLogout } from "../../Hooks/useMethod";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
 
 interface ForgotPasswordProps {
   logout?: boolean;
@@ -9,8 +10,8 @@ interface ForgotPasswordProps {
 const ForgotPasswordButton: React.FC<ForgotPasswordProps> = ({
   logout = false,
 }) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   return (
     <div>

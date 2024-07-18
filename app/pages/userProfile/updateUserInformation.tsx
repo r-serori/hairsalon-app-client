@@ -1,33 +1,36 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { updateUser, UserState } from "../../store/auth/userSlice";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import UpdateInformationForm from "../../components/elements/form/userProfile/UpdateInformationForm";
 import {
   permissionStore,
   user,
   userError,
+  userErrorStatus,
   userMessage,
   userStatus,
 } from "../../components/Hooks/authSelector";
 import { useEffect } from "react";
-import { staffPermission } from "../../components/Hooks/useMethod";
+import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { showUser } from "../../store/auth/userSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
 import ForgotPasswordButton from "../../components/elements/button/ForgotPasswordButton";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
+import { isLogout } from "../../store/auth/isLoginSlice";
 
 const UpdateUserInformationPage: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
-  const editUser: UserState[] = useSelector(user);
-
-  const uError: string | null = useSelector(userError);
+  const editUser: UserState = useSelector(user)[0];
 
   const uStatus: string = useSelector(userStatus);
-
   const uMessage: string | null = useSelector(userMessage);
+  const uError: string | null = useSelector(userError);
+  const uErrorStatus: number = useSelector(userErrorStatus);
 
   const permission: PermissionsState = useSelector(permissionStore);
 
@@ -41,17 +44,20 @@ const UpdateUserInformationPage: React.FC = () => {
           permission === "マネージャー" ||
           permission === "スタッフ"
         ) {
-          await dispatch(showUser({}) as any);
-        } else {
-          return;
+          const response = await dispatch(showUser() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(uErrorStatus, router, dispatch);
+            if (re === null)
+              throw new Error("ユーザー情報の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.log("Error", error);
         return;
       }
     };
-    fetchData();
-  }, [dispatch]);
+    if (permission) fetchData();
+  }, [dispatch, permission]);
 
   const handleUpdateUserInformation = async (formData: {
     name: string;
@@ -61,11 +67,11 @@ const UpdateUserInformationPage: React.FC = () => {
     console.log(formData);
     try {
       const response = await dispatch(updateUser(formData) as any);
-
       if (response.meta.requestStatus === "fulfilled") {
-        router.push("/dashboard");
+        router.push("/auth/emailWait");
       } else {
-        throw new Error();
+        const re = renderError(uErrorStatus, router, dispatch);
+        if (re === null) throw new Error("userInfoUpdateに失敗しました");
       }
     } catch (error) {
       console.log("Error", error);
@@ -98,6 +104,8 @@ const UpdateUserInformationPage: React.FC = () => {
 
         {uStatus === "loading" ? (
           <p>Loading...</p>
+        ) : permission === null ? (
+          <p>あなたに権限はありません。</p>
         ) : (
           <UpdateInformationForm
             onSubmitUserInformation={handleUpdateUserInformation}

@@ -93,7 +93,7 @@ export interface RootState {
   stock_categories: Stock_categoryState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -114,7 +114,10 @@ const stock_categorySlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getStockCategory.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(getStockCategory.fulfilled, (state, action) => {
@@ -134,7 +137,10 @@ const stock_categorySlice = createSlice({
 
     builder.addCase(createStockCategory.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(createStockCategory.fulfilled, (state, action) => {
@@ -154,7 +160,10 @@ const stock_categorySlice = createSlice({
 
     builder.addCase(updateStockCategory.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(updateStockCategory.fulfilled, (state, action) => {
@@ -175,7 +184,10 @@ const stock_categorySlice = createSlice({
 
     builder.addCase(deleteStockCategory.pending, (state) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(deleteStockCategory.fulfilled, (state, action) => {

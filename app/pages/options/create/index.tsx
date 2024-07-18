@@ -1,19 +1,28 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createOption, getOption } from "../../../store/options/optionSlice";
+import { createOption } from "../../../store/options/optionSlice";
 import OptionForm from "../../../components/elements/form/options/OptionForm";
-import { useRouter } from "next/router";
-import { optionStatus, optionError } from "../../../components/Hooks/selector";
+import { useRouter, NextRouter } from "next/router";
+import {
+  optionStatus,
+  optionError,
+  optionErrorStatus,
+} from "../../../components/Hooks/selector";
 import RouterButton from "../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../redux/store";
+import { renderError } from "../../../store/errorHandler";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../components/Hooks/authSelector";
 
 const optionCreate: React.FC = () => {
-  const dispatch = useDispatch();
-
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const oStatus: string = useSelector(optionStatus);
   const oError: string = useSelector(optionError);
+  const oErrorStatus: number = useSelector(optionErrorStatus);
 
   const handleCreate = async (formData: {
     id: number;
@@ -27,7 +36,8 @@ const optionCreate: React.FC = () => {
         console.log("Success", response);
         router.push("/options");
       } else {
-        throw new Error();
+        const re = renderError(oErrorStatus, router, dispatch);
+        if (re === null) throw new Error("オプションの作成に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -40,6 +50,8 @@ const optionCreate: React.FC = () => {
       )}
       {oStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="ml-4 mt-4 ">

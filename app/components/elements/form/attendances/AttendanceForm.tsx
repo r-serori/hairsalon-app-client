@@ -3,18 +3,18 @@ import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import { UserState } from "../../../../store/auth/userSlice";
-import { RoleState, UserAllState } from "../../../Hooks/interface";
+import { RoleState } from "../../../Hooks/interface";
 import BasicNumberField from "../../input/BasicNumberField";
 
 interface UserUpdateFormProps {
   onSubmit: (formData: { id: number; role: RoleState }) => void;
-  node: UserAllState;
+  node: UserState;
 }
 
 const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
-  const [name, setName] = useState<string>(node.name || "");
+  const [name, setName] = useState<string>(node ? node.name : "");
   const [phone_number, setPhoneNumber] = useState<string>(
-    node.phone_number || ""
+    node ? node.phone_number : ""
   );
   const [role, setRole] = useState<RoleState>(node.role || "スタッフ");
 

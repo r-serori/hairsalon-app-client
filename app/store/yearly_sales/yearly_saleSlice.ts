@@ -105,7 +105,7 @@ export interface RootState {
   yearly_sales: Yearly_salesState[];
   status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
-  error: ErrorType | null; // エラー
+  error: ErrorType; // エラー
 }
 
 export const initialState: RootState = {
@@ -124,13 +124,19 @@ const yearly_salesSlice = createSlice({
   reducers: {
     changeYearlySaleMessage: (state, action: PayloadAction<string>) => {
       state.message = action.payload;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     },
   },
   extraReducers(builder) {
     builder.addCase(getYearly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(getYearly_sales.fulfilled, (state, action) => {
@@ -150,7 +156,10 @@ const yearly_salesSlice = createSlice({
 
     builder.addCase(createYearly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(createYearly_sales.fulfilled, (state, action) => {
@@ -167,7 +176,10 @@ const yearly_salesSlice = createSlice({
 
     builder.addCase(updateYearly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(updateYearly_sales.fulfilled, (state, action) => {
@@ -188,7 +200,10 @@ const yearly_salesSlice = createSlice({
 
     builder.addCase(deleteYearly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(deleteYearly_sales.fulfilled, (state, action) => {

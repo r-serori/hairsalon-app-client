@@ -20,10 +20,10 @@ const EmailField: React.FC<EmailFieldProps> = ({
   onChange,
   onValidationChange,
 }) => {
-  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    const newValue = e.target.value.toLowerCase(); // 強制的に小文字に変換
     onChange({
       ...e,
       target: { ...e.target, value: newValue },
@@ -61,7 +61,9 @@ const EmailField: React.FC<EmailFieldProps> = ({
         inputProps={{ maxLength: 50 }} // 任意の最大文字数を設定
         error={!emailRegex.test(value)}
         helperText={
-          !emailRegex.test(value) ? "正しいEmail形式で入力してください" : ""
+          !emailRegex.test(value)
+            ? "正しいEmail形式かつ、小文字で入力してください"
+            : ""
         }
         sx={{
           "& .MuiInputBase-input": {

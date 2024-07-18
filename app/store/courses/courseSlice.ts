@@ -92,7 +92,7 @@ export interface RootState {
   courses: CourseState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null; // メッセージ
-  error: ErrorType | null; // エラーメッセージ
+  error: ErrorType; // エラーメッセージ
 }
 
 const initialState: RootState = {
@@ -101,7 +101,7 @@ const initialState: RootState = {
   status: "idle",
   message: null, // メッセージ
   error: {
-    message: "",
+    message: null,
     status: 0,
   }, // エラーメッセージ
 };
@@ -114,7 +114,10 @@ const courseSlice = createSlice({
     builder.addCase(getCourse.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(getCourse.fulfilled, (state, action) => {
       state.status = "success";
@@ -131,7 +134,10 @@ const courseSlice = createSlice({
     builder.addCase(createCourse.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createCourse.fulfilled, (state, action) => {
       state.status = "success";
@@ -148,7 +154,10 @@ const courseSlice = createSlice({
     builder.addCase(updateCourse.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateCourse.fulfilled, (state, action) => {
       state.status = "success";
@@ -169,7 +178,10 @@ const courseSlice = createSlice({
     builder.addCase(deleteCourse.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteCourse.fulfilled, (state, action) => {
       state.status = "success";

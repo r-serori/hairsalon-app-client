@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import DatePickerValue from "../../input/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
@@ -18,6 +18,7 @@ import { selectGetAttendanceTimes } from "../../../../store/attendance_times/att
 import { selectGetDaily_sales } from "../../../../store/daily_sales/daily_saleSlice";
 import { selectGetMonthly_sales } from "../../../../store/monthly_sales/monthly_saleSlice";
 import { selectGetYearly_sales } from "../../../../store/yearly_sales/yearly_saleSlice";
+import { AppDispatch } from "../../../../redux/store";
 
 const style = {
   position: "absolute" as "absolute",
@@ -59,8 +60,8 @@ const EasyModal: React.FC<EasyModalProps> = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const [selectDate, setSelectDate] = useState<Dayjs>(
     dayjs().utc().tz("Asia/Tokyo")

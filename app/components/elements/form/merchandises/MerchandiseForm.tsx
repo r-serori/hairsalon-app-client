@@ -23,9 +23,9 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
   const [merchandiseNameValidate, setMerchandiseNameValidate] =
-    useState<boolean>(node.merchandise_name ? true : false);
+    useState<boolean>(node && node.merchandise_name ? true : false);
   const [priceValidate, setPriceValidate] = useState<boolean>(
-    node.price ? true : false
+    node && node.price ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

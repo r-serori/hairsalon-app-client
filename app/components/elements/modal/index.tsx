@@ -5,18 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ModalForm from "../form/ModalForm";
 import AttendanceTimesShotForm from "../form/attendances/AttendanceTimesShotForm";
-import BackAgainButton from "../button/RouterButton";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { getUsers } from "../../../store/auth/userSlice";
-import { useRouter } from "next/router";
 import RouterButton from "../button/RouterButton";
-import { permissionStore, user } from "../../Hooks/authSelector";
-import { UserAllState } from "../../Hooks/interface";
-import { userKey } from "../../Hooks/authSelector";
-import { PermissionsState } from "../../../store/auth/permissionSlice";
-import { ownerPermission } from "../../Hooks/useMethod";
-import { Height, Widgets } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -71,43 +60,6 @@ const BasicModal: React.FC<BasicModalProps> = ({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  // const users: UserAllState[] = useSelector(user);
-
-  // const key: string | null = useSelector(userKey);
-  // const permission: PermissionsState = useSelector(permissionStore);
-
-  // const handleOpenAttendance = () => {
-  //   const getStaffs = async () => {
-  //     const response = await dispatch(getUsers({}) as any);
-  //     console.log("response", response);
-  //     localStorage.setItem("userCount", response.payload.userCount);
-  //   };
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const userCount: string = localStorage.getItem("userCount");
-  //       if (
-  //         (permission === "オーナー" && !userCount) ||
-  //         (permission === "オーナー" && userCount === undefined) ||
-  //         (permission === "オーナー" && userCount === null) ||
-  //         (permission === "オーナー" && userCount === "") ||
-  //         (permission === "オーナー" && userCount === "undefined") ||
-  //         (users.length < Number(userCount) && permission === "オーナー")
-  //       ) {
-  //         await getStaffs();
-  //       } else {
-  //         setOpenAttendance(true);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       router.push("/attendances");
-  //     }
-  //   };
-  //   fetchData();
-  // };
-
-  // const handleCloseAttendance = () => setOpenAttendance(false);
 
   const formatPrice = (value: number) => {
     return new Intl.NumberFormat("ja-JP").format(value);

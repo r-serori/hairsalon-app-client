@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { deleteUser } from "../../auth/userSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getCustomer_users = createAsyncThunk(
@@ -56,7 +57,7 @@ export interface RootState {
   // RootStateの型
   customer_users: Customer_usersState[];
   loading: boolean;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 export const initialState: RootState = {
@@ -145,6 +146,12 @@ const customer_usersSlice = createSlice({
         ),
         ...action.payload.customer_users,
       ];
+    });
+
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.customer_users = state.customer_users.filter(
+        (customer_user) => customer_user.user_id !== action.payload.deleteId
+      );
     });
   },
 });

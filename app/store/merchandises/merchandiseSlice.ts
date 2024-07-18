@@ -83,7 +83,7 @@ export interface RootState {
   merchandises: MerchandiseState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -105,7 +105,10 @@ const merchandiseSlice = createSlice({
     builder.addCase(getMerchandise.pending, (state, action) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(getMerchandise.fulfilled, (state, action) => {
       state.status = "success";
@@ -125,7 +128,10 @@ const merchandiseSlice = createSlice({
     builder.addCase(createMerchandise.pending, (state, action) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createMerchandise.fulfilled, (state, action) => {
       state.status = "success";
@@ -142,7 +148,10 @@ const merchandiseSlice = createSlice({
     builder.addCase(updateMerchandise.pending, (state, action) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateMerchandise.fulfilled, (state, action) => {
       state.status = "success";
@@ -163,13 +172,19 @@ const merchandiseSlice = createSlice({
     builder.addCase(deleteMerchandise.pending, (state, action) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
       state.status = "success";
       state.merchandises = state.merchandises.filter(
         (merchandise) => merchandise.id !== Number(action.payload.deleteId)
       );
+      state.message = action.payload.message
+        ? action.payload.message
+        : "物販の削除に成功しました！";
     });
     builder.addCase(deleteMerchandise.rejected, (state, action) => {
       state.status = "failed";

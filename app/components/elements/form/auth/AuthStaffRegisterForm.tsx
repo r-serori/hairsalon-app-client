@@ -96,6 +96,7 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
             onValidationChange={(isValid) => setPhoneNumberValidate(isValid)}
+            format={false}
           />
 
           <PasswordField

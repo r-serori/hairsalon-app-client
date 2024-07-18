@@ -3,7 +3,7 @@ import BasicTextField from "../../../input/BasicTextField";
 import PrimaryButton from "../../../button/PrimaryButton";
 import { Monthly_salesState } from "../../../../../store/monthly_sales/monthly_saleSlice";
 import BasicNumberField from "../../../input/BasicNumberField";
-import BasicAlerts from "../../../alert/Alert";
+import BasicAlerts from "../../../alert/BasicAlert";
 
 interface MonthlySalesFormProps {
   node: Monthly_salesState;

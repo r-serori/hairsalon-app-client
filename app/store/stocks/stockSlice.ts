@@ -97,7 +97,7 @@ export interface RootState {
   stocks: StockState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -120,7 +120,10 @@ const stockSlice = createSlice({
     builder.addCase(getStock.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(getStock.fulfilled, (state, action) => {
       state.status = "success";
@@ -137,7 +140,10 @@ const stockSlice = createSlice({
     builder.addCase(createStock.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createStock.fulfilled, (state, action) => {
       state.status = "success";
@@ -154,7 +160,10 @@ const stockSlice = createSlice({
     builder.addCase(updateStock.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateStock.fulfilled, (state, action) => {
       state.status = "success";
@@ -175,13 +184,19 @@ const stockSlice = createSlice({
     builder.addCase(deleteStock.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteStock.fulfilled, (state, action) => {
       state.status = "success";
       state.stocks = state.stocks.filter(
         (stock) => stock.id !== Number(action.payload.deleteId)
       );
+      state.message = action.payload.message
+        ? action.payload.message
+        : "在庫情報を削除しました！";
     });
     builder.addCase(deleteStock.rejected, (state, action) => {
       state.status = "failed";

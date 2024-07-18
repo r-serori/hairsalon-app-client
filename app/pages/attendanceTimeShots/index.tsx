@@ -1,13 +1,13 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import BasicAlerts from "../../components/elements/alert/Alert";
-import { UserAllState } from "../../components/Hooks/interface";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import { getUsers } from "../../store/auth/userSlice";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   user,
   userError,
+  userErrorStatus,
   userMessage,
   userStatus,
 } from "../../components/Hooks/authSelector";
@@ -17,28 +17,30 @@ import { staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { allLogout } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
+import { UserState } from "../../store/auth/userSlice";
+import { renderError } from "../../store/errorHandler";
+import { AppDispatch } from "../../redux/store";
 
 const AttendanceTimeShots = () => {
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
-  const dispatch = useDispatch();
-
-  const users: UserAllState[] = useSelector(user);
-  console.log("users", users);
+  const users: UserState[] = useSelector(user);
   const uStatus: string = useSelector(userStatus);
-
   const uMessage: string | null = useSelector(userMessage);
-
   const uError: string | null = useSelector(userError);
+  const uErrorStatus: number = useSelector(userErrorStatus);
 
-  // const key: string | null = useSelector(userKey);
+  const atimeError: string | null = useSelector(attendance_timeError);
+
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const getStaffs = async () => {
-      const response = await dispatch(getUsers({}) as any);
+      const response = await dispatch(getUsers() as any);
       console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
+      return response;
     };
 
     const fetchData = async () => {
@@ -55,7 +57,11 @@ const AttendanceTimeShots = () => {
           userCount === undefined ||
           users.length < Number(userCount)
         ) {
-          await getStaffs();
+          const response = (await getStaffs()) as any;
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(uErrorStatus, router, dispatch);
+            if (re === null) throw new Error("更新に失敗しました");
+          }
         }
       } catch (error) {
         console.log("Error", error);
@@ -65,12 +71,6 @@ const AttendanceTimeShots = () => {
     };
     if (permission) fetchData();
   }, [dispatch, permission]);
-
-  // const atimeStatus = useSelector(attendance_timeStatus);
-
-  // const atimeMessage = useSelector(attendance_timeMessage);
-
-  const atimeError: string | null = useSelector(attendance_timeError);
 
   const searchItems = [{ key: "shotUserName", value: "名前" }];
 
@@ -102,6 +102,9 @@ const AttendanceTimeShots = () => {
           />
         )}
         {uError && (
+          <BasicAlerts message={uError} type={"error"} padding={1} space={1} />
+        )}
+        {atimeError && (
           <BasicAlerts
             type="error"
             message={atimeError}
@@ -112,7 +115,9 @@ const AttendanceTimeShots = () => {
       </div>
       <div className="my-4 mx-4">
         {uStatus === "loading" || !nodes || permission === null ? (
-          <p className="py-4 text-blue-700">Loading...</p>
+          <p>Loading...</p>
+        ) : permission === null ? (
+          <p>あなたに権限はありません。</p>
         ) : (
           <ComponentTable
             nodes={nodes}

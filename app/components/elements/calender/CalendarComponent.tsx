@@ -10,21 +10,19 @@ import SalesModal from "../modal/sales/SalesModal";
 import EasyModal from "../modal/easy/EasyModal";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import ButtonModal from "../buttonModal/ButtonModal";
-import { el } from "@fullcalendar/core/internal-common";
 import { customerStatus } from "../../Hooks/selector";
-import { RoleState } from "../../Hooks/interface";
 import { permissionStore } from "../../Hooks/authSelector";
-import { UserAllState } from "../../Hooks/interface";
 import { CourseState } from "../../../store/courses/courseSlice";
 import { OptionState } from "../../../store/options/optionSlice";
 import { MerchandiseState } from "../../../store/merchandises/merchandiseSlice";
 import { HairstyleState } from "../../../store/hairstyles/hairstyleSlice";
+import { UserState } from "../../../store/auth/userSlice";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
 
 export interface CalendarEvent {
   id: number;
@@ -46,7 +44,7 @@ export interface CalendarEvent {
 interface OpenCalendarProps {
   events: CalendarEvent[];
   nodes: any;
-  users: UserAllState[];
+  users: UserState[];
   courses: CourseState[];
   options: OptionState[];
   merchandises: MerchandiseState[];
@@ -92,7 +90,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
 
   const [scheduleYear, setScheduleYear] = useState<string>("");
 
-  const permission = useSelector(permissionStore);
+  const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
     const localYear = localStorage.getItem("year");

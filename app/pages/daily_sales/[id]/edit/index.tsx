@@ -1,8 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   daily_saleError,
+  daily_saleErrorStatus,
   daily_salesStore,
   daily_saleStatus,
 } from "../../../../components/Hooks/selector";
@@ -10,13 +11,20 @@ import { Daily_salesState } from "../../../../store/daily_sales/daily_saleSlice"
 import { updateDaily_sales } from "../../../../store/daily_sales/daily_saleSlice";
 import DailySalesForm from "../../../../components/elements/form/sales/daily_sales/Daily_salesForm";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../../components/Hooks/authSelector";
+
 const dailySalesEdit: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const dsStatus: string = useSelector(daily_saleStatus);
   const dsError: string = useSelector(daily_saleError);
+  const dsErrorStatus: number = useSelector(daily_saleErrorStatus);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
@@ -40,7 +48,8 @@ const dailySalesEdit: React.FC = () => {
         console.log("Success", response);
         router.push("/daily_sales");
       } else {
-        throw new Error();
+        const re = renderError(dsErrorStatus, router, dispatch);
+        if (re === null) throw new Error("日別売上の更新に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -54,6 +63,8 @@ const dailySalesEdit: React.FC = () => {
       )}
       {dsStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="mx-4 my-4">

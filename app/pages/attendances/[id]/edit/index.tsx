@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { RootState } from "../../../../redux/store";
-import AttendanceForm from "../../../../components/elements/form/attendances/AttendanceForm";
-import { useRouter } from "next/router";
-import BackAgainButton from "../../../../components/elements/button/RouterButton";
+import { useRouter, NextRouter } from "next/router";
 import RouterButton from "../../../../components/elements/button/RouterButton";
 import {
   updateUserPermission,
@@ -12,34 +9,34 @@ import {
 } from "../../../../store/auth/userSlice";
 import UserUpdateForm from "../../../../components/elements/form/attendances/AttendanceForm";
 import DeleteButton from "../../../../components/elements/button/DeleteButton";
-import { useState } from "react";
 import {
   user,
   userStatus,
   permissionStore,
-  userMessage,
   userError,
+  userErrorStatus,
 } from "../../../../components/Hooks/authSelector";
-import { UserAllState } from "../../../../components/Hooks/interface";
 import { ownerPermission } from "../../../../components/Hooks/useMethod";
-import { userKey } from "../../../../components/Hooks/authSelector";
 import { allLogout } from "../../../../components/Hooks/useMethod";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
-import BasicAlerts from "../../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../../components/elements/alert/BasicAlert";
+import { UserState } from "../../../../store/auth/userSlice";
+import { renderError } from "../../../../store/errorHandler";
+import { AppDispatch } from "../../../../redux/store";
 
 const attenDanceEdit: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const uStatus: string = useSelector(userStatus);
   const uError: string = useSelector(userError);
+  const uErrorStatus: number = useSelector(userErrorStatus);
 
   const permission: PermissionsState = useSelector(permissionStore);
 
-  const router = useRouter();
-
   const { id } = router.query; // idを取得
 
-  const editUser: UserAllState = useSelector(user).find(
+  const editUser: UserState = useSelector(user).find(
     (user) => user.id === Number(id)
   );
 
@@ -49,7 +46,7 @@ const attenDanceEdit: React.FC = () => {
         ownerPermission(permission, router);
 
         if (!editUser && permission === "オーナー") {
-          await dispatch(showUser(Number(id)) as any);
+          await dispatch(showUser() as any);
         } else {
           return;
         }
@@ -60,7 +57,7 @@ const attenDanceEdit: React.FC = () => {
       }
     };
     if (permission) fetchData();
-  }, [dispatch]);
+  }, [dispatch, permission]);
 
   const handleUpdate = async (formData: { id: number; role: string }) => {
     try {
@@ -68,7 +65,8 @@ const attenDanceEdit: React.FC = () => {
       if (response.meta.requestStatus === "fulfilled") {
         router.push("/attendances");
       } else {
-        throw new Error("更新に失敗しました");
+        const re = renderError(uErrorStatus, router, dispatch);
+        if (re === null) throw new Error("更新に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -87,7 +85,8 @@ const attenDanceEdit: React.FC = () => {
         if (response.meta.requestStatus === "fulfilled") {
           router.push("/attendances");
         } else {
-          throw new Error("削除に失敗しました");
+          const re = renderError(uErrorStatus, router, dispatch);
+          if (re === null) throw new Error("削除に失敗しました");
         }
       }
     } catch (error) {
@@ -102,7 +101,9 @@ const attenDanceEdit: React.FC = () => {
       )}
 
       {uStatus === "loading" ? (
-        <p>Loading...</p>
+        <p>loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="mx-4">

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { schedulesApi } from "../../services/schedules/api";
 import RootState from "../../redux/reducers/rootReducer";
 import { handleErrorResponse, handleCatchError } from "../errorHandler";
-import { CustomerOnlyState } from "../customers/customerSlice";
+import { CustomerOnlyState, deleteCustomer } from "../customers/customerSlice";
 import { CourseState } from "../courses/courseSlice";
 import { OptionState } from "../options/optionSlice";
 import { MerchandiseState } from "../merchandises/merchandiseSlice";
@@ -206,14 +206,14 @@ export interface RequestScheduleState {
   title: string;
   start_time: string;
   end_time: string;
-  allDay: number;
+  allDay: boolean;
 }
 
 export interface RootState {
   schedules: ScheduleState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -236,7 +236,10 @@ const scheduleSlice = createSlice({
       .addCase(getSchedule.pending, (state) => {
         state.status = "loading";
         state.message = null;
-        state.error = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
       })
       .addCase(getSchedule.fulfilled, (state, action) => {
         state.status = "success";
@@ -255,7 +258,10 @@ const scheduleSlice = createSlice({
       .addCase(createSchedule.pending, (state) => {
         state.status = "loading";
         state.message = null;
-        state.error = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
       })
       .addCase(createSchedule.fulfilled, (state, action) => {
         state.status = "success";
@@ -271,7 +277,10 @@ const scheduleSlice = createSlice({
       .addCase(createCustomerAndSchedule.pending, (state) => {
         state.status = "loading";
         state.message = null;
-        state.error = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
       })
       .addCase(createCustomerAndSchedule.fulfilled, (state, action) => {
         state.status = "success";
@@ -288,7 +297,10 @@ const scheduleSlice = createSlice({
       .addCase(updateSchedule.pending, (state) => {
         state.status = "failed";
         state.message = null;
-        state.error = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
       })
       .addCase(updateSchedule.fulfilled, (state, action) => {
         state.status = "success";
@@ -311,7 +323,10 @@ const scheduleSlice = createSlice({
       .addCase(updateCustomerAndSchedule.pending, (state) => {
         state.status = "failed";
         state.message = null;
-        state.error = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
       })
       .addCase(updateCustomerAndSchedule.fulfilled, (state, action) => {
         state.status = "success";
@@ -335,7 +350,10 @@ const scheduleSlice = createSlice({
       .addCase(updateCustomerAndScheduleCreate.pending, (state) => {
         state.status = "loading";
         state.message = null;
-        state.error = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
       })
       .addCase(updateCustomerAndScheduleCreate.fulfilled, (state, action) => {
         state.status = "success";
@@ -352,7 +370,10 @@ const scheduleSlice = createSlice({
       .addCase(deleteSchedule.pending, (state) => {
         state.status = "loading";
         state.message = null;
-        state.error = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
       })
       .addCase(deleteSchedule.fulfilled, (state, action) => {
         state.status = "success";
@@ -371,7 +392,10 @@ const scheduleSlice = createSlice({
     builder.addCase(selectGetSchedules.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
@@ -385,6 +409,13 @@ const scheduleSlice = createSlice({
     builder.addCase(selectGetSchedules.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.payload;
+    });
+
+    builder.addCase(deleteCustomer.fulfilled, (state, action) => {
+      state.status = "success";
+      state.schedules = state.schedules.filter(
+        (schedule) => schedule.customer_id !== action.payload.deleteId
+      );
     });
   },
 });

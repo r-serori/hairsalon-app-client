@@ -1,3 +1,6 @@
+import { allLogout } from "../components/Hooks/useMethod";
+import { changeMessage } from "./auth/userSlice";
+
 export interface ErrorResponse {
   status: number;
   message: string;
@@ -15,17 +18,10 @@ export const handleErrorResponse = (
   } else if (response.status >= 400 && response.status < 500) {
     // クライアントエラー時の処理
     console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-    if (
-      response.status === 401 ||
-      response.status === 403 ||
-      response.status === 404
-    ) {
-      return rejectWithValue({
-        status: response.status,
-        message: response.data.message,
-      }); // rejectWithValueでエラーメッセージを返す
-    }
-    return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
+    return rejectWithValue({
+      status: response.status,
+      message: response.data.message,
+    }); // rejectWithValueでエラーメッセージを返す
   } else if (response.status >= 500) {
     // サーバーエラー時の処理
     console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
@@ -49,19 +45,55 @@ export const handleCatchError = (err: any, rejectWithValue: Function) => {
   });
 };
 
-export const renderError = (errorStatus: number, router) => {
+export const renderError = async (
+  errorStatus: number,
+  router: any,
+  dispatch: any
+) => {
   switch (errorStatus) {
-    case 403:
-      return "アクセス権限がありません。";
     case 401:
-      return "認証が必要です。ログイン画面へ移動し、、ログインしてください。";
-    case 503:
-      return "サービスが一時的に利用できません。しばらくしてからもう一度お試しください。";
+      await allLogout(dispatch);
+      router.push({
+        pathname: "/error",
+        query: { code: 401 },
+      });
+    case 403:
+      await allLogout(dispatch);
+      router.push({
+        pathname: "/error",
+        query: { code: 403 },
+      });
     case 419:
-      return "セッションがタイムアウトしました。再度ログインしてください。";
+      await allLogout(dispatch);
+      router.push({
+        pathname: "/error",
+        query: { code: 419 },
+      });
+    case 422:
+      await allLogout(dispatch);
+      router.push({
+        pathname: "/error",
+        query: { code: 422 },
+      });
+    case 433:
+      await allLogout(dispatch);
+      router.push({
+        pathname: "/error",
+        query: { code: 433 },
+      });
     case 500:
-      return "サーバーエラーが発生しました。しばらくしてからもう一度お試しください。";
+      await allLogout(dispatch);
+      router.push({
+        pathname: "/error",
+        query: { code: 500 },
+      });
+    case 503:
+      await allLogout(dispatch);
+      router.push({
+        pathname: "/error",
+        query: { code: 503 },
+      });
     default:
-      return;
+      return null;
   }
 };

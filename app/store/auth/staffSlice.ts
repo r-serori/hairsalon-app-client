@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import RootState from "../../redux/reducers/rootReducer";
 import { staffRegister } from "./userSlice";
 import { handleErrorResponse, handleCatchError } from "../errorHandler";
+import { ErrorType } from "../../components/Hooks/interface";
 
 export interface StaffState {
   id: number;
@@ -14,7 +15,7 @@ export interface RootState {
   staff: StaffState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: any | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -22,9 +23,9 @@ const initialState: RootState = {
   status: "idle",
   message: null,
   error: {
-    message: "",
+    message: null,
     status: 0,
-  },
+  }, // エラーメッセージ
 };
 
 const staffSlice = createSlice({

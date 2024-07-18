@@ -23,10 +23,10 @@ const optionForm: React.FC<OptionFormProps> = ({
   const [price, setPrice] = useState<number>(node ? node.price : 0);
 
   const [optionNameValidate, setOptionNameValidate] = useState<boolean>(
-    node.option_name ? true : false
+    node && node.option_name ? true : false
   );
   const [priceValidate, setPriceValidate] = useState<boolean>(
-    node.price ? true : false
+    node && node.price ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

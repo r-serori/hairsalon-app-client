@@ -2,19 +2,27 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createHairstyle } from "../../../store/hairstyles/hairstyleSlice";
 import HairstyleForm from "../../../components/elements/form/hairstyles/HairstyleForm";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import RouterButton from "../../../components/elements/button/RouterButton";
 import {
   hairstyleError,
+  hairstyleErrorStatus,
   hairstyleStatus,
 } from "../../../components/Hooks/selector";
-import BasicAlerts from "../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../redux/store";
+import { renderError } from "../../../store/errorHandler";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../components/Hooks/authSelector";
 
 const hairstyleCreate = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
+
   const hStatus: string = useSelector(hairstyleStatus);
   const hError: string = useSelector(hairstyleError);
+  const hErrorStatus: number = useSelector(hairstyleErrorStatus);
 
   const handleCreate = async (formData: {
     id: number;
@@ -26,7 +34,8 @@ const hairstyleCreate = () => {
       if (response.meta.requestStatus === "fulfilled") {
         router.push("/hairstyles");
       } else {
-        throw new Error();
+        const re = renderError(hErrorStatus, router, dispatch);
+        if (re === null) throw new Error("髪型の作成に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -39,6 +48,8 @@ const hairstyleCreate = () => {
       )}
       {hStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="mt-4 ml-4">

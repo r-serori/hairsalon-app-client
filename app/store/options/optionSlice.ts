@@ -82,7 +82,7 @@ export interface RootState {
   options: OptionState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -103,7 +103,10 @@ const optionSlice = createSlice({
     builder.addCase(getOption.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(getOption.fulfilled, (state, action) => {
       state.status = "success";
@@ -120,7 +123,10 @@ const optionSlice = createSlice({
     builder.addCase(createOption.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createOption.fulfilled, (state, action) => {
       state.status = "success";
@@ -137,7 +143,10 @@ const optionSlice = createSlice({
     builder.addCase(updateOption.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateOption.fulfilled, (state, action) => {
       state.status = "success";
@@ -158,7 +167,10 @@ const optionSlice = createSlice({
     builder.addCase(deleteOption.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteOption.fulfilled, (state, action) => {
       state.status = "success";

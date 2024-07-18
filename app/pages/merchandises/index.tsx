@@ -1,41 +1,40 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   MerchandiseState,
   getMerchandise,
 } from "../../store/merchandises/merchandiseSlice";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   merchandiseStore,
   merchandiseStatus,
   merchandiseMessage,
   merchandiseError,
+  merchandiseErrorStatus,
 } from "../../components/Hooks/selector";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
 const merchandises = () => {
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const dispatch = useDispatch();
+
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const merchandises: MerchandiseState[] = useSelector(merchandiseStore);
-  console.log(merchandises);
-
   const mStatus: string = useSelector(merchandiseStatus);
-
   const mMessage: string | null = useSelector(merchandiseMessage);
-
   const mError: string | null = useSelector(merchandiseError);
-
-  const key: string | null = useSelector(userKey);
-  const permission: PermissionsState = useSelector(permissionStore);
+  const mErrorStatus: number = useSelector(merchandiseErrorStatus);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,14 +53,14 @@ const merchandises = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getMerchandise({}) as any);
-        } else {
-          return;
+          const response = await dispatch(getMerchandise() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(mErrorStatus, router, dispatch);
+            if (re === null) throw new Error("物販情報の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.error("Error:", error);
-        allLogout(dispatch);
-        router.push("/auth/login");
       }
     };
 
@@ -91,8 +90,10 @@ const merchandises = () => {
       {mError && (
         <BasicAlerts type="error" message={mError} space={1} padding={0.6} />
       )}
-      {mStatus === "loading" || !nodes || permission === null ? (
+      {mStatus === "loading" || !nodes ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="my-4">

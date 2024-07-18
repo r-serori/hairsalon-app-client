@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { deleteMerchandise } from "../../merchandises/merchandiseSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getMerchandise_customers = createAsyncThunk(
@@ -56,13 +57,13 @@ export interface RootState {
   // RootStateの型
   merchandise_customers: Merchandise_customersState[];
   status: "idle" | "loading" | "success" | "failed";
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 export const initialState: RootState = {
   merchandise_customers: [],
   status: "idle",
-    error: {
+  error: {
     message: "",
     status: 0,
   },
@@ -145,6 +146,13 @@ const merchandise_customersSlice = createSlice({
         ),
         ...action.payload.merchandise_customers,
       ];
+    });
+
+    builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
+      state.merchandise_customers = state.merchandise_customers.filter(
+        (merchandise_customer) =>
+          merchandise_customer.merchandise_id !== action.payload.deleteId
+      );
     });
   },
 });

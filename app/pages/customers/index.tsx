@@ -1,15 +1,13 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
-  CustomerState,
+  CustomerOnlyState,
   getCustomer,
 } from "../../store/customers/customerSlice";
-import { RootState } from "../../redux/store";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   customersStore,
   customerStatus,
@@ -24,12 +22,9 @@ import {
   merchandise_customersStore,
   hairstyle_customersStore,
   customer_usersStore,
+  customerErrorStatus,
 } from "../../components/Hooks/selector";
-import {
-  user,
-  userKey,
-  permissionStore,
-} from "../../components/Hooks/authSelector";
+import { user, permissionStore } from "../../components/Hooks/authSelector";
 import { staffPermission } from "../../components/Hooks/useMethod";
 import { allLogout } from "../../components/Hooks/useMethod";
 import _ from "lodash";
@@ -37,33 +32,28 @@ import { CourseState } from "../../store/courses/courseSlice";
 import { OptionState } from "../../store/options/optionSlice";
 import { MerchandiseState } from "../../store/merchandises/merchandiseSlice";
 import { HairstyleState } from "../../store/hairstyles/hairstyleSlice";
-import { UserAllState } from "../../components/Hooks/interface";
 import { Course_customersState } from "../../store/middleTable/customers/course_customersSlice";
 import { Option_customersState } from "../../store/middleTable/customers/option_customersSlice";
 import { Merchandise_customersState } from "../../store/middleTable/customers/merchandise_customersSlice";
 import { Hairstyle_customersState } from "../../store/middleTable/customers/hairstyle_customersSlice";
 import { Customer_usersState } from "../../store/middleTable/customers/customer_usersSlice";
 import { PermissionsState } from "../../store/auth/permissionSlice";
+import { UserState } from "../../store/auth/userSlice";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
-interface CustomerProps {
-  update?: boolean;
-}
+const customers: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
-const customers: React.FC<CustomerProps> = ({ update }) => {
-  const router = useRouter();
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
 
-  const dispatch = useDispatch();
-
-  const customers: CustomerState[] = useSelector(customersStore);
-
+  const customers: CustomerOnlyState[] = useSelector(customersStore);
   const cStatus: string = useSelector(customerStatus);
-
   const cMessage: string | null = useSelector(customerMessage);
-
   const cError: string | null = useSelector(customerError);
+  const cErrorStatus: number = useSelector(customerErrorStatus);
 
-  const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -114,7 +104,11 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getCustomer({}) as any);
+          const response = await dispatch(getCustomer() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(cErrorStatus, router, dispatch);
+            if (re === null) throw new Error("顧客の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.log(error);
@@ -136,7 +130,7 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
 
   const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
 
-  const users: UserAllState[] = useSelector(user);
+  const users: UserState[] = useSelector(user);
 
   const course_customers: Course_customersState[] = useSelector(
     course_customersStore
@@ -313,8 +307,10 @@ const customers: React.FC<CustomerProps> = ({ update }) => {
           <BasicAlerts type="error" message={cError} space={1} padding={0.6} />
         )}
       </div>
-      {cStatus === "loading" || !nodes || permission === null ? (
+      {cStatus === "loading" || !nodes ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="my-4 ">

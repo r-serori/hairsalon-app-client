@@ -1,17 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   updateCustomer,
-  getCustomer,
-  CustomerState,
+  CustomerOnlyState,
 } from "../../../../store/customers/customerSlice";
-import { RootState } from "../../../../redux/store";
 import CustomerForm from "../../../../components/elements/form/customers/CustomerForm";
-import BackAgainButton from "../../../../components/elements/button/RouterButton";
 import {
   course_customersStore,
   customerError,
+  customerErrorStatus,
   customerStatus,
   customer_usersStore,
   customersStore,
@@ -19,22 +17,27 @@ import {
   merchandise_customersStore,
   option_customersStore,
 } from "../../../../components/Hooks/selector";
-import { userKey } from "../../../../components/Hooks/authSelector";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../../components/Hooks/authSelector";
 
 const customersEdit: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const cStatus: string = useSelector(customerStatus);
   const cError: string = useSelector(customerError);
+  const cErrorStatus: number = useSelector(customerErrorStatus);
 
   const { id } = router.query; // idを取得
   console.log("idだよ");
   console.log({ id });
 
-  const getCustomer: CustomerState = useSelector(customersStore).find(
+  const getCustomer: CustomerOnlyState = useSelector(customersStore).find(
     (customer) => customer.id === Number(id)
   );
 
@@ -120,7 +123,8 @@ const customersEdit: React.FC = () => {
         console.log("Success", response);
         router.push("/customers");
       } else {
-        throw new Error();
+        const re = renderError(cErrorStatus, router, dispatch);
+        if (re === null) throw new Error("customersの作成に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -133,6 +137,8 @@ const customersEdit: React.FC = () => {
       )}
       {cStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="my-4 ml-4">

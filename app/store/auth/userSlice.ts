@@ -301,7 +301,7 @@ export interface RootState {
   users: UserState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -312,7 +312,7 @@ const initialState: RootState = {
   error: {
     message: "",
     status: 0,
-  },
+  }, // エラーメッセージ
 };
 
 const usersSlice = createSlice({
@@ -320,17 +320,23 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     clearError(state) {
-      state.error = null;
+      state.error.message = "";
+    },
+    changeErrorMessage(state, action) {
+      state.error.message = action.payload;
     },
     changeMessage(state, action) {
-      state.error.message = action.payload;
+      state.message = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.status = "success";
@@ -346,7 +352,10 @@ const usersSlice = createSlice({
     builder.addCase(register.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(register.fulfilled, (state, action) => {
       state.status = "success";
@@ -355,16 +364,15 @@ const usersSlice = createSlice({
     });
     builder.addCase(register.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message.includes(
-        "メールアドレスの値は既に存在しています。"
-      )
-        ? "既に登録されているメールアドレスです！登録済みの場合はホーム画面に戻り、ログインしてください！"
-        : (action.payload as any).message;
+      state.error = action.payload;
     });
     builder.addCase(staffRegister.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(staffRegister.fulfilled, (state, action) => {
       state.status = "success";
@@ -379,7 +387,10 @@ const usersSlice = createSlice({
     builder.addCase(logout.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.status = "success";
@@ -388,18 +399,17 @@ const usersSlice = createSlice({
     });
     builder.addCase(logout.rejected, (state, action) => {
       state.status = "failed";
-      state.error = (action.payload as any).message.includes(
-        "CSRF token mismatch"
-      )
-        ? "セッションが切れました！再度ログインしてください！"
-        : (action.payload as any).message;
+      state.error = action.payload;
     });
 
     //get系
     builder.addCase(getUsers.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
       state.status = "success";
@@ -415,7 +425,10 @@ const usersSlice = createSlice({
     // builder.addCase(getAttendanceUsers.pending, (state) => {
     //   state.status = "loading";
     //   state.message = null;
-    //   state.error = null;
+    //   state.error = {
+    //   message: "",
+    //   status: 0,
+    // };
     // });
     // builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
     //   state.status = "success";
@@ -433,7 +446,10 @@ const usersSlice = createSlice({
     builder.addCase(showUser.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(showUser.fulfilled, (state, action) => {
       state.status = "success";
@@ -449,7 +465,10 @@ const usersSlice = createSlice({
     builder.addCase(updateUserPermission.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateUserPermission.fulfilled, (state, action) => {
       state.status = "success";
@@ -468,7 +487,10 @@ const usersSlice = createSlice({
     builder.addCase(updateUser.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.status = "success";
@@ -485,7 +507,10 @@ const usersSlice = createSlice({
     builder.addCase(deleteUser.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.status = "success";
@@ -502,7 +527,10 @@ const usersSlice = createSlice({
     builder.addCase(updateUserPassword.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateUserPassword.fulfilled, (state, action) => {
       state.status = "success";
@@ -516,7 +544,10 @@ const usersSlice = createSlice({
     builder.addCase(resetPassword.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       state.status = "success";
@@ -606,26 +637,13 @@ const usersSlice = createSlice({
         : state.users;
     });
 
-    // builder.addCase(verifyEmail.pending, (state) => {
-    //   state.status = "loading";
-    //   state.message = null;
-    //   state.error = null;
-    // });
-
-    // builder.addCase(verifyEmail.fulfilled, (state, action) => {
-    //   state.status = "success";
-    //   state.message = "メールアドレスの認証が完了しました！";
-    // });
-    // builder.addCase(verifyEmail.rejected, (state, action) => {
-    //   state.status = "failed";
-    //   state.error =
-    //     "メールアドレスの認証に失敗しました！ログインからやり直してください！";
-    // });
-
     builder.addCase(forgotPassword.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
 
     builder.addCase(forgotPassword.fulfilled, (state, action) => {
@@ -640,7 +658,8 @@ const usersSlice = createSlice({
   },
 });
 
-export const { clearError, changeMessage } = usersSlice.actions;
+export const { clearError, changeMessage, changeErrorMessage } =
+  usersSlice.actions;
 
 const usersReducer = usersSlice.reducer;
 

@@ -1,33 +1,34 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { updateMerchandise } from "../../../../store/merchandises/merchandiseSlice";
 import MerchandiseForm from "../../../../components/elements/form/merchandises/MerchandiseForm";
 import {
   merchandiseStatus,
   merchandiseStore,
   merchandiseError,
+  merchandiseErrorStatus,
 } from "../../../../components/Hooks/selector";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../../components/Hooks/authSelector";
 
 const merchandiseEdit: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  const mStatus: string = useSelector(merchandiseStatus);
-  const mError: string = useSelector(merchandiseError);
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
 
   const merchandise = useSelector(merchandiseStore).find(
     (merchandise) => merchandise.id === Number(id)
   );
-
-  console.log("merchandiseだよ");
-  console.log(merchandise);
+  const mStatus: string = useSelector(merchandiseStatus);
+  const mError: string = useSelector(merchandiseError);
+  const mErrorStatus: number = useSelector(merchandiseErrorStatus);
 
   const handleUpdate = async (formData: {
     id: number;
@@ -41,7 +42,8 @@ const merchandiseEdit: React.FC = () => {
         console.log("Success", response);
         router.push("/merchandises");
       } else {
-        throw new Error();
+        const re = renderError(mErrorStatus, router, dispatch);
+        if (re === null) throw new Error("物販の更新に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -55,6 +57,8 @@ const merchandiseEdit: React.FC = () => {
       )}
       {mStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div>
           <div className="ml-4 mt-4">

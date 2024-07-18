@@ -1,38 +1,38 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   HairstyleState,
   getHairstyle,
 } from "../../store/hairstyles/hairstyleSlice";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   hairstylesStore,
   hairstyleStatus,
   hairstyleMessage,
   hairstyleError,
+  hairstyleErrorStatus,
 } from "../../components/Hooks/selector";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
 const hairstyles: React.FC = () => {
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const dispatch = useDispatch();
 
   const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
-  console.log(hairstyles);
-
   const hStatus: string = useSelector(hairstyleStatus);
-
   const hMessage: string | null = useSelector(hairstyleMessage);
-
   const hError: string | null = useSelector(hairstyleError);
+  const hErrorStatus: number = useSelector(hairstyleErrorStatus);
 
   const permission: PermissionsState = useSelector(permissionStore);
 
@@ -54,14 +54,14 @@ const hairstyles: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getHairstyle({}) as any);
-        } else {
-          return;
+          const response = await dispatch(getHairstyle() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(hErrorStatus, router, dispatch);
+            if (re === null) throw new Error("髪型情報の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.log(error);
-        allLogout(dispatch);
-        router.push("/auth/login");
       }
     };
 
@@ -87,8 +87,10 @@ const hairstyles: React.FC = () => {
       {hError && (
         <BasicAlerts type="error" message={hError} space={1} padding={0.6} />
       )}
-      {hStatus === "loading" || !nodes || permission === null ? (
+      {hStatus === "loading" || !nodes ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="my-4">

@@ -1,38 +1,36 @@
 import ComponentTable from "../../components/elements/table";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { OptionState, getOption } from "../../store/options/optionSlice";
-import { RootState } from "../../redux/store";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   optionError,
+  optionErrorStatus,
   optionMessage,
   optionStatus,
   optionsStore,
 } from "../../components/Hooks/selector";
-import { userKey, permissionStore } from "../../components/Hooks/authSelector";
+import { permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
 const options: React.FC = () => {
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
 
-  const dispatch = useDispatch();
-
   const options: OptionState[] = useSelector(optionsStore);
-
   const opStatus: string = useSelector(optionStatus);
-
   const opMessage: string | null = useSelector(optionMessage);
-
   const opError: string | null = useSelector(optionError);
+  const oErrorStatus: number = useSelector(optionErrorStatus);
 
-  const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -54,9 +52,12 @@ const options: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getOption({}) as any);
-        } else {
-          return;
+          const response = await dispatch(getOption() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(oErrorStatus, router, dispatch);
+            if (re === null)
+              throw new Error("オプション情報の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.error("Error:", error);
@@ -91,8 +92,10 @@ const options: React.FC = () => {
       {opError && (
         <BasicAlerts type="error" message={opError} space={1} padding={0.6} />
       )}
-      {opStatus === "loading" || !nodes || permission === null ? (
+      {opStatus === "loading" || !nodes ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className="my-4">

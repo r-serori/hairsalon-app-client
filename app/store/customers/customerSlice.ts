@@ -134,7 +134,7 @@ export interface RootState {
   customers: CustomerOnlyState[]; // 顧客情報の配列
   status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
-  error: ErrorType | null; // エラーメッセージ
+  error: ErrorType; // エラーメッセージ
 }
 
 const initialState: RootState = {
@@ -156,7 +156,10 @@ const customerSlice = createSlice({
     builder.addCase(getCustomer.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(getCustomer.fulfilled, (state, action) => {
       state.status = "success";
@@ -180,7 +183,10 @@ const customerSlice = createSlice({
     builder.addCase(createCustomer.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createCustomer.fulfilled, (state, action) => {
       state.status = "success";
@@ -197,7 +203,10 @@ const customerSlice = createSlice({
     builder.addCase(updateCustomer.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
 
     builder.addCase(updateCustomer.fulfilled, (state, action) => {
@@ -223,7 +232,10 @@ const customerSlice = createSlice({
     builder.addCase(deleteCustomer.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteCustomer.fulfilled, (state, action) => {
       state.status = "success";

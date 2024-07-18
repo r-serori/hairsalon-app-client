@@ -205,7 +205,7 @@ export interface RootState {
   attendance_times: Attendance_timeState[]; // 出席情報の配列
   status: "idle" | "loading" | "success" | "failed";
   message: string | null; // メッセージ
-  error: ErrorType | null; // エラーメッセージ
+  error: ErrorType; // エラーメッセージ
 }
 
 const initialState: RootState = {
@@ -214,7 +214,7 @@ const initialState: RootState = {
   status: "idle",
   message: null, // メッセージ
   error: {
-    message: "",
+    message: null,
     status: 0,
   }, // エラーメッセージ
 };
@@ -227,7 +227,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(selectGetAttendanceTimes.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
       state.status = "success";
@@ -244,7 +247,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(firstGetAttendanceTime.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
 
     builder.addCase(firstGetAttendanceTime.fulfilled, (state, action) => {
@@ -266,7 +272,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(pleaseEditEndTime.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
@@ -289,7 +298,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(updateStartTime.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateStartTime.fulfilled, (state, action) => {
       state.status = "success";
@@ -313,7 +325,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(updateEndTime.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateEndTime.fulfilled, (state, action) => {
       state.status = "success";
@@ -335,7 +350,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(createStartTime.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createStartTime.fulfilled, (state, action) => {
       state.status = "success";
@@ -358,7 +376,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(createEndTime.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createEndTime.fulfilled, (state, action) => {
       state.status = "success";
@@ -382,7 +403,10 @@ const attendance_timeSlice = createSlice({
     builder.addCase(deleteAttendanceTime.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteAttendanceTime.fulfilled, (state, action) => {
       state.status = "success";

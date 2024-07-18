@@ -9,41 +9,58 @@ import { userKey } from "../../../Hooks/authSelector";
 import { fetchAddressApi } from "../../../../services/auth/fetchAddressApi";
 import { useDispatch } from "react-redux";
 import { changeMessage } from "../../../../store/auth/userSlice";
+import { KeyState } from "../../../../store/auth/keySlice";
+import { OwnerState } from "../../../../store/auth/ownerSlice";
 
 interface AuthOwnerFormProps {
-  onSubmit: (formData: {
-    store_name: string;
-    postal_code: string;
-    prefecture: string;
-    city: string;
-    addressLine1: string;
-    addressLine2?: string;
-    phone_number: string;
-    user_id: number;
-  }) => void;
+  node?: OwnerState;
+  onSubmit: (formData: OwnerState) => void;
 }
 
-const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
-  const [store_name, setStoreName] = useState<string>("");
-  const [postal_code, setPostalCode] = useState<string>("");
-  const [prefecture, setPrefecture] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [addressLine1, setAddressLine1] = useState<string>("");
-  const [addressLine2, setAddressLine2] = useState<string>("");
-  const [phone_number, setPhoneNumber] = useState<string>("");
+const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ node, onSubmit }) => {
+  const [store_name, setStoreName] = useState<string>(
+    node ? node.store_name : ""
+  );
+  const [postal_code, setPostalCode] = useState<string>(
+    node ? node.postal_code : ""
+  );
+  const [prefecture, setPrefecture] = useState<string>(
+    node ? node.prefecture : ""
+  );
+  const [city, setCity] = useState<string>(node ? node.city : "");
+  const [addressLine1, setAddressLine1] = useState<string>(
+    node ? node.addressLine1 : ""
+  );
+  const [addressLine2, setAddressLine2] = useState<string>(
+    node && node.addressLine2 ? node.addressLine2 : ""
+  );
+  const [phone_number, setPhoneNumber] = useState<string>(
+    node ? node.phone_number : ""
+  );
 
-  const [storeNameValidate, setStoreNameValidate] = useState<boolean>(true);
-  const [postalCodeValidate, setPostalCodeValidate] = useState<boolean>(true);
-  const [prefectureValidate, setPrefectureValidate] = useState<boolean>(true);
-  const [cityValidate, setCityValidate] = useState<boolean>(true);
-  const [addressLine1Validate, setAddressLine1Validate] =
-    useState<boolean>(true);
-  const [phoneNumberValidate, setPhoneNumberValidate] = useState<boolean>(true);
+  const [storeNameValidate, setStoreNameValidate] = useState<boolean>(
+    node && node.store_name ? true : false
+  );
+  const [postalCodeValidate, setPostalCodeValidate] = useState<boolean>(
+    node && node.postal_code ? true : false
+  );
+  const [prefectureValidate, setPrefectureValidate] = useState<boolean>(
+    node && node.prefecture ? true : false
+  );
+  const [cityValidate, setCityValidate] = useState<boolean>(
+    node && node.city ? true : false
+  );
+  const [addressLine1Validate, setAddressLine1Validate] = useState<boolean>(
+    node && node.addressLine1 ? true : false
+  );
+  const [phoneNumberValidate, setPhoneNumberValidate] = useState<boolean>(
+    node && node.phone_number ? true : false
+  );
 
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const key: string | null = useSelector(userKey);
+  const key: KeyState = useSelector(userKey);
 
   const handlePostalCodeChange = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -59,6 +76,10 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
           setPrefecture(address.prefecture);
           setCity(address.city);
           setAddressLine1(address.address_line1);
+          setPostalCodeValidate(true);
+          setPrefectureValidate(true);
+          setCityValidate(true);
+          setAddressLine1Validate(true);
         }
       }
     } catch (error) {
@@ -78,14 +99,27 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
       router.push("/auth/register");
       return;
     }
+
+    if (
+      !storeNameValidate ||
+      !postalCodeValidate ||
+      !prefectureValidate ||
+      !cityValidate ||
+      !addressLine1Validate ||
+      !phoneNumberValidate
+    ) {
+      return;
+    }
+
     onSubmit({
-      store_name,
-      postal_code,
-      prefecture,
-      city,
-      addressLine1,
-      addressLine2,
-      phone_number,
+      id: node ? node.id : 0,
+      store_name: store_name,
+      postal_code: postal_code,
+      prefecture: prefecture,
+      city: city,
+      addressLine1: addressLine1,
+      addressLine2: addressLine2,
+      phone_number: phone_number,
       user_id: Number(userId),
     });
   };
@@ -95,7 +129,7 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ onSubmit }) => {
       <div className="max-w-md w-full space-y-4">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            店舗情報登録
+            {node ? "店舗情報更新" : "店舗情報登録"}
           </h2>
         </div>
 

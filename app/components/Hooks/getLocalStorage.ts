@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import { KeyState } from "../../store/auth/keySlice";
 
 // export const getRole = (key: string): string | null => {
 //   try {
@@ -15,11 +16,11 @@ import CryptoJS from "crypto-js";
 //   }
 // };
 
-export const getUserId = (key: string): number | null => {
+export const getUserId = (key: KeyState): number | null => {
   try {
     const userId = localStorage.getItem("user_id");
 
-    const bytes = CryptoJS.AES.decrypt(userId, key);
+    const bytes = CryptoJS.AES.decrypt(userId, String(key));
 
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 

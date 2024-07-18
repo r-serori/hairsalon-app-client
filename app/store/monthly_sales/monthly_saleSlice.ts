@@ -100,7 +100,7 @@ export interface RootState {
   monthly_sales: Monthly_salesState[];
   status: "idle" | "loading" | "success" | "failed"; // ローディング状態
   message: string | null; // メッセージ
-  error: ErrorType | null; // エラー
+  error: ErrorType; // エラー
 }
 
 export const initialState: RootState = {
@@ -119,13 +119,19 @@ const monthly_salesSlice = createSlice({
   reducers: {
     changeMonthlySaleMessage: (state, action: PayloadAction<string>) => {
       state.message = action.payload;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     },
   },
   extraReducers(builder) {
     builder.addCase(getMonthly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(getMonthly_sales.fulfilled, (state, action) => {
@@ -145,7 +151,10 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(selectGetMonthly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(selectGetMonthly_sales.fulfilled, (state, action) => {
@@ -165,7 +174,10 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(createMonthly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(createMonthly_sales.fulfilled, (state, action) => {
@@ -185,7 +197,10 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(updateMonthly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(updateMonthly_sales.fulfilled, (state, action) => {
@@ -206,7 +221,10 @@ const monthly_salesSlice = createSlice({
 
     builder.addCase(deleteMonthly_sales.pending, (state, action) => {
       state.status = "loading";
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
       state.message = null;
     });
     builder.addCase(deleteMonthly_sales.fulfilled, (state, action) => {

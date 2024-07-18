@@ -1,6 +1,4 @@
-import { el } from "@fullcalendar/core/internal-common";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 
 interface RouterButtonProps {
   link?: string;
@@ -21,7 +19,7 @@ const RouterButton: React.FC<RouterButtonProps> = ({
   pyValue,
   onChangeAndRouter,
 }) => {
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   const handleRouter = () => {
     if (link) {

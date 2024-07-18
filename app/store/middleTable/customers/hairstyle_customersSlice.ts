@@ -12,6 +12,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
 } from "../../schedules/scheduleSlice";
+import { deleteHairstyle } from "../../hairstyles/hairstyleSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
 
 // export const getHairstyle_customers = createAsyncThunk(
@@ -56,7 +57,7 @@ export interface RootState {
   // RootStateの型
   hairstyle_customers: Hairstyle_customersState[];
   status: "idle" | "loading" | "success" | "failed";
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 export const initialState: RootState = {
@@ -145,6 +146,13 @@ const hairstyle_customersSlice = createSlice({
         ),
         ...action.payload.hairstyle_customers,
       ];
+    });
+
+    builder.addCase(deleteHairstyle.fulfilled, (state, action) => {
+      state.hairstyle_customers = state.hairstyle_customers.filter(
+        (hairstyle_customer) =>
+          hairstyle_customer.hairstyle_id !== action.payload.deleteId
+      );
     });
   },
 });

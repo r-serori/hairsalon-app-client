@@ -1,7 +1,5 @@
 import * as React from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-// import { deleteAttendance } from "../../../store/attendances/attendanceSlice";
 import { deleteAttendanceTime } from "../../../store/attendance_times/attendance_timesSlice";
 import { deleteCourse } from "../../../store/courses/courseSlice";
 import { deleteCustomer } from "../../../store/customers/customerSlice";
@@ -20,14 +18,17 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import PrimaryButton from "../../elements/button/PrimaryButton";
 import DeleteButton from "../../elements/button/DeleteButton";
+import { AppDispatch } from "../../../redux/store";
+import BasicAlert from "../../elements/alert/BasicAlert";
 
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "30%",
-  height: "30%", // ブラウザの高さの80%に設定
+  maxWidth: "70vw",
+  maxHeight: "70vh",
+  width: "100%",
   overflowY: "auto", // 縦方向のスクロールを可能にする
   bgcolor: "background.paper",
   border: "2px solid #000",
@@ -42,8 +43,7 @@ interface DeleteManProps {
 }
 
 const DeleteMan: React.FC<DeleteManProps> = ({ id, link }) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false);
 
@@ -109,36 +109,35 @@ const DeleteMan: React.FC<DeleteManProps> = ({ id, link }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} className="rounded-xl">
-          <Typography id="modal-modal-title">
-            <div>
-              <div
-                className="flex justify-center items-center p-4 mb-4   text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-                style={{ flexDirection: "column" }}
-              >
-                <div className="font-medium mb-4 lg:text-xl md:text-sm">
-                  完全にデータが消えてしまいます!
-                </div>
-
-                <div className="lg:text-xl md:text-sm">
-                  本当に削除しますか？
-                </div>
-              </div>
-              <div className="flex justify-center items-center lg:gap-24 lg:mt-8">
-                <PrimaryButton
-                  onChanger={() => setOpen(false)}
-                  value="キャンセル"
-                />
-                <DeleteButton
-                  value="削除する"
-                  onClicker={() => {
-                    handleDeleteMan();
-                    setOpen(false);
-                  }}
-                />
-              </div>
+          <div>
+            <div
+              className="flex justify-center items-center p-4 mb-4   text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+              style={{ flexDirection: "column" }}
+            >
+              <BasicAlert
+                type="error"
+                message="本当に削除しますか？このデータは消えてしまいます！"
+                padding={4}
+                space={4}
+                size="1.5rem"
+                iconSize="2rem"
+              />
             </div>
-          </Typography>
+            <div className="flex justify-center items-center lg:gap-24 lg:mt-8">
+              <PrimaryButton
+                onChanger={() => setOpen(false)}
+                value="キャンセル"
+              />
+              <DeleteButton
+                value="削除する"
+                onClicker={() => {
+                  handleDeleteMan();
+                  setOpen(false);
+                }}
+              />
+            </div>
+          </div>
         </Box>
       </Modal>
     </div>

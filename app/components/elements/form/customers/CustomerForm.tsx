@@ -131,7 +131,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   );
 
   const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
-    node.customer_name ? true : false
+    node && node.customer_name ? true : false
   );
   const [usersValidate, setUsersValidate] = useState<boolean>(true);
 
@@ -208,14 +208,14 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <BasicTextField
-            id={node ? node.id : 0}
+            id={0}
             placeholder="顧客名"
             value={customer_name}
             onChange={(e) => setCustomer_Name(e.target.value)}
             onValidationChange={(isValid) => setCustomerNameValidate(isValid)}
           />
           <BasicNumberField
-            id={node ? node.id : 0}
+            id={1}
             placeholder="電話番号"
             value={phone_number}
             onChange={(e) => setPhoneNumber(e.target.value)}
@@ -224,7 +224,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
             format={false}
           />
           <BasicTextField
-            id={node ? node.id : 0}
+            id={3}
             placeholder="備考"
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}

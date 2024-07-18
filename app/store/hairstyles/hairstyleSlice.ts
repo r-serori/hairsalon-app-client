@@ -90,7 +90,7 @@ export interface RootState {
   hairstyles: HairstyleState[];
   status: "idle" | "loading" | "success" | "failed";
   message: string | null;
-  error: ErrorType | null;
+  error: ErrorType;
 }
 
 const initialState: RootState = {
@@ -112,14 +112,17 @@ const hairstyleSlice = createSlice({
     builder.addCase(getHairstyle.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(getHairstyle.fulfilled, (state, action) => {
       state.status = "success";
       state.hairstyles = [...state.hairstyles, ...action.payload.hairstyles];
       state.message = action.payload.message
         ? action.payload.message
-        : "ヘアスタイル情報を取得しました！ ";
+        : "髪型情報を取得しました！ ";
     });
     builder.addCase(getHairstyle.rejected, (state, action) => {
       state.status = "failed";
@@ -129,14 +132,17 @@ const hairstyleSlice = createSlice({
     builder.addCase(createHairstyle.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(createHairstyle.fulfilled, (state, action) => {
       state.status = "success";
       state.hairstyles = [...state.hairstyles, action.payload.hairstyle];
       state.message = action.payload.message
         ? action.payload.message
-        : "ヘアスタイル情報を作成しました！";
+        : "髪型情報を作成しました！";
     });
     builder.addCase(createHairstyle.rejected, (state, action) => {
       state.status = "failed";
@@ -146,7 +152,10 @@ const hairstyleSlice = createSlice({
     builder.addCase(updateHairstyle.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(updateHairstyle.fulfilled, (state, action) => {
       state.status = "success";
@@ -157,7 +166,7 @@ const hairstyleSlice = createSlice({
       );
       state.message = action.payload.message
         ? action.payload.message
-        : "ヘアスタイル情報を更新しました！";
+        : "髪型情報を更新しました！";
     });
 
     builder.addCase(updateHairstyle.rejected, (state, action) => {
@@ -168,13 +177,19 @@ const hairstyleSlice = createSlice({
     builder.addCase(deleteHairstyle.pending, (state) => {
       state.status = "loading";
       state.message = null;
-      state.error = null;
+      state.error = {
+        message: "",
+        status: 0,
+      };
     });
     builder.addCase(deleteHairstyle.fulfilled, (state, action) => {
       state.status = "success";
       state.hairstyles = state.hairstyles.filter(
         (hairstyle) => hairstyle.id !== Number(action.payload.deleteId)
       );
+      state.message = action.payload.message
+        ? action.payload.message
+        : "髪型情報を削除しました！";
     });
     builder.addCase(deleteHairstyle.rejected, (state, action) => {
       state.status = "failed";

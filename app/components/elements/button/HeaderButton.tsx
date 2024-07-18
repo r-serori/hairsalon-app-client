@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 
 interface HeaderButtonProps {
   link: string;
@@ -11,7 +11,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
   responsive,
   value,
 }) => {
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   const handleRouter = () => {
     router.push(link);

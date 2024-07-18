@@ -1,34 +1,35 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import {
   yearly_salesStore,
   yearly_saleStatus,
   yearly_saleError,
+  yearly_saleErrorStatus,
 } from "../../../../components/Hooks/selector";
 import { Yearly_salesState } from "../../../../store/yearly_sales/yearly_saleSlice";
 import { updateYearly_sales } from "../../../../store/yearly_sales/yearly_saleSlice";
 import YearlySalesForm from "../../../../components/elements/form/sales/yearly_sales/Yearly_salesForm";
 import RouterButton from "../../../../components/elements/button/RouterButton";
-import BasicAlerts from "../../../../components/elements/alert/Alert";
+import BasicAlerts from "../../../../components/elements/alert/BasicAlert";
+import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
+import { permissionStore } from "../../../../components/Hooks/authSelector";
 
 const yearlySalesEdit: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  const ysStatus: string = useSelector(yearly_saleStatus);
-  const ysError: string = useSelector(yearly_saleError);
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
+  const permission: PermissionsState = useSelector(permissionStore);
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
 
   const yearlySale: Yearly_salesState = useSelector(yearly_salesStore).find(
     (yearlySale: Yearly_salesState) => yearlySale.id === Number(id)
   );
-
-  console.log("yearlySaleです");
-  console.log(yearlySale);
+  const ysStatus: string = useSelector(yearly_saleStatus);
+  const ysError: string | null = useSelector(yearly_saleError);
+  const ysErrorStatus: number = useSelector(yearly_saleErrorStatus);
 
   const handleUpdate = async (formData: {
     id: number;
@@ -41,7 +42,8 @@ const yearlySalesEdit: React.FC = () => {
         console.log("Success", response);
         router.push("/yearly_sales");
       } else {
-        throw new Error();
+        const re = renderError(ysErrorStatus, router, dispatch);
+        if (re === null) throw new Error("年次売上の更新に失敗しました");
       }
     } catch (error) {
       console.error(error);
@@ -55,6 +57,8 @@ const yearlySalesEdit: React.FC = () => {
       )}
       {ysStatus === "loading" ? (
         <p>Loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
           <div className=" my-4">

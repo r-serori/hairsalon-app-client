@@ -1,39 +1,41 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import AuthRegisterForm from "../../components/elements/form/auth/AuthRegisterForm";
 import { register } from "../../store/auth/userSlice";
-import { RootState } from "../../redux/store";
-import BasicAlerts from "../../components/elements/alert/Alert";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { clearError, changeMessage } from "../../store/auth/userSlice";
+import { clearError } from "../../store/auth/userSlice";
 import { isLogin } from "../../store/auth/isLoginSlice";
 import { useEffect } from "react";
 import {
-  user,
   userStatus,
-  userMessage,
   userError,
-  userKey,
-  userKeyStatus,
   ownerError,
+  userErrorStatus,
 } from "../../components/Hooks/authSelector";
 import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
 import { pushUserId } from "../../components/Hooks/pushLocalStorage";
-import { vioRoleApi } from "../../services/auth/vioRole";
 import { getPermission } from "../../store/auth/permissionSlice";
+import { renderError } from "../../store/errorHandler";
+import { AppDispatch } from "../../redux/store";
+import { KeyState } from "../../store/auth/keySlice";
 
 const RegisterPage: React.FC = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const uStatus: string = useSelector(userStatus);
 
   const uError: string | null = useSelector(userError);
-
+  const uErrorStatus: number = useSelector(userErrorStatus);
   const oError: string | null = useSelector(ownerError);
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
+    const isLogin = localStorage.getItem("isLogin");
+    if (isLogin) {
+      allLogout(dispatch);
+    }
   }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleRegister = async (formData: {
@@ -48,24 +50,26 @@ const RegisterPage: React.FC = () => {
     try {
       const response: any = await dispatch(register(formData) as any);
       console.log("register.tsxのデータだよ", response);
-      const userId = response.payload.responseUser.id;
+      if (response.meta.requestStatus === "fulfilled") {
+        const userId = response.payload.responseUser.id;
 
-      const userKey: string | null = await getUserKey(dispatch);
+        const userKey: KeyState = await getUserKey(dispatch);
 
-      if (userKey === null) {
-        throw new Error();
-      }
-      const pushUser: boolean = pushUserId(userId, userKey);
+        if (userKey === null) {
+          throw new Error();
+        }
+        const pushUser: boolean = pushUserId(userId, userKey);
 
-      if (pushUser && response.meta.requestStatus === "fulfilled") {
-        await dispatch(getPermission({}) as any);
-        dispatch(isLogin());
-        router.push("/auth/emailWait");
+        if (pushUser) {
+          await dispatch(getPermission() as any);
+          dispatch(isLogin());
+          router.push("/auth/emailWait");
+        }
       } else {
-        throw new Error();
+        const re = renderError(uErrorStatus, router, dispatch);
+        if (re === null) throw new Error("register処理に失敗しました");
       }
     } catch (error) {
-      console.log("Error", error);
       return;
     }
   };
@@ -85,11 +89,7 @@ const RegisterPage: React.FC = () => {
       ) : (
         <div>
           <div className="mt-4 ml-4">
-            <RouterButton
-              link="/"
-              value="ホーム画面へ戻る"
-              onChangeAndRouter={() => dispatch(clearError())}
-            />
+            <RouterButton link="/" value="ホーム画面へ戻る" />
           </div>
           <AuthRegisterForm onSubmitOwner={handleRegister} />
         </div>

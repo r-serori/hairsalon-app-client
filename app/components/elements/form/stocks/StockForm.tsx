@@ -49,16 +49,16 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
   );
 
   const [productNameValidate, setProductNameValidate] = useState<boolean>(
-    node.product_name ? true : false
+    node && node.product_name ? true : false
   );
   const [productPriceValidate, setProductPriceValidate] = useState<boolean>(
-    node.product_price ? true : false
+    node && node.product_price ? true : false
   );
   const [quantityValidate, setQuantityValidate] = useState<boolean>(
-    node.quantity ? true : false
+    node && node.quantity ? true : false
   );
   const [noticeValidate, setNoticeValidate] = useState<boolean>(
-    node.notice ? true : false
+    node && node.notice ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

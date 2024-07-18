@@ -9,39 +9,22 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
+import MoreTimeIcon from "@mui/icons-material/MoreTime";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import LogoutButton from "../components/elements/button/logoutButton";
-import { useRouter } from "next/router";
-import BasicAlerts from "../components/elements/alert/Alert";
+import BasicAlerts from "../components/elements/alert/BasicAlert";
 import {
   ownerMessage,
   permissionStore,
-  user,
-  userKey,
   userMessage,
 } from "../components/Hooks/authSelector";
-import { allLogout, getUserKey } from "../components/Hooks/useMethod";
-import { useDispatch } from "react-redux";
 import { PermissionsState } from "../store/auth/permissionSlice";
-import { UserState } from "../store/auth/userSlice";
 
 const dashboard: React.FC = () => {
-  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
-
   const permission: PermissionsState = useSelector(permissionStore);
   const uMessage: string | null = useSelector(userMessage);
   const oMessage: string | null = useSelector(ownerMessage);
-
-  useEffect(() => {
-    function handleResize() {
-      setIsFullScreen(window.innerWidth >= 1024); // 1024px 以上でフルスクリーンと判定
-    }
-    window.addEventListener("resize", handleResize);
-    handleResize(); // コンポーネントがマウントされたときに初期設定を行う
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <>
@@ -79,12 +62,12 @@ const dashboard: React.FC = () => {
             ) : (
               ""
             )}
-            {/* <NavLink
-              IconName={ManageAccountsIcon}
-              href="/attendance_times"
+            <NavLink
+              IconName={MoreTimeIcon}
+              href="/attendanceTimeShots"
               iconSrc="#"
-              label="スタッフ管理"
-            /> */}
+              label="勤怠管理"
+            />
             <NavLink
               IconName={SentimentVerySatisfiedIcon}
               href="/customers"

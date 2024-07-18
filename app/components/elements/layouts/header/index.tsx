@@ -11,9 +11,10 @@ import { allLogout, getUserKey } from "../../../Hooks/useMethod";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../Hooks/authSelector";
 import { getPermission } from "../../../../store/auth/permissionSlice";
-import { isLogin } from "../../../../store/auth/isLoginSlice";
+import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import Link from "next/link";
 import { KeyState } from "../../../../store/auth/keySlice";
+import { current } from "immer";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -40,8 +41,9 @@ export default function Header() {
           await dispatch(getPermission() as any);
         } catch (e) {
           console.log("Error", e);
-          allLogout(dispatch);
-          router.push("/auth/login");
+          localStorage.clear();
+          dispatch(isLogout());
+          router.push("/error?code=401");
         }
       };
 
@@ -50,8 +52,9 @@ export default function Header() {
           await getUserKey(dispatch);
         } catch (e) {
           console.log("Error", e);
-          allLogout(dispatch);
-          router.push("/auth/login");
+          localStorage.clear();
+          dispatch(isLogout());
+          router.push("/error?code=401");
         }
       };
 
@@ -71,8 +74,9 @@ export default function Header() {
     const verifySession = async () => {
       const response: boolean = await checkSessionApi.checkSession();
       if (!response) {
-        await allLogout(dispatch);
-        router.push("/auth/login");
+        localStorage.clear();
+        dispatch(isLogout());
+        router.push("/error?code=401");
       } else {
         await dispatch(isLogin());
         console.log("セッション確認済み");
@@ -98,6 +102,7 @@ export default function Header() {
     currentPath === "/auth/login" ||
     currentPath === "/auth/register" ||
     currentPath === "/_error" ||
+    currentPath === "/404" ||
     currentPath === "/auth/emailWait" ||
     currentPath === "/auth/emailVerify/[id]/[hash]" ||
     currentPath === "/auth/forgotPassword" ||
@@ -171,7 +176,16 @@ export default function Header() {
             href: "/yearly_sales",
             current: currentPath === "/yearly_sales",
           },
-          { name: "Your Profile", href: "/userProfile/updateUserInformation" },
+          {
+            name: "個人情報",
+            href: "/userProfile/updateUserInformation",
+            current: currentPath === "/userProfile/updateUserInformation",
+          },
+          {
+            name: "店舗情報",
+            href: "/userProfile/updateOwnerInfo",
+            current: currentPath === "/notifications",
+          },
         ]
       : permission === "マネージャー" || permission === "スタッフ"
       ? [
@@ -220,7 +234,11 @@ export default function Header() {
             href: "/hairstyles",
             current: currentPath === "/hairstyles",
           },
-          { name: "Your Profile", href: "/userProfile/updateUserInformation" },
+          {
+            name: "個人情報",
+            href: "/userProfile/updateUserInformation",
+            current: currentPath === "/userProfile/updateUserInformation",
+          },
         ]
       : [];
 

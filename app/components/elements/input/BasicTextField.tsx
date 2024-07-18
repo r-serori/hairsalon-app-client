@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { createTheme } from "@mui/material/styles";
+import { v4 as uuidv4 } from "uuid";
 
 interface BasicTextFieldProps {
   id: number;
@@ -32,6 +33,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
   onChange,
   onValidationChange,
 }) => {
+  const uuid = uuidv4();
   const removeInvalidChars = (str: string) => {
     return str.replace(regex, "");
   };
@@ -72,7 +74,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
       }}
     >
       <TextField
-        id={`${id}`}
+        id={`${String(uuid)}  ${id}`}
         type="text"
         label={placeholder}
         onChange={handleChange}

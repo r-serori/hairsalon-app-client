@@ -9,6 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { getOption } from "../../../../store/options/optionSlice";
 import { createTheme } from "@mui/material/styles";
+import { v4 as uuidv4 } from "uuid";
 
 interface MultiCheckboxProps {
   getOptions: [] | Object;
@@ -31,6 +32,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
   error = false,
   onValidationChange,
 }) => {
+  const uuid = uuidv4();
   const [allowed, setAllowed] = React.useState(false);
   const names: string[] = [];
   const fieldName: string[] = [];
@@ -144,7 +146,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
       disabled={noArrayAndNoLength ? true : false}
     >
       <InputLabel
-        id="demo-multiple-checkbox-label"
+        id="demo-multiple-checkbox"
         shrink={true}
         sx={{
           width: "100%",
@@ -161,12 +163,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           marginLeft: `${noArrayAndNoLength && ".5rem"}`,
           marginBottom: `${noArrayAndNoLength && ".1rem"}`,
         }}
-        disabled={
-          role === "スタッフ" || names.length === 0 || noArrayAndNoLength
-            ? true
-            : false
-        }
-        variant={noArrayAndNoLength ? "standard" : "filled"}
+        variant={noArrayAndNoLength ? "standard" : "outlined"}
       >
         {names.length === 0
           ? `${fieldName[0]}がありません。${fieldName[0]}画面から新規作成してください！`
@@ -175,13 +172,14 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           : String(fieldName[0])}
       </InputLabel>
       <Select
-        labelId="demo-multiple-checkbox-label"
         id="demo-multiple-checkbox"
         multiple={names.length === 0 || noArrayAndNoLength ? false : true}
         value={optionName ? optionName : []}
         onChange={handleChange}
         input={
           <OutlinedInput
+            id={uuid}
+            name={uuid}
             label={
               names.length === 0
                 ? `${fieldName[0]}がありません。${fieldName[0]}画面から新規作成してください！`
@@ -195,7 +193,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           console.log("selected", selected);
 
           // selectedが文字列の場合
-          if (typeof selected === "string") {
+          if (typeof selected === "string" || noArrayAndNoLength) {
             return <div style={{ whiteSpace: "no-wrap" }}></div>;
           }
 
@@ -230,6 +228,7 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
             <MenuItem key={index} value={name}>
               <Checkbox
                 id={`${name}-${index}`}
+                name={`${name}-${index}`}
                 checked={optionName ? optionName.indexOf(name) > -1 : false}
               />
               <ListItemText
@@ -247,7 +246,8 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
             disabled={noArrayAndNoLength ? true : false}
           >
             <Checkbox
-              id={`${names[0]}-0`}
+              id={`${names}-0`}
+              name={`${names}-0`}
               checked={optionName ? optionName.indexOf(names[0]) > -1 : false}
             />
             <ListItemText

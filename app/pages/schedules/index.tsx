@@ -10,29 +10,25 @@ import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import BasicAlerts from "../../components/elements/alert/Alert";
-import { useRouter } from "next/router";
+import BasicAlerts from "../../components/elements/alert/BasicAlert";
+import { useRouter, NextRouter } from "next/router";
 import {
   customersStore,
   scheduleError,
+  scheduleErrorStatus,
   scheduleMessage,
   scheduleStatus,
   schedulesStore,
 } from "../../components/Hooks/selector";
-import {
-  userKey,
-  permissionStore,
-  user,
-} from "../../components/Hooks/authSelector";
+import { permissionStore, user } from "../../components/Hooks/authSelector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { PermissionsState } from "../../store/auth/permissionSlice";
-import { CustomerState } from "../../store/customers/customerSlice";
+import { CustomerOnlyState } from "../../store/customers/customerSlice";
 import { CourseState } from "../../store/courses/courseSlice";
 import { OptionState } from "../../store/options/optionSlice";
 import { MerchandiseState } from "../../store/merchandises/merchandiseSlice";
 import { HairstyleState } from "../../store/hairstyles/hairstyleSlice";
-import { RoleState, UserAllState } from "../../components/Hooks/interface";
 import { Course_customersState } from "../../store/middleTable/customers/course_customersSlice";
 import { Option_customersState } from "../../store/middleTable/customers/option_customersSlice";
 import { Merchandise_customersState } from "../../store/middleTable/customers/merchandise_customersSlice";
@@ -49,19 +45,24 @@ import {
   merchandiseStore,
   hairstyle_customersStore,
 } from "../../components/Hooks/selector";
+import { UserState } from "../../store/auth/userSlice";
+import { AppDispatch } from "../../redux/store";
+import { renderError } from "../../store/errorHandler";
 
-interface Schedule {
-  year?: string;
-  update?: boolean;
-}
+const schedules: React.FC = () => {
+  dayjs.locale("ja");
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
-const schedules: React.FC<Schedule> = ({ year, update }) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const router: NextRouter = useRouter();
 
   const schedules: ScheduleState[] = useSelector(schedulesStore);
+  const sStatus: string = useSelector(scheduleStatus);
+  const sMessage: string | null = useSelector(scheduleMessage);
+  const sError: string | null = useSelector(scheduleError);
+  const sErrorStatus: number = useSelector(scheduleErrorStatus);
 
-  const key: string | null = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
@@ -75,7 +76,12 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
-          await dispatch(getSchedule({}) as any);
+          const response = await dispatch(getSchedule() as any);
+          if (response.meta.requestStatus === "rejected") {
+            const re = renderError(sErrorStatus, router, dispatch);
+            if (re === null)
+              throw new Error("スケジュール情報の取得に失敗しました");
+          }
         }
       } catch (error) {
         console.log(error);
@@ -88,18 +94,8 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  dayjs.locale("ja");
-  dayjs.extend(utc);
-  dayjs.extend(timezone);
-
-  const sStatus: string = useSelector(scheduleStatus);
-
-  const sMessage: string | null = useSelector(scheduleMessage);
-
-  const sError: string | null = useSelector(scheduleError);
-
   // 顧客情報を取得
-  const customers: CustomerState[] = useSelector(customersStore);
+  const customers: CustomerOnlyState[] = useSelector(customersStore);
 
   // コース情報を取得
   const courses: CourseState[] = useSelector(coursesStore);
@@ -112,15 +108,13 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
   // 髪型情報を取得
   const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
   // 担当者情報を取得
-  const users: UserAllState[] = useSelector(user);
+  const users: UserState[] = useSelector(user);
   console.log("userです", users);
 
   // 中間テーブルの情報を取得
   const course_customers: Course_customersState[] = useSelector(
     course_customersStore
   );
-  // console.log("course_customersだよ");
-  // console.log(course_customers);
   // 中間テーブルの情報を取得
   const option_customers: Option_customersState[] = useSelector(
     option_customersStore
@@ -286,8 +280,10 @@ const schedules: React.FC<Schedule> = ({ year, update }) => {
       {sError && (
         <BasicAlerts type="error" message={sError} space={1} padding={0.6} />
       )}
-      {sStatus === "loading" || permission === null ? (
+      {sStatus === "loading" ? (
         <p>loading...</p>
+      ) : permission === null ? (
+        <p>あなたに権限はありません。</p>
       ) : (
         <MyCalendar
           events={events}
