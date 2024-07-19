@@ -106,7 +106,7 @@ const yearly_sales: React.FC = () => {
         <p>あなたに権限はありません。</p>
       ) : (
         <div className="mx-4">
-          <div className="flex justify-end items-center gap-4">
+          <div className="flex justify-end items-center gap-4 my-4">
             <RouterButton link="/daily_sales" value="日次売上画面へ" />
             <RouterButton link="/monthly_sales" value="月次売上画面へ" />
           </div>

@@ -19,13 +19,18 @@ import {
   attendance_timeStatus,
   attendance_timeErrorStatus,
 } from "../../../components/Hooks/selector";
-import { permissionStore } from "../../../components/Hooks/authSelector";
+import {
+  permissionStore,
+  user,
+  userStatus,
+} from "../../../components/Hooks/authSelector";
 import { ownerPermission } from "../../../components/Hooks/useMethod";
 import { allLogout } from "../../../components/Hooks/useMethod";
 import _ from "lodash";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { renderError } from "../../../store/errorHandler";
 import { AppDispatch } from "../../../redux/store";
+import { changeMessage, UserState } from "../../../store/auth/userSlice";
 
 const attendanceTimes: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -40,6 +45,8 @@ const attendanceTimes: React.FC = () => {
   // 初回のみデータ取得を行うためのフラグ
   const [attendanceTimeOpen, setAttendanceTimeOpen] = useState<boolean>(false);
 
+  const users: UserState[] = useSelector(user);
+  const uStatus: string = useSelector(userStatus);
   const atStatus: string = useSelector(attendance_timeStatus);
 
   const atMessage: string | null = useSelector(attendance_timeMessage);
@@ -85,6 +92,10 @@ const attendanceTimes: React.FC = () => {
           permission === "マネージャー" ||
           permission === "スタッフ"
         ) {
+          if (users.length === 0) {
+            router.push("/attendances");
+            return;
+          }
           setYearMonth("000111");
           const response = await dispatch(
             selectGetAttendanceTimes({
@@ -149,7 +160,7 @@ const attendanceTimes: React.FC = () => {
           <BasicAlerts type="error" message={atError} space={1} padding={0.6} />
         )}
       </div>
-      {atStatus === "loading" || permission === null || !nodes ? (
+      {atStatus === "loading" || uStatus === "loading" || !nodes ? (
         <p>loading...</p>
       ) : permission === null ? (
         <p>あなたに権限はありません。</p>

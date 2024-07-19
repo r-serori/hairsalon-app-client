@@ -52,7 +52,7 @@ export const firstGetAttendanceTime = createAsyncThunk<
 );
 
 export const pleaseEditEndTime = createAsyncThunk<
-  CreateAttendanceTimeState,
+  PostAttendanceTimeState,
   {
     id: number;
     end_time: string;
@@ -77,7 +77,7 @@ export const pleaseEditEndTime = createAsyncThunk<
 );
 
 export const updateStartTime = createAsyncThunk<
-  UpdateAttendanceTimeState,
+  PostAttendanceTimeState,
   {
     id: number;
     start_time: string;
@@ -97,7 +97,7 @@ export const updateStartTime = createAsyncThunk<
 });
 
 export const updateEndTime = createAsyncThunk<
-  UpdateAttendanceTimeState,
+  PostAttendanceTimeState,
   {
     id: number;
     end_time: string;
@@ -117,7 +117,7 @@ export const updateEndTime = createAsyncThunk<
 });
 
 export const createStartTime = createAsyncThunk<
-  CreateAttendanceTimeState,
+  PostAttendanceTimeState,
   {
     start_time: string;
     start_photo_path: string;
@@ -136,7 +136,7 @@ export const createStartTime = createAsyncThunk<
 });
 
 export const createEndTime = createAsyncThunk<
-  CreateAttendanceTimeState,
+  PostAttendanceTimeState,
   {
     end_time: string;
     end_photo_path: string;
@@ -190,12 +190,7 @@ export interface GetFirstAttendanceTimeState {
   message: string;
 }
 
-export interface CreateAttendanceTimeState {
-  attendanceTime: Attendance_timeState;
-  responseUser: UserState;
-  message: string;
-}
-export interface UpdateAttendanceTimeState {
+export interface PostAttendanceTimeState {
   attendanceTime: Attendance_timeState;
   message: string;
 }
@@ -367,10 +362,7 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(createStartTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error =
-        (action.payload as any).resStatus === "error"
-          ? (action.payload as any).message
-          : (action.payload as any).message;
+      state.error = action.payload;
     });
 
     builder.addCase(createEndTime.pending, (state) => {
@@ -423,15 +415,6 @@ const attendance_timeSlice = createSlice({
       state.status = "failed";
       state.error = action.payload;
     });
-
-    // builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
-    //   state.status = "success";
-    //   state.message = action.payload.message;
-    //   state.attendance_times = [
-    //     ...state.attendance_times,
-    //     ...action.payload.attendanceTimes,
-    //   ];
-    // });
   },
 });
 

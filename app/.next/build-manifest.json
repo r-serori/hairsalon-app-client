@@ -27,10 +27,20 @@
       "static/chunks/main.js",
       "static/chunks/pages/attendanceTimeShots.js"
     ],
-    "/dashboard": [
+    "/customers": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/dashboard.js"
+      "static/chunks/pages/customers.js"
+    ],
+    "/userProfile/updateOwnerInfo": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/userProfile/updateOwnerInfo.js"
+    ],
+    "/userProfile/updateUserInformation": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/userProfile/updateUserInformation.js"
     ]
   },
   "ampFirstPages": []

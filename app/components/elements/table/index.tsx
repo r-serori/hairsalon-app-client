@@ -263,6 +263,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                     const propProp = nodesProp[propName];
 
                     const imgUrl = process.env.NEXT_PUBLIC_BACKEND_IMG_URL;
+                    console.log(`${imgUrl} ${decodeURIComponent(propValue)}`);
 
                     const formatValue = (value: number) => {
                       return new Intl.NumberFormat("ja-JP").format(value);

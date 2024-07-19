@@ -100,19 +100,6 @@ export const logout = createAsyncThunk<
   }
 });
 
-// export const getAttendanceUsers = createAsyncThunk(
-//   "users/getAttendanceUser",
-//   async (formData: {}, { rejectWithValue }) => {
-//     try {
-//       const response = await userApi.getAttendanceUsers();
-
-//       return handleErrorResponse(response, rejectWithValue);
-//     } catch (err) {
-//       return handleCatchError(err, rejectWithValue);
-//     }
-//   }
-// );
-
 export const getUsers = createAsyncThunk<
   GetUserState,
   void,
@@ -258,24 +245,6 @@ export const deleteUser = createAsyncThunk<
   }
 });
 
-// export const verifyEmail = createAsyncThunk(
-//   "users/verifyEmail",
-//   async (
-//     formData: {
-//       id: number;
-//       hash: string;
-//     },
-//     { rejectWithValue }
-//   ) => {
-//     try {
-//       const response = await emailVerify(formData);
-//       return handleErrorResponse(response, rejectWithValue);
-//     } catch (err) {
-//       return handleCatchError(err, rejectWithValue);
-//     }
-//   }
-// );
-
 export interface UserState {
   // ステートの型
   id: number;
@@ -328,7 +297,18 @@ const usersSlice = createSlice({
     changeMessage(state, action) {
       state.message = action.payload;
     },
+    trueIsAttendance(state, action: PayloadAction<number>) {
+      state.users = state.users.map((user) =>
+        user.id === action.payload ? { ...user, isAttendance: true } : user
+      );
+    },
+    falseIsAttendance(state, action: PayloadAction<number>) {
+      state.users = state.users.map((user) =>
+        user.id === action.payload ? { ...user, isAttendance: false } : user
+      );
+    },
   },
+
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.status = "loading";
@@ -421,27 +401,6 @@ const usersSlice = createSlice({
       state.status = "failed";
       state.error = action.payload;
     });
-
-    // builder.addCase(getAttendanceUsers.pending, (state) => {
-    //   state.status = "loading";
-    //   state.message = null;
-    //   state.error = {
-    //   message: "",
-    //   status: 0,
-    // };
-    // });
-    // builder.addCase(getAttendanceUsers.fulfilled, (state, action) => {
-    //   state.status = "success";
-    //   state.users =
-    //     state.users.length >= action.payload.responseUsers.length
-    //       ? state.users
-    //       : action.payload.responseUsers;
-    //   state.message = action.payload.message;
-    // });
-    // builder.addCase(getAttendanceUsers.rejected, (state, action) => {
-    //   state.status = "failed";
-    //   state.error = action.payload;
-    // });
 
     builder.addCase(showUser.pending, (state) => {
       state.status = "loading";
@@ -583,40 +542,16 @@ const usersSlice = createSlice({
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users.map((user) =>
-        user.id === action.payload.responseUser.id
-          ? {
-              ...user,
-              isAttendanceTime: false,
-            }
-          : user
-      );
       state.message = action.payload.message;
     });
 
     builder.addCase(createStartTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users.map((user) =>
-        user.id === action.payload.responseUser.id
-          ? {
-              ...user,
-              isAttendanceTime: true,
-            }
-          : user
-      );
       state.message = "出勤しました！";
     });
 
     builder.addCase(createEndTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users.map((user) =>
-        user.id === action.payload.responseUser.id
-          ? {
-              ...user,
-              isAttendanceTime: false,
-            }
-          : user
-      );
       state.message = "退勤しました！";
     });
 
@@ -628,13 +563,7 @@ const usersSlice = createSlice({
 
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = action.payload.responseUser
-        ? state.users.map((user) =>
-            user.id === action.payload.responseUser.id
-              ? { ...user, ...action.payload.responseUser }
-              : user
-          )
-        : state.users;
+      state.users = state.users ? state.users : [action.payload.responseUser];
     });
 
     builder.addCase(forgotPassword.pending, (state) => {
@@ -658,8 +587,13 @@ const usersSlice = createSlice({
   },
 });
 
-export const { clearError, changeMessage, changeErrorMessage } =
-  usersSlice.actions;
+export const {
+  clearError,
+  changeMessage,
+  changeErrorMessage,
+  trueIsAttendance,
+  falseIsAttendance,
+} = usersSlice.actions;
 
 const usersReducer = usersSlice.reducer;
 

@@ -40,14 +40,6 @@ const yearly_salesForm: React.FC<YearlySalesFormProps> = ({
 
   return (
     <div>
-      <BasicAlerts
-        message={
-          "日付変更はできません！変更したい場合は、年次売上画面から項目を削除し、予約画面から更新し直してください！"
-        }
-        type={"info"}
-        padding={1}
-        space={1}
-      />
       <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
         <div className="max-w-md w-full space-y-8">
           <div>

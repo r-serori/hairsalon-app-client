@@ -61,8 +61,16 @@ const monthlySalesEdit: React.FC = () => {
       ) : permission === null ? (
         <p>あなたに権限はありません。</p>
       ) : (
-        <div>
-          <div className="mx-4 my-4">
+        <div className="mx-4">
+          <BasicAlerts
+            message={
+              "日付変更はできません！変更したい場合は、月次売上画面から項目を削除し、予約画面から更新し直してください！"
+            }
+            type={"info"}
+            padding={1}
+            space={1}
+          />
+          <div className="my-4">
             <RouterButton link={"/monthly_sales"} value="日別売上画面に戻る" />
           </div>
 

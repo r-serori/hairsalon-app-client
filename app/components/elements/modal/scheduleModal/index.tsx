@@ -219,7 +219,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
-    isCustomer && selectedEvent.title ? true : false
+    isCustomer ? true : false
   );
 
   const [usernameValidate, setUsernameValidate] = useState<boolean>(true);
@@ -255,7 +255,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [titleValidate, setTitleValidate] = useState<boolean>(
-    !isCustomer && selectedEvent.title ? true : false
+    whoIsEvent === "編集" && !isCustomer && selectedEvent.title ? true : false
   );
 
   const [startTimeValidate, setStartTimeValidate] = useState<boolean>(true);
@@ -426,6 +426,11 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         !startTimeValidate ||
         !endTimeValidate)
     ) {
+      console.log("バリデーションエラー");
+      console.log("customerNameValidate", customerNameValidate);
+      console.log("usernameValidate", usernameValidate);
+      console.log("startTimeValidate", startTimeValidate);
+      console.log("endTimeValidate", endTimeValidate);
       return;
     } else if (
       !isCustomer &&

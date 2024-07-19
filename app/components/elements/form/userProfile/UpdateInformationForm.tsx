@@ -55,9 +55,9 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
 
   return (
     <div className="flex items-center justify-center ">
-      <div className="max-w-lg w-full space-y-6 mt-4">
+      <div className="max-w-lg w-full ">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900">
             {edit
               ? "あなたのプロフィール情報を編集"
               : "あなたのプロフィール情報"}
@@ -65,7 +65,7 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
         </div>
         <div className="flex justify-center items-center text-center mx-auto pb-1">
           <button
-            className="items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
+            className="mt-6 items-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-4 py-2 text-center "
             onClick={() => setEdit(!edit)}
           >
             編集
@@ -101,7 +101,7 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
             maxNumber={999999999999999}
           />
 
-          <PrimaryButton value="登録" />
+          <PrimaryButton value="プロフィール更新" />
         </form>
       </div>
     </div>

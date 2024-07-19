@@ -25,17 +25,22 @@ import {
   attendance_timeErrorStatus,
   attendance_timesStore,
 } from "../../../Hooks/selector";
-import { UserState } from "../../../../store/auth/userSlice";
+import {
+  falseIsAttendance,
+  trueIsAttendance,
+  UserState,
+} from "../../../../store/auth/userSlice";
 import { AppDispatch } from "../../../../redux/store";
 import { renderError } from "../../../../store/errorHandler";
 import { useRouter } from "next/router";
+import { allLogout } from "../../../Hooks/useMethod";
 
 interface UserTimesShotFormProps {
   node: any;
   link: string;
   startOrEnd: string;
   open: boolean;
-  setOpen: any;
+  setOpen: (open: boolean) => void;
   editValue?: any;
 }
 
@@ -64,6 +69,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       ? true
       : false
   );
+  console.log("nodeeeeee", node);
 
   const userId: number =
     link === "/attendanceTimeShots" ? node.id : node.user_id;
@@ -266,12 +272,15 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         }
       } else {
         const response = await dispatch(createStartTime(formData) as any);
+        console.log("responseCreate", response);
         if (response.meta.requestStatus === "fulfilled") {
+          dispatch(trueIsAttendance(userId) as any);
           resetPhoto();
           setOpen(false);
         } else {
-          const re = renderError(atErrorStatus, router, dispatch);
-          if (re === null) throw new Error("更新に失敗しました");
+          // const re = renderError(atErrorStatus, router, dispatch);
+          // if (re === null) throw new Error("更新に失敗しました");
+          allLogout(dispatch);
         }
       }
     } catch (error) {
@@ -314,6 +323,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       } else {
         const response = await dispatch(createEndTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
+          dispatch(falseIsAttendance(formData.user_id) as any);
           resetPhoto();
           setOpen(false);
         } else {
@@ -355,10 +365,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           準備中...
         </div>
       ) : (
-          
-          
-
-   
+        ""
+      )}
       {/* DateTimePickerの表示式 */}
       {/* 編集リンクで時間登録がされている時 */}
       {notEdit && edit ? (
@@ -534,7 +542,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           <PrimaryButton value="編集依頼" place="big" onChanger={pleaseEdit} />
         </div>
       )}
-         )}
     </div>
   );
 };

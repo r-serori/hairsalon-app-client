@@ -11,7 +11,10 @@ import {
   userMessage,
   userStatus,
 } from "../../components/Hooks/authSelector";
-import { attendance_timeError } from "../../components/Hooks/selector";
+import {
+  attendance_timeError,
+  attendance_timeStatus,
+} from "../../components/Hooks/selector";
 import { permissionStore } from "../../components/Hooks/authSelector";
 import { staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
@@ -31,6 +34,7 @@ const AttendanceTimeShots = () => {
   const uError: string | null = useSelector(userError);
   const uErrorStatus: number = useSelector(userErrorStatus);
 
+  const atStatus: string = useSelector(attendance_timeStatus);
   const atimeError: string | null = useSelector(attendance_timeError);
 
   const permission: PermissionsState = useSelector(permissionStore);
@@ -49,15 +53,8 @@ const AttendanceTimeShots = () => {
 
         const userCount = localStorage.getItem("userCount");
         console.log("userLength", users.length);
-        if (
-          !userCount ||
-          userCount === "undefined" ||
-          userCount === null ||
-          userCount === "" ||
-          userCount === undefined ||
-          users.length < Number(userCount)
-        ) {
-          const response = (await getStaffs()) as any;
+        if (!userCount || users.length < Number(userCount)) {
+          const response = await getStaffs();
           if (response.meta.requestStatus === "rejected") {
             const re = renderError(uErrorStatus, router, dispatch);
             if (re === null) throw new Error("更新に失敗しました");
@@ -114,7 +111,7 @@ const AttendanceTimeShots = () => {
         )}
       </div>
       <div className="my-4 mx-4">
-        {uStatus === "loading" || !nodes || permission === null ? (
+        {uStatus === "loading" || atStatus === "loading" || !nodes ? (
           <p>Loading...</p>
         ) : permission === null ? (
           <p>あなたに権限はありません。</p>
