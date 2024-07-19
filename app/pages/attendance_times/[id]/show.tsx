@@ -81,10 +81,9 @@ const attendanceTimes: React.FC = () => {
         ownerPermission(permission, router);
 
         if (
-          _.isEmpty(attendanceTimes) &&
-          (permission === "オーナー" ||
-            permission === "マネージャー" ||
-            permission === "スタッフ")
+          permission === "オーナー" ||
+          permission === "マネージャー" ||
+          permission === "スタッフ"
         ) {
           setYearMonth("000111");
           const response = await dispatch(

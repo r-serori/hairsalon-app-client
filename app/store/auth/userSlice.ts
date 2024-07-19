@@ -587,7 +587,7 @@ const usersSlice = createSlice({
         user.id === action.payload.responseUser.id
           ? {
               ...user,
-              isAttendanceTime: action.payload.responseUser.isAttendance,
+              isAttendanceTime: false,
             }
           : user
       );
@@ -600,7 +600,7 @@ const usersSlice = createSlice({
         user.id === action.payload.responseUser.id
           ? {
               ...user,
-              isAttendanceTime: action.payload.responseUser.isAttendance,
+              isAttendanceTime: true,
             }
           : user
       );
@@ -613,7 +613,7 @@ const usersSlice = createSlice({
         user.id === action.payload.responseUser.id
           ? {
               ...user,
-              isAttendanceTime: action.payload.responseUser.isAttendance,
+              isAttendanceTime: false,
             }
           : user
       );

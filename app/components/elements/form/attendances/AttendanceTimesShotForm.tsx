@@ -21,9 +21,14 @@ import DateTimeRangePicker from "../../input/DateTimePicker";
 import { useSelector } from "react-redux";
 import BasicAlerts from "../../alert/BasicAlert";
 import { user } from "../../../Hooks/authSelector";
-import { attendance_timesStore } from "../../../Hooks/selector";
+import {
+  attendance_timeErrorStatus,
+  attendance_timesStore,
+} from "../../../Hooks/selector";
 import { UserState } from "../../../../store/auth/userSlice";
 import { AppDispatch } from "../../../../redux/store";
+import { renderError } from "../../../../store/errorHandler";
+import { useRouter } from "next/router";
 
 interface UserTimesShotFormProps {
   node: any;
@@ -47,6 +52,9 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   dayjs.extend(timezone);
 
   const dispatch: AppDispatch = useDispatch();
+  const router = useRouter();
+
+  const atErrorStatus: number = useSelector(attendance_timeErrorStatus);
 
   const webcamRef = useRef(null);
 
@@ -249,17 +257,22 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
     try {
       if (edit) {
         const response = await dispatch(updateStartTime(formData) as any);
-        resetPhoto();
-        setOpen(false);
+        if (response.meta.requestStatus === "fulfilled") {
+          resetPhoto();
+          setOpen(false);
+        } else {
+          const re = renderError(atErrorStatus, router, dispatch);
+          if (re === null) throw new Error("更新に失敗しました");
+        }
       } else {
         const response = await dispatch(createStartTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
           resetPhoto();
           setOpen(false);
         } else {
-          throw new Error();
+          const re = renderError(atErrorStatus, router, dispatch);
+          if (re === null) throw new Error("更新に失敗しました");
         }
-        // router.push("/attendanceTimeShots");
       }
     } catch (error) {
       console.log(error);
@@ -290,13 +303,23 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
     try {
       if (edit) {
-        await dispatch(updateEndTime(formData) as any);
-        resetPhoto();
-        setOpen(false);
+        const response = await dispatch(updateEndTime(formData) as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          resetPhoto();
+          setOpen(false);
+        } else {
+          const re = renderError(atErrorStatus, router, dispatch);
+          if (re === null) throw new Error("更新に失敗しました");
+        }
       } else {
-        await dispatch(createEndTime(formData) as any);
-        resetPhoto();
-        setOpen(false);
+        const response = await dispatch(createEndTime(formData) as any);
+        if (response.meta.requestStatus === "fulfilled") {
+          resetPhoto();
+          setOpen(false);
+        } else {
+          const re = renderError(atErrorStatus, router, dispatch);
+          if (re === null) throw new Error("更新に失敗しました");
+        }
         // router.push("/attendanceTimeShots");
       }
     } catch (error) {
@@ -332,8 +355,10 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           準備中...
         </div>
       ) : (
-        ""
-      )}
+          
+          
+
+   
       {/* DateTimePickerの表示式 */}
       {/* 編集リンクで時間登録がされている時 */}
       {notEdit && edit ? (
@@ -509,6 +534,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           <PrimaryButton value="編集依頼" place="big" onChanger={pleaseEdit} />
         </div>
       )}
+         )}
     </div>
   );
 };

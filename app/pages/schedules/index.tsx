@@ -1,7 +1,7 @@
 import React from "react";
 import MyCalendar from "../../components/elements/calender/CalendarComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getSchedule,
   ScheduleState,
@@ -65,8 +65,12 @@ const schedules: React.FC = () => {
 
   const permission: PermissionsState = useSelector(permissionStore);
 
+  const [scheduleYear, setScheduleYear] = useState<string>("");
+
   const nowScheduleGetter = async () => {
     try {
+      localStorage.removeItem("year");
+      setScheduleYear("");
       const response = await dispatch(getSchedule() as any);
       if (response.meta.requestStatus === "rejected") {
         const re = renderError(sErrorStatus, router, dispatch);
@@ -78,12 +82,17 @@ const schedules: React.FC = () => {
       allLogout(dispatch);
       router.push("/auth/login");
     } finally {
-      localStorage.removeItem("year");
       localStorage.removeItem("userCount");
     }
   };
 
   useEffect(() => {
+    const year = localStorage.getItem("year");
+    if (year) {
+      setScheduleYear(year);
+    } else {
+      setScheduleYear("");
+    }
     const fetchData = async () => {
       try {
         staffPermission(permission, router);
@@ -94,6 +103,8 @@ const schedules: React.FC = () => {
             permission === "マネージャー" ||
             permission === "スタッフ")
         ) {
+          localStorage.removeItem("year");
+          setScheduleYear("");
           const response = await dispatch(getSchedule() as any);
           if (response.meta.requestStatus === "rejected") {
             const re = renderError(sErrorStatus, router, dispatch);
@@ -106,7 +117,6 @@ const schedules: React.FC = () => {
         allLogout(dispatch);
         router.push("/auth/login");
       } finally {
-        localStorage.removeItem("year");
         localStorage.removeItem("userCount");
       }
     };
@@ -314,6 +324,8 @@ const schedules: React.FC = () => {
           hairstyles={hairstyles}
           customerNames={customerNames}
           nowScheduleGetter={nowScheduleGetter}
+          scheduleYear={scheduleYear}
+          setScheduleYear={setScheduleYear}
         />
       )}
     </div>

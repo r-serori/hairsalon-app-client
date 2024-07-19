@@ -46,6 +46,7 @@ const LoginPage: React.FC = () => {
       const response: any = await dispatch(login(formData) as any);
       console.log("Success", response);
       if (response.meta.requestStatus === "fulfilled") {
+        dispatch(isLogin());
         const userId: number = response.payload.responseUser.id;
 
         const userKey: KeyState = await getUserKey(dispatch);
@@ -61,10 +62,8 @@ const LoginPage: React.FC = () => {
         await dispatch(getPermission() as any);
 
         if (pushUser && !response.payload.ownerRender) {
-          dispatch(isLogin());
           router.push("/dashboard");
         } else if (pushUser && response.payload.ownerRender) {
-          dispatch(isLogin());
           router.push("/auth/owner");
         }
       } else {
@@ -73,6 +72,7 @@ const LoginPage: React.FC = () => {
       }
     } catch (error) {
       localStorage.removeItem("registerNow");
+      allLogout(dispatch);
       router.push("/auth/login");
       return;
     }

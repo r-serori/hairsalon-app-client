@@ -43,9 +43,7 @@ const HomePage: React.FC = () => {
         <div>
           <h1
             id="rotate"
-            className={`mt-20 lg:text-8xl md:text-6xl sm:text-4xl text-3xl  ${
-              uError === null && "rotate-12"
-            }`}
+            className={`mt-20 lg:text-8xl md:text-6xl sm:text-4xl text-3xl text-center font-bold transform rotate-12 `}
           >
             Welcome to HairSalon App
           </h1>

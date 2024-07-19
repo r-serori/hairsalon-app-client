@@ -43,6 +43,8 @@ export interface CalendarEvent {
 
 interface OpenCalendarProps {
   events: CalendarEvent[];
+  scheduleYear: string;
+  setScheduleYear: (year: string) => void;
   nodes: any;
   users: UserState[];
   courses: CourseState[];
@@ -62,6 +64,8 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
   merchandises,
   hairstyles,
   customerNames,
+  scheduleYear,
+  setScheduleYear,
   nowScheduleGetter,
 }) => {
   dayjs.locale("ja");
@@ -89,10 +93,6 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
   }));
 
   const eventBorderColor = "#333";
-
-  const [scheduleYear, setScheduleYear] = useState<string>(
-    localStorage.getItem("year") || ""
-  );
 
   const permission: PermissionsState = useSelector(permissionStore);
 
@@ -148,9 +148,10 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
       ) : (
         // ローディングが終わったらカレンダーを表示する
 
-        <div className="flex justify-center items-center my-4 ">
+        <div className="flex justify-between items-center my-4 ">
           {scheduleYear ? (
             <button
+              className="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-md text-bold px-4 py-2 text-center mr-auto ml-4 "
               onClick={() => {
                 localStorage.removeItem("year");
                 nowScheduleGetter();
@@ -159,7 +160,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
               現在の年の予約を表示
             </button>
           ) : (
-            <div className="mr-auto ml-4">
+            <div className="mr-auto ml-4 ">
               <EasyModal
                 open={easyOpen}
                 setOpen={setEasyOpen}

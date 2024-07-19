@@ -48,7 +48,7 @@ const AttendanceTimeShots = () => {
         staffPermission(permission, router);
 
         const userCount = localStorage.getItem("userCount");
-
+        console.log("userLength", users.length);
         if (
           !userCount ||
           userCount === "undefined" ||
