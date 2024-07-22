@@ -48,7 +48,7 @@ const monthly_sales: React.FC = () => {
       }
       setYearMonth("");
     } catch (error) {
-      console.error("Error:", error);
+      return;
     }
   };
 
@@ -72,9 +72,7 @@ const monthly_sales: React.FC = () => {
               throw new Error("月次売上情報の取得に失敗しました");
           }
         }
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      } catch (error) {}
     };
     if (permission) fetchData();
   }, [dispatch, permission]);

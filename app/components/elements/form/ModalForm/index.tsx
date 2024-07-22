@@ -10,9 +10,6 @@ import { updateHairstyle } from "../../../../store/hairstyles/hairstyleSlice";
 import { updateStockCategory } from "../../../../store/stocks/stock_categories/stock_categorySlice";
 import { updateStock } from "../../../../store/stocks/stockSlice";
 import { updateCustomer } from "../../../../store/customers/customerSlice";
-import { updateDaily_sales } from "../../../../store/daily_sales/daily_saleSlice";
-import { updateMonthly_sales } from "../../../../store/monthly_sales/monthly_saleSlice";
-import { updateYearly_sales } from "../../../../store/yearly_sales/yearly_saleSlice";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import BasicTextField from "../../input/BasicTextField";
@@ -70,8 +67,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       const slicer = () => {
         const splitEditValue = EditValue.split(",\n");
         setCheckName(splitEditValue);
-        console.log("splitEditValueだよ");
-        console.log(splitEditValue);
         return splitEditValue;
       };
       slicer();
@@ -82,62 +77,29 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   const getCheckBoxCategoriesState = useSelector(stock_categoriesStore);
 
-  console.log("useCheckBoxCategoriesStateだよ");
-  console.log(getCheckBoxCategoriesState);
-
   const getOptionCategories = getCheckBoxCategoriesState.map(
     (category) => category.category
   );
 
-  console.log("getOptionCategoriesだよ");
-  console.log(getOptionCategories);
-
   const getCoursesState = useSelector(coursesStore);
-  console.log("getCoursesStateだよ");
-  console.log(getCoursesState);
 
   const getOptionsState = useSelector(optionsStore);
 
-  console.log("getOptionsStateだよ");
-  console.log(getOptionsState);
-
   const getMerchandisesState = useSelector(merchandiseStore);
-
-  console.log("getMerchandisesStateだよ");
-  console.log(getMerchandisesState);
 
   const getHairstylesState = useSelector(hairstylesStore);
 
-  console.log("getHairstylesStateだよ");
-  console.log(getHairstylesState);
-
   const getUsersState = useSelector(user);
 
-  console.log("getUsersStateだよ");
-  console.log(getUsersState);
-
   const getCourse_customers = useSelector(course_customersStore);
-  console.log("getCourse_customersだよ");
-  console.log(getCourse_customers);
 
   const getOption_customers = useSelector(option_customersStore);
 
-  console.log("getOption_customersだよ");
-  console.log(getOption_customers);
-
   const getMerchandise_customers = useSelector(merchandise_customersStore);
-
-  console.log("getMerchandise_customersだよ");
-  console.log(getMerchandise_customers);
 
   const getHairstyle_customers = useSelector(hairstyle_customersStore);
 
-  console.log("getHairstyle_customersだよ");
-  console.log(getHairstyle_customers);
-
   const getCustomer_users = useSelector(customer_usersStore);
-  console.log("getCustomer_usersだよ");
-  console.log(getCustomer_users);
 
   const changeMan = () => {
     const changeCourses_id = () => {
@@ -149,9 +111,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       return course_id;
     };
 
-    console.log("changeCourses_idだよ");
-    console.log(changeCourses_id());
-
     const defaultChangeCourses_id = () => {
       const courses = EditNode.course.split(",\n");
       const course_id = Array.isArray(getCoursesState)
@@ -162,9 +121,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       return course_id;
     };
 
-    console.log("defaultChangeCourses_idだよ");
-    console.log(defaultChangeCourses_id());
-
     const changeOptions_id = () => {
       const option_id = Array.isArray(getOptionsState)
         ? getOptionsState
@@ -173,9 +129,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
         : [Object(getOptionsState).id];
       return option_id;
     };
-
-    console.log("changeOptions_idだよ");
-    console.log(changeOptions_id());
 
     const defaultChangeOptions_id = () => {
       const options = EditNode.option.split(",\n");
@@ -186,9 +139,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
         : [Object(getOptionsState).id];
       return option_id;
     };
-
-    console.log("defaultChangeOptions_idだよ");
-    console.log(defaultChangeOptions_id());
 
     const changeMerchandises_id = () => {
       const merchandise_id = Array.isArray(getMerchandisesState)
@@ -202,9 +152,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       return merchandise_id;
     };
 
-    console.log("changeMerchandises_idだよ");
-    console.log(changeMerchandises_id());
-
     const defaultChangeMerchandises_id = () => {
       const merchandises = EditNode.merchandise.split(",\n");
       const merchandise_id = Array.isArray(getMerchandisesState)
@@ -217,9 +164,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       return merchandise_id;
     };
 
-    console.log("defaultChangeMerchandises_idだよ");
-    console.log(defaultChangeMerchandises_id());
-
     const changeHairstyles_id = () => {
       const hairstyle_id = Array.isArray(getHairstylesState)
         ? getHairstylesState
@@ -229,9 +173,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
       return hairstyle_id;
     };
-
-    console.log("changeHairstyles_idだよ");
-    console.log(changeHairstyles_id());
 
     const defaultChangeHairstyles_id = () => {
       const hairstyles = EditNode.hairstyle.split(",\n");
@@ -245,9 +186,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       return hairstyle_id;
     };
 
-    console.log("defaultChangeHairstyles_idだよ");
-    console.log(defaultChangeHairstyles_id());
-
     const changeUsers_id = () => {
       const user_id = Array.isArray(getUsersState)
         ? getUsersState
@@ -258,9 +196,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       return user_id;
     };
 
-    console.log("changeUsers_idだよ");
-    console.log(changeUsers_id());
-
     const defaultChangeUsers_id = () => {
       const users = EditNode.names.split(",\n");
       const user_id = Array.isArray(getUsersState)
@@ -270,9 +205,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
         : [Object(getUsersState).id];
       return user_id;
     };
-
-    console.log("defaultChangeUsers_idだよ");
-    console.log(defaultChangeUsers_id());
 
     return {
       changeCourses_id,
@@ -289,14 +221,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
   };
 
   const handleChange = (e) => {
-    try {
-      const newValue = e.target.value;
-      setEditValue(newValue);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      // updateStateCreate();
-    }
+    const newValue = e.target.value;
+    setEditValue(newValue);
   };
 
   const changeCategoryId = () => {
@@ -314,26 +240,41 @@ const ModalForm: React.FC<ModalFormProps> = ({
       ...EditNode,
       [NodesProp]: EditValue,
     };
-    const update = true;
-    console.log("updatedNodeだよ");
-    console.log(updatedNode);
-    console.log(EditNode.id);
     try {
       switch (link) {
         case "/courses":
-          await dispatch(updateCourse(updatedNode) as any);
+          const cResponse = await dispatch(updateCourse(updatedNode) as any);
+          // if (cResponse.meta.requestStatus === "fulfilled") {
+          //   setOpen(false);
+          // }
           break;
         case "/options":
-          await dispatch(updateOption(updatedNode) as any);
+          const oResponse = await dispatch(updateOption(updatedNode) as any);
+          if (oResponse.meta.requestStatus === "fulfilled") {
+            setOpen(false);
+          }
           break;
         case "/merchandises":
-          await dispatch(updateMerchandise(updatedNode) as any);
+          const mResponse = await dispatch(
+            updateMerchandise(updatedNode) as any
+          );
+          if (mResponse.meta.requestStatus === "fulfilled") {
+            setOpen(false);
+          }
           break;
         case "/hairstyles":
-          await dispatch(updateHairstyle(updatedNode) as any);
+          const hResponse = await dispatch(updateHairstyle(updatedNode) as any);
+          if (hResponse.meta.requestStatus === "fulfilled") {
+            setOpen(false);
+          }
           break;
         case "/stock_categories":
-          await dispatch(updateStockCategory(updatedNode) as any);
+          const scResponse = await dispatch(
+            updateStockCategory(updatedNode) as any
+          );
+          if (scResponse.meta.requestStatus === "fulfilled") {
+            setOpen(false);
+          }
           break;
         case "/stocks":
           if (NodesProp === "category_name") {
@@ -342,8 +283,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
               ...newUpdatedNode,
               stock_category_id: changeCategoryId() ? changeCategoryId() : null,
             };
-
-            await dispatch(updateStock(superUpdatedNode) as any);
+            const sResponse = await dispatch(
+              updateStock(superUpdatedNode) as any
+            );
+            if (sResponse.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           } else {
             const objInCategoryID = getCheckBoxCategoriesState.find(
               (category) => category.category === EditNode.category_name
@@ -353,7 +298,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
               ...newUpdatedNode,
               stock_category_id: objInCategoryID ? objInCategoryID : null,
             };
-            await dispatch(updateStock(superUpdatedNode) as any);
+            const sResponse = await dispatch(
+              updateStock(superUpdatedNode) as any
+            );
+            if (sResponse.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           }
           break;
         case "/customers":
@@ -380,14 +330,13 @@ const ModalForm: React.FC<ModalFormProps> = ({
               hairstyle_id: hairstyle_id,
               user_id: user_id,
             };
-            console.log("superUpdatedNodeだよ");
-            console.log(superUpdatedNode);
 
-            await dispatch(updateCustomer(superUpdatedNode) as any);
-            router.push({
-              pathname: "/customers",
-              query: { update },
-            });
+            const response = await dispatch(
+              updateCustomer(superUpdatedNode) as any
+            );
+            if (response.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           } else if (NodesProp === "option") {
             const course_id = changeMan().defaultChangeCourses_id();
             const option_id = changeMan().changeOptions_id();
@@ -410,11 +359,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
               hairstyle_id: hairstyle_id,
               user_id: user_id,
             };
-            await dispatch(updateCustomer(superUpdatedNode) as any);
-            router.push({
-              pathname: "/customers",
-              query: { update },
-            });
+            const response = await dispatch(
+              updateCustomer(superUpdatedNode) as any
+            );
+            if (response.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           } else if (NodesProp === "merchandise") {
             const course_id = changeMan().defaultChangeCourses_id();
             const option_id = changeMan().defaultChangeOptions_id();
@@ -437,11 +387,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
               hairstyle_id: hairstyle_id,
               user_id: user_id,
             };
-            await dispatch(updateCustomer(superUpdatedNode) as any);
-            router.push({
-              pathname: "/customers",
-              query: { update },
-            });
+            const response = await dispatch(
+              updateCustomer(superUpdatedNode) as any
+            );
+            if (response.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           } else if (NodesProp === "hairstyle") {
             const course_id = changeMan().defaultChangeCourses_id();
             const option_id = changeMan().defaultChangeOptions_id();
@@ -464,11 +415,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
               hairstyle_id: hairstyle_id,
               user_id: user_id,
             };
-            await dispatch(updateCustomer(superUpdatedNode) as any);
-            router.push({
-              pathname: "/customers",
-              query: { update },
-            });
+            const response = await dispatch(
+              updateCustomer(superUpdatedNode) as any
+            );
+            if (response.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           } else if (NodesProp === "names") {
             const course_id = changeMan().defaultChangeCourses_id();
             const option_id = changeMan().defaultChangeOptions_id();
@@ -491,11 +443,12 @@ const ModalForm: React.FC<ModalFormProps> = ({
               hairstyle_id: hairstyle_id,
               user_id: user_id,
             };
-            await dispatch(updateCustomer(superUpdatedNode) as any);
-            router.push({
-              pathname: "/customers",
-              query: { update },
-            });
+            const response = await dispatch(
+              updateCustomer(superUpdatedNode) as any
+            );
+            if (response.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           } else {
             const course_id = changeMan().defaultChangeCourses_id();
             const option_id = changeMan().defaultChangeOptions_id();
@@ -518,79 +471,31 @@ const ModalForm: React.FC<ModalFormProps> = ({
               hairstyle_id: hairstyle_id,
               user_id: user_id,
             };
-            await dispatch(updateCustomer(superUpdatedNode) as any);
-            router.push({
-              pathname: "/customers",
-              query: { update },
-            });
+            const response = await dispatch(
+              updateCustomer(superUpdatedNode) as any
+            );
+            if (response.meta.requestStatus === "fulfilled") {
+              setOpen(false);
+            }
           }
           break;
-        case "/daily_sales":
-          await dispatch(updateDaily_sales(updatedNode) as any);
-          break;
-        case "/monthly_sales":
-          await dispatch(updateMonthly_sales(updatedNode) as any);
-          break;
-        case "/yearly_sales":
-          await dispatch(updateYearly_sales(updatedNode) as any);
-          break;
+
         default:
           break;
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      // setOpen(false);
-    }
+    } catch (error) {}
   };
-
-  const singleCheckBoxLabelCreate = () => {
-    switch (NodesProp) {
-      case "category_name":
-        return "在庫カテゴリー";
-      case "course":
-        return "コース";
-      default:
-        return "";
-    }
-  };
-
-  const singleCheckBoxLabel = singleCheckBoxLabelCreate();
-
-  console.log("singleCheckBoxLabelだよ");
-  console.log(singleCheckBoxLabel); //役職
-
-  console.log("NodesPropだよ");
-  console.log(NodesProp); //user_name
-  console.log("EditNodeだよ");
-  console.log(EditNode); // address: "東京都渋谷区";
-  // user_name: "田中店長";
-  // id: 1;
-  // phone_number: "09012345678";
-  // position: "オーナー";
-  console.log("EditValueだよ");
-  console.log(EditValue); //田中店長
-  console.log("EditNodeIdだよ");
-  console.log(EditNode.id); //1
-  console.log(type); ///text
-  console.log(link); //"/users"
-  console.log("checkNameだよ");
-  console.log(checkName);
 
   const handleCheckChange = (event: SelectChangeEvent<typeof checkName>) => {
     const {
       target: { value },
     } = event;
-    setCheckName(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",\n") : value
-    );
-    setEditNode({ ...EditNode, [NodesProp]: (value as string[]).join(",\n") });
+    setCheckName(typeof value === "string" ? value.split(",\n") : value);
+    setEditNode({
+      ...EditNode,
+      [NodesProp]: (value as string[]).join(",\n"),
+    });
   };
-
-  console.log("EditNodeだよ", EditNode);
-  console.log("EditValueだよ", EditValue);
-  console.log("NodesPropだよ", NodesProp);
 
   const renderComponent = () => {
     switch (NodesProp) {

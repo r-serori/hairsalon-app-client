@@ -1,5 +1,5 @@
 import { sendRequest } from "../requestApi";
-import { OwnerState, updateOwner } from "../../store/auth/ownerSlice";
+import { OwnerState } from "../../store/auth/ownerSlice";
 export const ownerApi = {
   ownerRegister: async (formData: OwnerState) => {
     try {
@@ -8,10 +8,8 @@ export const ownerApi = {
         `api/user/ownerRegister`,
         formData
       )) as any;
-      // console.log("responseRegisterDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },

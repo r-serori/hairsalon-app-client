@@ -10,7 +10,6 @@ export const checkSessionApi = {
         throw new Error("セッション未確認");
       }
     } catch (error) {
-      console.error("セッション未確認", error);
       return false;
     }
   },

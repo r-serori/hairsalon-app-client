@@ -144,16 +144,13 @@ const EasyModal: React.FC<EasyModalProps> = ({
           if (re === null) throw new Error();
         }
       } else {
-        console.log("whoAreYouが不正です");
         throw new Error("whoAreYouが不正です");
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      // console.log("Error", error);
     }
   };
 
-  console.log("yearです", year);
-  console.log("selectDateです", selectDate);
   return (
     <div>
       {whoAreYou === "attendanceTimes" ? (

@@ -22,7 +22,6 @@ const UpdateInformationForm: React.FC<UpdateInformationFormProps> = ({
   node,
   onSubmitUserInformation,
 }) => {
-  console.log("node", node);
   const [name, setName] = useState<string>(node.name || "");
   const [email, setEmail] = useState<string>(node.email || "");
   const [phone_number, setPhoneNumber] = useState<string>(

@@ -39,14 +39,13 @@ const merchandiseEdit: React.FC = () => {
       const response = await dispatch(updateMerchandise(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/merchandises");
       } else {
         const re = renderError(mErrorStatus, router, dispatch);
         if (re === null) throw new Error("物販の更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
 

@@ -39,14 +39,13 @@ const courseEdit: React.FC = () => {
     try {
       const response = await dispatch(updateCourse(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/courses");
       } else {
         const re = renderError(cErrorStatus, router, dispatch);
         if (re === null) throw new Error("コースの更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
   return (

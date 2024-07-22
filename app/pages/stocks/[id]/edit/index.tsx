@@ -35,14 +35,13 @@ const stockEdit: React.FC = () => {
       const response = await dispatch(updateStock(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/stocks");
       } else {
         const res = renderError(sErrorStatus, router, dispatch);
         if (res === null) throw new Error("在庫の更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
 

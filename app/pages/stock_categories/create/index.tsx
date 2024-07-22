@@ -29,14 +29,13 @@ const stockCategoryCreate: React.FC = () => {
       const response = await dispatch(createStockCategory(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/stock_categories");
       } else {
         const re = renderError(scErrorStatus, router, dispatch);
         if (re === null) throw new Error("在庫カテゴリの作成に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
 

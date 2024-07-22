@@ -21,7 +21,7 @@ export const selectGetAttendanceTimes = createAsyncThunk<
       const response = await attendance_timeApi.selectFetchAttendanceTimes(
         formData
       );
-      console.log("responseだよ", response);
+      // console.log("responseだよ", response);
 
       return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
@@ -43,7 +43,7 @@ export const firstGetAttendanceTime = createAsyncThunk<
       const response: any = await attendance_timeApi.firstGetAttendanceTime(
         id as number
       );
-      console.log("responseだよ", response);
+      // console.log("responseだよ", response);
       return handleErrorResponse(response, rejectWithValue);
     } catch (err) {
       return handleCatchError(err, rejectWithValue);

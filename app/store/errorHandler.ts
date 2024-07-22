@@ -13,18 +13,18 @@ export const handleErrorResponse = (
 ) => {
   if (response.status >= 200 && response.status < 300) {
     // 成功時の処理
-    console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
+    // console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
     return response.data; // response.dataを返すことで、必要なデータのみを返す
   } else if (response.status >= 400 && response.status < 500) {
     // クライアントエラー時の処理
-    console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+    // console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
     return rejectWithValue({
       status: response.status,
       message: response.data.message,
     }); // rejectWithValueでエラーメッセージを返す
   } else if (response.status >= 500) {
     // サーバーエラー時の処理
-    console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
+    // console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
     return rejectWithValue({
       status: response.status,
       message: response.data.message,
@@ -38,7 +38,7 @@ export const handleErrorResponse = (
 };
 
 export const handleCatchError = (err: any, rejectWithValue: Function) => {
-  console.log("errだよ", err);
+  // console.log("errだよ", err);
   return rejectWithValue({
     status: 500,
     message: "予期しないエラーが発生しました",

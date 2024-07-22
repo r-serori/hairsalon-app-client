@@ -70,7 +70,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       ? true
       : false
   );
-  console.log("nodeeeeee", node);
 
   const userId: number =
     link === "/attendanceTimeShots" ? node.id : node.user_id;
@@ -79,8 +78,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const attendanceUser: UserState = useSelector(user).find(
     (user) => user.id === Number(userId)
   );
-
-  // console.log("user", user);
 
   // 編集する時のユーザーが持っている出勤時間、退勤時間の情報を取得
   const attendanceTimes: Attendance_timeState[] = useSelector(
@@ -110,8 +107,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       ? true
       : false
   );
-  console.log("notEdit", notEdit);
-  // console.log("node.start_time", attendanceTime.start_time);
 
   //出勤する時に、昨日の退勤時間が登録されていない時　true　編集依頼を出すため
   const [lateTime, setLateTime] = useState<boolean>(
@@ -126,7 +121,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       ? true
       : false
   );
-  console.log("lateTime", lateTime);
 
   //出勤時間、退勤時間の編集モードの時、編集済みの写真を表示
   const [shotEdit, setShotEdit] = useState<boolean>(false);
@@ -181,9 +175,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(
     link !== "/attendanceTimeShots" && !lateTime ? false : true
   );
-  console.log("isLoading", isLoading);
-
-  console.log("edit", edit);
 
   // 出勤時間、退勤時間の編集モードの時、写真を撮るボタンを押した時、編集済みの写真を表示
   const [editEnd, setEditEnd] = useState<boolean>(
@@ -272,7 +263,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         }
       } else {
         const response = await dispatch(createStartTime(formData) as any);
-        console.log("responseCreate", response);
         if (response.meta.requestStatus === "fulfilled") {
           dispatch(trueIsAttendance(userId) as any);
           resetPhoto();
@@ -283,9 +273,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           if (re === null) throw new Error("更新に失敗しました");
         }
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleEndTime = async () => {
@@ -334,9 +322,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         }
         // router.push("/attendanceTimeShots");
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   // const pleaseEdit = async () => {

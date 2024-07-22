@@ -20,11 +20,6 @@ const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
   const router: NextRouter = useRouter();
 
   const uErrorStatus: number = useSelector(userErrorStatus);
-
-  const deleteCookie = (name) => {
-    document.cookie = `${name}=; Max-Age=0; path=/; domain=${location.hostname}`;
-  };
-
   // ログアウト処理
   const handleLogout = async () => {
     confirm("ログアウトしますか？");
@@ -42,7 +37,7 @@ const LogoutButton: React.FC<LogoutProps> = ({ className }) => {
           if (re === null) throw new Error("ログアウト処理に失敗しました");
         }
       } catch (error) {
-        console.log("Error", error);
+        // console.log("Error", error);
         return;
       }
     }

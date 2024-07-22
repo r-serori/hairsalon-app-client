@@ -50,7 +50,6 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
     } else {
       onValidationChange(true);
     }
-    console.log(newValue);
   };
 
   const theme = createTheme({

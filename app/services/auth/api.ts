@@ -6,10 +6,8 @@ export const userApi = {
     try {
       await getCsrfToken();
       const response = (await sendRequest("POST", "/login", formData)) as any;
-      console.log("responseLoginDataだよ", response);
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -27,10 +25,8 @@ export const userApi = {
     try {
       await getCsrfToken();
       const response = await sendRequest("POST", "/register", formData);
-      console.log("responseRegisterDataだよ", response);
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -50,10 +46,8 @@ export const userApi = {
         `api/user/staffRegister`,
         formData
       )) as any;
-      // console.log("responseStaffRegisterDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -62,10 +56,8 @@ export const userApi = {
   logout: async () => {
     try {
       const response = (await sendRequest("POST", `/logout`)) as any;
-      // console.log("responseLogOutDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -74,10 +66,8 @@ export const userApi = {
   getUsers: async () => {
     try {
       const response = (await sendRequest("GET", `api/user/getUsers`)) as any;
-      // console.log("responseGetUsersDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -88,10 +78,8 @@ export const userApi = {
         "GET",
         `api/user/getAttendanceUsers`
       )) as any;
-      // console.log("responseGetUsersDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -100,10 +88,8 @@ export const userApi = {
   showUser: async () => {
     try {
       const response = (await sendRequest("GET", `api/user/showUser`)) as any;
-      // console.log("responseShowUserDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -120,10 +106,8 @@ export const userApi = {
         `/updateUser`,
         formData
       )) as any;
-      console.log("responseUpdateUserDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -140,10 +124,8 @@ export const userApi = {
         `/updateUserPassword`,
         formData
       )) as any;
-      // console.log("responseUpdateUserPasswordDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -153,10 +135,8 @@ export const userApi = {
       const response = (await sendRequest("POST", `/forgotPassword`, {
         email: email,
       })) as any;
-      // console.log("responseForgotPasswordDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -173,10 +153,8 @@ export const userApi = {
         `/resetPassword`,
         formData
       )) as any;
-      // console.log("responseResetPasswordDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -192,10 +170,8 @@ export const userApi = {
         `api/user/updatePermission`,
         formData
       )) as any;
-      // console.log("responseUpdatePermissionDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -206,10 +182,8 @@ export const userApi = {
       const response = (await sendRequest("POST", `api/user/deleteUser`, {
         id: id,
       })) as any;
-      // console.log("responseDeleteUserDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },

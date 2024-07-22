@@ -38,7 +38,7 @@ const hairstyleCreate = () => {
         if (re === null) throw new Error("髪型の作成に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
   return (

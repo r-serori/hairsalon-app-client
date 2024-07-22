@@ -17,9 +17,8 @@ import {
 } from "../../components/Hooks/selector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { permissionStore } from "../../components/Hooks/authSelector";
-import { allLogout, ownerPermission } from "../../components/Hooks/useMethod";
+import { ownerPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
-import EasyModal from "../../components/elements/modal/easy/EasyModal";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
@@ -28,7 +27,6 @@ const yearly_sales: React.FC = () => {
   const router: NextRouter = useRouter();
 
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
-  const [salesOpen, setSalesOpen] = useState<boolean>(false);
 
   const yearly_sales: Yearly_salesState[] = useSelector(yearly_salesStore);
   const ysStatus: string = useSelector(yearly_saleStatus);
@@ -37,18 +35,6 @@ const yearly_sales: React.FC = () => {
   const ysErrorStatus: number = useSelector(yearly_saleErrorStatus);
 
   const permission: PermissionsState = useSelector(permissionStore);
-
-  const nowYearlySales = async () => {
-    try {
-      const response = await dispatch(getYearly_sales() as any);
-      if (response.meta.requestStatus === "rejected") {
-        const re = renderError(ysErrorStatus, router, dispatch);
-        if (re === null) throw new Error("年次売上の取得に失敗しました");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +55,7 @@ const yearly_sales: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error("Error:", error);
+        return;
       }
     };
 

@@ -29,14 +29,13 @@ const stockCreate: React.FC = () => {
       const response = await dispatch(createStock(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/stocks");
       } else {
         const re = renderError(sErrorState, router, dispatch);
         if (re === null) throw new Error("在庫の作成に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
   return (

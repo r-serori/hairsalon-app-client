@@ -65,7 +65,6 @@ const courses: React.FC = () => {
           return;
         }
       } catch (error) {
-        console.error("Error:", error);
         allLogout(dispatch);
         router.push("/auth/login");
       }
@@ -77,8 +76,6 @@ const courses: React.FC = () => {
     { key: "course_name", value: "コース名" },
     { key: "price", value: "価格" },
   ];
-
-  console.log("tHeaderItemsです", tHeaderItems);
 
   const nodesProps = [{ text: "course_name" }, { number: "price" }];
 

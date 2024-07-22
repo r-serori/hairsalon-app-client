@@ -25,13 +25,7 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  console.log("valueです", value);
-
   const errorChecker = (newValue) => {
-    console.log(
-      "newValueです",
-      dayjs(newValue).utc().tz("Asia/Tokyo").format("YYYY-MM-DD")
-    );
     if (
       dayjs(newValue)
         .utc()

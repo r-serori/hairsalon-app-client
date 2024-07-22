@@ -13,10 +13,8 @@ export const schedulesApi = {
         "/schedules/customers/double",
         formData
       );
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -24,10 +22,8 @@ export const schedulesApi = {
   createSchedule: async (formData: ScheduleState) => {
     try {
       const response = await sendRequest("POST", "/schedules/store", formData);
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -35,10 +31,8 @@ export const schedulesApi = {
   fetchAllSchedules: async () => {
     try {
       const response = await sendRequest("GET", `/schedules/all`);
-      // console.log("schedules fetched", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -49,31 +43,17 @@ export const schedulesApi = {
         "GET",
         `/schedules/customers/selectGetYear/${encodeURIComponent(year)}`
       );
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
 
-  // fetchScheduleById: async (id: number) => {
-  // try{
-  //   const response = await sendRequest("GET", `/schedules/${id}`);
-  //   return response;
-  // }catch(error){
-  // console.error("errorだよ", error);
-  // return { error: error };
-  // }
-  // },
-
   updateSchedule: async (formData: ScheduleState) => {
     try {
       const response = await sendRequest("POST", `/schedules/update`, formData);
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -86,10 +66,8 @@ export const schedulesApi = {
         `/schedules/customers/doubleUpdate`,
         formData
       );
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -101,10 +79,8 @@ export const schedulesApi = {
         `/schedules/customers/customerCreateScheduleUpdate`,
         formData
       );
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -114,10 +90,8 @@ export const schedulesApi = {
       const response = await sendRequest("POST", `/schedules/delete`, {
         id: id,
       });
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -129,10 +103,8 @@ export const schedulesApi = {
         `schedules/customers/customerOnlyUpdate`,
         formData
       );
-      // console.log("APIのschedulesDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },

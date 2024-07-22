@@ -41,10 +41,8 @@ const LoginPage: React.FC = () => {
   }, []); // useEffectの依存配列を空にすることで、初回のみ実行されるようにする
 
   const handleLogin = async (formData: { email: string; password: string }) => {
-    console.log(formData);
     try {
       const response: any = await dispatch(login(formData) as any);
-      console.log("Success", response);
       if (response.meta.requestStatus === "fulfilled") {
         dispatch(isLogin());
         const userId: number = response.payload.responseUser.id;
@@ -52,12 +50,9 @@ const LoginPage: React.FC = () => {
         const userKey: KeyState = await getUserKey(dispatch);
 
         if (userKey === null) {
-          console.log("key is null");
           throw new Error();
         }
         const pushUser: boolean = pushUserId(userId, userKey);
-
-        console.log("pushUser", pushUser);
 
         await dispatch(getPermission() as any);
 

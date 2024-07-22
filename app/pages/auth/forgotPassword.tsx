@@ -32,7 +32,7 @@ const forgotPasswordPage: React.FC = () => {
           throw new Error("forgotPassのリクエストに失敗しました");
       }
     } catch (error) {
-      console.log("Error", error);
+      return;
     }
   };
 

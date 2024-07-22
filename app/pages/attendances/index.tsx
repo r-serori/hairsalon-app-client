@@ -35,7 +35,6 @@ const Attendances = () => {
   useEffect(() => {
     const getStaffs = async () => {
       const response = await dispatch(getUsers() as any);
-      console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
       return response;
     };
@@ -54,14 +53,12 @@ const Attendances = () => {
           (users.length < Number(userCount) && permission === "オーナー")
         ) {
           const response = (await getStaffs()) as any;
-          console.log("response", response);
           if (response.meta.requestStatus === "rejected") {
             const re = renderError(uErrorStatus, router, dispatch);
             if (re === null) throw new Error("更新に失敗しました");
           }
         }
       } catch (error) {
-        console.log("Error", error);
         allLogout(dispatch);
         router.push("/auth/login");
       }

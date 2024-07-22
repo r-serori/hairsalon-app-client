@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, NextRouter } from "next/router";
 import BasicAlerts from "../../components/elements/alert/BasicAlert";
-import UpdateInformationForm from "../../components/elements/form/userProfile/UpdateInformationForm";
 import {
   ownerError,
   ownerErrorStatus,
@@ -9,20 +8,11 @@ import {
   ownerStatus,
   ownerStore,
   permissionStore,
-  user,
-  userError,
-  userErrorStatus,
-  userMessage,
-  userStatus,
 } from "../../components/Hooks/authSelector";
 import { useEffect } from "react";
-import {
-  ownerPermission,
-  staffPermission,
-} from "../../components/Hooks/useMethod";
+import { ownerPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import RouterButton from "../../components/elements/button/RouterButton";
-import ForgotPasswordButton from "../../components/elements/button/ForgotPasswordButton";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 import { getOwner, OwnerState, updateOwner } from "../../store/auth/ownerSlice";
@@ -56,7 +46,6 @@ const UpdateOwnerInformationPage: React.FC = () => {
           }
         }
       } catch (error) {
-        console.log("Error", error);
         return;
       }
     };
@@ -65,7 +54,6 @@ const UpdateOwnerInformationPage: React.FC = () => {
   }, [dispatch, permission]);
 
   const handleUpdateOwnerInformation = async (formData: OwnerState) => {
-    console.log(formData);
     try {
       const response = await dispatch(updateOwner(formData) as any);
 
@@ -75,9 +63,7 @@ const UpdateOwnerInformationPage: React.FC = () => {
         const re = renderError(oErrorStatus, router, dispatch);
         if (re === null) throw new Error("ownerInfoUpdateに失敗しました");
       }
-    } catch (error) {
-      console.log("Error", error);
-    }
+    } catch (error) {}
   };
 
   return (

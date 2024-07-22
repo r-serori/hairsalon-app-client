@@ -8,17 +8,12 @@ import {
   userMessage,
   userError,
   ownerErrorStatus,
-  permissionStore,
   userKey,
 } from "../../components/Hooks/authSelector";
 import { changeMessage } from "../../store/auth/userSlice";
 import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
-import { PermissionsState } from "../../store/auth/permissionSlice";
 import { useEffect } from "react";
-import { getUserKey } from "../../components/Hooks/useMethod";
-import { pushUserId } from "../../components/Hooks/pushLocalStorage";
-import { getPermission } from "../../store/auth/permissionSlice";
 import { isLogin } from "../../store/auth/isLoginSlice";
 import { KeyState } from "../../store/auth/keySlice";
 

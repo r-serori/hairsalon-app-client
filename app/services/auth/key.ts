@@ -1,4 +1,3 @@
-import Router from "next/router";
 import { sendRequest } from "../requestApi";
 
 export const getKeyApi = {
@@ -7,7 +6,6 @@ export const getKeyApi = {
       const response = (await sendRequest("GET", "/getKey")) as any;
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },

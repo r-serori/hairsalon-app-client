@@ -12,7 +12,7 @@ export const getPermission = createAsyncThunk<
 >("permission/getPermission", async (_, { rejectWithValue }) => {
   try {
     const response = await vioRoleApi.getVioRole();
-    console.log("responseMyRole", response);
+    // console.log("responseMyRole", response);
     return handleErrorResponse(response, rejectWithValue);
   } catch (err) {
     return handleCatchError(err, rejectWithValue);

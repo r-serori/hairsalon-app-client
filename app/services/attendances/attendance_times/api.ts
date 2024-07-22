@@ -14,10 +14,8 @@ export const attendance_timeApi = {
         "GET",
         `/attendance_times/selectedAttendanceTimes/${yearMonthEncoded}/${userIdEncoded}`
       );
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -28,10 +26,8 @@ export const attendance_timeApi = {
         "GET",
         `/firstAttendanceTimes/firstGet/${encodeURIComponent(user_id)}`
       );
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -48,10 +44,8 @@ export const attendance_timeApi = {
         `/attendance_times/pleaseEditEndTime`,
         formData
       );
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -67,10 +61,8 @@ export const attendance_timeApi = {
         "/attendance_times/startTimeShot",
         formData
       );
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -86,10 +78,8 @@ export const attendance_timeApi = {
         "/attendance_times/endTimeShot",
         formData
       );
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -106,10 +96,8 @@ export const attendance_timeApi = {
         `/attendance_times/updateStartTime`,
         formData
       );
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -126,10 +114,8 @@ export const attendance_timeApi = {
         `/attendance_times/updateEndTime`,
         formData
       );
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -139,10 +125,8 @@ export const attendance_timeApi = {
       const response = await sendRequest("POST", `/attendance_times/delete`, {
         id: id,
       });
-      console.log("APIのattendanceTimeDataだよ");
       return response;
     } catch (error) {
-      console.error("errorだよ", error);
       return { error: error };
     }
   },

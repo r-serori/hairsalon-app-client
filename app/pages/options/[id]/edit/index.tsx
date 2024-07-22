@@ -39,14 +39,13 @@ const optionEdit: React.FC = () => {
       const response = await dispatch(updateOption(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/options");
       } else {
         const re = renderError(oErrorStatus, router, dispatch);
         if (re === null) throw new Error("オプションの更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
   return (

@@ -38,7 +38,6 @@ const StaffRegisterPage: React.FC = () => {
     role: string;
     isAttendance: boolean;
   }) => {
-    console.log(formData);
     try {
       const response: any = await dispatch(staffRegister(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
@@ -48,7 +47,6 @@ const StaffRegisterPage: React.FC = () => {
         if (re === null) throw new Error("スタッフ登録に失敗しました");
       }
     } catch (error) {
-      console.log("Error", error);
       return;
     }
   };

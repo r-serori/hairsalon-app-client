@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
-import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/store";
 import { StockState } from "../../../../store/stocks/stockSlice";
 import { stock_categoriesStore } from "../../../Hooks/selector";
 import { Stock_categoryState } from "../../../../store/stocks/stock_categories/stock_categorySlice";
@@ -21,14 +19,9 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
     stock_categoriesStore
   );
 
-  console.log(stockCategories);
-
   const stockCategoryNames = stockCategories.map(
     (category) => category.category
   );
-
-  console.log("stockCategoryNamesだよ");
-  console.log(stockCategoryNames);
 
   const [product_name, setProductName] = useState<string>(
     node ? node.product_name : ""

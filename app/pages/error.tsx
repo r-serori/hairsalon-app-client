@@ -22,26 +22,18 @@ const ErrorPage = () => {
   useEffect(() => {
     // Draggableの設定
     Draggable.create("#active", {
-      // type: "rotation",
       bounds: ".container",
       inertia: true,
     });
     Draggable.create("#rotate", {
       type: "rotation",
-      // bounds: ".container",
       inertia: true,
     });
-    // Draggable.create("#active", {
-    //   type: "rotation",
-    //   bounds: ".container",
-    //   inertia: true,
-    // });
   }, []);
 
   const { code } = router.query;
 
   const getMessage = () => {
-    console.log(code);
     switch (Number(code)) {
       case 401:
         dispatch(
@@ -79,11 +71,6 @@ const ErrorPage = () => {
           )
         );
         return "メール認証が完了していません。メール認証を行ってください。";
-      case 422:
-        dispatch(
-          changeMessage("ログイン情報が不正です。再度ログインしてください。")
-        );
-        return "ログイン情報が不正です。再度ログインしてください。";
       case 500:
         dispatch(
           changeMessage(

@@ -38,14 +38,13 @@ const stockCategoryEdit: React.FC = () => {
       const response = await dispatch(updateStockCategory(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/stock_categories");
       } else {
         const re = renderError(scErrorStatus, router, dispatch);
         if (re === null) throw new Error("在庫カテゴリの更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
   return (

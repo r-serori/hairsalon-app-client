@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import BasicTextField from "../../input/BasicTextField";
-import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
-import MultiCheckbox from "../../input/checkbox/MultiCheckbox";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
 import BasicNumberField from "../../input/BasicNumberField";
 

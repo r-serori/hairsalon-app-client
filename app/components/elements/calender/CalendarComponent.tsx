@@ -135,12 +135,12 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
     ? scheduleYear
     : dayjs().utc().tz("Asia/Tokyo").format("YYYY");
 
-  console.log("currentYear", currentYear);
+  // console.log("currentYear", currentYear);
   const nextYear = scheduleYear
     ? currentYear
     : dayjs(currentYear).add(1, "year").format("YYYY");
 
-  console.log("nextYear", nextYear);
+  // console.log("nextYear", nextYear);
   return (
     <>
       {cStatus === "loading" ? (

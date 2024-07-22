@@ -107,8 +107,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? selectedEvent.extendedProps.isCustomer
       : isCustomerProp
   );
-  console.log("isCustomerです", isCustomer);
-  console.log("selectedEventです", selectedEvent);
 
   //新規予約の場合、初期値として最初の顧客情報を取得
   const initialCustomer = isCustomer && nodes[0] ? nodes[0] : null;
@@ -144,8 +142,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : ""
   );
 
-  // console.log("customerNameだよ", customerName);
-
   const [phone_number, setPhoneNumber] = useState<string>(
     whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.phone_number
@@ -178,7 +174,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : []
   );
 
-  console.log("merchandises", merchandises);
   const [merchandiseNames, setMerchandiseNames] = useState(
     whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.merchandise
@@ -195,7 +190,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : []
   );
 
-  console.log("users", users);
   const [userNames, setUserNames] = useState<string[]>(
     initialCustomer === null &&
       newCustomer &&
@@ -228,8 +222,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : []
   );
 
-  console.log("userNames", userNames);
-
   const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
     isCustomer ? true : false
   );
@@ -240,7 +232,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const [Sid, setSid] = useState<number>(
     whoIsEvent === "編集" ? selectedEvent.id : 0
   );
-  console.log("Sidです", Sid);
 
   //終日予約か時間指定予約かを判定
   const [allDay, setAllDay] = useState<boolean>(
@@ -251,7 +242,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const [title, setTitle] = useState<string>(
     !isCustomer && !newReservation ? selectedEvent.title : ""
   );
-  console.log("titleです", title);
 
   //開始時間を設定
   const [startTime, setStartTime] = useState<Dayjs | null>(
@@ -348,9 +338,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     scheduleAndCustomerFormData: RequestScheduleState
   ) => {
     try {
-      console.log("newCustomer", newCustomer);
-      console.log("newReservation", newReservation);
-      console.log("title", title);
       if (
         //新規予約、新規顧客、タイトルなし
         newCustomer &&
@@ -450,11 +437,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         !startTimeValidate ||
         !endTimeValidate)
     ) {
-      console.log("バリデーションエラー");
-      console.log("customerNameValidate", customerNameValidate);
-      console.log("usernameValidate", usernameValidate);
-      console.log("startTimeValidate", startTimeValidate);
-      console.log("endTimeValidate", endTimeValidate);
       return;
     } else if (
       !isCustomer &&
@@ -527,10 +509,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   };
 
   const startTimeChange = (e) => {
-    // console.log("eFです", dayjs(e).utc().tz("Asia/Tokyo"));
     setStartTime(dayjs(e).utc().tz("Asia/Tokyo"));
   };
-  // console.log("startTimeです", startTime);
 
   const endTimeChange = (e) => {
     setEndTime(dayjs(e).utc().tz("Asia/Tokyo"));

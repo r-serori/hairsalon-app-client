@@ -27,15 +27,10 @@ const dailySalesEdit: React.FC = () => {
   const dsErrorStatus: number = useSelector(daily_saleErrorStatus);
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
 
   const dailySale: Daily_salesState = useSelector(daily_salesStore).find(
     (dailySale: Daily_salesState) => dailySale.id === Number(id)
   );
-
-  console.log("dailySaleです");
-  console.log(dailySale);
 
   const handleUpdate = async (formData: {
     id: number;
@@ -45,14 +40,13 @@ const dailySalesEdit: React.FC = () => {
     try {
       const response = await dispatch(updateDaily_sales(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/daily_sales");
       } else {
         const re = renderError(dsErrorStatus, router, dispatch);
         if (re === null) throw new Error("日別売上の更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
 

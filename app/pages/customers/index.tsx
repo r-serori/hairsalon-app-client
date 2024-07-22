@@ -59,7 +59,6 @@ const customers: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("permission", permission);
         staffPermission(permission, router);
         if (permission === "オーナー") {
           setTHeaderItems([
@@ -111,7 +110,6 @@ const customers: React.FC = () => {
           }
         }
       } catch (error) {
-        console.log(error);
         allLogout(dispatch);
         router.push("/auth/login");
       } finally {
@@ -135,9 +133,6 @@ const customers: React.FC = () => {
   const course_customers: Course_customersState[] = useSelector(
     course_customersStore
   );
-
-  console.log("course_customersだよ");
-  console.log(course_customers);
 
   const option_customers: Option_customersState[] = useSelector(
     option_customersStore
@@ -185,7 +180,6 @@ const customers: React.FC = () => {
           const customerCourses = course_customers.filter(
             (course) => course.customer_id === customer.id
           );
-          console.log(customerCourses);
           // [{customer_id: 1, course_id: 1}]
 
           // 顧客に関連するコース名を取得し、カンマ区切りの文字列に変換
@@ -195,14 +189,12 @@ const customers: React.FC = () => {
               return courseInfo ? courseInfo.course_name : ""; // コース名が見つかった場合のみ取得
             })
             .join(",\n"); // コース名をカンマ区切りの文字列に変換
-          console.log(courseNames);
           // カットとシェービングA
 
           // 顧客に関連するオプションの情報を取得
           const customerOptions = option_customers.filter(
             (cus_op) => cus_op.customer_id === customer.id
           );
-          console.log("CUSOP", customerOptions);
           // [{customer_id: 1, option_id: 1},
           // {customer_id: 1, option_id: 2}]
 
@@ -213,14 +205,12 @@ const customers: React.FC = () => {
               return optionInfo ? optionInfo.option_name : ""; // オプション名が見つかった場合のみ取得
             })
             .join(",\n"); // オプション名をカンマ区切りの文字列に変換
-          console.log(optionNames);
           // トリートメント, パーマ
 
           // 顧客に関連する商品の情報を取得
           const customerMerchandises = merchandise_customers.filter(
             (merchandise) => merchandise.customer_id === customer.id
           );
-          console.log(customerMerchandises);
           // [{customer_id: 1, merchandise_id: 1},
           // {customer_id: 1, merchandise_id: 2}]
 
@@ -233,14 +223,12 @@ const customers: React.FC = () => {
               return merchandiseInfo ? merchandiseInfo.merchandise_name : ""; // 商品名が見つかった場合のみ取得
             })
             .join(",\n"); // 商品名をカンマ区切りの文字列に変換
-          console.log(merchandiseNames);
           // シャンプー, コンディショナー
 
           // 顧客に関連する髪型の情報を取得
           const customerHairstyles = hairstyle_customers.filter(
             (hairstyle) => hairstyle.customer_id === customer.id
           );
-          console.log(customerHairstyles);
           // [{customer_id: 1, hairstyle_id: 1},
           // {customer_id: 1, hairstyle_id: 2}]
 
@@ -253,14 +241,12 @@ const customers: React.FC = () => {
               return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // 髪型名が見つかった場合のみ取得
             })
             .join(",\n"); // 髪型名をカンマ区切りの文字列に変換
-          console.log(hairstyleNames);
           // ショート, ロング
 
           // 顧客に関連する担当者の情報を取得
           const customerUsers = customer_users.filter(
             (user) => user.customer_id === customer.id
           );
-          console.log(customerUsers);
           // [{customer_id: 1, user_id: 1}]
 
           // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
@@ -273,7 +259,6 @@ const customers: React.FC = () => {
                 .join(",\n") // 担当者名をカンマ区切りの文字列に変換
             : Object(users).name;
 
-          console.log(userNames);
           // 田中店長
 
           // 顧客情報を返す

@@ -9,10 +9,8 @@ export const merchandiseApi = {
         "/merchandises/store",
         formData
       );
-      // console.log("APIのmerchandiseDataだよ",response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -20,23 +18,11 @@ export const merchandiseApi = {
   fetchAllMerchandises: async () => {
     try {
       const response = await sendRequest("GET", `/merchandises/all`);
-      // console.log("merchandises fetched",response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
-
-  // fetchMerchandiseById: async (id: number) => {
-  // try{
-  //   const response = await sendRequest("GET", `/merchandises/${id}`);
-  //   return response;
-  // }catch (error ){
-  // console.error("errorだよ", error);
-  // return { error: error };
-  // }
-  // },
 
   updateMerchandise: async (formData: MerchandiseState) => {
     try {
@@ -45,10 +31,8 @@ export const merchandiseApi = {
         `/merchandises/update`,
         formData
       );
-      // console.log("APIのmerchandiseDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },
@@ -58,10 +42,8 @@ export const merchandiseApi = {
       const response = await sendRequest("POST", `/merchandises/delete`, {
         id: id,
       });
-      // console.log("APIのmerchandiseDataだよ", response);
       return response;
     } catch (error) {
-      // console.error("errorだよ", error);
       return { error: error };
     }
   },

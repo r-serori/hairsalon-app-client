@@ -31,7 +31,7 @@ export const selectGetDaily_sales = createAsyncThunk<
 
     return handleErrorResponse(response, rejectWithValue);
   } catch (err) {
-    console.log("errだよ", err);
+    // console.log("errだよ", err);
     return handleCatchError(err, rejectWithValue);
   }
 });
@@ -48,7 +48,7 @@ export const createDaily_sales = createAsyncThunk<
 
     return handleErrorResponse(response, rejectWithValue);
   } catch (err) {
-    console.log("errだよ", err);
+    // console.log("errだよ", err);
     return handleCatchError(err, rejectWithValue);
   }
 });
@@ -65,7 +65,7 @@ export const updateDaily_sales = createAsyncThunk<
 
     return handleErrorResponse(response, rejectWithValue);
   } catch (err) {
-    console.log("errだよ", err);
+    // console.log("errだよ", err);
     return handleCatchError(err, rejectWithValue);
   }
 });
@@ -82,7 +82,7 @@ export const deleteDaily_sales = createAsyncThunk<
 
     return handleErrorResponse(response, rejectWithValue);
   } catch (err) {
-    console.log("errだよ", err);
+    // console.log("errだよ", err);
     return handleCatchError(err, rejectWithValue);
   }
 });

@@ -27,21 +27,13 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  console.log("valueです", value);
-
   const dayJsValue = dayjs(value).utc().tz("Asia/Tokyo");
-
-  console.log("dayJsValueです", dayJsValue);
 
   // 0時と23時のdayjsオブジェクトを作成
   const minTime = dayjs().hour(0).minute(0).utc().tz("Asia/Tokyo");
   const maxTime = dayjs().hour(23).minute(59).utc().tz("Asia/Tokyo");
 
   const errorChecker = (newValue) => {
-    console.log(
-      "newValueです",
-      dayjs(newValue).utc().tz("Asia/Tokyo").format("YYYY-MM-DD HH:mm")
-    );
     if (
       dayjs(newValue)
         .utc()

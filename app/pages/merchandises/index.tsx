@@ -60,7 +60,7 @@ const merchandises = () => {
           }
         }
       } catch (error) {
-        console.error("Error:", error);
+        return;
       }
     };
 

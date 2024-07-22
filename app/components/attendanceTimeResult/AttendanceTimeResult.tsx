@@ -26,7 +26,7 @@ const AttendanceTimeResult: React.FC<AttendanceTimeResultProps> = ({
     })
     .reduce((acc: number, cur: number) => acc + cur, 0);
 
-  console.log("勤怠時間計算結果", attendanceTimeResult);
+  // console.log("勤怠時間計算結果", attendanceTimeResult);
 
   return (
     <div>

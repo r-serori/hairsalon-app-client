@@ -64,7 +64,7 @@ const stock_categories = () => {
           }
         }
       } catch (error) {
-        console.log(error);
+        return;
       }
     };
 

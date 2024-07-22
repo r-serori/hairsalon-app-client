@@ -78,7 +78,6 @@ const schedules: React.FC = () => {
           throw new Error("スケジュール情報の取得に失敗しました");
       }
     } catch (error) {
-      console.log(error);
       allLogout(dispatch);
       router.push("/auth/login");
     } finally {
@@ -113,7 +112,6 @@ const schedules: React.FC = () => {
           }
         }
       } catch (error) {
-        console.log(error);
         allLogout(dispatch);
         router.push("/auth/login");
       } finally {
@@ -138,7 +136,6 @@ const schedules: React.FC = () => {
   const hairstyles: HairstyleState[] = useSelector(hairstylesStore);
   // 担当者情報を取得
   const users: UserState[] = useSelector(user);
-  console.log("userです", users);
 
   // 中間テーブルの情報を取得
   const course_customers: Course_customersState[] = useSelector(
@@ -175,36 +172,25 @@ const schedules: React.FC = () => {
             .filter((course) => course.customer_id === customer.id)
             .map((course) => course.course_id);
 
-          // console.log(customerCourses);
           //  [1,2,3]
 
           const courseNames: string[] = courses
             .filter((course) => customerCourses.includes(course.id))
             .map((course) => course.course_name);
 
-          // console.log("courseNamesだよ");
-          // console.log(courseNames);
-
           // 顧客に関連するオプションの情報を取得
           const customerOptions: number[] = option_customers
             .filter((option) => option.customer_id === customer.id)
             .map((option) => option.option_id);
 
-          // console.log(customerOptions);
-
           const optionNames: string[] = options
             .filter((option) => customerOptions.includes(option.id))
             .map((option) => option.option_name);
-
-          // console.log("optionNamesだよ");
-          // console.log(optionNames);
 
           // 顧客に関連する商品の情報を取得
           const customerMerchandises: number[] = merchandise_customers
             .filter((merchandise) => merchandise.customer_id === customer.id)
             .map((merchandise) => merchandise.merchandise_id);
-
-          // console.log(customerMerchandises);
 
           const merchandiseNames: string[] = merchandises
             .filter((merchandise) =>
@@ -212,25 +198,14 @@ const schedules: React.FC = () => {
             )
             .map((merchandise) => merchandise.merchandise_name);
 
-          // console.log("merchandiseNamesだよ");
-          // console.log(merchandiseNames);
-
           // 顧客に関連する髪型の情報を取得
           const customerHairstyles: number[] = hairstyle_customers
             .filter((hairstyle) => hairstyle.customer_id === customer.id)
             .map((hairstyle) => hairstyle.hairstyle_id);
 
-          // console.log("cusHair", customerHairstyles);
-
-          // console.log("hairstylesだよ", hairstyles);
-
           const hairstyleNames: string[] = hairstyles
             .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
             .map((hairstyle) => hairstyle.hairstyle_name);
-
-          // console.log("hairstyleNamesだよ");
-
-          // console.log(hairstyleNames);
 
           // 顧客に関連する担当者の情報を取得
           //user_idを配列にしている
@@ -238,17 +213,11 @@ const schedules: React.FC = () => {
             .filter((user) => user.customer_id === customer.id)
             .map((user) => user.user_id);
 
-          // console.log("customerUsers", customerUsers);
-
-          // console.log("users前", users);
-
           const userNames: string[] = Array.isArray(users)
             ? users
                 .filter((user) => customerUsers.includes(user.id))
                 .map((user) => user.name)
             : [Object(users).name];
-
-          // console.log("userNames", userNames);
 
           // 顧客情報を返す
           return {

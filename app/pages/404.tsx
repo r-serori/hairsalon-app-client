@@ -16,22 +16,14 @@ const NotExistPage = () => {
   const [isLogin, setIsLogin] = React.useState<boolean>(false);
 
   useEffect(() => {
-    // Draggableの設定
     Draggable.create("#active", {
-      // type: "rotation",
       bounds: ".container",
       inertia: true,
     });
     Draggable.create("#rotate", {
       type: "rotation",
-      // bounds: ".container",
       inertia: true,
     });
-    // Draggable.create("#active", {
-    //   type: "rotation",
-    //   bounds: ".container",
-    //   inertia: true,
-    // });
     localStorage.getItem("isLogin") === "true"
       ? setIsLogin(true)
       : setIsLogin(false);

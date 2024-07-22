@@ -40,14 +40,13 @@ const monthlySalesEdit: React.FC = () => {
       const response = await dispatch(updateMonthly_sales(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/monthly_sales");
       } else {
         const re = renderError(msErrorStatus, router, dispatch);
         if (re === null) throw new Error("月次売上の更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
 

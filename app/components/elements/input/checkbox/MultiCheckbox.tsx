@@ -37,8 +37,6 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
   const names: string[] = [];
   const fieldName: string[] = [];
 
-  console.log("getOptions", getOptions);
-
   switch (nodesProp) {
     case "course":
       Array.isArray(getOptions) && getOptions.length > 1
@@ -83,8 +81,6 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
       fieldName.push("髪型");
       break;
     case "names":
-      console.log("getOptionsだよ", getOptions);
-
       Array.isArray(getOptions) && getOptions.length === 1
         ? names.push(getOptions[0].name)
         : Array.isArray(getOptions) && getOptions.length > 1
@@ -97,15 +93,6 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
     default:
       break;
   }
-
-  console.log("getOptions", getOptions);
-  console.log("names[0]", names[0]);
-
-  console.log("names.length", names.length);
-  console.log(
-    "ARRRARARR",
-    Array.isArray(getOptions) && getOptions.length === 0
-  );
 
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const newValue = event.target.value as string[];
@@ -121,8 +108,6 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
     (!Array.isArray(getOptions) && required && error) ||
     (Array.isArray(getOptions) && getOptions.length === 0) ||
     (Array.isArray(getOptions) && required && error && getOptions.length === 1);
-
-  console.log("noArrayAndNoLength", noArrayAndNoLength);
 
   const theme = createTheme({
     palette: {
@@ -190,8 +175,6 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           />
         }
         renderValue={(selected) => {
-          console.log("selected", selected);
-
           // selectedが文字列の場合
           if (typeof selected === "string" || noArrayAndNoLength) {
             return <div style={{ whiteSpace: "no-wrap" }}></div>;

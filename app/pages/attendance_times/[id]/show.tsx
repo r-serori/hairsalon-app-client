@@ -37,8 +37,6 @@ const attendanceTimes: React.FC = () => {
   const router: NextRouter = useRouter();
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
 
   const permission: PermissionsState = useSelector(permissionStore);
 
@@ -71,7 +69,6 @@ const attendanceTimes: React.FC = () => {
       );
       setYearMonth("000111");
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("response", response);
       } else {
         renderError(atErrorStatus, router, dispatch);
       }
@@ -104,7 +101,6 @@ const attendanceTimes: React.FC = () => {
             }) as any
           );
           if (response.meta.requestStatus === "fulfilled") {
-            console.log("response", response);
           } else {
             renderError(atErrorStatus, router, dispatch);
           }
@@ -143,7 +139,6 @@ const attendanceTimes: React.FC = () => {
   ];
 
   const nodes: Attendance_timeState[] = attendanceTimes;
-  console.log("nodes", nodes);
 
   return (
     <div>

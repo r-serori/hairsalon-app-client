@@ -16,7 +16,6 @@ export const allLogout = async (
     }
     return null;
   } catch (error) {
-    console.log("Error", error);
     return null;
   }
 };
@@ -27,13 +26,10 @@ export const getUserKey = async (
   try {
     const response = await dispatch(getKey() as any);
     if (response.meta.requestStatus === "fulfilled") {
-      console.log("responseGetKey", response);
-
       return response.payload.roleKey;
     }
     return null;
   } catch (error) {
-    console.log("Error", error);
     return null;
   }
 };

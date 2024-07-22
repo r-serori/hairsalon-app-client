@@ -60,7 +60,6 @@ const options: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error("Error:", error);
         allLogout(dispatch);
         router.push("/auth/login");
       }

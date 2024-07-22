@@ -9,10 +9,8 @@ export const emailVerify = async (formData: { id: number; hash: string }) => {
         formData.id
       )}/${encodeURIComponent(formData.hash)}`
     );
-    console.log("responseDataだよ", response);
     return response;
   } catch (error) {
-    console.error("errorだよ", error);
     return { error: error };
   }
 };

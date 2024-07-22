@@ -52,7 +52,6 @@ const UpdateUserInformationPage: React.FC = () => {
           }
         }
       } catch (error) {
-        console.log("Error", error);
         return;
       }
     };
@@ -64,7 +63,6 @@ const UpdateUserInformationPage: React.FC = () => {
     email: string;
     phone_number: string;
   }) => {
-    console.log(formData);
     try {
       const response = await dispatch(updateUser(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
@@ -79,9 +77,7 @@ const UpdateUserInformationPage: React.FC = () => {
         const re = renderError(uErrorStatus, router, dispatch);
         if (re === null) throw new Error("userInfoUpdateに失敗しました");
       }
-    } catch (error) {
-      console.log("Error", error);
-    }
+    } catch (error) {}
   };
 
   return (

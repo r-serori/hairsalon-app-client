@@ -26,7 +26,6 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
           checked={type === "disabled" ? true : checked}
           onChange={(newValue) => {
             onChanger(newValue.target.checked);
-            console.log("newValueです", newValue);
           }}
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}

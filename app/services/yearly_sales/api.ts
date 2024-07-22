@@ -9,10 +9,8 @@ export const yearlySaleApi = {
         "/yearly_sales/store",
         formData
       );
-      // console.log("APIのyearlySalesDataだよ", response);
       return response;
     } catch (error) {
-      // console.log("errorだよ", error);
       return { error: error };
     }
   },
@@ -20,10 +18,8 @@ export const yearlySaleApi = {
   fetchAllYearlySales: async () => {
     try {
       const response = await sendRequest("GET", `/yearly_sales/all`);
-      // console.log("yearly_sales fetched", response);
       return response;
     } catch (error) {
-      // console.log("errorだよ", error);
       return { error: error };
     }
   },
@@ -35,10 +31,8 @@ export const yearlySaleApi = {
         `/yearly_sales/update`,
         formData
       );
-      // console.log("APIのyearlySalesDataだよ", response);
       return response;
     } catch (error) {
-      // console.log("errorだよ", error);
       return { error: error };
     }
   },
@@ -48,10 +42,8 @@ export const yearlySaleApi = {
       const response = await sendRequest("POST", `/yearly_sales/delete`, {
         id: id,
       });
-      // console.log("APIのyearlySalesDataだよ", response);
       return response;
     } catch (error) {
-      // console.log("errorだよ", error);
       return { error: error };
     }
   },

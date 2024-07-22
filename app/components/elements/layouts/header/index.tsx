@@ -7,14 +7,13 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { checkSessionApi } from "../../../../services/auth/checkSession";
 import { loginNow, userKey } from "../../../Hooks/authSelector";
-import { allLogout, getUserKey } from "../../../Hooks/useMethod";
+import { getUserKey } from "../../../Hooks/useMethod";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../Hooks/authSelector";
 import { getPermission } from "../../../../store/auth/permissionSlice";
 import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import Link from "next/link";
 import { KeyState } from "../../../../store/auth/keySlice";
-import { current } from "immer";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -24,7 +23,7 @@ export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
   const currentPath = router.pathname;
-  console.log("currentPath", currentPath);
+  // console.log("currentPath", currentPath);
   const nowLogin: boolean = useSelector(loginNow);
   const key: KeyState = useSelector(userKey);
   const permission: PermissionsState = useSelector(permissionStore);
@@ -33,14 +32,14 @@ export default function Header() {
     if (typeof window !== "undefined") {
       const IsLoggedIn: boolean =
         localStorage.getItem("isLogin") === "true" ? true : false;
-      console.log("isLogin", IsLoggedIn);
+      // console.log("isLogin", IsLoggedIn);
 
-      console.log("headerrrrrrrrrrrr  ");
+      // console.log("headerrrrrrrrrrrr  ");
       const getPermissionData = async () => {
         try {
           await dispatch(getPermission() as any);
         } catch (e) {
-          console.log("Error", e);
+          // console.log("Error", e);
           localStorage.clear();
           dispatch(isLogout());
           router.push("/error?code=401");
@@ -51,7 +50,7 @@ export default function Header() {
         try {
           await getUserKey(dispatch);
         } catch (e) {
-          console.log("Error", e);
+          // console.log("Error", e);
           localStorage.clear();
           dispatch(isLogout());
           router.push("/error?code=401");
@@ -62,7 +61,7 @@ export default function Header() {
         getPermissionData();
       }
 
-      console.log("permission", permission);
+      // console.log("permission", permission);
 
       if (key === null && IsLoggedIn) {
         getKey();
@@ -79,13 +78,13 @@ export default function Header() {
         router.push("/error?code=401");
       } else {
         await dispatch(isLogin());
-        console.log("セッション確認済み");
+        // console.log("セッション確認済み");
       }
     };
 
     const IsLoggedIn: boolean =
       localStorage.getItem("isLogin") === "true" ? true : false;
-    console.log("isLogin", IsLoggedIn);
+    // console.log("isLogin", IsLoggedIn);
 
     if (IsLoggedIn) {
       isLogin();
@@ -249,7 +248,7 @@ export default function Header() {
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>
-                <div className="mx-auto max-w-7xl sm:px-2 ">
+                <div className="mx-auto max-w-7xl sm:px-2 flex justify-center ">
                   <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center ">
                       <div className="hidden md:block">
@@ -260,9 +259,9 @@ export default function Header() {
                             <span
                               className={classNames(
                                 item.current
-                                  ? "bg-gray-900 text-blue-600 p-4 "
+                                  ? "bg-gray-900 text-blue-600 p-3 "
                                   : "text-gray-200 hover:bg-gray-700 hover:text-white",
-                                "rounded-md p-4 text-md font-medium"
+                                "rounded-md p-3 text-md font-medium"
                               )}
                               aria-current={item.current ? "page" : undefined}
                             >

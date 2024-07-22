@@ -4,8 +4,6 @@ import AuthRegisterForm from "../../components/elements/form/auth/AuthRegisterFo
 import { register } from "../../store/auth/userSlice";
 import BasicAlerts from "../../components/elements/alert/BasicAlert";
 import RouterButton from "../../components/elements/button/RouterButton";
-import { clearError } from "../../store/auth/userSlice";
-import { isLogin } from "../../store/auth/isLoginSlice";
 import { useEffect } from "react";
 import {
   userStatus,
@@ -15,7 +13,6 @@ import {
 } from "../../components/Hooks/authSelector";
 import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
 import { pushUserId } from "../../components/Hooks/pushLocalStorage";
-import { getPermission } from "../../store/auth/permissionSlice";
 import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
 import { KeyState } from "../../store/auth/keySlice";
@@ -49,14 +46,10 @@ const RegisterPage: React.FC = () => {
   }) => {
     try {
       const response: any = await dispatch(register(formData) as any);
-      console.log("register.tsxのデータだよ", response);
       if (response.meta.requestStatus === "fulfilled") {
         const userId: number = Number(response.payload.responseUser.id);
-        console.log("responseuserId", userId);
 
         const userKey: KeyState = await getUserKey(dispatch);
-
-        console.log("userKey", userKey);
 
         if (userKey === null) {
           throw new Error();

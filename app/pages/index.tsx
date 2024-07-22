@@ -18,20 +18,13 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     // Draggableの設定
     Draggable.create("#active", {
-      // type: "rotation",
       bounds: ".container",
       inertia: true,
     });
     Draggable.create("#rotate", {
       type: "rotation",
-      // bounds: ".container",
       inertia: true,
     });
-    // Draggable.create("#active", {
-    //   type: "rotation",
-    //   bounds: ".container",
-    //   inertia: true,
-    // });
   }, []);
 
   return (

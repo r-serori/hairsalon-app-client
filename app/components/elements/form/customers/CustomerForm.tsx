@@ -29,57 +29,13 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
 }) => {
   const getCoursesState = useSelector(coursesStore);
 
-  console.log("getCoursesStateだよ");
-  console.log(getCoursesState);
-
-  const getCourseNames = getCoursesState.map((course) => course.course_name);
-
-  console.log("getCourseNamesだよ");
-  console.log(getCourseNames);
-
   const getOptionsState = useSelector(optionsStore);
-
-  console.log("getOptionsStateだよ");
-  console.log(getOptionsState);
-
-  const getOptionsNames = getOptionsState.map((option) => option.option_name);
-
-  console.log("getOptionsNamesだよ");
-  console.log(getOptionsNames);
 
   const getMerchandisesState = useSelector(merchandiseStore);
 
-  console.log("getMerchandisesStateだよ");
-  console.log(getMerchandisesState);
-
-  const getMerchandisesNames = getMerchandisesState.map(
-    (merchandise) => merchandise.merchandise_name
-  );
-
-  console.log("getMerchandisesNamesだよ");
-  console.log(getMerchandisesNames);
-
   const getHairstylesState = useSelector(hairstylesStore);
 
-  console.log("getHairstylesStateだよ");
-  console.log(getHairstylesState);
-
-  const getHairstylesNames = getHairstylesState.map(
-    (hairstyle) => hairstyle.hairstyle_name
-  );
-
-  console.log("getHairstylesNamesだよ");
-  console.log(getHairstylesNames);
-
   const getUsersState = useSelector(user);
-
-  console.log("getUsersStateだよ");
-  console.log(getUsersState);
-
-  const getUsersNames = console.log("getUsersNamesだよ");
-  console.log(getUsersNames);
-
-  console.log("getUsersState", getUsersState);
 
   const [customer_name, setCustomer_Name] = useState<string>(
     node ? node.customer_name : ""

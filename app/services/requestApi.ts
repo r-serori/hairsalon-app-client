@@ -14,11 +14,11 @@ export const getCsrfToken = async () => {
       /(?:(?:^|.*;\s*)XSRF-TOKEN\s*=\s*([^;]*).*$)|^.*$/,
       "$1"
     );
-    console.log("CSRFトークン取得成功:", csrfToken);
+    // console.log("CSRFトークン取得成功:", csrfToken);
     axios.defaults.headers.common["X-XSRF-TOKEN"] = csrfToken;
     return csrfToken;
   } catch (error) {
-    console.error("CSRFトークンの取得に失敗しました:", error);
+    // console.error("CSRFトークンの取得に失敗しました:", error);
     throw new Error("CSRFトークンの取得に失敗しました");
   }
 };
@@ -28,7 +28,7 @@ export const sendRequest = async (
   url: string,
   data?: any
 ): Promise<any> => {
-  console.log("送信するデータ:", data);
+  // console.log("送信するデータ:", data);
   try {
     const response = await axios.request({
       method,
@@ -44,30 +44,30 @@ export const sendRequest = async (
       },
     });
 
-    console.log(`${method} request to ${url} successful:`);
-    console.log("RESPONSE", response);
+    // console.log(`${method} request to ${url} successful:`);
+    // console.log("RESPONSE", response);
     return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error("AxiosErrorが発生しました:", error.message);
+      // console.error("AxiosErrorが発生しました:", error.message);
       if (error.response) {
-        console.error("サーバーからのレスポンス:", error.response);
+        // console.error("サーバーからのレスポンス:", error.response);
         return error.response;
       } else if (error.request) {
-        console.error(
-          "リクエストは送信されましたが、レスポンスがありませんでした:",
-          error.request
-        );
+        // console.error(
+        //   "リクエストは送信されましたが、レスポンスがありませんでした:",
+        //   error.request
+        // );
         return error.request;
       } else {
-        console.error(
-          "リクエストの設定中にエラーが発生しました:",
-          error.message
-        );
+        // console.error(
+        //   "リクエストの設定中にエラーが発生しました:",
+        //   error.message
+        // );
         return error;
       }
     } else {
-      console.error("予期しないエラーが発生しました:", error);
+      // console.error("予期しないエラーが発生しました:", error);
     }
     throw error;
   }

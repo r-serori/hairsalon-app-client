@@ -34,15 +34,10 @@ const customersEdit: React.FC = () => {
   const cErrorStatus: number = useSelector(customerErrorStatus);
 
   const { id } = router.query; // idを取得
-  console.log("idだよ");
-  console.log({ id });
 
   const getCustomer: CustomerOnlyState = useSelector(customersStore).find(
     (customer) => customer.id === Number(id)
   );
-
-  console.log("getCustomerだよ");
-  console.log(getCustomer);
 
   const course_customers: number[] = useSelector(course_customersStore)
     .filter(
@@ -51,18 +46,12 @@ const customersEdit: React.FC = () => {
     )
     .map((course_customer) => course_customer.course_id);
 
-  console.log("course_customersだよ");
-  console.log(course_customers);
-
   const option_customers: number[] = useSelector(option_customersStore)
     .filter(
       (option_customer) =>
         option_customer.customer_id === parseInt(id as string)
     )
     .map((option_customer) => option_customer.option_id);
-
-  console.log("option_customersだよ");
-  console.log(option_customers);
 
   const merchandise_customers: number[] = useSelector(
     merchandise_customersStore
@@ -73,9 +62,6 @@ const customersEdit: React.FC = () => {
     )
     .map((merchandise_customer) => merchandise_customer.merchandise_id);
 
-  console.log("merchandise_customersだよ");
-  console.log(merchandise_customers);
-
   const hairstyle_customers: number[] = useSelector(hairstyle_customersStore)
     .filter(
       (hairstyle_customer) =>
@@ -83,17 +69,11 @@ const customersEdit: React.FC = () => {
     )
     .map((hairstyle_customer) => hairstyle_customer.hairstyle_id);
 
-  console.log("hairstyle_customersだよ");
-  console.log(hairstyle_customers);
-
   const customer_users: number[] = useSelector(customer_usersStore)
     .filter(
       (customer_user) => customer_user.customer_id === parseInt(id as string)
     )
     .map((customer_user) => customer_user.user_id);
-
-  console.log("customer_usersだよ");
-  console.log(customer_users);
 
   const customer = {
     ...getCustomer,
@@ -120,15 +100,12 @@ const customersEdit: React.FC = () => {
       const response = await dispatch(updateCustomer(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/customers");
       } else {
         const re = renderError(cErrorStatus, router, dispatch);
         if (re === null) throw new Error("customersの作成に失敗しました");
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
   return (
     <div className="min-h-full ">

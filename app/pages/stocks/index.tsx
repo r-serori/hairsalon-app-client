@@ -102,7 +102,7 @@ const stocks: React.FC = () => {
           }
         }
       } catch (error) {
-        console.log(error);
+        return;
       }
     };
 

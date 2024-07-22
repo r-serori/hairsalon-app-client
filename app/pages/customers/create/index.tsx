@@ -38,14 +38,13 @@ const customersCreate = () => {
     try {
       const response = await dispatch(createCustomer(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/customers");
       } else {
         const re = renderError(cErrorStatus, router, dispatch);
         if (re === null) throw new Error("customersの作成に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
   return (

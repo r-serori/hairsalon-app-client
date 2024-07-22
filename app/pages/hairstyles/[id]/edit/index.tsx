@@ -41,15 +41,13 @@ const hairstyleEdit: React.FC = () => {
       const response = await dispatch(updateHairstyle(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/hairstyles");
       } else {
         const re = renderError(hErrorStatus, router, dispatch);
         if (re === null) throw new Error("髪型の更新に失敗しました");
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
+    return;
   };
 
   return (

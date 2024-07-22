@@ -44,6 +44,7 @@ interface BasicModalProps {
   editNode?: any;
   NodesProp?: any;
   link: string;
+  role?: string;
 }
 
 const BasicModal: React.FC<BasicModalProps> = ({
@@ -52,13 +53,19 @@ const BasicModal: React.FC<BasicModalProps> = ({
   editNode,
   NodesProp,
   link,
+  role,
 }) => {
   // const dispatch = useDispatch();
   // const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [openAttendance, setOpenAttendance] = React.useState(false);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (role !== "スタッフ") {
+      setOpen(true);
+    }
+  };
+
   const handleClose = () => setOpen(false);
 
   const formatPrice = (value: number) => {

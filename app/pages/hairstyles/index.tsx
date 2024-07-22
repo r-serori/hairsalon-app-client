@@ -61,7 +61,7 @@ const hairstyles: React.FC = () => {
           }
         }
       } catch (error) {
-        console.log(error);
+        return;
       }
     };
 

@@ -17,7 +17,6 @@ import {
 } from "../../components/Hooks/selector";
 import { ownerPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
-import { allLogout } from "../../components/Hooks/useMethod";
 import { permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import EasyModal from "../../components/elements/modal/easy/EasyModal";
@@ -52,7 +51,7 @@ const daily_sales: React.FC = () => {
       }
       setYearMonth("");
     } catch (error) {
-      console.error("Error:", error);
+      return;
     }
   };
 
@@ -79,7 +78,7 @@ const daily_sales: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error("Error:", error);
+        return;
       }
     };
 

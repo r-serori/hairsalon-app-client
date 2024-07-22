@@ -39,14 +39,13 @@ const yearlySalesEdit: React.FC = () => {
     try {
       const response = await dispatch(updateYearly_sales(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/yearly_sales");
       } else {
         const re = renderError(ysErrorStatus, router, dispatch);
         if (re === null) throw new Error("年次売上の更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
 

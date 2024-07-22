@@ -28,7 +28,6 @@ const resetPasswordPage: React.FC = () => {
     password: string;
     password_confirmation: string;
   }) => {
-    console.log(formData);
     const requestForm = { ...formData, token: token as string };
     try {
       const response = await dispatch(resetPassword(requestForm) as any);
@@ -39,7 +38,7 @@ const resetPasswordPage: React.FC = () => {
         if (re === null) throw new Error("パスワードリセットに失敗しました");
       }
     } catch (error) {
-      console.log("Error", error);
+      return;
     }
   };
 

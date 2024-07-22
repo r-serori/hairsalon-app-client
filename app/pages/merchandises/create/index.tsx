@@ -33,14 +33,13 @@ const merchandiseCreate: React.FC = () => {
       const response = await dispatch(createMerchandise(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
-        console.log("Success", response);
         router.push("/merchandises");
       } else {
         const re = renderError(mErrorStatus, router, dispatch);
         if (re === null) throw new Error("物販の作成に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      return;
     }
   };
   return (

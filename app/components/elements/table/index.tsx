@@ -263,7 +263,6 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                     const propProp = nodesProp[propName];
 
                     const imgUrl = process.env.NEXT_PUBLIC_BACKEND_IMG_URL;
-                    console.log(`${imgUrl} ${decodeURIComponent(propValue)}`);
 
                     const formatValue = (value: number) => {
                       return new Intl.NumberFormat("ja-JP").format(value);
@@ -302,8 +301,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                       propProp === "attendanceNow" ||
                       propProp === "name" ||
                       propProp === "staff_phone_number" ||
-                      propProp === "role" ||
-                      role === "スタッフ"
+                      propProp === "role"
                     ) {
                       return (
                         <Cell
@@ -387,6 +385,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                             editNode={node}
                             NodesProp={nodesProp[propName]}
                             link={link}
+                            role={role}
                           />
                         </Cell>
                       );
@@ -474,8 +473,6 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                   )}
                   {/* tHeaderItemsに"編集"が含まれていたら作成 */}
                   {tHeaderItems.includes("編集") && (
-                    // console.log("編集nodeだよ"),
-                    // console.log(node.id),
                     <Cell className="items-center bg-gray-100 text-gray-900 pt-1 px-1 pointer border-b-2 border-gray-300">
                       <div className="flex justify-center items-center text-center mx-auto pb-1">
                         <button

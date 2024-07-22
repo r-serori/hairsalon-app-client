@@ -26,7 +26,6 @@ import {
   createYearly_sales,
 } from "../../../../store/yearly_sales/yearly_saleSlice";
 import {
-  customerStatus,
   daily_saleError,
   daily_saleStatus,
   monthly_saleError,
@@ -39,7 +38,6 @@ import { OptionState } from "../../../../store/options/optionSlice";
 import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
 import { CalendarEvent } from "../../calender/CalendarComponent";
 import BasicAlerts from "../../alert/BasicAlert";
-import { ErrorType } from "../../../Hooks/interface";
 
 interface SaleFormProps {
   events: CalendarEvent[];
@@ -54,9 +52,7 @@ interface SaleFormProps {
 const SaleForm: React.FC<SaleFormProps> = ({
   events,
   whatSales,
-  showModal,
   setShowModal,
-  nodes,
   courses,
   options,
   merchandises,
@@ -69,13 +65,10 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const router = useRouter();
 
   const dailySalesError = useSelector(daily_saleError);
-  const dailySalesStatus = useSelector(daily_saleStatus);
 
   const monthlySalesError = useSelector(monthly_saleError);
-  const monthlySalesStatus = useSelector(monthly_saleStatus);
 
   const yearlySalesError = useSelector(yearly_saleError);
-  const yearlySalesStatus = useSelector(yearly_saleStatus);
 
   const [time, setTime] = React.useState<Dayjs | null>(
     dayjs().utc().tz("Asia/Tokyo")
@@ -92,38 +85,25 @@ const SaleForm: React.FC<SaleFormProps> = ({
     let sameDateEvents = [];
     try {
       if (whatSales === "日次") {
-        console.log("updateDateだよ", updateDate);
         const updateDateFormat = dayjs(updateDate).format("YYYY-MM-DD");
-
-        console.log("updateDateFormatだよ", updateDateFormat);
 
         //events==schedulesとtitleとしてcustomer_nameを持っているものを取得。上記の updateDateFormatと同じ日付のものを取得。
         sameDateEvents = events.filter(
           (event) =>
             dayjs(event.start).format("YYYY-MM-DD") === updateDateFormat
         );
-
-        console.log("sameDateEventsだよ", sameDateEvents);
       } else if (whatSales === "月次") {
         const updateDateFormat = dayjs(updateDate).format("YYYY-MM");
-
-        console.log("updateDateFormatだよ", updateDateFormat);
 
         sameDateEvents = events.filter(
           (event) => dayjs(event.start).format("YYYY-MM") === updateDateFormat
         );
-
-        console.log("sameDateEventsだよ", sameDateEvents);
       } else if (whatSales === "年次") {
         const updateDateFormat = dayjs(updateDate).format("YYYY");
-
-        console.log("updateDateFormatだよ", updateDateFormat);
 
         sameDateEvents = events.filter(
           (event) => dayjs(event.start).format("YYYY") === updateDateFormat
         );
-
-        console.log("sameDateEventsだよ", sameDateEvents);
       }
 
       if (sameDateEvents.length === 0) {
@@ -142,22 +122,16 @@ const SaleForm: React.FC<SaleFormProps> = ({
         }
       });
 
-      console.log("sameCustomerEventsだよ", sameCustomerEvents);
-
       //sameCustomerEventsをmapで回して、courseのみを取得。その後、配列内に配列が複数入っている状態になるのでflat()で配列を一つの配列にする。
       const sameCoursesEvents = sameCustomerEvents
         .map((event) => event.course)
         .flat();
-
-      console.log("sameCoursesEventsだよ", sameCoursesEvents);
 
       //coursesの中にあるcourse_nameとpriceを取得して、配列に入れる。
       const courseNameAndPrices = courses.map((course) => ({
         courseName: course.course_name,
         coursePrice: course.price,
       }));
-
-      console.log("courseNameAndPriceだよ", courseNameAndPrices);
 
       //一つの配列にした配列をmapで回して、courseNameと同じだったら、coursePriceを取得して、reduceで合計する。
       const sameCoursesPrice = sameCoursesEvents
@@ -169,21 +143,15 @@ const SaleForm: React.FC<SaleFormProps> = ({
         )
         .reduce((acc, cur) => acc + cur, 0);
 
-      console.log("sameCoursesPriceだよ", sameCoursesPrice);
-
       //optionも同様にする。
       const sameOptionsEvents = sameCustomerEvents
         .map((event) => event.option)
         .flat();
 
-      console.log("sameOptionsEventsだよ", sameOptionsEvents);
-
       const optionNameAndPrices = options.map((option) => ({
         optionName: option.option_name,
         optionPrice: option.price,
       }));
-
-      console.log("optionNameAndPricesだよ", optionNameAndPrices);
 
       const sameOptionsPrice = sameOptionsEvents
         .map(
@@ -194,22 +162,16 @@ const SaleForm: React.FC<SaleFormProps> = ({
         )
         .reduce((acc, cur) => acc + cur, 0);
 
-      console.log("sameOptionsPriceだよ", sameOptionsPrice);
-
       //merchandiseも同様にする。
 
       const sameMerchandisesEvents = sameCustomerEvents
         .map((event) => event.merchandise)
         .flat();
 
-      console.log("sameMerchandisesEventsだよ", sameMerchandisesEvents);
-
       const merchandiseNameAndPrices = merchandises.map((merchandise) => ({
         merchandiseName: merchandise.merchandise_name,
         merchandisePrice: merchandise.price,
       }));
-
-      console.log("merchandiseNameAndPricesだよ", merchandiseNameAndPrices);
 
       const sameMerchandisesPrice = sameMerchandisesEvents
         .map(
@@ -221,20 +183,15 @@ const SaleForm: React.FC<SaleFormProps> = ({
         )
         .reduce((acc, cur) => acc + cur, 0);
 
-      console.log("sameMerchandisesPriceだよ", sameMerchandisesPrice);
-
       const result =
         sameCoursesPrice + sameOptionsPrice + sameMerchandisesPrice;
 
-      console.log("resultだよ", result);
       setMessage("");
       setSumPrice(result);
     } catch (e) {
       return 0;
     }
   };
-
-  console.log("eventsだよ", events);
 
   const allInitialState = () => {
     setTime(dayjs().utc().tz("Asia/Tokyo"));
@@ -248,8 +205,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
     setMessage("");
     setSumPrice(0);
   };
-
-  console.log("whatSalesだよ", whatSales);
 
   const SalesSubmit = async () => {
     if (!timeValidate) return;
@@ -308,9 +263,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
           throw new Error();
         }
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   useEffect(() => {
@@ -363,7 +316,6 @@ const SaleForm: React.FC<SaleFormProps> = ({
           <DatePickerValue
             value={time}
             changer={(newValue) => {
-              console.log("newValueだよasaasassfasf", newValue);
               setTime(newValue);
               sumPricer(newValue);
             }}

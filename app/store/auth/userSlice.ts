@@ -15,9 +15,7 @@ import {
   ErrorType,
   RoleState,
 } from "../../components/Hooks/interface";
-import { emailVerify } from "../../services/auth/emailVerify";
 import { handleErrorResponse, handleCatchError } from "../errorHandler";
-import { StaffState } from "./staffSlice";
 
 export const login = createAsyncThunk<
   ResponseUserState,

@@ -32,7 +32,6 @@ const updatePasswordPage: React.FC = () => {
     password: string;
     password_confirmation: string;
   }) => {
-    console.log(formData);
     try {
       const response = await dispatch(updateUserPassword(formData) as any);
 
@@ -45,7 +44,7 @@ const updatePasswordPage: React.FC = () => {
         if (re === null) throw new Error("パスワードの変更に失敗しました");
       }
     } catch (error) {
-      console.log("Error", error);
+      return;
     }
   };
 
