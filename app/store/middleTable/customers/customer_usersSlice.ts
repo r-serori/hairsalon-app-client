@@ -11,41 +11,10 @@ import {
   createCustomerAndSchedule,
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
+  createCustomerAndUpdateSchedule,
 } from "../../schedules/scheduleSlice";
 import { deleteUser } from "../../auth/userSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
-
-// export const getCustomer_users = createAsyncThunk(
-//   "customer_users/getCustomer_users",
-//   async (formData: {}, { rejectWithValue }) => {
-//     try {
-//       const response: any = await customerUserApi.fetchAllCustomerUsers();
-
-//       if (response.status >= 200 && response.status < 300) {
-//         // 成功時の処理
-//         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//         return response.data; // response.dataを返すことで、必要なデータのみを返す
-//       } else if (response.status >= 400 && response.status < 500) {
-//         // クライアントエラー時の処理
-//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-//       } else if (response.status >= 500) {
-//         // サーバーエラー時の処理
-//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-//       } else {
-//         return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-//       }
-//     } catch (err) {
-//       console.log("errだよ", err);
-//       return rejectWithValue(
-//         err.response
-//           ? err.response.data
-//           : { message: "予期しないエラーが発生しました" }
-//       );
-//     }
-//   }
-// );
 
 export interface Customer_usersState {
   // ステートの型
@@ -147,6 +116,16 @@ const customer_usersSlice = createSlice({
         ...action.payload.customer_users,
       ];
     });
+
+    builder.addCase(
+      createCustomerAndUpdateSchedule.fulfilled,
+      (state, action) => {
+        state.customer_users = [
+          ...state.customer_users,
+          ...action.payload.customer_users,
+        ];
+      }
+    );
 
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.customer_users = state.customer_users.filter(

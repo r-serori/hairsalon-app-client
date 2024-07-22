@@ -5,11 +5,7 @@ export const userApi = {
   login: async (formData: { email: string; password: string }) => {
     try {
       await getCsrfToken();
-      const response = (await sendRequest(
-        "POST",
-        "api/login",
-        formData
-      )) as any;
+      const response = (await sendRequest("POST", "/login", formData)) as any;
       console.log("responseLoginDataだよ", response);
       return response;
     } catch (error) {
@@ -30,7 +26,7 @@ export const userApi = {
   }) => {
     try {
       await getCsrfToken();
-      const response = await sendRequest("POST", "api/register", formData);
+      const response = await sendRequest("POST", "/register", formData);
       console.log("responseRegisterDataだよ", response);
       return response;
     } catch (error) {
@@ -65,7 +61,7 @@ export const userApi = {
   //ログアウト処理 Gate,ALL
   logout: async () => {
     try {
-      const response = (await sendRequest("POST", `api/user/logout`)) as any;
+      const response = (await sendRequest("POST", `/logout`)) as any;
       // console.log("responseLogOutDataだよ", response);
       return response;
     } catch (error) {
@@ -121,7 +117,7 @@ export const userApi = {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/user/updateUser`,
+        `/updateUser`,
         formData
       )) as any;
       console.log("responseUpdateUserDataだよ", response);
@@ -141,7 +137,7 @@ export const userApi = {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/user/updateUserPassword`,
+        `/updateUserPassword`,
         formData
       )) as any;
       // console.log("responseUpdateUserPasswordDataだよ", response);
@@ -154,7 +150,7 @@ export const userApi = {
 
   forgotPassword: async (email: string) => {
     try {
-      const response = (await sendRequest("POST", `api/forgotPassword`, {
+      const response = (await sendRequest("POST", `/forgotPassword`, {
         email: email,
       })) as any;
       // console.log("responseForgotPasswordDataだよ", response);
@@ -174,7 +170,7 @@ export const userApi = {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/resetPassword`,
+        `/resetPassword`,
         formData
       )) as any;
       // console.log("responseResetPasswordDataだよ", response);

@@ -357,8 +357,11 @@ const usersSlice = createSlice({
     builder.addCase(staffRegister.fulfilled, (state, action) => {
       state.status = "success";
       state.message = `スタッフの登録に成功しました！ ${action.payload.responseUser.name}さん！`;
-      state.users = [...state.users, action.payload.responseUser];
+      state.users = !Array.isArray(state.users)
+        ? [state.users, action.payload.responseUser]
+        : [...state.users, action.payload.responseUser];
     });
+
     builder.addCase(staffRegister.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.payload;

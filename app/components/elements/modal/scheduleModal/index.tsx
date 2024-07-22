@@ -10,6 +10,7 @@ import {
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
   RequestScheduleState,
+  createCustomerAndUpdateSchedule,
 } from "../../../../store/schedules/scheduleSlice";
 import { useSelector, useDispatch } from "react-redux";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
@@ -38,8 +39,6 @@ import { UserState } from "../../../../store/auth/userSlice";
 import { AppDispatch } from "../../../../redux/store";
 import { renderError } from "../../../../store/errorHandler";
 import { scheduleError, scheduleErrorStatus } from "../../../Hooks/selector";
-import BasicAlerts from "../../alert/BasicAlert";
-import { CssOutlined } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -179,6 +178,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : []
   );
 
+  console.log("merchandises", merchandises);
   const [merchandiseNames, setMerchandiseNames] = useState(
     whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.merchandise
@@ -195,9 +195,18 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       : []
   );
 
+  console.log("users", users);
   const [userNames, setUserNames] = useState<string[]>(
-    newCustomer && Array.isArray(users) && users.length === 0
+    initialCustomer === null &&
+      newCustomer &&
+      Array.isArray(users) &&
+      users.length === 0
       ? []
+      : initialCustomer === null &&
+        newCustomer &&
+        Array.isArray(users) &&
+        users.length > 1
+      ? [users[0].name]
       : newCustomer && !Array.isArray(users) && Object(users)
       ? [Object(users).name]
       : newCustomer && Array.isArray(users) && users.length === 1
@@ -218,6 +227,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? initialCustomer.names
       : []
   );
+
+  console.log("userNames", userNames);
 
   const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
     isCustomer ? true : false
@@ -415,6 +426,16 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
           const re = renderError(sErrorStatus, router, dispatch);
           if (re === null) throw new Error("予約処理に失敗しました");
         }
+      } else if (isCustomer && !newReservation && !title) {
+        const response = await dispatch(
+          createCustomerAndUpdateSchedule(scheduleAndCustomerFormData) as any
+        );
+        if (response.meta.requestStatus === "fulfilled") {
+          handleClose();
+        } else {
+          const re = renderError(sErrorStatus, router, dispatch);
+          if (re === null) throw new Error("予約処理に失敗しました");
+        }
       }
     } catch (error) {
       console.error(error);
@@ -532,10 +553,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         <Box sx={style} className="rounded-xl">
           {whoIsEvent === "編集" ? (
             <div className="flex justify-between items-center ml-2">
-              {permission === "オーナー" ||
-                (permission === "マネージャー" && (
-                  <DeleteMan id={Sid} link={"/schedules"} />
-                ))}
+              {(permission === "オーナー" || permission === "マネージャー") && (
+                <DeleteMan id={Sid} link={"/schedules"} />
+              )}
               <button
                 onClick={BackAgain}
                 className="md:w-auto text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-4 py-2 text-center cursor-pointer mr-2"
@@ -603,17 +623,20 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             setNewReservation(newValue ? false : true);
                             if (newValue === false) {
                               clearStates();
+                              setUsernameValidate(false);
                             } else {
-                              setCustomerName(
-                                whoIsEvent === "編集"
-                                  ? selectedEvent.title
-                                  : initialCustomer.customer_name
-                              );
-                              changeCustomerState(
-                                whoIsEvent === "編集"
-                                  ? selectedEvent.title
-                                  : initialCustomer.customer_name
-                              );
+                              if (!newCustomer) {
+                                setCustomerName(
+                                  whoIsEvent === "編集"
+                                    ? selectedEvent.title
+                                    : initialCustomer.customer_name
+                                );
+                                changeCustomerState(
+                                  whoIsEvent === "編集"
+                                    ? selectedEvent.title
+                                    : initialCustomer.customer_name
+                                );
+                              }
                             }
                           }}
                           role={permission}
@@ -634,17 +657,20 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             setNewReservation(newValue ? true : false);
                             if (newValue === true) {
                               clearStates();
+                              setUsernameValidate(false);
                             } else {
-                              setCustomerName(
-                                whoIsEvent === "編集"
-                                  ? selectedEvent.title
-                                  : initialCustomer.customer_name
-                              );
-                              changeCustomerState(
-                                whoIsEvent === "編集"
-                                  ? selectedEvent.title
-                                  : initialCustomer.customer_name
-                              );
+                              if (!newCustomer) {
+                                setCustomerName(
+                                  whoIsEvent === "編集"
+                                    ? selectedEvent.title
+                                    : initialCustomer.customer_name
+                                );
+                                changeCustomerState(
+                                  whoIsEvent === "編集"
+                                    ? selectedEvent.title
+                                    : initialCustomer.customer_name
+                                );
+                              }
                             }
                           }}
                           role={permission}
@@ -668,6 +694,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             setNewCustomer(newValue ? true : false);
                             if (newValue === true) {
                               clearStates();
+                              setUsernameValidate(false);
                             } else {
                               setCustomerName(
                                 whoIsEvent === "編集"
@@ -710,6 +737,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                               );
                             } else {
                               clearStates();
+                              setUsernameValidate(false);
                             }
                           }}
                           role={permission}
@@ -766,6 +794,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         role={permission}
                         required={false}
                         format={false}
+                        maxNumber={999999999999999}
                       />
                     </div>
                     <div className="pt-6 flex justify-center items-center ml-4 mr-4">
@@ -879,6 +908,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         role={permission}
                         required={false}
                         format={false}
+                        maxNumber={999999999999999}
                       />
                     </div>
 

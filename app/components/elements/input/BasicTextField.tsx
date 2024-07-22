@@ -33,7 +33,6 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
   onChange,
   onValidationChange,
 }) => {
-  const uuid = uuidv4();
   const removeInvalidChars = (str: string) => {
     return str.replace(regex, "");
   };
@@ -74,7 +73,7 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
       }}
     >
       <TextField
-        id={`${String(uuid)}  ${id}`}
+        id={`${id}`}
         type="text"
         label={placeholder}
         onChange={handleChange}

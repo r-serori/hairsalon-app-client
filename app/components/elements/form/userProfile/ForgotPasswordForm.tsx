@@ -9,7 +9,7 @@ interface ForgotPasswordFormProps {
 const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onSubmitForgotPassword,
 }) => {
-  const [email, setEmail] = useState<string>("owner@hairmail.com");
+  const [email, setEmail] = useState<string>("");
 
   const [emailValidate, setEmailValidate] = useState<boolean>(false);
 

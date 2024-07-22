@@ -51,19 +51,21 @@ const RegisterPage: React.FC = () => {
       const response: any = await dispatch(register(formData) as any);
       console.log("register.tsxのデータだよ", response);
       if (response.meta.requestStatus === "fulfilled") {
-        const userId = response.payload.responseUser.id;
+        const userId: number = Number(response.payload.responseUser.id);
+        console.log("responseuserId", userId);
 
         const userKey: KeyState = await getUserKey(dispatch);
+
+        console.log("userKey", userKey);
 
         if (userKey === null) {
           throw new Error();
         }
         const pushUser: boolean = pushUserId(userId, userKey);
-
         if (pushUser) {
-          await dispatch(getPermission() as any);
-          dispatch(isLogin());
           router.push("/auth/emailWait");
+        } else {
+          throw new Error();
         }
       } else {
         const re = renderError(uErrorStatus, router, dispatch);

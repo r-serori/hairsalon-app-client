@@ -6,6 +6,7 @@ import {
   createCustomerAndSchedule,
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
+  createCustomerAndUpdateSchedule,
 } from "../../store/schedules/scheduleSlice";
 import { handleErrorResponse, handleCatchError } from "../errorHandler";
 import { deleteResponse, ErrorType } from "../../components/Hooks/interface";
@@ -284,6 +285,14 @@ const customerSlice = createSlice({
           : customer
       );
     });
+
+    builder.addCase(
+      createCustomerAndUpdateSchedule.fulfilled,
+      (state, action) => {
+        state.status = "success";
+        state.customers = [...state.customers, action.payload.customer];
+      }
+    );
   },
 });
 

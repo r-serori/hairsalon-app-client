@@ -69,6 +69,8 @@ const UpdateUserInformationPage: React.FC = () => {
       const response = await dispatch(updateUser(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
         if (response.payload.redirect === true) {
+          localStorage.clear();
+          dispatch(isLogout());
           router.push("/auth/emailWait");
         } else {
           router.push("/dashboard");

@@ -22,40 +22,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/attendanceTimeShots": [
+    "/auth/emailWait": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/attendanceTimeShots.js"
+      "static/chunks/pages/auth/emailWait.js"
     ],
-    "/auth/login": [
+    "/schedules": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/auth/login.js"
-    ],
-    "/dashboard": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/dashboard.js"
-    ],
-    "/error": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/error.js"
-    ],
-    "/stocks": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/stocks.js"
-    ],
-    "/userProfile/updateUserInformation": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/userProfile/updateUserInformation.js"
-    ],
-    "/yearly_sales": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/yearly_sales.js"
+      "static/chunks/pages/schedules.js"
     ]
   },
   "ampFirstPages": []

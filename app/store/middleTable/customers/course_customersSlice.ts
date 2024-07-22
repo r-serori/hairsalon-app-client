@@ -11,41 +11,11 @@ import {
   createCustomerAndSchedule,
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
+  createCustomerAndUpdateSchedule,
 } from "../../schedules/scheduleSlice";
 import { deleteCourse } from "../../courses/courseSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
 
-// export const getCourse_customers = createAsyncThunk(
-//   "course_customers/getCourse_customers",
-//   async (formData: {}, { rejectWithValue }) => {
-//     try {
-//       const response: any = await courseCustomerApi.fetchAllCourseCustomers();
-
-//       if (response.status >= 200 && response.status < 300) {
-//         // 成功時の処理
-//         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//         return response.data; // response.dataを返すことで、必要なデータのみを返す
-//       } else if (response.status >= 400 && response.status < 500) {
-//         // クライアントエラー時の処理
-//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-//       } else if (response.status >= 500) {
-//         // サーバーエラー時の処理
-//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-//       } else {
-//         return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-//       }
-//     } catch (err) {
-//       console.log("errだよ", err);
-//       return rejectWithValue(
-//         err.response
-//           ? err.response.data
-//           : { message: "予期しないエラーが発生しました" }
-//       );
-//     }
-//   }
-// );
 export interface Course_customersState {
   // ステートの型
   course_id: number;
@@ -128,6 +98,16 @@ const course_customersSlice = createSlice({
                   payloadCourse_customer.customer_id
               )
           ),
+          ...action.payload.course_customers,
+        ];
+      }
+    );
+
+    builder.addCase(
+      createCustomerAndUpdateSchedule.fulfilled,
+      (state, action) => {
+        state.course_customers = [
+          ...state.course_customers,
           ...action.payload.course_customers,
         ];
       }

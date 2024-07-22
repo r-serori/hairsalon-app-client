@@ -81,6 +81,27 @@ export const createCustomerAndSchedule = createAsyncThunk<
   }
 });
 
+export const createCustomerAndUpdateSchedule = createAsyncThunk<
+  PostScheduleState,
+  RequestScheduleState,
+  {
+    rejectValue: ErrorType;
+  }
+>(
+  "schedule/customer/createCustomerAndUpdateSchedule",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response: any = await schedulesApi.createCustomerAndUpdateSchedule(
+        formData
+      );
+
+      return handleErrorResponse(response, rejectWithValue);
+    } catch (err) {
+      return handleCatchError(err, rejectWithValue);
+    }
+  }
+);
+
 export const updateSchedule = createAsyncThunk<
   PostScheduleOnlyState,
   ScheduleState,
@@ -363,6 +384,34 @@ const scheduleSlice = createSlice({
           : "顧客情報の更新とスケジュールの作成に成功しました！";
       })
       .addCase(updateCustomerAndScheduleCreate.rejected, (state, action) => {
+        state.error = action.payload;
+        state.status = "failed";
+      })
+
+      .addCase(createCustomerAndUpdateSchedule.pending, (state) => {
+        state.status = "loading";
+        state.message = null;
+        state.error = {
+          message: "",
+          status: 0,
+        };
+      })
+      .addCase(createCustomerAndUpdateSchedule.fulfilled, (state, action) => {
+        state.status = "success";
+        state.schedules = state.schedules = state.schedules.map((schedule) =>
+          schedule.id === action.payload.schedule.id
+            ? {
+                ...schedule,
+                ...action.payload.schedule,
+              }
+            : schedule
+        );
+        state.message = action.payload.message
+          ? action.payload.message
+          : "スケジュールの更新と顧客情報の作成に成功しました！";
+      })
+
+      .addCase(createCustomerAndUpdateSchedule.rejected, (state, action) => {
         state.error = action.payload;
         state.status = "failed";
       })

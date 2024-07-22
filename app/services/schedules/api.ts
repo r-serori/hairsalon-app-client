@@ -94,6 +94,21 @@ export const schedulesApi = {
     }
   },
 
+  createCustomerAndUpdateSchedule: async (formData: RequestScheduleState) => {
+    try {
+      const response = await sendRequest(
+        "POST",
+        `/schedules/customers/customerCreateScheduleUpdate`,
+        formData
+      );
+      // console.log("APIのschedulesDataだよ", response);
+      return response;
+    } catch (error) {
+      // console.error("errorだよ", error);
+      return { error: error };
+    }
+  },
+
   deleteSchedule: async (id: number) => {
     try {
       const response = await sendRequest("POST", `/schedules/delete`, {

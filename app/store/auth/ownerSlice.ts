@@ -58,7 +58,7 @@ export interface OwnerState {
   prefecture: string;
   city: string;
   addressLine1: string;
-  addressLine2?: string;
+  addressLine2: string | null;
   phone_number: string;
   user_id: number;
 }

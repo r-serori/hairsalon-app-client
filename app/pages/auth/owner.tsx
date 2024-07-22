@@ -9,23 +9,33 @@ import {
   userError,
   ownerErrorStatus,
   permissionStore,
+  userKey,
 } from "../../components/Hooks/authSelector";
 import { changeMessage } from "../../store/auth/userSlice";
 import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
 import { PermissionsState } from "../../store/auth/permissionSlice";
+import { useEffect } from "react";
+import { getUserKey } from "../../components/Hooks/useMethod";
+import { pushUserId } from "../../components/Hooks/pushLocalStorage";
+import { getPermission } from "../../store/auth/permissionSlice";
+import { isLogin } from "../../store/auth/isLoginSlice";
+import { KeyState } from "../../store/auth/keySlice";
 
 const OwnerPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
+  const key: KeyState = useSelector(userKey);
   const uStatus: string = useSelector(userStatus);
   const uMessage: string | null = useSelector(userMessage);
   const uError: string | null = useSelector(userError);
 
   const oErrorStatus: number = useSelector(ownerErrorStatus);
 
-  const permission: PermissionsState = useSelector(permissionStore);
+  useEffect(() => {
+    dispatch(isLogin());
+  }, []);
 
   const ownerSubmit = async (formData: OwnerState) => {
     console.log(formData);
@@ -33,6 +43,7 @@ const OwnerPage = () => {
       const response = await dispatch(ownerRegister(formData) as any);
 
       if (response.meta.requestStatus === "fulfilled") {
+        dispatch(changeMessage(""));
         router.push("/dashboard");
       } else {
         const re = renderError(oErrorStatus, router, dispatch);
@@ -71,8 +82,6 @@ const OwnerPage = () => {
 
       {uStatus == "loading" ? (
         <p>Loading...</p>
-      ) : permission === null ? (
-        <p>あなたに権限はありません。</p>
       ) : (
         <OwnerRegisterForm onSubmit={ownerSubmit} />
       )}

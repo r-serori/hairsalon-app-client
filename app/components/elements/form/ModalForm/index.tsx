@@ -3,7 +3,6 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import PrimaryButton from "../../button/PrimaryButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { RootState } from "../../../../redux/store";
 import { updateCourse } from "../../../../store/courses/courseSlice";
 import { updateOption } from "../../../../store/options/optionSlice";
 import { updateMerchandise } from "../../../../store/merchandises/merchandiseSlice";

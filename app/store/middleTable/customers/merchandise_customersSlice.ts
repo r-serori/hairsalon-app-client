@@ -11,42 +11,11 @@ import {
   createCustomerAndSchedule,
   updateCustomerAndSchedule,
   updateCustomerAndScheduleCreate,
+  createCustomerAndUpdateSchedule,
 } from "../../schedules/scheduleSlice";
 import { deleteMerchandise } from "../../merchandises/merchandiseSlice";
 import { ErrorType } from "../../../components/Hooks/interface";
 
-// export const getMerchandise_customers = createAsyncThunk(
-//   "merchandise_customers/getMerchandise_customers",
-//   async (formData: {}, { rejectWithValue }) => {
-//     try {
-//       const response: any =
-//         await merchandiseCustomerApi.fetchAllMerchandiseCustomers();
-
-//       if (response.status >= 200 && response.status < 300) {
-//         // 成功時の処理
-//         console.log("response.success", response); // 成功メッセージをコンソールに表示するなど、適切な処理を行う
-//         return response.data; // response.dataを返すことで、必要なデータのみを返す
-//       } else if (response.status >= 400 && response.status < 500) {
-//         // クライアントエラー時の処理
-//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-//       } else if (response.status >= 500) {
-//         // サーバーエラー時の処理
-//         console.log("response.error", response); // エラーメッセージをコンソールに表示するなど、適切な処理を行う
-//         return rejectWithValue(response.data); // rejectWithValueでエラーメッセージを返す
-//       } else {
-//         return rejectWithValue({ message: "予期しないエラーが発生しました" }); // 一般的なエラーメッセージを返す
-//       }
-//     } catch (err) {
-//       console.log("errだよ", err);
-//       return rejectWithValue(
-//         err.response
-//           ? err.response.data
-//           : { message: "予期しないエラーが発生しました" }
-//       );
-//     }
-//   }
-// );
 export interface Merchandise_customersState {
   // ステートの型
   merchandise_id: number;
@@ -147,6 +116,16 @@ const merchandise_customersSlice = createSlice({
         ...action.payload.merchandise_customers,
       ];
     });
+
+    builder.addCase(
+      createCustomerAndUpdateSchedule.fulfilled,
+      (state, action) => {
+        state.merchandise_customers = [
+          ...state.merchandise_customers,
+          ...action.payload.merchandise_customers,
+        ];
+      }
+    );
 
     builder.addCase(deleteMerchandise.fulfilled, (state, action) => {
       state.merchandise_customers = state.merchandise_customers.filter(

@@ -68,7 +68,7 @@ export default function Header() {
         getKey();
       }
     }
-  }, [dispatch]);
+  }, [dispatch, nowLogin]);
 
   useEffect(() => {
     const verifySession = async () => {
