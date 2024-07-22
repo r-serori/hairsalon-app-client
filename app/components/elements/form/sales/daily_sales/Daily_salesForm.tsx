@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BasicTextField from "../../../input/BasicTextField";
-import SingleCheckBox from "../../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../../button/PrimaryButton";
-import MultiCheckbox from "../../../input/checkbox/MultiCheckbox";
 import { Daily_salesState } from "../../../../../store/daily_sales/daily_saleSlice";
 import BasicNumberField from "../../../input/BasicNumberField";
-import BasicAlerts from "../../../alert/BasicAlert";
+import { useRouter } from "next/router";
 
 interface DailySalesFormProps {
   node: Daily_salesState;
@@ -16,9 +14,16 @@ const DailySalesForm: React.FC<DailySalesFormProps> = ({
   createDailySales,
   node,
 }) => {
-  const [date, setDate] = useState<string>(node.date ? node.date : "");
+  useEffect(() => {
+    if (!node) {
+      router.push("/daily_sales");
+    }
+  }, []);
+
+  const router = useRouter();
+  const [date, setDate] = useState<string>(node && node.date ? node.date : "");
   const [daily_sales, setDaily_sales] = useState<number>(
-    node.daily_sales ? node.daily_sales : 0
+    node && node.daily_sales ? node.daily_sales : 0
   );
 
   const [dailySalesValidate, setDailySalesValidate] = useState<boolean>(
@@ -41,7 +46,7 @@ const DailySalesForm: React.FC<DailySalesFormProps> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
+      <div className="flex items-center justify-center pt-12  px-4 sm:px-6 lg:px-8 min-h-full ">
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

@@ -68,7 +68,11 @@ const UpdateUserInformationPage: React.FC = () => {
     try {
       const response = await dispatch(updateUser(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
-        router.push("/auth/emailWait");
+        if (response.payload.redirect === true) {
+          router.push("/auth/emailWait");
+        } else {
+          router.push("/dashboard");
+        }
       } else {
         const re = renderError(uErrorStatus, router, dispatch);
         if (re === null) throw new Error("userInfoUpdateに失敗しました");

@@ -27,20 +27,35 @@
       "static/chunks/main.js",
       "static/chunks/pages/attendanceTimeShots.js"
     ],
-    "/customers": [
+    "/auth/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/customers.js"
+      "static/chunks/pages/auth/login.js"
     ],
-    "/userProfile/updateOwnerInfo": [
+    "/dashboard": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/userProfile/updateOwnerInfo.js"
+      "static/chunks/pages/dashboard.js"
+    ],
+    "/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/error.js"
+    ],
+    "/stocks": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/stocks.js"
     ],
     "/userProfile/updateUserInformation": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/userProfile/updateUserInformation.js"
+    ],
+    "/yearly_sales": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/yearly_sales.js"
     ]
   },
   "ampFirstPages": []

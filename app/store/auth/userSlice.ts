@@ -528,16 +528,12 @@ const usersSlice = createSlice({
 
     builder.addCase(getSchedule.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = action.payload.responseUsers
-        ? action.payload.responseUsers
-        : state.users;
+      state.users = action.payload.responseUsers;
     });
 
     builder.addCase(selectGetSchedules.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = action.payload.responseUsers
-        ? action.payload.responseUsers
-        : state.users;
+      state.users = action.payload.responseUsers;
     });
 
     builder.addCase(pleaseEditEndTime.fulfilled, (state, action) => {
@@ -547,12 +543,13 @@ const usersSlice = createSlice({
 
     builder.addCase(createStartTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.message = "出勤しました！";
+      state.message = "出勤しました！今日も一日頑張りましょう！";
     });
 
     builder.addCase(createEndTime.fulfilled, (state, action) => {
       state.status = "success";
-      state.message = "退勤しました！";
+      state.message =
+        "退勤しました！今日も1日お疲れ様でした！ゆっくりお休み下さい！";
     });
 
     builder.addCase(isLogout, (state) => {

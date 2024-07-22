@@ -26,6 +26,7 @@ import {
   attendance_timesStore,
 } from "../../../Hooks/selector";
 import {
+  changeMessage,
   falseIsAttendance,
   trueIsAttendance,
   UserState,
@@ -222,8 +223,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const resetPhoto = () => {
     if (link === "/attendanceTimeShots") {
       setPhoto(null);
-      setIsLoading(true);
-      setTime(null);
       setShowTime("");
       setShotEdit(false);
     } else {
@@ -267,6 +266,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           resetPhoto();
           setOpen(false);
         } else {
+          dispatch(changeMessage(""));
           const re = renderError(atErrorStatus, router, dispatch);
           if (re === null) throw new Error("更新に失敗しました");
         }
@@ -278,9 +278,9 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           resetPhoto();
           setOpen(false);
         } else {
-          // const re = renderError(atErrorStatus, router, dispatch);
-          // if (re === null) throw new Error("更新に失敗しました");
-          allLogout(dispatch);
+          dispatch(changeMessage(""));
+          const re = renderError(atErrorStatus, router, dispatch);
+          if (re === null) throw new Error("更新に失敗しました");
         }
       }
     } catch (error) {
@@ -317,6 +317,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           resetPhoto();
           setOpen(false);
         } else {
+          dispatch(changeMessage(""));
           const re = renderError(atErrorStatus, router, dispatch);
           if (re === null) throw new Error("更新に失敗しました");
         }
@@ -327,6 +328,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           resetPhoto();
           setOpen(false);
         } else {
+          dispatch(changeMessage(""));
           const re = renderError(atErrorStatus, router, dispatch);
           if (re === null) throw new Error("更新に失敗しました");
         }
@@ -337,23 +339,23 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
     }
   };
 
-  const pleaseEdit = async () => {
-    let formData;
+  // const pleaseEdit = async () => {
+  //   let formData;
 
-    if (link === "/attendanceTimeShots") {
-      formData = {
-        id: lastAttendanceTime.id,
-        end_time: "9999-12-31 23:59:59",
-        end_photo_path: "111222",
-        user_id: node.user_id,
-      };
+  //   if (link === "/attendanceTimeShots") {
+  //     formData = {
+  //       id: lastAttendanceTime.id,
+  //       end_time: "9999-12-31 23:59:59",
+  //       end_photo_path: "111222",
+  //       user_id: node.user_id,
+  //     };
 
-      await dispatch(pleaseEditEndTime(formData) as any);
-      resetPhoto();
-      setLateTime(false);
-      setOpen(false);
-    }
-  };
+  //     await dispatch(pleaseEditEndTime(formData) as any);
+  //     resetPhoto();
+  //     setLateTime(false);
+  //     setOpen(false);
+  //   }
+  // };
 
   return (
     <div
@@ -529,7 +531,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       ) : (
         ""
       )}
-
+      {/* 
       {lateTime && (
         <div className="flex justify-center items-center mt-4">
           <BasicAlerts
@@ -541,7 +543,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
           <PrimaryButton value="編集依頼" place="big" onChanger={pleaseEdit} />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

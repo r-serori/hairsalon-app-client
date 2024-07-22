@@ -4,6 +4,8 @@ import PrimaryButton from "../../../button/PrimaryButton";
 import { Monthly_salesState } from "../../../../../store/monthly_sales/monthly_saleSlice";
 import BasicNumberField from "../../../input/BasicNumberField";
 import BasicAlerts from "../../../alert/BasicAlert";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface MonthlySalesFormProps {
   node: Monthly_salesState;
@@ -14,11 +16,18 @@ const MonthlySalesForm: React.FC<MonthlySalesFormProps> = ({
   node,
   createMonthlySales,
 }) => {
+  useEffect(() => {
+    if (!node) {
+      router.push("/monthly_sales");
+    }
+  }, []);
+
+  const router = useRouter();
   const [year_month, setYear_month] = useState<string>(
-    node.year_month ? node.year_month : ""
+    node && node.year_month ? node.year_month : ""
   );
   const [monthly_sales, setMonthly_sales] = useState<number>(
-    node.monthly_sales ? node.monthly_sales : 0
+    node && node.monthly_sales ? node.monthly_sales : 0
   );
 
   const [monthlySalesValidate, setMonthlySalesValidate] = useState<boolean>(
@@ -41,7 +50,7 @@ const MonthlySalesForm: React.FC<MonthlySalesFormProps> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
+      <div className="flex items-center justify-center pt-12 px-4 sm:px-6 lg:px-8 min-h-full ">
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

@@ -39,6 +39,7 @@ import { AppDispatch } from "../../../../redux/store";
 import { renderError } from "../../../../store/errorHandler";
 import { scheduleError, scheduleErrorStatus } from "../../../Hooks/selector";
 import BasicAlerts from "../../alert/BasicAlert";
+import { CssOutlined } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -114,14 +115,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const initialCustomer = isCustomer && nodes[0] ? nodes[0] : null;
 
   const [newReservation, setNewReservation] = useState<boolean>(
-    initialCustomer === null ? true : whoIsEvent === "編集" ? false : true
+    whoIsEvent !== "編集" ? true : whoIsEvent === "編集" ? false : true
   );
 
   //trueは新規顧客、falseは既存顧客 顧客予約の場合はfalse　最初は既存顧客を表示
   const [newCustomer, setNewCustomer] = useState<boolean>(
     whoIsEvent === "編集" && isCustomer
       ? false
-      : initialCustomer === null && isCustomer && whoIsEvent !== "編集"
+      : isCustomer && whoIsEvent !== "編集"
       ? true
       : false
   );
@@ -277,7 +278,6 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     // useCustomerStateが存在する場合、顧客情報を設定
     setIsCustomer(true);
-    setNewReservation(false);
     setCustomerId(useCustomerState.id);
     setCustomerName(newValue);
     setPhoneNumber(useCustomerState.phone_number || "");
@@ -337,6 +337,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     scheduleAndCustomerFormData: RequestScheduleState
   ) => {
     try {
+      console.log("newCustomer", newCustomer);
+      console.log("newReservation", newReservation);
+      console.log("title", title);
       if (
         //新規予約、新規顧客、タイトルなし
         newCustomer &&
@@ -467,7 +470,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
             .map((user) => user.id)
         : [Object(users).id],
 
-      title: title ? title : "",
+      title: title ? title : null,
       start_time: dayjs(startTime)
         .utc()
         .tz("Asia/Tokyo")

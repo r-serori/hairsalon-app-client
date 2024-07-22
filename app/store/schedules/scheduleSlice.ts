@@ -193,17 +193,17 @@ export interface PostScheduleOnlyState {
 }
 
 export interface RequestScheduleState {
-  id: number;
-  customer_id: number;
-  customer_name: string;
-  phone_number: string;
-  remarks: string;
-  course_id: number[];
-  option_id: number[];
-  merchandise_id: number[];
-  hairstyle_id: number[];
+  id: number | null;
+  customer_id: number | null;
+  customer_name: string | null;
+  phone_number: string | null;
+  remarks: string | null;
+  course_id: number[] | null;
+  option_id: number[] | null;
+  merchandise_id: number[] | null;
+  hairstyle_id: number[] | null;
   user_id: number[];
-  title: string;
+  title: string | null;
   start_time: string;
   end_time: string;
   allDay: boolean;

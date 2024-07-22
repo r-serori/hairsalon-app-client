@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import BasicTextField from "../../../input/BasicTextField";
-import SingleCheckBox from "../../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../../button/PrimaryButton";
-import MultiCheckbox from "../../../input/checkbox/MultiCheckbox";
 import { Yearly_salesState } from "../.../../../../../../store/yearly_sales/yearly_saleSlice";
 import BasicNumberField from "../../../input/BasicNumberField";
-import BasicAlerts from "../../../alert/BasicAlert";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface YearlySalesFormProps {
   node: Yearly_salesState;
@@ -16,9 +15,15 @@ const yearly_salesForm: React.FC<YearlySalesFormProps> = ({
   node,
   createYearlySales,
 }) => {
-  const [year, setYear] = useState(node.year ? node.year : "");
+  useEffect(() => {
+    if (!node) {
+      router.push("/yearly_sales");
+    }
+  }, []);
+  const router = useRouter();
+  const [year, setYear] = useState(node && node.year ? node.year : "");
   const [yearly_sales, setYearly_sales] = useState(
-    node.yearly_sales ? node.yearly_sales : 0
+    node && node.yearly_sales ? node.yearly_sales : 0
   );
 
   const [yearlySalesValidate, setYearlySalesValidate] = useState<boolean>(
@@ -40,7 +45,7 @@ const yearly_salesForm: React.FC<YearlySalesFormProps> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-center bg-gray-50 pt-12 py-80 px-4 sm:px-6 lg:px-8 min-h-full ">
+      <div className="flex items-center justify-center pt-12 px-4 sm:px-6 lg:px-8 min-h-full ">
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -53,6 +58,7 @@ const yearly_salesForm: React.FC<YearlySalesFormProps> = ({
               placeholder="年"
               value={year}
               onChange={(e) => setYear(e.target.value)}
+              disabled={true}
             />
 
             <BasicNumberField
