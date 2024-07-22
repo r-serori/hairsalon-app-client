@@ -31,6 +31,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/dashboard.js"
+    ],
+    "/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/error.js"
     ]
   },
   "ampFirstPages": []

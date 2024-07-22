@@ -273,6 +273,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     if (!isCustomer) {
       setIsCustomer(false);
       setTitle(newValue);
+      setTitleValidate(true);
       setNewReservation(false);
       return;
     }
@@ -281,6 +282,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setIsCustomer(true);
     setCustomerId(useCustomerState.id);
     setCustomerName(newValue);
+    setCustomerNameValidate(true);
     setPhoneNumber(useCustomerState.phone_number || "");
     setRemarks(useCustomerState.remarks || "");
     setCourseNames(useCustomerState.course || []);
@@ -288,6 +290,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setMerchandiseNames(useCustomerState.merchandise || []);
     setHairstyleNames(useCustomerState.hairstyle || []);
     setUserNames(useCustomerState.names || []);
+    setUsernameValidate(true);
   };
 
   //顧客情報をクリアする関数

@@ -11,6 +11,7 @@ import {
 } from "../../components/Hooks/authSelector";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import RouterButton from "../../components/elements/button/RouterButton";
 
 const forgotPasswordPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -54,7 +55,12 @@ const forgotPasswordPage: React.FC = () => {
       {uStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
-        <ForgotPasswordForm onSubmitForgotPassword={handleForgotPassword} />
+        <div className="mx-4">
+          <div className="my-4">
+            <RouterButton link="/" value="ホーム画面へ戻る" />
+          </div>
+          <ForgotPasswordForm onSubmitForgotPassword={handleForgotPassword} />
+        </div>
       )}
     </div>
   );
