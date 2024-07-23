@@ -120,7 +120,7 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
 
           <SingleCheckBox
             value={role}
-            onChange={(newValue: RoleState) => setRole(newValue)}
+            onChange={(newValue: RoleState) => setRole(newValue as RoleState)}
             getOptions={["マネージャー", "スタッフ"]}
             onValidationChange={(isValid) => setRoleValidate(isValid)}
           />

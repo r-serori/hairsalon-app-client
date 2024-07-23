@@ -58,7 +58,7 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
 
           <SingleCheckBox
             value={role}
-            onChange={(newValue: RoleState) => setRole(newValue)}
+            onChange={(newValue: RoleState) => setRole(newValue as RoleState)}
             getOptions={["マネージャー", "スタッフ"]}
           />
 
