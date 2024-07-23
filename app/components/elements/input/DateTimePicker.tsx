@@ -9,7 +9,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 interface DateTimeRangePickerProps {
-  value: Dayjs;
+  value: Dayjs | null;
   changer: (newValue: Dayjs) => void;
   isAllDay?: boolean; //終日の予定かどうか
   role?: string; //スタッフかどうか
@@ -27,7 +27,10 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  const dayJsValue = dayjs(value).utc().tz("Asia/Tokyo");
+  const dayJsValue =
+    value === null
+      ? dayjs().utc().tz("Asia/Tokyo")
+      : dayjs(value).utc().tz("Asia/Tokyo");
 
   // 0時と23時のdayjsオブジェクトを作成
   const minTime = dayjs().hour(0).minute(0).utc().tz("Asia/Tokyo");
