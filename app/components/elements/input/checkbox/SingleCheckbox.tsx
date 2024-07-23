@@ -2,7 +2,6 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { createTheme } from "@mui/material/styles";
-import { RoleState } from "../../../Hooks/interface";
 
 interface SingleCheckBoxProps {
   value?: string;

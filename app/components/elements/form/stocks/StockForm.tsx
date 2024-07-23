@@ -37,7 +37,7 @@ const StockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
     node?.stock_category_id && stockCategories.length > 0
       ? stockCategories.find(
           (category) => category.id === node.stock_category_id
-        )?.category
+        )?.category ?? ""
       : stockCategoryNames[0]
   );
 
@@ -146,7 +146,7 @@ const StockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
             getOptions={stockCategoryNames}
             value={stockCategoryIdName}
             nodeId={node ? node.id.toString() : "stock_category_id"}
-            onChange={(newValue) => setStockCategoryIdName(newValue)}
+            onChange={(newValue: string) => setStockCategoryIdName(newValue)}
           />
           <PrimaryButton value={"作成"} />
         </form>
