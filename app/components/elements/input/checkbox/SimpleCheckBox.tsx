@@ -3,13 +3,14 @@ import Checkbox from "@mui/material/Checkbox";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
 
 interface ControlledCheckboxProps {
   type?: string;
   checked: boolean;
   onChanger: (newValue: boolean) => void;
   label: string; // ラベルの追加
-  role?: string;
+  role?: PermissionsState;
 }
 
 const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
