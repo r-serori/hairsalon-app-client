@@ -220,7 +220,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     };
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const newValue = e.target.value;
     setEditValue(newValue);
   };
@@ -232,7 +232,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
     return categoryId;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (isValidate === false) return;
 
