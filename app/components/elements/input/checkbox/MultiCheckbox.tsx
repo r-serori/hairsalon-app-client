@@ -11,13 +11,14 @@ import { getOption } from "../../../../store/options/optionSlice";
 import { createTheme } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
 import { object } from "yup";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
 
 interface MultiCheckboxProps {
   getOptions: [] | object;
   optionName: string[] | null;
   onChanger: (event: SelectChangeEvent<string[]>) => void;
   nodesProp: string;
-  role?: string;
+  role?: PermissionsState;
   required?: boolean; // 必須フラグ
   error?: boolean; // エラーフラグ
   onValidationChange?: (isValid: boolean) => void;
