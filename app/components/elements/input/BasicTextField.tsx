@@ -16,7 +16,7 @@ interface BasicTextFieldProps {
   regex?: RegExp;
   required?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onValidationChange?: (isValid: boolean) => void;
+  onValidationChange?: null | ((isValid: boolean) => void);
 }
 
 const BasicTextField: React.FC<BasicTextFieldProps> = ({
@@ -43,9 +43,20 @@ const BasicTextField: React.FC<BasicTextFieldProps> = ({
       ...e,
       target: { ...e.target, value: newValue },
     });
-    if (!required) {
+    if (
+      !required ||
+      onValidationChange === undefined ||
+      onValidationChange === null
+    ) {
       return;
-    } else if (required && newValue === "") {
+    } else if (
+      required &&
+      (newValue === "" ||
+        newValue === null ||
+        newValue === undefined ||
+        newValue === " ") &&
+      onValidationChange
+    ) {
       onValidationChange(false);
     } else {
       onValidationChange(true);

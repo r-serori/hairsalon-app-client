@@ -55,8 +55,8 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
         newValue === "0" ||
         newValue === "00" ||
         newValue === null ||
-        newValue === undefined ||
-        onValidationChange)
+        newValue === undefined) &&
+      onValidationChange
     ) {
       onValidationChange(false);
     } else {
