@@ -536,12 +536,20 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     setSelectedEvent(null);
   };
 
-  const startTimeChange = (e) => {
-    setStartTime(dayjs(e).utc().tz("Asia/Tokyo"));
+  const startTimeChange = (e: Dayjs | null) => {
+    if (e === null) {
+      return;
+    } else {
+      setStartTime(dayjs(e).utc().tz("Asia/Tokyo"));
+    }
   };
 
-  const endTimeChange = (e) => {
-    setEndTime(dayjs(e).utc().tz("Asia/Tokyo"));
+  const endTimeChange = (e: Dayjs | null) => {
+    if (e === null) {
+      return;
+    } else {
+      setEndTime(dayjs(e).utc().tz("Asia/Tokyo"));
+    }
   };
 
   return (
