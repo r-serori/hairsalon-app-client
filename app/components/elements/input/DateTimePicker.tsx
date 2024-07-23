@@ -7,12 +7,13 @@ import timezone from "dayjs/plugin/timezone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
 
 interface DateTimeRangePickerProps {
   value: Dayjs | null;
   changer: (newValue: Dayjs) => void;
   isAllDay?: boolean; //終日の予定かどうか
-  role?: string; //スタッフかどうか
+  role?: PermissionsState; //スタッフかどうか
   onValidateChange: (isValid: boolean) => void;
 }
 
