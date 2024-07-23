@@ -84,20 +84,21 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
         //events==schedulesとtitleとしてcustomer_nameを持っているものを取得。上記の updateDateFormatと同じ日付のものを取得。
         sameDateEvents = events.filter(
-          (event) =>
+          (event: any) =>
             dayjs(event.start).format("YYYY-MM-DD") === updateDateFormat
         );
       } else if (whatSales === "月次") {
         const updateDateFormat = dayjs(updateDate).format("YYYY-MM");
 
         sameDateEvents = events.filter(
-          (event) => dayjs(event.start).format("YYYY-MM") === updateDateFormat
+          (event: any) =>
+            dayjs(event.start).format("YYYY-MM") === updateDateFormat
         );
       } else if (whatSales === "年次") {
         const updateDateFormat = dayjs(updateDate).format("YYYY");
 
         sameDateEvents = events.filter(
-          (event) => dayjs(event.start).format("YYYY") === updateDateFormat
+          (event: any) => dayjs(event.start).format("YYYY") === updateDateFormat
         );
       }
 
@@ -107,7 +108,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         return;
       }
 
-      const sameCustomerEvents = sameDateEvents.filter((event) => {
+      const sameCustomerEvents = sameDateEvents.filter((event: any) => {
         if (event.isCustomer) {
           return {
             course: event.course,
@@ -119,7 +120,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       //sameCustomerEventsをmapで回して、courseのみを取得。その後、配列内に配列が複数入っている状態になるのでflat()で配列を一つの配列にする。
       const sameCoursesEvents = sameCustomerEvents
-        .map((event) => event.course)
+        .map((event: any) => event.course)
         .flat();
 
       //coursesの中にあるcourse_nameとpriceを取得して、配列に入れる。
@@ -140,7 +141,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       //optionも同様にする。
       const sameOptionsEvents = sameCustomerEvents
-        .map((event) => event.option)
+        .map((event: any) => event.option)
         .flat();
 
       const optionNameAndPrices = options.map((option) => ({
@@ -160,7 +161,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
       //merchandiseも同様にする。
 
       const sameMerchandisesEvents = sameCustomerEvents
-        .map((event) => event.merchandise)
+        .map((event: any) => event.merchandise)
         .flat();
 
       const merchandiseNameAndPrices = merchandises.map((merchandise) => ({
