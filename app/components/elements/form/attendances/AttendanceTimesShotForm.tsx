@@ -251,10 +251,10 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       if (edit) {
         const startTimePhoto: string = "111222";
         const formData = {
-          id: node.id,
+          id: node?.id || 0,
           start_time: getTime,
           start_photo_path: startTimePhoto,
-          user_id: node.user_id,
+          user_id: node?.user_id || 0,
         };
         const response = await dispatch(updateStartTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
@@ -271,7 +271,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         const formData = {
           start_time: getTime,
           start_photo_path: startTimePhoto,
-          user_id: node.id,
+          user_id: node?.id || 0,
         };
         const response = await dispatch(createStartTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
@@ -295,10 +295,10 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       if (edit) {
         const endTimePhoto: string = "111222";
         const formData = {
-          id: node.id,
+          id: node?.id || 0,
           end_time: getTime,
           end_photo_path: endTimePhoto,
-          user_id: node.user_id,
+          user_id: node?.user_id || 0,
         };
         const response = await dispatch(updateEndTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
@@ -315,7 +315,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         const formData = {
           end_time: getTime,
           end_photo_path: endTimePhoto,
-          user_id: node.id,
+          user_id: node?.id || 0,
         };
         const response = await dispatch(createEndTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
