@@ -127,7 +127,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
   // 既存顧客で新規予約の場合、初期値として最初の顧客情報を取得
   const [customerId, setCustomerId] = useState<number>(
-    whoIsEvent == "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? 0
+      : whoIsEvent == "編集" && isCustomer
       ? selectedEvent.extendedProps.customer_id
       : !newCustomer && isCustomer && initialCustomer.id
       ? initialCustomer.id
@@ -136,7 +138,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
   const [customerName, setCustomerName] = useState<string>(
     //新規顧客、新規予約の場合は初期値としてnode[0]の顧客名を設定
-    whoIsEvent === "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? ""
+      : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.title
       : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.customer_name
@@ -144,7 +148,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [phone_number, setPhoneNumber] = useState<string>(
-    whoIsEvent === "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? ""
+      : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.phone_number
       : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.phone_number
@@ -152,7 +158,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [remarks, setRemarks] = useState<string>(
-    whoIsEvent === "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? ""
+      : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.remarks
       : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.remarks
@@ -160,7 +168,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [courseNames, setCourseNames] = useState(
-    whoIsEvent === "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? []
+      : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.course
       : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.course
@@ -168,7 +178,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [optionNames, setOptionNames] = useState(
-    whoIsEvent === "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? []
+      : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.option
       : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.option
@@ -176,7 +188,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [merchandiseNames, setMerchandiseNames] = useState(
-    whoIsEvent === "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? []
+      : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.merchandise
       : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.merchandise
@@ -184,7 +198,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   );
 
   const [hairstyleNames, setHairstyleNames] = useState(
-    whoIsEvent === "編集" && isCustomer
+    initialCustomer === null && newCustomer
+      ? []
+      : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.hairstyle
       : !newCustomer && isCustomer && initialCustomer
       ? initialCustomer.hairstyle
