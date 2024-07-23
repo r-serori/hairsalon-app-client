@@ -48,7 +48,11 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
     } else {
       onValidateChange(true);
     }
-    changer(newValue);
+    if (newValue === null) {
+      changer(dayjs().utc().tz("Asia/Tokyo"));
+    } else {
+      changer(newValue);
+    }
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
