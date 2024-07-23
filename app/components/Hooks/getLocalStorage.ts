@@ -1,11 +1,10 @@
 import CryptoJS from "crypto-js";
-import { KeyState } from "../../store/auth/keySlice";
 
-export const getUserId = (key: KeyState): number => {
+export const getUserId = (key: string): number => {
   try {
     const userId = localStorage.getItem("user_id");
 
-    const bytes = CryptoJS.AES.decrypt(userId, String(key));
+    const bytes = CryptoJS.AES.decrypt(userId, key);
 
     const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 

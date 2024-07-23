@@ -21,7 +21,6 @@ const OwnerPage = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
-  const key: KeyState = useSelector(userKey);
   const uStatus: string = useSelector(userStatus);
   const uMessage: string | null = useSelector(userMessage);
   const uError: string | null = useSelector(userError);
