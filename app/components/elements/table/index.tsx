@@ -287,7 +287,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
               {tableList.map((node: any, index: any) => (
                 <Row key={`${index} + ${node.id} `} item={node}>
                   {/* nodeの縦列を数える */}
-                  {nodesProps.map((nodesProp) => {
+                  {nodesProps.map((nodesProp: any) => {
                     const propName: string = Object.keys(nodesProp)[0] || ""; //  Object.keysは()内＝nodesProp　のkeyを取得　[0]は一番上のkeyを取得　mapで一つ一つ取得してるから一番上[0]にあるのは一つだけ
 
                     const propValue: any = node[nodesProp[propName]] || "";
