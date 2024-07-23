@@ -229,6 +229,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
     const categoryId = getCheckBoxCategoriesState.find(
       (category) => category.category === EditValue
     ).id;
+    if (categoryId === undefined) {
+      throw new Error("カテゴリーが見つかりません");
+    }
     return categoryId;
   };
 
