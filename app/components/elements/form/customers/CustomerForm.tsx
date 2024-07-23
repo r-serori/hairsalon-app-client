@@ -53,8 +53,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       Array.isArray(getCoursesState) &&
       Array.isArray(node.course_id)
       ? getCoursesState
-          .filter((course) => node.course_id.includes(course.id))
-          .map((course) => course.course_name)
+          .filter((course) => node?.course_id.includes(course.id))
+          .map((course) => course.course_name) || []
       : []
   );
   const [options, setOptions] = useState<string[]>(
@@ -63,8 +63,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       Array.isArray(getOptionsState) &&
       Array.isArray(node.option_id)
       ? getOptionsState
-          .filter((option) => node.option_id.includes(option.id))
-          .map((option) => option.option_name)
+          .filter((option) => node?.option_id.includes(option.id))
+          .map((option) => option.option_name) || []
       : []
   );
   const [merchandises, setMerchandises] = useState<string[]>(
@@ -73,8 +73,10 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       Array.isArray(getMerchandisesState) &&
       Array.isArray(node.merchandise_id)
       ? getMerchandisesState
-          .filter((merchandise) => node.merchandise_id.includes(merchandise.id))
-          .map((merchandise) => merchandise.merchandise_name)
+          .filter((merchandise) =>
+            node?.merchandise_id.includes(merchandise.id)
+          )
+          .map((merchandise) => merchandise.merchandise_name) || []
       : []
   );
   const [hairstyles, setHairstyles] = useState<string[]>(
@@ -83,8 +85,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       Array.isArray(getHairstylesState) &&
       Array.isArray(node.hairstyle_id)
       ? getHairstylesState
-          .filter((hairstyle) => node.hairstyle_id.includes(hairstyle.id))
-          .map((hairstyle) => hairstyle.hairstyle_name)
+          .filter((hairstyle) => node?.hairstyle_id.includes(hairstyle.id))
+          .map((hairstyle) => hairstyle.hairstyle_name) || []
       : []
   );
   const [users, setUsers] = useState<string[]>(
@@ -96,8 +98,8 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
           node !== null &&
           node.user_id !== null)
       ? getUsersState
-          .filter((user) => node.user_id.includes(user.id))
-          .map((user) => user.name)
+          .filter((user) => node?.user_id.includes(user.id))
+          .map((user) => user.name) || []
       : Object(getUsersState).name
   );
 
