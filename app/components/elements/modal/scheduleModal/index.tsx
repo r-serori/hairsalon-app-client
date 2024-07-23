@@ -131,8 +131,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? 0
       : whoIsEvent == "編集" && isCustomer
       ? selectedEvent.extendedProps.customer_id
-      : !newCustomer && isCustomer && initialCustomer.id
-      ? initialCustomer.id
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.id || 0
       : 0
   );
 
@@ -142,8 +142,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? ""
       : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.title
-      : !newCustomer && isCustomer && initialCustomer
-      ? initialCustomer.customer_name
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.customer_name || ""
       : ""
   );
 
@@ -152,8 +152,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? ""
       : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.phone_number
-      : !newCustomer && isCustomer && initialCustomer
-      ? initialCustomer.phone_number
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.phone_number || ""
       : ""
   );
 
@@ -162,8 +162,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? ""
       : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.remarks
-      : !newCustomer && isCustomer && initialCustomer
-      ? initialCustomer.remarks
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.remarks || ""
       : ""
   );
 
@@ -172,8 +172,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? []
       : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.course
-      : !newCustomer && isCustomer && initialCustomer
-      ? initialCustomer.course
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.course || []
       : []
   );
 
@@ -182,8 +182,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? []
       : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.option
-      : !newCustomer && isCustomer && initialCustomer
-      ? initialCustomer.option
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.option || []
       : []
   );
 
@@ -192,8 +192,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? []
       : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.merchandise
-      : !newCustomer && isCustomer && initialCustomer
-      ? initialCustomer.merchandise
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.merchandise || []
       : []
   );
 
@@ -202,8 +202,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       ? []
       : whoIsEvent === "編集" && isCustomer
       ? selectedEvent.extendedProps.hairstyle
-      : !newCustomer && isCustomer && initialCustomer
-      ? initialCustomer.hairstyle
+      : !newCustomer && isCustomer && initialCustomer !== null
+      ? initialCustomer?.hairstyle || []
       : []
   );
 
