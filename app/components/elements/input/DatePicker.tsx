@@ -43,7 +43,11 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
     } else {
       onValidateChange(true);
     }
-    changer(newValue);
+    if (newValue === null) {
+      changer(dayjs().utc().tz("Asia/Tokyo"));
+    } else {
+      changer(newValue);
+    }
   };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
