@@ -9,7 +9,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface DatePickerValueProps {
-  value: Dayjs;
+  value: Dayjs | null;
   changer: (newValue: Dayjs) => void;
   whatSales: string;
   onValidateChange: (isValid: boolean) => void;
@@ -59,7 +59,11 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
             ? "年を選択"
             : "表示したい年月を選択"
         }
-        value={dayjs(value).utc().tz("Asia/Tokyo")}
+        value={
+          value === null
+            ? dayjs().utc().tz("Asia/Tokyo")
+            : dayjs(value).utc().tz("Asia/Tokyo")
+        }
         onChange={errorChecker}
         views={
           whatSales === "日次"
