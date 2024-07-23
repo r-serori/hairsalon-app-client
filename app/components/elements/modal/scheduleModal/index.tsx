@@ -234,8 +234,11 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         users.length > 1 &&
         whoIsEvent === "編集"
       ? selectedEvent.extendedProps.names
-      : isCustomer && Array.isArray(users) && users.length > 1
-      ? initialCustomer.names
+      : isCustomer &&
+        Array.isArray(users) &&
+        users.length > 1 &&
+        initialCustomer !== null
+      ? initialCustomer?.names || []
       : []
   );
 
