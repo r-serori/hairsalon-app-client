@@ -45,9 +45,9 @@ const StockNotice: React.FC<StockNoticeProps> = ({ nodes, setSearch }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {stockNotice.map((node) => (
+                {stockNotice.map((node: any) => (
                   <TableRow
-                    key={node.id}
+                    key={node?.id || 0}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <Button
@@ -58,15 +58,15 @@ const StockNotice: React.FC<StockNoticeProps> = ({ nodes, setSearch }) => {
                         cursor: "pointer",
                         ":hover": { color: "blue" },
                       }}
-                      onClick={() => setSearch(node.product_name)}
+                      onClick={() => setSearch(node?.product_name || "")}
                     >
-                      {node.product_name}
+                      {node?.product_name || ""}
                     </Button>
                     <TableCell
                       align="right"
                       sx={{ padding: 0.6, color: "red" }}
                     >
-                      {node.quantity}
+                      {node?.quantity || 0}
                     </TableCell>
                   </TableRow>
                 ))}
