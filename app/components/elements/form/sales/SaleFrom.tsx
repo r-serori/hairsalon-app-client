@@ -140,7 +140,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
           );
           return foundCourse ? foundCourse.coursePrice : 0;
         })
-        .reduce((acc, cur) => acc + cur, 0);
+        .reduce((acc: number, cur: number) => acc + cur, 0);
       //optionも同様にする。
       const sameOptionsEvents = sameCustomerEvents
         .map((event: any) => event.option)
@@ -161,7 +161,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
           );
           return foundOption ? foundOption.optionPrice : 0;
         })
-        .reduce((acc, cur) => acc + cur, 0);
+        .reduce((acc: number, cur: number) => acc + cur, 0);
 
       //merchandiseも同様にする。
 
@@ -190,7 +190,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
           );
           return foundMerchandise ? foundMerchandise.merchandisePrice : 0;
         })
-        .reduce((acc, cur) => acc + cur, 0);
+        .reduce((acc: number, cur: number) => acc + cur, 0);
 
       const result =
         sameCoursesPrice + sameOptionsPrice + sameMerchandisesPrice;
