@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { getOption } from "../../../../store/options/optionSlice";
 import { createTheme } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
+import { object } from "yup";
 
 interface MultiCheckboxProps {
   getOptions: [] | Object;
@@ -45,7 +46,11 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           })
         : Array.isArray(getOptions) && getOptions.length === 0
         ? names.push("コースがありません。コース画面から新規作成してください！")
+        : Object(getOptions).course_name
+        ? names.push(Object(getOptions).course_name)
         : names.push(getOptions[0].course_name);
+
+      names.push(getOptions[0].course_name);
       fieldName.push("コース");
       break;
     case "option":
@@ -57,6 +62,8 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
         ? names.push(
             "オプションがありません。オプション画面から新規作成してください！"
           )
+        : Object(getOptions).option_name
+        ? names.push(Object(getOptions).option_name)
         : names.push(getOptions[0].option_name);
       fieldName.push("オプション");
       break;
@@ -67,6 +74,8 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           })
         : Array.isArray(getOptions) && getOptions.length === 0
         ? names.push("物販がありません。物販画面から新規作成してください！")
+        : Object(getOptions).merchandise_name
+        ? names.push(Object(getOptions).merchandise_name)
         : names.push(getOptions[0].merchandise_name);
       fieldName.push("物販");
       break;
@@ -77,6 +86,8 @@ const MultiCheckbox: React.FC<MultiCheckboxProps> = ({
           })
         : Array.isArray(getOptions) && getOptions.length === 0
         ? names.push("髪型がありません。髪型画面から新規作成してください！")
+        : Object(getOptions).hairstyle_name
+        ? names.push(Object(getOptions).hairstyle_name)
         : names.push(getOptions[0].hairstyle_name);
       fieldName.push("髪型");
       break;
