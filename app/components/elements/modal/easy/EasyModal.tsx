@@ -106,7 +106,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
       if (whoAreYou === "attendanceTimes") {
         const response = await dispatch(
           selectGetAttendanceTimes({
-            user_id: whatIsYourId,
+            user_id: whatIsYourId || 0,
             yearMonth: year,
           }) as any
         );
