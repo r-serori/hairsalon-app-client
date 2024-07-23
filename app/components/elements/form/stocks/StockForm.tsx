@@ -65,6 +65,12 @@ const StockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
     ) {
       return;
     }
+
+    const stockCategoryId: number | null =
+      stockCategories?.find(
+        (category) => category.category === stockCategoryIdName
+      )?.id || null;
+
     createStock({
       id: node ? node.id : 0,
       product_name: product_name,
@@ -73,9 +79,7 @@ const StockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
       remarks: remarks,
       supplier: supplier,
       notice: notice,
-      stock_category_id: stockCategories.find(
-        (category) => category.category === stockCategoryIdName
-      )?.id,
+      stock_category_id: stockCategoryId,
     });
   };
 
