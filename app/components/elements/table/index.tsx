@@ -443,6 +443,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                         <div className="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg  text-center ml-2 pointer ">
                           <BasicModal
                             type="出勤"
+                            NodesProp="start_time"
                             editValue={
                               link === "/attendance_times"
                                 ? "出勤時間と写真を編集"
@@ -484,6 +485,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                         <div className="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg  text-center ml-2 pointer">
                           <BasicModal
                             type="退勤"
+                            NodesProp="end_time"
                             editValue={
                               link === "/attendance_times"
                                 ? "退勤時間と写真を編集"

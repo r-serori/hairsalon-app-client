@@ -67,7 +67,7 @@ interface BasicModalProps {
     | CustomerNodes[]
     | any;
 
-  NodesProp?: string;
+  NodesProp: string;
   link: string;
   role?: PermissionsState;
 }
