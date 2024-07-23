@@ -1,7 +1,7 @@
 import CryptoJS from "crypto-js";
 import { KeyState } from "../../store/auth/keySlice";
 
-export const getUserId = (key: KeyState): number | null => {
+export const getUserId = (key: KeyState): number => {
   try {
     const userId = localStorage.getItem("user_id");
 
