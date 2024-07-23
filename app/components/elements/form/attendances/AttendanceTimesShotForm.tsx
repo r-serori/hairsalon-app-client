@@ -61,7 +61,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
   const atErrorStatus: number = useSelector(attendance_timeErrorStatus);
 
-  const webcamRef = useRef(null);
+  const webcamRef = useRef<Webcam>(null);
 
   // 出勤時間、退勤時間の編集モード
   const [edit, setEdit] = useState<boolean>(
@@ -194,32 +194,33 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       link === "/attendanceTimeEnd"
       // && node.end_photo_path
     ) {
-      const imageSrc = webcamRef.current?.getScreenshot() || null;
-      if (imageSrc === null) {
-        return;
-      } else {
+      if (webcamRef.current) {
+        const imageSrc = webcamRef.current.getScreenshot();
         setPhoto(imageSrc);
+      } else {
+        return null;
       }
     } else if (link === "/attendanceTimeShots") {
-      const imageSrc = webcamRef.current?.getScreenshot() || null;
-      if (imageSrc === null) {
-        return;
-      } else {
+      if (webcamRef.current) {
+        const imageSrc = webcamRef.current.getScreenshot();
         setPhoto(imageSrc);
-
+        setPhoto(imageSrc);
         setTime(dayjs().utc().tz("Asia/Tokyo"));
         setShowTime(
           dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm:ss")
         );
         setShotEdit(true);
+      } else {
+        return null;
       }
     } else {
-      const imageSrc = webcamRef.current?.getScreenshot() || null;
-      if (imageSrc === null) {
-        return;
-      } else {
+      if (webcamRef.current) {
+        const imageSrc = webcamRef.current.getScreenshot();
+        setPhoto(imageSrc);
         setPhoto(imageSrc);
         setShotEdit(true);
+      } else {
+        return null;
       }
     }
   };
