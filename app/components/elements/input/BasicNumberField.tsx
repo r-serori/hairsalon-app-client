@@ -43,14 +43,16 @@ const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
       ...e,
       target: { ...e.target, value: newValue },
     });
-    if (!required || onValidationChange === null) {
+    if (!required || onValidationChange === undefined) {
       return;
     } else if (
       required &&
       (newValue === "" ||
         newValue === "0" ||
         newValue === "00" ||
-        newValue === null)
+        newValue === null ||
+        newValue === undefined ||
+        onValidationChange)
     ) {
       onValidationChange(false);
     } else {
