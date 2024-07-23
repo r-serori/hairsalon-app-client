@@ -225,10 +225,14 @@ const ModalForm: React.FC<ModalFormProps> = ({
     setEditValue(newValue);
   };
 
-  const changeCategoryId = () => {
-    const categoryId: number | undefined = getCheckBoxCategoriesState.find(
+  const changeCategoryId = (): number | null => {
+    const foundCategory = getCheckBoxCategoriesState.find(
       (category) => category.category === EditValue
-    ).id;
+    );
+
+    // `foundCategory` が `undefined` でない場合にのみ `.id` を取得する
+    const categoryId: number = foundCategory ? foundCategory.id : undefined;
+
     if (categoryId === undefined) {
       return null;
     } else {
