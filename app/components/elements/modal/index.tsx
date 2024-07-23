@@ -51,7 +51,7 @@ const AttendanceStyle = {
 };
 
 interface BasicModalProps {
-  type?: string;
+  type: string;
   editValue?: any;
   editNode?:
     | UserState[]
