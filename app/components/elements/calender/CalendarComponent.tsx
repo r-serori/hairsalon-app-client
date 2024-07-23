@@ -23,6 +23,7 @@ import { MerchandiseState } from "../../../store/merchandises/merchandiseSlice";
 import { HairstyleState } from "../../../store/hairstyles/hairstyleSlice";
 import { UserState } from "../../../store/auth/userSlice";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { ScheduleModalNodes } from "../../Hooks/interface";
 
 export interface CalendarEvent {
   id: number;
@@ -45,7 +46,7 @@ interface OpenCalendarProps {
   events: CalendarEvent[];
   scheduleYear: string;
   setScheduleYear: (year: string) => void;
-  nodes: any;
+  nodes: ScheduleModalNodes[];
   users: UserState[];
   courses: CourseState[];
   options: OptionState[];

@@ -18,3 +18,15 @@ export interface ErrorType {
   status: number;
   message: string;
 }
+
+export interface ScheduleModalNodes {
+  id: number;
+  customer_name: string;
+  phone_number: string | null;
+  remarks: string | null;
+  course: string[] | [];
+  option: string[] | [];
+  merchandise: string[] | [];
+  hairstyle: string[] | [];
+  names: string[] | [];
+}

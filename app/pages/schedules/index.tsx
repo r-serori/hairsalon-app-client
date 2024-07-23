@@ -24,7 +24,10 @@ import { permissionStore, user } from "../../components/Hooks/authSelector";
 import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { PermissionsState } from "../../store/auth/permissionSlice";
-import { CustomerOnlyState } from "../../store/customers/customerSlice";
+import {
+  CustomerOnlyState,
+  CustomerState,
+} from "../../store/customers/customerSlice";
 import { CourseState } from "../../store/courses/courseSlice";
 import { OptionState } from "../../store/options/optionSlice";
 import { MerchandiseState } from "../../store/merchandises/merchandiseSlice";
@@ -48,6 +51,7 @@ import {
 import { UserState } from "../../store/auth/userSlice";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import { ScheduleModalNodes } from "../../components/Hooks/interface";
 
 const Schedules: React.FC = () => {
   dayjs.locale("ja");
@@ -163,7 +167,7 @@ const Schedules: React.FC = () => {
       ? []
       : customers.map((customer) => customer.customer_name);
 
-  const nodes = customers
+  const nodes: ScheduleModalNodes[] = customers
     ? [
         ...customers.map((customer) => {
           // customerは一回一番下まで行く。その後、次のcustomerに行く。

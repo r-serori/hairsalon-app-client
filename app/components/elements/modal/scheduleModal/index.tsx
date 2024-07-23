@@ -39,6 +39,7 @@ import { UserState } from "../../../../store/auth/userSlice";
 import { AppDispatch } from "../../../../redux/store";
 import { renderError } from "../../../../store/errorHandler";
 import { scheduleError, scheduleErrorStatus } from "../../../Hooks/selector";
+import { ScheduleModalNodes } from "../../../Hooks/interface";
 
 const style = {
   position: "absolute" as "absolute",
@@ -62,7 +63,7 @@ interface ScheduleModalProps {
   setShowModal: (value: boolean) => void;
   setSelectedEvent: (value: any) => void;
   isCustomerProp: boolean;
-  nodes: any;
+  nodes: ScheduleModalNodes[];
   users: UserState[];
   courses: CourseState[];
   options: OptionState[];
@@ -268,9 +269,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     //編集時に選択した顧客情報を取得
     if (newValue === null) return;
     if (!nodes) return;
-    if (nodes.customer_name === undefined) return;
     const useCustomerState = nodes.find(
-      (node) => node.customer_name === newValue
+      (node: ScheduleModalNodes) => node.customer_name === newValue
     );
 
     if (!isCustomer) {
