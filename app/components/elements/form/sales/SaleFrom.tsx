@@ -218,13 +218,13 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const SalesSubmit = async () => {
     if (!timeValidate) return;
     try {
-      let SalesFormData;
+      if (time === null) return;
       if (sumPrice === 0) {
         setMessage("売上が0円のため、更新できません。");
         return;
       }
       if (whatSales === "日次") {
-        SalesFormData = {
+        const SalesFormData = {
           id: 0,
           date: time.utc().tz("Asia/Tokyo").format("YYYY-MM-DD"),
           daily_sales: sumPrice,
@@ -240,7 +240,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
           throw new Error();
         }
       } else if (whatSales === "月次") {
-        SalesFormData = {
+        const SalesFormData = {
           id: 0,
           year_month: time.utc().tz("Asia/Tokyo").format("YYYY-MM"),
           monthly_sales: sumPrice,
@@ -256,7 +256,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
           throw new Error();
         }
       } else if (whatSales === "年次") {
-        SalesFormData = {
+        const SalesFormData = {
           id: 0,
           year: time.utc().tz("Asia/Tokyo").format("YYYY"),
           yearly_sales: sumPrice,
