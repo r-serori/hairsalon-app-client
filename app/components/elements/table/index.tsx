@@ -284,7 +284,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
 
             <Body>
               {/* Bodyの横行を数える */}
-              {tableList.map((node, index) => (
+              {tableList.map((node: any, index: any) => (
                 <Row key={`${index} + ${node.id} `} item={node}>
                   {/* nodeの縦列を数える */}
                   {nodesProps.map((nodesProp) => {
