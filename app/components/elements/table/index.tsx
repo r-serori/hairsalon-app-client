@@ -266,7 +266,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
         theme={theme}
         layout={{ custom: true, horizontalScroll: true }}
       >
-        {(tableList) => (
+        {(tableList: any) => (
           <>
             <Header>
               <HeaderRow className="border-b-2 border-gray-900">
