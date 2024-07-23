@@ -289,28 +289,16 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const handleEndTime = async () => {
     if (!timeValidate) return;
     const getTime: string = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
-    let formData;
-
-    if (!edit) {
-      const endTimePhoto: string | null = photo;
-      if (endTimePhoto === null) return;
-      formData = {
-        end_time: getTime,
-        end_photo_path: endTimePhoto,
-        user_id: node.id,
-      };
-    } else {
-      const endTimePhoto: string = "111222";
-      formData = {
-        id: node.id,
-        end_time: getTime,
-        end_photo_path: endTimePhoto,
-        user_id: node.user_id,
-      };
-    }
 
     try {
       if (edit) {
+        const endTimePhoto: string = "111222";
+        const formData = {
+          id: node.id,
+          end_time: getTime,
+          end_photo_path: endTimePhoto,
+          user_id: node.user_id,
+        };
         const response = await dispatch(updateEndTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
           resetPhoto();
@@ -321,6 +309,13 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           if (re === null) throw new Error("更新に失敗しました");
         }
       } else {
+        const endTimePhoto: string | null = photo;
+        if (endTimePhoto === null) return;
+        const formData = {
+          end_time: getTime,
+          end_photo_path: endTimePhoto,
+          user_id: node.id,
+        };
         const response = await dispatch(createEndTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
           dispatch(falseIsAttendance(formData.user_id) as any);
