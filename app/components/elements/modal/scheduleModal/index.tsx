@@ -645,12 +645,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                                 setCustomerName(
                                   whoIsEvent === "編集"
                                     ? selectedEvent.title
-                                    : initialCustomer.customer_name
+                                    : initialCustomer?.customer_name || ""
                                 );
                                 changeCustomerState(
                                   whoIsEvent === "編集"
                                     ? selectedEvent.title
-                                    : initialCustomer.customer_name
+                                    : initialCustomer?.customer_name || ""
                                 );
                               }
                             }
@@ -679,12 +679,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                                 setCustomerName(
                                   whoIsEvent === "編集"
                                     ? selectedEvent.title
-                                    : initialCustomer.customer_name
+                                    : initialCustomer?.customer_name || ""
                                 );
                                 changeCustomerState(
                                   whoIsEvent === "編集"
                                     ? selectedEvent.title
-                                    : initialCustomer.customer_name
+                                    : initialCustomer?.customer_name || ""
                                 );
                               }
                             }
@@ -715,12 +715,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                               setCustomerName(
                                 whoIsEvent === "編集"
                                   ? selectedEvent.title
-                                  : initialCustomer.customer_name
+                                  : initialCustomer?.customer_name || ""
                               );
                               changeCustomerState(
                                 whoIsEvent === "編集"
                                   ? selectedEvent.title
-                                  : initialCustomer.customer_name
+                                  : initialCustomer?.customer_name || ""
                               );
                             }
                           }}
@@ -744,12 +744,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                               setCustomerName(
                                 whoIsEvent === "編集"
                                   ? selectedEvent.title
-                                  : initialCustomer.customer_name
+                                  : initialCustomer?.customer_name || ""
                               );
                               changeCustomerState(
                                 whoIsEvent === "編集"
                                   ? selectedEvent.title
-                                  : initialCustomer.customer_name
+                                  : initialCustomer?.customer_name || ""
                               );
                             } else {
                               clearStates();
@@ -771,7 +771,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                       id={Number(uniqueId)}
                       placeholder="タイトル"
                       value={title}
-                      onChange={(e) => setTitle(e.target.value)}
+                      onChange={(e) => setTitle(e.target.value || "")}
                       role={permission}
                       decideLength={50}
                       onValidationChange={(newValue) =>
