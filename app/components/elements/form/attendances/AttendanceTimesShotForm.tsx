@@ -126,8 +126,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const [shotEdit, setShotEdit] = useState<boolean>(false);
 
   //出勤時間、退勤時間の編集モードの時、編集済みの写真を表示
-  const [photo, setPhoto] = useState<string | null>(
-    node?.start_photo_path === "111222" || node.end_photo_path === "111222"
+  const [photo, setPhoto] = useState<string | null | undefined>(
+    node?.start_photo_path === "111222" || node?.end_photo_path === "111222"
       ? null
       : link === "/attendanceTimeStart" &&
         edit &&
