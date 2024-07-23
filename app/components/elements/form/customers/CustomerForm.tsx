@@ -76,10 +76,13 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
       : []
   );
   const [users, setUsers] = useState<string[]>(
-    !node && getUsersState.length > 1
+    node === null && getUsersState.length > 1
       ? []
-      : (node && getUsersState.length > 1) ||
-        (Array.isArray(getUsersState) && getUsersState.length > 1)
+      : (node !== null && node.user_id !== null && getUsersState.length > 1) ||
+        (Array.isArray(getUsersState) &&
+          getUsersState.length > 1 &&
+          node !== null &&
+          node.user_id !== null)
       ? getUsersState
           .filter((user) => node.user_id.includes(user.id))
           .map((user) => user.name)
