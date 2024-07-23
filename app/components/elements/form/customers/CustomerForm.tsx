@@ -48,32 +48,32 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   const [remarks, setRemarks] = useState<string>(node?.remarks || "");
 
   const [courses, setCourses] = useState<string[]>(
-    node === null || node.course_id === null
-      ? []
-      : getCoursesState
+    node?.course_id && Array.isArray(node.course_id)
+      ? getCoursesState
           .filter((course) => node.course_id.includes(course.id))
           .map((course) => course.course_name)
+      : []
   );
   const [options, setOptions] = useState<string[]>(
-    node === null || node.option_id === null
-      ? []
-      : getOptionsState
+    node?.option_id && Array.isArray(node.option_id)
+      ? getOptionsState
           .filter((option) => node.option_id.includes(option.id))
           .map((option) => option.option_name)
+      : []
   );
   const [merchandises, setMerchandises] = useState<string[]>(
-    node === null || node.merchandise_id === null
-      ? []
-      : getMerchandisesState
+    node?.merchandise_id && Array.isArray(node.merchandise_id)
+      ? getMerchandisesState
           .filter((merchandise) => node.merchandise_id.includes(merchandise.id))
           .map((merchandise) => merchandise.merchandise_name)
+      : []
   );
   const [hairstyles, setHairstyles] = useState<string[]>(
-    node === null || node.hairstyle_id === null
-      ? []
-      : getHairstylesState
+    node?.hairstyle_id && Array.isArray(node.hairstyle_id)
+      ? getHairstylesState
           .filter((hairstyle) => node.hairstyle_id.includes(hairstyle.id))
           .map((hairstyle) => hairstyle.hairstyle_name)
+      : []
   );
   const [users, setUsers] = useState<string[]>(
     node === null && getUsersState.length > 1
