@@ -245,28 +245,16 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const handleStartTime = async () => {
     if (!timeValidate) return;
     const getTime: string = dayjs(time).format("YYYY-MM-DD HH:mm:ss");
-    let formData;
-
-    if (!edit) {
-      const startTimePhoto: string | null = photo;
-      if (startTimePhoto === null) return;
-      formData = {
-        start_time: getTime,
-        start_photo_path: startTimePhoto,
-        user_id: node?.id || 0,
-      };
-    } else {
-      const startTimePhoto: string = "111222";
-      formData = {
-        id: node?.id || 0,
-        start_time: getTime,
-        start_photo_path: startTimePhoto,
-        user_id: node?.user_id || 0,
-      };
-    }
 
     try {
       if (edit) {
+        const startTimePhoto: string = "111222";
+        const formData = {
+          id: node.id,
+          start_time: getTime,
+          start_photo_path: startTimePhoto,
+          user_id: node.user_id,
+        };
         const response = await dispatch(updateStartTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
           resetPhoto();
@@ -277,6 +265,13 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           if (re === null) throw new Error("更新に失敗しました");
         }
       } else {
+        const startTimePhoto: string | null = photo;
+        if (startTimePhoto === null) return;
+        const formData = {
+          start_time: getTime,
+          start_photo_path: startTimePhoto,
+          user_id: node.id,
+        };
         const response = await dispatch(createStartTime(formData) as any);
         if (response.meta.requestStatus === "fulfilled") {
           dispatch(trueIsAttendance(userId) as any);
@@ -302,15 +297,15 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       formData = {
         end_time: getTime,
         end_photo_path: endTimePhoto,
-        user_id: node?.id || 0,
+        user_id: node.id,
       };
     } else {
       const endTimePhoto: string = "111222";
       formData = {
-        id: node?.id || 0,
+        id: node.id,
         end_time: getTime,
         end_photo_path: endTimePhoto,
-        user_id: node?.user_id || 0,
+        user_id: node.user_id,
       };
     }
 
