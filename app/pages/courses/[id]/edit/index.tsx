@@ -24,9 +24,13 @@ const CourseEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const course: CourseState = useSelector(coursesStore).find(
+  const course: CourseState = useSelector(coursesStore)?.find(
     (course: CourseState) => course.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    course_name: "",
+    price: 0,
+  };
   const cStatus: string = useSelector(courseStatus);
   const cError: string = useSelector(courseError);
   const cErrorStatus: number = useSelector(courseErrorStatus);

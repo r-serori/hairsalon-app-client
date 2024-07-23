@@ -21,12 +21,17 @@ import { staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import {
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const Stock_categories = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
-  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [tHeaderItems, setTHeaderItems] = useState<THeaderItems>([]);
 
   const stockCategories: Stock_categoryState[] = useSelector(
     stock_categoriesStore
@@ -70,11 +75,13 @@ const Stock_categories = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [{ key: "category", value: "在庫カテゴリ名" }];
+  const searchItems: SearchItems = [
+    { key: "category", value: "在庫カテゴリ名" },
+  ];
 
-  const nodesProps = [{ text: "category" }];
+  const nodesProps: NodesProps[] = [{ text: "category" }];
 
-  const nodes = stockCategories;
+  const nodes: Stock_categoryState[] = stockCategories;
 
   return (
     <div>

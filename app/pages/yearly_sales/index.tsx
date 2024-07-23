@@ -21,12 +21,17 @@ import { ownerPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import {
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const Yearly_sales: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
-  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [tHeaderItems, setTHeaderItems] = useState<THeaderItems>([]);
 
   const yearly_sales: Yearly_salesState[] = useSelector(yearly_salesStore);
   const ysStatus: string = useSelector(yearly_saleStatus);
@@ -62,12 +67,15 @@ const Yearly_sales: React.FC = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "year", value: "年" },
     { key: "yearly_sales", value: "売上" },
   ];
 
-  const nodesProps = [{ string: "year" }, { number: "yearly_sales" }];
+  const nodesProps: NodesProps[] = [
+    { text: "year" },
+    { number: "yearly_sales" },
+  ];
 
   const nodes: Yearly_salesState[] = yearly_sales;
 

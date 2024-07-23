@@ -23,9 +23,14 @@ const OptionEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const option = useSelector(optionsStore).find(
+  const option = useSelector(optionsStore)?.find(
     (option) => option.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    option_name: "",
+    price: 0,
+  };
+
   const oStatus: string = useSelector(optionStatus);
   const oError: string = useSelector(optionError);
   const oErrorStatus: number = useSelector(optionErrorStatus);

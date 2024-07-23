@@ -28,9 +28,13 @@ const DailySalesEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const dailySale: Daily_salesState = useSelector(daily_salesStore).find(
+  const dailySale: Daily_salesState = useSelector(daily_salesStore)?.find(
     (dailySale: Daily_salesState) => dailySale.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    date: "",
+    daily_sales: 0,
+  };
 
   const handleUpdate = async (formData: {
     id: number;

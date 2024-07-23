@@ -28,7 +28,11 @@ const StockCategoryEdit: React.FC = () => {
 
   const stockCategory: Stock_categoryState = useSelector(
     stock_categoriesStore
-  ).find((stockCategory) => stockCategory.id === Number(id));
+  )?.find((stockCategory) => stockCategory.id === Number(id)) || {
+    id: 0,
+    category: "",
+  };
+
   const scStatus: string = useSelector(stock_categoryStatus);
   const scError: string = useSelector(stock_categoryError);
   const scErrorStatus: number = useSelector(stock_categoryErrorStatus);

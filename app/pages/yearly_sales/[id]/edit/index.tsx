@@ -24,9 +24,14 @@ const YearlySalesEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const yearlySale: Yearly_salesState = useSelector(yearly_salesStore).find(
+  const yearlySale: Yearly_salesState = useSelector(yearly_salesStore)?.find(
     (yearlySale: Yearly_salesState) => yearlySale.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    year: "",
+    yearly_sales: 0,
+  };
+
   const ysStatus: string = useSelector(yearly_saleStatus);
   const ysError: string | null = useSelector(yearly_saleError);
   const ysErrorStatus: number = useSelector(yearly_saleErrorStatus);

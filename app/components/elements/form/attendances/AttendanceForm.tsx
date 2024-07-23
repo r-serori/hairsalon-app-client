@@ -3,7 +3,6 @@ import BasicTextField from "../../input/BasicTextField";
 import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import PrimaryButton from "../../button/PrimaryButton";
 import { UserState } from "../../../../store/auth/userSlice";
-import { RoleState } from "../../../Hooks/interface";
 import BasicNumberField from "../../input/BasicNumberField";
 
 interface UserUpdateFormProps {
@@ -20,6 +19,8 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (node.id === 0 || node.id === undefined) return;
 
     onSubmit({
       id: node.id,

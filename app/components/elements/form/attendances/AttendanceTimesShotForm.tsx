@@ -34,10 +34,11 @@ import { AppDispatch } from "../../../../redux/store";
 import { renderError } from "../../../../store/errorHandler";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { AttendanceTimeShotsNodes } from "../../../Hooks/interface";
 
 interface UserTimesShotFormProps {
-  node: any;
-  link: string;
+  node: AttendanceTimeShotsNodes | Attendance_timeState;
+  link: "/attendanceTimeStart" | "/attendanceTimeEnd" | "/attendanceTimeShots";
   startOrEnd: string;
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -71,7 +72,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   );
 
   const userId: number =
-    link === "/attendanceTimeShots" ? node.id : node.user_id;
+    link === "/attendanceTimeShots" ? node?.id || 0 : node?.user_id || 0;
 
   //ボタンを押したユーザーの情報を取得
   const attendanceUser: UserState | null =
@@ -163,9 +164,9 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           .utc()
           .tz("Asia/Tokyo")
           .format("YYYY/MM/DD HH:mm:ss")
-      : link === "/attendanceTimesStart" && !node.start_time
+      : link === "/attendanceTimeStart" && !node.start_time
       ? "出勤時間が登録されていません"
-      : link === "/attendanceTimesEnd" && !node.end_time
+      : link === "/attendanceTimeEnd" && !node.end_time
       ? "退勤時間が登録されていません"
       : ""
   );

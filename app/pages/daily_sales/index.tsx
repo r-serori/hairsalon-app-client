@@ -22,6 +22,7 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 import EasyModal from "../../components/elements/modal/easy/EasyModal";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import { NodesProps, SearchItems } from "../../components/Hooks/interface";
 
 const Daily_sales: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -85,12 +86,15 @@ const Daily_sales: React.FC = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "date", value: "日付" },
     { key: "daily_sales", value: "売上" },
   ];
 
-  const nodesProps = [{ string: "date" }, { number: "daily_sales" }];
+  const nodesProps: NodesProps[] = [
+    { text: "date" },
+    { number: "daily_sales" },
+  ];
 
   const nodes: Daily_salesState[] = daily_sales;
 

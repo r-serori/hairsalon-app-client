@@ -31,6 +31,11 @@ import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { renderError } from "../../../store/errorHandler";
 import { AppDispatch } from "../../../redux/store";
 import { changeMessage, UserState } from "../../../store/auth/userSlice";
+import {
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../../components/Hooks/interface";
 
 const AttendanceTimes: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -116,12 +121,12 @@ const AttendanceTimes: React.FC = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "start_time", value: "出勤時間" },
     { key: "end_time", value: "退勤時間" },
   ];
 
-  const tHeaderItems = [
+  const tHeaderItems: THeaderItems = [
     "出勤時間",
     "出勤画像",
     "退勤時間",
@@ -131,11 +136,11 @@ const AttendanceTimes: React.FC = () => {
     "削除",
   ];
 
-  const nodesProps = [
-    { string: "start_time" },
-    { string: "start_photo_path" },
-    { string: "end_time" },
-    { string: "end_photo_path" },
+  const nodesProps: NodesProps[] = [
+    { text: "start_time" },
+    { text: "start_photo_path" },
+    { text: "end_time" },
+    { text: "end_photo_path" },
   ];
 
   const nodes: Attendance_timeState[] = attendanceTimes;

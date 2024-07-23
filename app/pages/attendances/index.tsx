@@ -19,6 +19,11 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 import { UserState } from "../../store/auth/userSlice";
 import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
+import {
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const Attendances = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -66,13 +71,13 @@ const Attendances = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "name", value: "名前" },
     { key: "staff_phone_number", value: "スタッフ電話番号" },
     { key: "role", value: "役職" },
   ];
 
-  const tHeaderItems = [
+  const tHeaderItems: THeaderItems = [
     "名前",
     "スタッフ電話番号",
     "役職",
@@ -80,7 +85,7 @@ const Attendances = () => {
     "勤怠時間管理",
   ];
 
-  const nodesProps = [
+  const nodesProps: NodesProps[] = [
     { text: "name" },
     { number: "staff_phone_number" },
     { text: "role" },

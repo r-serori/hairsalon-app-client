@@ -27,11 +27,37 @@ import {
 } from "../../../Hooks/selector";
 import { user } from "../../../Hooks/authSelector";
 import BasicNumberField from "../../input/BasicNumberField";
+import { CourseState } from "../../../../store/courses/courseSlice";
+import { OptionState } from "../../../../store/options/optionSlice";
+import { MerchandiseState } from "../../../../store/merchandises/merchandiseSlice";
+import { HairstyleState } from "../../../../store/hairstyles/hairstyleSlice";
+import { StockState } from "../../../../store/stocks/stockSlice";
+import { Stock_categoryState } from "../../../../store/stocks/stock_categories/stock_categorySlice";
+import { UserState } from "../../../../store/auth/userSlice";
+import {
+  AttendanceTimeShotsNodes,
+  NodesProps,
+  StockNodes,
+} from "../../../Hooks/interface";
+import { Attendance_timeState } from "../../../../store/attendance_times/attendance_timesSlice";
+import { AttendancesNodes } from "../../../Hooks/interface";
+import { CustomerNodes } from "../../../Hooks/interface";
 
 interface ModalFormProps {
   type: string;
   editValue: string | number | string[] | number[] | null;
-  editNode: any;
+  editNode:
+    | UserState
+    | CourseState
+    | OptionState
+    | MerchandiseState
+    | HairstyleState
+    | AttendanceTimeShotsNodes
+    | Attendance_timeState
+    | AttendancesNodes
+    | StockNodes
+    | Stock_categoryState
+    | CustomerNodes;
   NodesProp: string;
   link: string;
   open: boolean;

@@ -24,11 +24,17 @@ import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import {
+  NodesProps,
+  SearchItems,
+  StockNodes,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const Stocks: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
-  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [tHeaderItems, setTHeaderItems] = useState<THeaderItems>([]);
 
   const stocks: StockState[] = useSelector(stocksStore);
   const sStatus: string = useSelector(stockStatus);
@@ -109,7 +115,7 @@ const Stocks: React.FC = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "category_name", value: "在庫カテゴリ" },
     { key: "product_name", value: "商品名" },
     { key: "product_price", value: "価格" },
@@ -121,7 +127,7 @@ const Stocks: React.FC = () => {
 
   //コースカテゴリをとってきて、nosesPropsに追加する
 
-  const nodesProps = [
+  const nodesProps: NodesProps[] = [
     { text: "category_name" },
     { text: "product_name" },
     { number: "product_price" },
@@ -132,7 +138,7 @@ const Stocks: React.FC = () => {
   ];
 
   //stocksのstock_category_idとstockCategoriesのidが一致するものをnodesに追加する
-  const nodes = [
+  const nodes: StockNodes[] = [
     ...stocks.map((stock) => {
       const categoryAndStock = stockCategories.find(
         (category) => category.id === stock.stock_category_id

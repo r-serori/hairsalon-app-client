@@ -21,12 +21,17 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import {
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const Merchandises = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
-  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [tHeaderItems, setTHeaderItems] = useState<THeaderItems>([]);
 
   const permission: PermissionsState = useSelector(permissionStore);
 
@@ -67,14 +72,17 @@ const Merchandises = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "merchandise_name", value: "物販名" },
     { key: "price", value: "価格" },
   ];
 
-  const nodesProps = [{ text: "merchandise_name" }, { number: "price" }];
+  const nodesProps: NodesProps[] = [
+    { text: "merchandise_name" },
+    { number: "price" },
+  ];
 
-  const nodes = merchandises;
+  const nodes: MerchandiseState[] = merchandises;
 
   return (
     <div>

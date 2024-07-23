@@ -26,9 +26,12 @@ const HairstyleEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const hairstyle = useSelector(hairstylesStore).find(
+  const hairstyle = useSelector(hairstylesStore)?.find(
     (hairstyle: HairstyleState) => hairstyle.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    hairstyle_name: "",
+  };
   const hStatus: string = useSelector(hairstyleStatus);
   const hError: string = useSelector(hairstyleError);
   const hErrorStatus: number = useSelector(hairstyleErrorStatus);

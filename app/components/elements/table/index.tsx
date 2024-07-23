@@ -23,11 +23,44 @@ import timezone from "dayjs/plugin/timezone";
 import StockNotice from "../../stockNotice/StockNotice";
 import AttendanceTimeResult from "../../attendanceTimeResult/AttendanceTimeResult";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { UserState } from "../../../store/auth/userSlice";
+import { CourseState } from "../../../store/courses/courseSlice";
+import { OptionState } from "../../../store/options/optionSlice";
+import { MerchandiseState } from "../../../store/merchandises/merchandiseSlice";
+import { HairstyleState } from "../../../store/hairstyles/hairstyleSlice";
+import {
+  AttendancesNodes,
+  AttendanceTimeShotsNodes,
+  CustomerNodes,
+  NodesProps,
+  StockNodes,
+} from "../../Hooks/interface";
+import { Attendance_timeState } from "../../../store/attendance_times/attendance_timesSlice";
+import { StockState } from "../../../store/stocks/stockSlice";
+import { Stock_categoryState } from "../../../store/stocks/stock_categories/stock_categorySlice";
+import { CustomerState } from "../../../store/customers/customerSlice";
+import { Daily_salesState } from "../../../store/daily_sales/daily_saleSlice";
+import { Monthly_salesState } from "../../../store/monthly_sales/monthly_saleSlice";
+import { Yearly_salesState } from "../../../store/yearly_sales/yearly_saleSlice";
 
 interface ComponentTableProps {
-  nodes: any;
-  searchItems: any;
-  nodesProps: any;
+  nodes:
+    | UserState[]
+    | CourseState[]
+    | OptionState[]
+    | MerchandiseState[]
+    | HairstyleState[]
+    | AttendanceTimeShotsNodes[]
+    | Attendance_timeState[]
+    | AttendancesNodes[]
+    | StockNodes[]
+    | Stock_categoryState[]
+    | CustomerNodes[]
+    | Daily_salesState[]
+    | Monthly_salesState[]
+    | Yearly_salesState[];
+  searchItems: { key: string; value: string }[];
+  nodesProps: NodesProps[];
   tHeaderItems: string[];
   link: string;
   role: PermissionsState;
@@ -52,7 +85,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
 
   //dataという新しいオブジェクトを作成
   const data = {
-    nodes: nodes.filter((node) =>
+    nodes: nodes.filter((node: any) =>
       nodesProps.some((nodesProp) => {
         const propName = Object.keys(nodesProp)[0];
         const propValue = node[nodesProp[propName]];

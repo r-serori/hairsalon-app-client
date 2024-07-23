@@ -18,12 +18,17 @@ import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import {
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const Options: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
-  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [tHeaderItems, setTHeaderItems] = useState<THeaderItems>([]);
 
   const options: OptionState[] = useSelector(optionsStore);
   const opStatus: string = useSelector(optionStatus);
@@ -68,14 +73,17 @@ const Options: React.FC = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "option_name", value: "オプション名" },
     { key: "price", value: "価格" },
   ];
 
-  const nodesProps = [{ text: "option_name" }, { number: "price" }];
+  const nodesProps: NodesProps[] = [
+    { text: "option_name" },
+    { number: "price" },
+  ];
 
-  const nodes = options;
+  const nodes: OptionState[] = options;
 
   return (
     <div>

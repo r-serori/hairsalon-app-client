@@ -35,9 +35,14 @@ const CustomersEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const getCustomer: CustomerOnlyState = useSelector(customersStore).find(
+  const getCustomer: CustomerOnlyState = useSelector(customersStore)?.find(
     (customer) => customer.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    customer_name: "",
+    phone_number: "",
+    remarks: "",
+  };
 
   const course_customers: number[] = useSelector(course_customersStore)
     .filter(

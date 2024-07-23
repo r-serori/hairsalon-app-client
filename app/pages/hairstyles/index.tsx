@@ -21,6 +21,7 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import { NodesProps, SearchItems } from "../../components/Hooks/interface";
 
 const Hairstyles: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -68,11 +69,11 @@ const Hairstyles: React.FC = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [{ key: "hairstyle_name", value: "髪型" }];
+  const searchItems: SearchItems = [{ key: "hairstyle_name", value: "髪型" }];
 
-  const nodesProps = [{ text: "hairstyle_name" }];
+  const nodesProps: NodesProps[] = [{ text: "hairstyle_name" }];
 
-  const nodes = hairstyles;
+  const nodes: HairstyleState[] = hairstyles;
   return (
     <div>
       {hMessage && (

@@ -23,6 +23,12 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 import { UserState } from "../../store/auth/userSlice";
 import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
+import {
+  AttendanceTimeShotsNodes,
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const AttendanceTimeShots = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -42,7 +48,6 @@ const AttendanceTimeShots = () => {
   useEffect(() => {
     const getStaffs = async () => {
       const response = await dispatch(getUsers() as any);
-      console.log("response", response);
       localStorage.setItem("userCount", response.payload.userCount);
       return response;
     };
@@ -52,7 +57,6 @@ const AttendanceTimeShots = () => {
         staffPermission(permission, router);
 
         const userCount = localStorage.getItem("userCount");
-        console.log("userLength", users.length);
         if (!userCount || users.length < Number(userCount)) {
           const response = await getStaffs();
           if (response.meta.requestStatus === "rejected") {
@@ -61,7 +65,6 @@ const AttendanceTimeShots = () => {
           }
         }
       } catch (error) {
-        console.log("Error", error);
         allLogout(dispatch);
         router.push("/auth/login");
       }
@@ -69,24 +72,25 @@ const AttendanceTimeShots = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [{ key: "shotUserName", value: "名前" }];
+  const searchItems: SearchItems = [{ key: "shotUserName", value: "名前" }];
 
-  const tHeaderItems = ["名前", "勤務中？", "出勤", "退勤"];
+  const tHeaderItems: THeaderItems = ["名前", "勤務中？", "出勤", "退勤"];
 
-  const nodesProps = [{ text: "shotUserName" }, { text: "attendanceNow" }];
+  const nodesProps: NodesProps[] = [
+    { text: "shotUserName" },
+    { text: "attendanceNow" },
+  ];
 
-  const nodes = Array.isArray(users)
-    ? users.map((user) => {
+  const nodes: AttendanceTimeShotsNodes[] = Array.isArray(users)
+    ? users?.map((user) => {
         return {
           id: user.id,
           shotUserName: user.name,
           attendanceNow: user.isAttendance ? "勤務中" : "退勤中",
           isAttendance: user.isAttendance,
         };
-      })
+      }) || []
     : [];
-
-  console.log("nodes", nodes);
 
   return (
     <div>

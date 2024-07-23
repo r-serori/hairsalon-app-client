@@ -18,9 +18,14 @@ import _ from "lodash";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
+import {
+  NodesProps,
+  SearchItems,
+  THeaderItems,
+} from "../../components/Hooks/interface";
 
 const Courses: React.FC = () => {
-  const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
+  const [tHeaderItems, setTHeaderItems] = useState<THeaderItems>([]);
 
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
@@ -72,14 +77,17 @@ const Courses: React.FC = () => {
     if (permission) fetchData(); // useEffect内で関数を呼び出す
   }, [dispatch, permission]); // useEffectの依存リストを指定
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "course_name", value: "コース名" },
     { key: "price", value: "価格" },
   ];
 
-  const nodesProps = [{ text: "course_name" }, { number: "price" }];
+  const nodesProps: NodesProps[] = [
+    { text: "course_name" },
+    { number: "price" },
+  ];
 
-  const nodes = courses;
+  const nodes: CourseState[] = courses;
 
   return (
     <div>

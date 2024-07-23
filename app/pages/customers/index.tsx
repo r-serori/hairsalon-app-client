@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   CustomerOnlyState,
+  CustomerState,
   getCustomer,
 } from "../../store/customers/customerSlice";
 import BasicAlerts from "../../components/elements/alert/BasicAlert";
@@ -41,6 +42,12 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 import { UserState } from "../../store/auth/userSlice";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import {
+  CustomerNodes,
+  NodesProps,
+  ScheduleModalNodes,
+  SearchItems,
+} from "../../components/Hooks/interface";
 
 const Customers: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -147,7 +154,7 @@ const Customers: React.FC = () => {
   const customer_users: Customer_usersState[] =
     useSelector(customer_usersStore);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "customer_name", value: "顧客" },
     { key: "phone_number", value: "電話番号" },
     { key: "remarks", value: "備考" },
@@ -161,7 +168,7 @@ const Customers: React.FC = () => {
     { key: "names", value: "担当者" },
   ];
 
-  const nodesProps = [
+  const nodesProps: NodesProps[] = [
     { text: "customer_name" },
     { number: "phone_number" },
     { text: "remarks" },
@@ -172,91 +179,104 @@ const Customers: React.FC = () => {
     { text: "names" },
   ];
 
-  const nodes = Array.isArray(customers)
+  const nodes: CustomerNodes[] = Array.isArray(customers)
     ? [
-        ...customers.map((customer) => {
+        ...customers?.map((customer) => {
           // customerは一回一番下まで行く。その後、次のcustomerに行く。
           // 顧客に関連するコースの情報を取得
-          const customerCourses = course_customers.filter(
-            (course) => course.customer_id === customer.id
-          );
+          const customerCourses =
+            course_customers?.filter(
+              (course) => course.customer_id === customer.id
+            ) || [];
           // [{customer_id: 1, course_id: 1}]
 
           // 顧客に関連するコース名を取得し、カンマ区切りの文字列に変換
-          const courseNames = customerCourses
-            .map((course) => {
-              const courseInfo = courses.find((c) => c.id === course.course_id);
-              return courseInfo ? courseInfo.course_name : ""; // コース名が見つかった場合のみ取得
-            })
-            .join(",\n"); // コース名をカンマ区切りの文字列に変換
-          // カットとシェービングA
+          const courseNames: string =
+            customerCourses
+              ?.map((course) => {
+                const courseInfo =
+                  courses?.find((c) => c.id === course.course_id) || null;
+                return (courseInfo && courseInfo.course_name) || ""; // コース名が見つかった場合のみ取得
+              })
+              .join(",\n") || ""; // コース名をカンマ区切りの文字列に変換
 
           // 顧客に関連するオプションの情報を取得
-          const customerOptions = option_customers.filter(
-            (cus_op) => cus_op.customer_id === customer.id
-          );
+          const customerOptions =
+            option_customers?.filter(
+              (cus_op) => cus_op.customer_id === customer.id
+            ) || [];
           // [{customer_id: 1, option_id: 1},
           // {customer_id: 1, option_id: 2}]
 
           // 顧客に関連するオプション名を取得し、カンマ区切りの文字列に変換
-          const optionNames = customerOptions
-            .map((option) => {
-              const optionInfo = options.find((o) => o.id === option.option_id);
-              return optionInfo ? optionInfo.option_name : ""; // オプション名が見つかった場合のみ取得
-            })
-            .join(",\n"); // オプション名をカンマ区切りの文字列に変換
+          const optionNames: string =
+            customerOptions
+              ?.map((option) => {
+                const optionInfo =
+                  options?.find((o) => o.id === option.option_id) || null;
+                return (optionInfo && optionInfo?.option_name) || ""; // オプション名が見つかった場合のみ取得
+              })
+              .join(",\n") || ""; // オプション名をカンマ区切りの文字列に変換
           // トリートメント, パーマ
 
           // 顧客に関連する商品の情報を取得
-          const customerMerchandises = merchandise_customers.filter(
-            (merchandise) => merchandise.customer_id === customer.id
-          );
+          const customerMerchandises =
+            merchandise_customers?.filter(
+              (merchandise) => merchandise.customer_id === customer.id
+            ) || [];
           // [{customer_id: 1, merchandise_id: 1},
           // {customer_id: 1, merchandise_id: 2}]
 
           // 顧客に関連する商品名を取得し、カンマ区切りの文字列に変換
-          const merchandiseNames = customerMerchandises
-            .map((merchandise) => {
-              const merchandiseInfo = merchandises.find(
-                (m) => m.id === merchandise.merchandise_id
-              );
-              return merchandiseInfo ? merchandiseInfo.merchandise_name : ""; // 商品名が見つかった場合のみ取得
-            })
-            .join(",\n"); // 商品名をカンマ区切りの文字列に変換
+          const merchandiseNames: string =
+            customerMerchandises
+              ?.map((merchandise) => {
+                const merchandiseInfo =
+                  merchandises?.find(
+                    (m) => m.id === merchandise.merchandise_id
+                  ) || null;
+                return (
+                  (merchandiseInfo && merchandiseInfo?.merchandise_name) || ""
+                ); // 商品名が見つかった場合のみ取得
+              })
+              .join(",\n") || ""; // 商品名をカンマ区切りの文字列に変換
           // シャンプー, コンディショナー
 
           // 顧客に関連する髪型の情報を取得
-          const customerHairstyles = hairstyle_customers.filter(
-            (hairstyle) => hairstyle.customer_id === customer.id
-          );
+          const customerHairstyles =
+            hairstyle_customers?.filter(
+              (hairstyle) => hairstyle.customer_id === customer.id
+            ) || [];
           // [{customer_id: 1, hairstyle_id: 1},
           // {customer_id: 1, hairstyle_id: 2}]
 
           // 顧客に関連する髪型名を取得し、カンマ区切りの文字列に変換
-          const hairstyleNames = customerHairstyles
-            .map((hairstyle) => {
-              const hairstyleInfo = hairstyles.find(
-                (h) => h.id === hairstyle.hairstyle_id
-              );
-              return hairstyleInfo ? hairstyleInfo.hairstyle_name : ""; // 髪型名が見つかった場合のみ取得
-            })
-            .join(",\n"); // 髪型名をカンマ区切りの文字列に変換
+          const hairstyleNames: string =
+            customerHairstyles
+              ?.map((hairstyle) => {
+                const hairstyleInfo =
+                  hairstyles?.find((h) => h.id === hairstyle.hairstyle_id) ||
+                  null;
+                return (hairstyleInfo && hairstyleInfo?.hairstyle_name) || ""; // 髪型名が見つかった場合のみ取得
+              })
+              .join(",\n") || ""; // 髪型名をカンマ区切りの文字列に変換
           // ショート, ロング
 
           // 顧客に関連する担当者の情報を取得
-          const customerUsers = customer_users.filter(
-            (user) => user.customer_id === customer.id
-          );
+          const customerUsers =
+            customer_users?.filter(
+              (user) => user.customer_id === customer.id
+            ) || [];
           // [{customer_id: 1, user_id: 1}]
 
           // 顧客に関連する担当者名を取得し、カンマ区切りの文字列に変換
-          const userNames = Array.isArray(users)
+          const userNames: string = Array.isArray(users)
             ? customerUsers
-                .map((user) => {
+                ?.map((user) => {
                   const userInfo = users.find((a) => a.id === user.user_id);
-                  return userInfo ? userInfo.name : ""; // 担当者名が見つかった場合のみ取得
+                  return (userInfo && userInfo?.name) || ""; // 担当者名が見つかった場合のみ取得
                 })
-                .join(",\n") // 担当者名をカンマ区切りの文字列に変換
+                .join(",\n") || "" // 担当者名をカンマ区切りの文字列に変換
             : Object(users).name;
 
           // 田中店長
@@ -274,7 +294,7 @@ const Customers: React.FC = () => {
             names: userNames,
           };
         }),
-      ]
+      ] || []
     : [];
 
   return (

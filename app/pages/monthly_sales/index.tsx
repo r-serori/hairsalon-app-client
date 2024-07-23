@@ -22,6 +22,7 @@ import { PermissionsState } from "../../store/auth/permissionSlice";
 import EasyModal from "../../components/elements/modal/easy/EasyModal";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
+import { NodesProps, SearchItems } from "../../components/Hooks/interface";
 
 const Monthly_sales: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -77,12 +78,15 @@ const Monthly_sales: React.FC = () => {
     if (permission) fetchData();
   }, [dispatch, permission]);
 
-  const searchItems = [
+  const searchItems: SearchItems = [
     { key: "year_month", value: "年-月" },
     { key: "monthly_sales", value: "売上" },
   ];
 
-  const nodesProps = [{ string: "year_month" }, { number: "monthly_sales" }];
+  const nodesProps: NodesProps[] = [
+    { text: "year_month" },
+    { number: "monthly_sales" },
+  ];
 
   const nodes: Monthly_salesState[] = monthly_sales;
 

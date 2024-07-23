@@ -1,7 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, NextRouter } from "next/router";
-import { updateMerchandise } from "../../../../store/merchandises/merchandiseSlice";
+import {
+  MerchandiseState,
+  updateMerchandise,
+} from "../../../../store/merchandises/merchandiseSlice";
 import MerchandiseForm from "../../../../components/elements/form/merchandises/MerchandiseForm";
 import {
   merchandiseStatus,
@@ -23,9 +26,14 @@ const MerchandiseEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const merchandise = useSelector(merchandiseStore).find(
+  const merchandise: MerchandiseState = useSelector(merchandiseStore)?.find(
     (merchandise) => merchandise.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    merchandise_name: "",
+    price: 0,
+  };
+
   const mStatus: string = useSelector(merchandiseStatus);
   const mError: string = useSelector(merchandiseError);
   const mErrorStatus: number = useSelector(merchandiseErrorStatus);

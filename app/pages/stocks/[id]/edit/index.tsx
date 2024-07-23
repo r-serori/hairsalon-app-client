@@ -23,9 +23,19 @@ const StockEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const stocks: StockState = useSelector(stocksStore).find(
+  const stocks: StockState = useSelector(stocksStore)?.find(
     (stock: StockState) => stock.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    product_name: "",
+    product_price: 0,
+    quantity: 0,
+    remarks: "",
+    supplier: "",
+    notice: 0,
+    stock_category_id: 0,
+  };
+
   const sStatus: string = useSelector(stockStatus);
   const sError: string = useSelector(stockError);
   const sErrorStatus: number = useSelector(stockErrorStatus);
