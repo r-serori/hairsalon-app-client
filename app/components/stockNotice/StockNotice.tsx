@@ -8,7 +8,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import BasicAlerts from "../elements/alert/BasicAlert";
 import Button from "@mui/material/Button";
-import { useState } from "react";
 
 interface StockNoticeProps {
   nodes: any;
@@ -16,7 +15,8 @@ interface StockNoticeProps {
 }
 
 const StockNotice: React.FC<StockNoticeProps> = ({ nodes, setSearch }) => {
-  const stockNotice = nodes.filter((node: any) => node.quantity <= node.notice);
+  const stockNotice: any =
+    nodes?.filter((node: any) => node?.quantity <= node?.notice) || [];
   return (
     <div>
       {stockNotice.length === 0 ? (

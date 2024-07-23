@@ -135,12 +135,12 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
   const router = useRouter();
 
   //時間管理画面へ遷移
-  const handleTimeManagement = (id) => {
+  const handleTimeManagement = (id: number) => {
     router.push(`attendance_times/${id}/show?id=${id}`);
   };
 
   //編集画面へ遷移
-  const handleEditManagement = (nodeId, link) => {
+  const handleEditManagement = (nodeId: number, link: string) => {
     router.push(`${link}/${nodeId}/edit?id=${nodeId}`);
   };
 
@@ -173,8 +173,8 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
           >
             <option value="">すべて</option>
             {searchItems.map((searchItem, index) => {
-              const searchKey = searchItem.key;
-              const searchValue = searchItem.value; // 検索対象のキーを取得,attendance_name
+              const searchKey: string = searchItem.key;
+              const searchValue: string = searchItem.value; // 検索対象のキーを取得,attendance_name
 
               return (
                 <option key={index} value={searchKey}>
