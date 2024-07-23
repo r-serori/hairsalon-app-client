@@ -302,16 +302,16 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     // useCustomerStateが存在する場合、顧客情報を設定
     setIsCustomer(true);
-    setCustomerId(useCustomerState.id);
+    setCustomerId(useCustomerState?.id || 0);
     setCustomerName(newValue);
     setCustomerNameValidate(true);
-    setPhoneNumber(useCustomerState.phone_number || "");
-    setRemarks(useCustomerState.remarks || "");
-    setCourseNames(useCustomerState.course || []);
-    setOptionNames(useCustomerState.option || []);
-    setMerchandiseNames(useCustomerState.merchandise || []);
-    setHairstyleNames(useCustomerState.hairstyle || []);
-    setUserNames(useCustomerState.names || []);
+    setPhoneNumber(useCustomerState?.phone_number || "");
+    setRemarks(useCustomerState?.remarks || "");
+    setCourseNames(useCustomerState?.course || []);
+    setOptionNames(useCustomerState?.option || []);
+    setMerchandiseNames(useCustomerState?.merchandise || []);
+    setHairstyleNames(useCustomerState?.hairstyle || []);
+    setUserNames(useCustomerState?.names || []);
     setUsernameValidate(true);
   };
 
