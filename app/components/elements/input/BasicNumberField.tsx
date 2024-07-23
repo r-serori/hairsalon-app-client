@@ -2,13 +2,14 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { createTheme } from "@mui/material/styles";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
 
 interface BasicNumberFieldProps {
   id: number;
   placeholder: string;
   value: string | null;
   disabled?: boolean;
-  role?: string;
+  role?: PermissionsState;
   maxNumber?: number;
   required?: boolean;
   format: boolean; // カンマ区切りにするかどうか

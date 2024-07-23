@@ -3,13 +3,14 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { createTheme } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
 
 interface BasicTextFieldProps {
   id: number;
   placeholder: string;
   value: string | null;
   disabled?: boolean;
-  role?: string;
+  role?: PermissionsState;
   decideLength?: number;
   multiline?: boolean;
   rows?: number;
