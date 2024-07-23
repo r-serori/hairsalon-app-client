@@ -604,11 +604,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               NodesProp === "phone_number" ? 999999999999999 : 4294967295
             }
             required={NodesProp === "phone_number" ? false : true}
-            onValidationChange={
-              NodesProp !== "phoneNumber"
-                ? (isValid) => setIsValidate(isValid)
-                : null
-            }
+            onValidationChange={NodesProp !== "phoneNumber" && setIsValidate}
             format={NodesProp === "phone_number" ? false : true}
           />
         )}
