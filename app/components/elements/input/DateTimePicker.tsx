@@ -59,7 +59,7 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
             : "日時を選択してください"
         }
         value={dayJsValue}
-        onChange={errorChecker}
+        onChange={(newValue) => errorChecker(newValue)}
         {...(isAllDay || role === "スタッフ" ? { readOnly: true } : {})}
         minTime={minTime}
         maxTime={maxTime}
