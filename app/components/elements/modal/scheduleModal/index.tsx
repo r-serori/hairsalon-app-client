@@ -264,8 +264,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
   const [endTimeValidate, setEndTimeValidate] = useState<boolean>(true);
 
-  const changeCustomerState = (newValue) => {
+  const changeCustomerState = (newValue: string | null) => {
     //編集時に選択した顧客情報を取得
+    if (newValue === null) return;
     const useCustomerState = nodes.find(
       (node) => node.customer_name === newValue
     );
@@ -452,24 +453,27 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
       id: Sid ? Sid : 0,
       customer_id: !newCustomer ? customerId : 0,
       customer_name: customerName,
-      phone_number: phone_number,
-      remarks: remarks,
-      course_id: courses
-        .filter((course) => courseNames.includes(course.course_name))
-        .map((course) => course.id),
+      phone_number: phone_number || null,
+      remarks: remarks || null,
+      course_id:
+        courses
+          ?.filter((course) => courseNames.includes(course.course_name))
+          .map((course) => course.id) || [],
       option_id: options
         .filter((option) => optionNames.includes(option.option_name))
         .map((option) => option.id),
-      merchandise_id: merchandises
-        .filter((merchandise) =>
-          merchandiseNames.includes(merchandise.merchandise_name)
-        )
-        .map((merchandise) => merchandise.id),
-      hairstyle_id: hairstyles
-        .filter((hairstyle) =>
-          hairstyleNames.includes(hairstyle.hairstyle_name)
-        )
-        .map((hairstyle) => hairstyle.id),
+      merchandise_id:
+        merchandises
+          ?.filter((merchandise) =>
+            merchandiseNames.includes(merchandise.merchandise_name)
+          )
+          .map((merchandise) => merchandise.id) || [],
+      hairstyle_id:
+        hairstyles
+          ?.filter((hairstyle) =>
+            hairstyleNames.includes(hairstyle.hairstyle_name)
+          )
+          .map((hairstyle) => hairstyle.id) || [],
       user_id: Array.isArray(users)
         ? users
             .filter((user) => userNames.includes(user.name))
@@ -735,7 +739,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                   <div className="pt-4 flex justify-center items-center ml-4 mr-4">
                     <div className="w-32 mr-2 text-right mb-6 ">タイトル:</div>
                     <BasicTextField
-                      id={uniqueId}
+                      id={Number(uniqueId)}
                       placeholder="タイトル"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
@@ -770,7 +774,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         電話番号:
                       </span>
                       <BasicNumberField
-                        id={uniqueId}
+                        id={Number(uniqueId)}
                         placeholder="電話番号"
                         value={phone_number}
                         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -783,7 +787,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     <div className="pt-6 flex justify-center items-center ml-4 mr-4">
                       <div className="w-32 mr-2 text-right mb-6 ">備考:</div>
                       <BasicTextField
-                        id={uniqueId}
+                        id={Number(uniqueId)}
                         placeholder="備考"
                         value={remarks}
                         onChange={(e) => setRemarks(e.target.value)}
@@ -868,7 +872,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         顧客名:
                       </span>
                       <BasicTextField
-                        id={uniqueId}
+                        id={Number(uniqueId)}
                         placeholder="顧客名"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
@@ -884,7 +888,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         電話番号:
                       </span>
                       <BasicNumberField
-                        id={uniqueId}
+                        id={Number(uniqueId)}
                         placeholder="電話番号"
                         value={phone_number}
                         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -898,7 +902,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                     <div className="pt-6 flex items-center ml-4 mr-4">
                       <span className="w-32 text-right mb-6  mr-2">備考:</span>
                       <BasicTextField
-                        id={uniqueId}
+                        id={Number(uniqueId)}
                         placeholder="備考"
                         value={remarks}
                         onChange={(e) => setRemarks(e.target.value)}
