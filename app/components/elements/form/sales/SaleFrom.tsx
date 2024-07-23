@@ -131,13 +131,12 @@ const SaleForm: React.FC<SaleFormProps> = ({
 
       //一つの配列にした配列をmapで回して、courseNameと同じだったら、coursePriceを取得して、reduceで合計する。
       const sameCoursesPrice = sameCoursesEvents
-        .map(
-          (course: any) =>
-            (courseNameAndPrices &&
-              courseNameAndPrices?.find(
+        .map((course: any) =>
+          courseNameAndPrices === undefined
+            ? 0
+            : courseNameAndPrices.find(
                 (courseNameAndPrice) => courseNameAndPrice.courseName === course
-              ).coursePrice) ||
-            0
+              ).coursePrice
         )
         .reduce((acc, cur) => acc + cur, 0);
 
@@ -152,13 +151,12 @@ const SaleForm: React.FC<SaleFormProps> = ({
       }));
 
       const sameOptionsPrice = sameOptionsEvents
-        .map(
-          (option: any) =>
-            (optionNameAndPrices &&
-              optionNameAndPrices?.find(
+        .map((option: any) =>
+          optionNameAndPrices === undefined
+            ? 0
+            : optionNameAndPrices.find(
                 (optionNameAndPrice) => optionNameAndPrice.optionName === option
-              ).optionPrice) ||
-            0
+              ).optionPrice
         )
         .reduce((acc, cur) => acc + cur, 0);
 
@@ -178,12 +176,12 @@ const SaleForm: React.FC<SaleFormProps> = ({
       const sameMerchandisesPrice = sameMerchandisesEvents
         .map(
           (merchandise: any) =>
-            (merchandiseNameAndPrices &&
-              merchandiseNameAndPrices?.find(
-                (merchandiseNameAndPrice) =>
-                  merchandiseNameAndPrice.merchandiseName === merchandise
-              ).merchandisePrice) ||
-            0
+            (merchandiseNameAndPrices === undefined
+              ? 0
+              : merchandiseNameAndPrices.find(
+                  (merchandiseNameAndPrice) =>
+                    merchandiseNameAndPrice.merchandiseName === merchandise
+                ).merchandisePrice) || 0
         )
         .reduce((acc, cur) => acc + cur, 0);
 
