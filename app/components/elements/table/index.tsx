@@ -86,7 +86,7 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
   //dataという新しいオブジェクトを作成
   const data = {
     nodes: nodes.filter((node: any) =>
-      nodesProps.some((nodesProp: NodesProps) => {
+      nodesProps.some((nodesProp: any) => {
         const propName = Object.keys(nodesProp)[0] || "";
         const propValue = node[nodesProp[propName]] || "";
         const propProp = nodesProp[propName] || "";
