@@ -57,7 +57,7 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
         options={getOptions}
         value={value}
         onChange={
-          (event, newValue) => changeValue(newValue) // オプションが選択されたときにonChangeを呼び出す
+          (event, newValue: string) => changeValue(newValue) // オプションが選択されたときにonChangeを呼び出す
         } // オプションが選択されたときにonChangeを呼び出す
         clearOnEscape={false} // 追加
         clearIcon={null} // 追加
