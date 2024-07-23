@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { PageNationProps } from "../../../Hooks/interface";
 
 export const usePaginationLogic = () => {
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<PageNationProps>({
     page: 0,
     size: 10,
   });
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setPagination({ ...pagination, page });
   };
 

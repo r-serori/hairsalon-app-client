@@ -86,3 +86,8 @@ export type NodesProps =
 export type SearchItems = { key: string; value: string }[];
 
 export type THeaderItems = string[];
+
+export interface PageNationProps {
+  page: number;
+  size: number;
+}
