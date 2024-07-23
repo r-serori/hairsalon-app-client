@@ -230,16 +230,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
       (category) => category.category === EditValue
     );
 
-    // `foundCategory` が `undefined` でない場合にのみ `.id` を取得する
-    const categoryId: number | undefined = foundCategory
-      ? foundCategory.id
-      : undefined;
+    const categoryId: number | null = foundCategory ? foundCategory.id : null;
 
-    if (categoryId === undefined) {
-      return null;
-    } else {
-      return categoryId;
-    }
+    return categoryId;
   };
 
   const handleSubmit = async (e: any) => {
@@ -302,11 +295,16 @@ const ModalForm: React.FC<ModalFormProps> = ({
           } else {
             const objInCategoryID = getCheckBoxCategoriesState.find(
               (category) => category.category === EditNode.category_name
-            ).id;
+            );
+
+            const categoryId: number | null = objInCategoryID
+              ? objInCategoryID.id
+              : null;
+
             const { category_name, ...newUpdatedNode } = updatedNode;
             const superUpdatedNode = {
               ...newUpdatedNode,
-              stock_category_id: objInCategoryID ? objInCategoryID : null,
+              stock_category_id: categoryId,
             };
             const sResponse = await dispatch(
               updateStock(superUpdatedNode) as any
