@@ -15,7 +15,7 @@ import { isLogin, isLogout } from "../../../../store/auth/isLoginSlice";
 import Link from "next/link";
 import { KeyState } from "../../../../store/auth/keySlice";
 
-function classNames(...classes) {
+function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
