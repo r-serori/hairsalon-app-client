@@ -5,7 +5,6 @@ import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import EmailField from "../../input/EmailField";
 import BasicNumberField from "../../input/BasicNumberField";
 import PasswordField from "../../input/PasswordField";
-import { string } from "../../../Hooks/interface";
 
 interface AuthStaffRegisterFormProps {
   onSubmitStaff: (formData: {

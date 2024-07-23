@@ -19,7 +19,6 @@ import PrimaryButton from "../../button/PrimaryButton";
 import CameraEnhanceIcon from "@mui/icons-material/CameraEnhance";
 import DateTimeRangePicker from "../../input/DateTimePicker";
 import { useSelector } from "react-redux";
-import BasicAlerts from "../../alert/BasicAlert";
 import { user } from "../../../Hooks/authSelector";
 import {
   attendance_timeErrorStatus,
@@ -75,14 +74,14 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
     link === "/attendanceTimeShots" ? node.id : node.user_id;
 
   //ボタンを押したユーザーの情報を取得
-  const attendanceUser: UserState = useSelector(user).find(
-    (user) => user.id === Number(userId)
-  );
+  const attendanceUser: UserState | null =
+    useSelector(user)?.find((user) => user.id === Number(userId)) || null;
 
   // 編集する時のユーザーが持っている出勤時間、退勤時間の情報を取得
-  const attendanceTimes: Attendance_timeState[] = useSelector(
-    attendance_timesStore
-  ).filter((time) => time.user_id === node.user_id);
+  const attendanceTimes: Attendance_timeState[] | [] =
+    useSelector(attendance_timesStore)?.filter(
+      (time) => time.user_id === node.user_id
+    ) || [];
 
   const lastAttendanceTime: Attendance_timeState | null =
     attendanceTimes.length > 0
@@ -91,18 +90,18 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
   //出勤中か退勤中かの判定
   const [isAttendance, setIsAttendance] = useState<boolean>(
-    attendanceUser.isAttendance ? true : false
+    attendanceUser?.isAttendance ? true : false
   ); //true:出勤中 false:退勤中
 
   //出勤中の時、オーナーが本日の出勤時間、退勤時間の編集を不可にする
   const [notEdit, setNotEdit] = useState<boolean>(
     (edit &&
       isAttendance &&
-      dayjs(node.start_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD") ===
+      dayjs(node?.start_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD") ===
         dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD")) ||
       (edit &&
         isAttendance &&
-        dayjs(node.end_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD") ===
+        dayjs(node?.end_time).utc().tz("Asia/Tokyo").format("YYYY/MM/DD") ===
           dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD"))
       ? true
       : false
@@ -112,8 +111,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
   const [lateTime, setLateTime] = useState<boolean>(
     isAttendance &&
       lastAttendanceTime &&
-      lastAttendanceTime.start_time !== null &&
-      dayjs(lastAttendanceTime.start_time)
+      lastAttendanceTime?.start_time !== null &&
+      dayjs(lastAttendanceTime?.start_time)
         .utc()
         .tz("Asia/Tokyo")
         .format("YYYY/MM/DD") !==
@@ -127,7 +126,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
 
   //出勤時間、退勤時間の編集モードの時、編集済みの写真を表示
   const [photo, setPhoto] = useState<string | null>(
-    node.start_photo_path === "111222" || node.end_photo_path === "111222"
+    node?.start_photo_path === "111222" || node.end_photo_path === "111222"
       ? null
       : link === "/attendanceTimeStart" &&
         edit &&
