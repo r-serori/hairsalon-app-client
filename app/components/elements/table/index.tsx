@@ -86,10 +86,10 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
   //dataという新しいオブジェクトを作成
   const data = {
     nodes: nodes.filter((node: any) =>
-      nodesProps.some((nodesProp) => {
-        const propName = Object.keys(nodesProp)[0];
-        const propValue = node[nodesProp[propName]];
-        const propProp = nodesProp[propName];
+      nodesProps.some((nodesProp: NodesProps) => {
+        const propName = Object.keys(nodesProp)[0] || "";
+        const propValue = node[nodesProp[propName]] || "";
+        const propProp = nodesProp[propName] || "";
 
         const searchResult =
           propProp.toString().includes(searchField || "") &&
