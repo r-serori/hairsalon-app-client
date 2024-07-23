@@ -50,7 +50,7 @@ interface EasyModalProps {
 
   whatIsYourId?: number;
   yearMonth: string;
-  setYearMonth?: (yearMonth: string) => void;
+  setYearMonth: (yearMonth: string) => void;
 }
 
 const EasyModal: React.FC<EasyModalProps> = ({
@@ -116,12 +116,13 @@ const EasyModal: React.FC<EasyModalProps> = ({
           const re = renderError(atErrorStatus, router, dispatch);
           if (re === null) throw new Error();
         }
-        setYearMonth(year);
+        if (setYearMonth) setYearMonth(year);
       } else if (whoAreYou === "schedules") {
         const response = await dispatch(selectGetSchedules(year) as any);
         if (response.meta.requestStatus === "fulfilled") {
           localStorage.setItem("year", year);
-          setYearMonth(year);
+          if (setYearMonth) setYearMonth(year);
+
           setOpen(false);
         } else {
           const re = renderError(sErrorStatus, router, dispatch);
@@ -130,7 +131,7 @@ const EasyModal: React.FC<EasyModalProps> = ({
       } else if (whoAreYou === "dailySales") {
         const response = await dispatch(selectGetDaily_sales(year) as any);
         if (response.meta.requestStatus === "fulfilled") {
-          setYearMonth(year);
+          if (setYearMonth) setYearMonth(year);
           setOpen(false);
         } else {
           const re = renderError(dsErrorStatus, router, dispatch);
@@ -139,7 +140,8 @@ const EasyModal: React.FC<EasyModalProps> = ({
       } else if (whoAreYou === "monthlySales") {
         const response = await dispatch(selectGetMonthly_sales(year) as any);
         if (response.meta.requestStatus === "fulfilled") {
-          setYearMonth(year);
+          if (setYearMonth) setYearMonth(year);
+
           setOpen(false);
         } else {
           const re = renderError(msErrorStatus, router, dispatch);
