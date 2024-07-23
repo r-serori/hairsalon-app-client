@@ -25,7 +25,7 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  const errorChecker = (newValue: Dayjs) => {
+  const errorChecker = (newValue: Dayjs | null) => {
     if (
       dayjs(newValue)
         .utc()
@@ -64,7 +64,7 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
             ? dayjs().utc().tz("Asia/Tokyo")
             : dayjs(value).utc().tz("Asia/Tokyo")
         }
-        onChange={(newValue) => errorChecker(newValue)}
+        onChange={(newValue: Dayjs | null) => errorChecker(newValue)}
         views={
           whatSales === "日次"
             ? ["year", "month", "day"]

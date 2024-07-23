@@ -36,7 +36,7 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   const minTime = dayjs().hour(0).minute(0).utc().tz("Asia/Tokyo");
   const maxTime = dayjs().hour(23).minute(59).utc().tz("Asia/Tokyo");
 
-  const errorChecker = (newValue: Dayjs) => {
+  const errorChecker = (newValue: Dayjs | null) => {
     if (
       dayjs(newValue)
         .utc()
@@ -59,7 +59,7 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
             : "日時を選択してください"
         }
         value={dayJsValue}
-        onChange={(newValue) => errorChecker(newValue)}
+        onChange={(newValue: Dayjs | null) => errorChecker(newValue)}
         {...(isAllDay || role === "スタッフ" ? { readOnly: true } : {})}
         minTime={minTime}
         maxTime={maxTime}
