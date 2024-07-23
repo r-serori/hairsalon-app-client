@@ -124,7 +124,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         .flat();
 
       //coursesの中にあるcourse_nameとpriceを取得して、配列に入れる。
-      const courseNameAndPrices = courses.map((course) => ({
+      const courseNameAndPrices = courses.map((course: CourseState) => ({
         courseName: course.course_name,
         coursePrice: course.price,
       }));
@@ -132,7 +132,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
       //一つの配列にした配列をmapで回して、courseNameと同じだったら、coursePriceを取得して、reduceで合計する。
       const sameCoursesPrice = sameCoursesEvents
         .map(
-          (course) =>
+          (course: any) =>
             courseNameAndPrices.find(
               (courseNameAndPrice) => courseNameAndPrice.courseName === course
             ).coursePrice
@@ -144,14 +144,14 @@ const SaleForm: React.FC<SaleFormProps> = ({
         .map((event: any) => event.option)
         .flat();
 
-      const optionNameAndPrices = options.map((option) => ({
+      const optionNameAndPrices = options.map((option: OptionState) => ({
         optionName: option.option_name,
         optionPrice: option.price,
       }));
 
       const sameOptionsPrice = sameOptionsEvents
         .map(
-          (option) =>
+          (option: any) =>
             optionNameAndPrices.find(
               (optionNameAndPrice) => optionNameAndPrice.optionName === option
             ).optionPrice
@@ -164,14 +164,16 @@ const SaleForm: React.FC<SaleFormProps> = ({
         .map((event: any) => event.merchandise)
         .flat();
 
-      const merchandiseNameAndPrices = merchandises.map((merchandise) => ({
-        merchandiseName: merchandise.merchandise_name,
-        merchandisePrice: merchandise.price,
-      }));
+      const merchandiseNameAndPrices = merchandises.map(
+        (merchandise: MerchandiseState) => ({
+          merchandiseName: merchandise.merchandise_name,
+          merchandisePrice: merchandise.price,
+        })
+      );
 
       const sameMerchandisesPrice = sameMerchandisesEvents
         .map(
-          (merchandise) =>
+          (merchandise: any) =>
             merchandiseNameAndPrices.find(
               (merchandiseNameAndPrice) =>
                 merchandiseNameAndPrice.merchandiseName === merchandise
@@ -183,7 +185,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
         sameCoursesPrice + sameOptionsPrice + sameMerchandisesPrice;
 
       setMessage("");
-      setSumPrice(result);
+      setSumPrice(Number(result));
     } catch (e) {
       return 0;
     }
