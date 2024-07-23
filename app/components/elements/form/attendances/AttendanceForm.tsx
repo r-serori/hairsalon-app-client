@@ -7,7 +7,7 @@ import { RoleState } from "../../../Hooks/interface";
 import BasicNumberField from "../../input/BasicNumberField";
 
 interface UserUpdateFormProps {
-  onSubmit: (formData: { id: number; role: RoleState }) => void;
+  onSubmit: (formData: { id: number; role: string }) => void;
   node: UserState;
 }
 
@@ -16,7 +16,7 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
   const [phone_number, setPhoneNumber] = useState<string>(
     node?.phone_number || ""
   );
-  const [role, setRole] = useState<RoleState>(node?.role || "スタッフ");
+  const [role, setRole] = useState<string>(node?.role || "スタッフ");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,7 +58,7 @@ const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
 
           <SingleCheckBox
             value={role}
-            onChange={(newValue: RoleState) => setRole(newValue as RoleState)}
+            onChange={(newValue) => setRole(newValue)}
             getOptions={["マネージャー", "スタッフ"]}
           />
 
