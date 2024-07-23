@@ -74,7 +74,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const [sumPrice, setSumPrice] = React.useState<number | 0>(0);
   const [message, setMessage] = React.useState<string>("");
 
-  const sumPricer = (updateDate) => {
+  const sumPricer = (updateDate: Dayjs) => {
     if (!timeValidate) return;
     //モーダルでDateTimePickerで選択した日付をdayjsでformat()で形を変更している。
     let sameDateEvents = [];
