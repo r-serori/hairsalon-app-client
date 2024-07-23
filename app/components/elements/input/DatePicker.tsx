@@ -25,7 +25,7 @@ const DatePickerValue: React.FC<DatePickerValueProps> = ({
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
-  const errorChecker = (newValue) => {
+  const errorChecker = (newValue: Dayjs) => {
     if (
       dayjs(newValue)
         .utc()

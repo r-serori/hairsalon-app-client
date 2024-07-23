@@ -36,7 +36,7 @@ const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({
   const minTime = dayjs().hour(0).minute(0).utc().tz("Asia/Tokyo");
   const maxTime = dayjs().hour(23).minute(59).utc().tz("Asia/Tokyo");
 
-  const errorChecker = (newValue) => {
+  const errorChecker = (newValue: Dayjs) => {
     if (
       dayjs(newValue)
         .utc()
