@@ -231,7 +231,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
     );
 
     // `foundCategory` が `undefined` でない場合にのみ `.id` を取得する
-    const categoryId: number = foundCategory ? foundCategory.id : undefined;
+    const categoryId: number | undefined = foundCategory
+      ? foundCategory.id
+      : undefined;
 
     if (categoryId === undefined) {
       return null;
