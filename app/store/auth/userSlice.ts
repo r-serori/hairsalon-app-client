@@ -251,7 +251,7 @@ export interface UserState {
   phone_number?: string;
   password?: string;
   role?: RoleState;
-  isAttendance?: boolean;
+  isAttendance: boolean;
 }
 
 export interface ResponseUserState {
