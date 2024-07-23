@@ -342,11 +342,13 @@ const SaleForm: React.FC<SaleFormProps> = ({
           {whatSales === "日次" ? (
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                {dayjs(time)
-                  .utc()
-                  .tz("Asia/Tokyo")
-                  .format("YYYY-MM-DD")
-                  .includes("Invalid")
+                {time === null
+                  ? "日付を正しく入力してください。"
+                  : dayjs(time)
+                      .utc()
+                      .tz("Asia/Tokyo")
+                      .format("YYYY-MM-DD")
+                      .includes("Invalid")
                   ? "日付を正しく入力してください。"
                   : `${time.format("YYYY")}
                 年${time.format("MM")}月${time.format("DD")}
@@ -362,11 +364,13 @@ const SaleForm: React.FC<SaleFormProps> = ({
           ) : whatSales === "月次" ? (
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                {dayjs(time)
-                  .utc()
-                  .tz("Asia/Tokyo")
-                  .format("YYYY-MM")
-                  .includes("Invalid")
+                {time === null
+                  ? "日付を正しく入力してください。"
+                  : dayjs(time)
+                      .utc()
+                      .tz("Asia/Tokyo")
+                      .format("YYYY-MM")
+                      .includes("Invalid")
                   ? "日付を正しく入力してください。"
                   : `${time.format("YYYY")}年${time.format(
                       "MM"
@@ -381,11 +385,13 @@ const SaleForm: React.FC<SaleFormProps> = ({
           ) : (
             <div>
               <h3 className="font-normal text-gray-900 dark:text-gray-400">
-                {dayjs(time)
-                  .utc()
-                  .tz("Asia/Tokyo")
-                  .format("YYYY")
-                  .includes("Invalid")
+                {time === null
+                  ? "日付を正しく入力してください。"
+                  : dayjs(time)
+                      .utc()
+                      .tz("Asia/Tokyo")
+                      .format("YYYY")
+                      .includes("Invalid")
                   ? "日付を正しく入力してください。"
                   : `${time.format("YYYY")}
                 年の売上合計は
