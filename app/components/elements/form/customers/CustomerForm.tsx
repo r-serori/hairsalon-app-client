@@ -23,7 +23,7 @@ interface CustomerFormProps {
 }
 
 const CustomerForm: React.FC<CustomerFormProps> = ({
-  node,
+  node = null,
   onSubmit,
   edit,
 }) => {
