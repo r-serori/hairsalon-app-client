@@ -266,8 +266,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           if (re === null) throw new Error("更新に失敗しました");
         }
       } else {
-        const startTimePhoto: string | null = photo;
-        if (startTimePhoto === null) return;
+        const startTimePhoto: string | null | undefined = photo;
+        if (startTimePhoto === null || startTimePhoto === undefined) return;
         const formData = {
           start_time: getTime,
           start_photo_path: startTimePhoto,
@@ -310,8 +310,8 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           if (re === null) throw new Error("更新に失敗しました");
         }
       } else {
-        const endTimePhoto: string | null = photo;
-        if (endTimePhoto === null) return;
+        const endTimePhoto: string | null | undefined = photo;
+        if (endTimePhoto === null || endTimePhoto === undefined) return;
         const formData = {
           end_time: getTime,
           end_photo_path: endTimePhoto,
