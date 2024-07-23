@@ -26,7 +26,13 @@ const SingleCheckBox: React.FC<SingleCheckBoxProps> = ({
 
   const changeValue = (newValue: string) => {
     onChange(newValue);
-    if (required && newValue === "") {
+    if (
+      !required ||
+      onValidationChange === undefined ||
+      onValidationChange === null
+    ) {
+      return;
+    } else if (required && newValue === "" && onValidationChange) {
       onValidationChange(false);
     }
   };
