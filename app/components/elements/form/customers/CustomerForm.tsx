@@ -50,28 +50,39 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   const [courses, setCourses] = useState<string[]>(
     node?.course_id && Array.isArray(node.course_id)
       ? getCoursesState
-          .filter((course) => node.course_id.includes(course.id))
+          .filter(
+            (course) => node.course_id && node.course_id.includes(course.id)
+          )
           .map((course) => course.course_name)
       : []
   );
   const [options, setOptions] = useState<string[]>(
     node?.option_id && Array.isArray(node.option_id)
       ? getOptionsState
-          .filter((option) => node.option_id.includes(option.id))
+          .filter(
+            (option) => node.option_id && node.option_id.includes(option.id)
+          )
           .map((option) => option.option_name)
       : []
   );
   const [merchandises, setMerchandises] = useState<string[]>(
     node?.merchandise_id && Array.isArray(node.merchandise_id)
       ? getMerchandisesState
-          .filter((merchandise) => node.merchandise_id.includes(merchandise.id))
+          .filter(
+            (merchandise) =>
+              node.merchandise_id &&
+              node.merchandise_id.includes(merchandise.id)
+          )
           .map((merchandise) => merchandise.merchandise_name)
       : []
   );
   const [hairstyles, setHairstyles] = useState<string[]>(
     node?.hairstyle_id && Array.isArray(node.hairstyle_id)
       ? getHairstylesState
-          .filter((hairstyle) => node.hairstyle_id.includes(hairstyle.id))
+          .filter(
+            (hairstyle) =>
+              node.hairstyle_id && node.hairstyle_id.includes(hairstyle.id)
+          )
           .map((hairstyle) => hairstyle.hairstyle_name)
       : []
   );
@@ -84,7 +95,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
           node !== null &&
           node.user_id !== null)
       ? getUsersState
-          .filter((user) => node?.user_id.includes(user.id))
+          .filter((user) => node.user_id && node.user_id.includes(user.id))
           .map((user) => user.name) || []
       : Object(getUsersState).name
   );
