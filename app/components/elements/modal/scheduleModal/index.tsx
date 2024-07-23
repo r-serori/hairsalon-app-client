@@ -267,6 +267,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
   const changeCustomerState = (newValue: string | null) => {
     //編集時に選択した顧客情報を取得
     if (newValue === null) return;
+    if (!nodes) return;
+    if (nodes.customer_name === undefined) return;
     const useCustomerState = nodes.find(
       (node) => node.customer_name === newValue
     );
