@@ -105,7 +105,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
   const [isCustomer, setIsCustomer] = useState<boolean>(false);
 
   //カレンダーのイベントをクリックした際に選択したイベントを格納するstate
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
   // イベントをクリックした際にどのようなイベントをクリックしたかを格納するstate
   const [whoIsEvent, setWhoIsEvent] = useState<
@@ -120,7 +120,7 @@ const MyCalendar: React.FC<OpenCalendarProps> = ({
   // EasyModalを表示するためのstate　表示する予約の年を選択する
   const [easyOpen, setEasyOpen] = useState(false);
 
-  const handleEventClick = (e) => {
+  const handleEventClick = (e: any) => {
     setSelectedEvent(e);
     setShowButtonModal(true);
     // setShowModal(true);
