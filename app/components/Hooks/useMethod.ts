@@ -3,6 +3,7 @@ import { isLogout } from "../../store/auth/isLoginSlice";
 import { logout } from "../../store/auth/userSlice";
 import { AppDispatch } from "../../redux/store";
 import { NextRouter } from "next/router";
+import { PermissionsState } from "../../store/auth/permissionSlice";
 
 export const allLogout = async (
   dispatch: AppDispatch
@@ -35,7 +36,7 @@ export const getUserKey = async (
 };
 
 export const ownerPermission = (
-  role: string,
+  role: PermissionsState,
   router: NextRouter
 ): boolean | undefined => {
   if (role === "オーナー") {
@@ -46,7 +47,7 @@ export const ownerPermission = (
 };
 
 export const managerPermission = (
-  role: string,
+  role: PermissionsState,
   router: NextRouter
 ): boolean | undefined => {
   if (role === "マネージャー" || role === "オーナー") {
@@ -57,7 +58,7 @@ export const managerPermission = (
 };
 
 export const staffPermission = (
-  role: string,
+  role: PermissionsState,
   router: NextRouter
 ): boolean | undefined => {
   if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
