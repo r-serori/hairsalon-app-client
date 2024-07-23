@@ -214,9 +214,9 @@ export interface PostScheduleOnlyState {
 }
 
 export interface RequestScheduleState {
-  id: number | null;
-  customer_id: number | null;
-  customer_name: string | null;
+  id: number;
+  customer_id: number;
+  customer_name: string;
   phone_number: string | null;
   remarks: string | null;
   course_id: number[] | null;
