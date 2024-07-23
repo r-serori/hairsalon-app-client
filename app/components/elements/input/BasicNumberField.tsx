@@ -13,7 +13,7 @@ interface BasicNumberFieldProps {
   required?: boolean;
   format: boolean; // カンマ区切りにするかどうか
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onValidationChange?: (isValid: boolean) => void | null;
+  onValidationChange?: null | ((isValid: boolean) => void);
 }
 
 const BasicNumberField: React.FC<BasicNumberFieldProps> = ({
