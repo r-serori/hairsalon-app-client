@@ -48,28 +48,28 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   const [remarks, setRemarks] = useState<string>(node?.remarks || "");
 
   const [courses, setCourses] = useState<string[]>(
-    node
+    node?.course_id
       ? getCoursesState
           .filter((course) => node.course_id.includes(course.id))
           .map((course) => course.course_name)
       : []
   );
   const [options, setOptions] = useState<string[]>(
-    node
+    node?.option_id
       ? getOptionsState
           .filter((option) => node.option_id.includes(option.id))
           .map((option) => option.option_name)
       : []
   );
   const [merchandises, setMerchandises] = useState<string[]>(
-    node
+    node?.merchandise_id
       ? getMerchandisesState
           .filter((merchandise) => node.merchandise_id.includes(merchandise.id))
           .map((merchandise) => merchandise.merchandise_name)
       : []
   );
   const [hairstyles, setHairstyles] = useState<string[]>(
-    node
+    node?.hairstyle_id
       ? getHairstylesState
           .filter((hairstyle) => node.hairstyle_id.includes(hairstyle.id))
           .map((hairstyle) => hairstyle.hairstyle_name)
@@ -87,7 +87,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   );
 
   const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
-    node ? true : false
+    node?.customer_name ? true : false
   );
   const [usersValidate, setUsersValidate] = useState<boolean>(true);
 
