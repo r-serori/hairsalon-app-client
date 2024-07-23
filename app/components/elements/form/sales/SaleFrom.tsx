@@ -123,23 +123,24 @@ const SaleForm: React.FC<SaleFormProps> = ({
         .map((event: any) => event.course)
         .flat();
 
-      //coursesの中にあるcourse_nameとpriceを取得して、配列に入れる。
+      // coursesの中にあるcourse_nameとpriceを取得して、配列に入れる。
       const courseNameAndPrices = courses.map((course: CourseState) => ({
         courseName: course.course_name,
         coursePrice: course.price,
       }));
 
-      //一つの配列にした配列をmapで回して、courseNameと同じだったら、coursePriceを取得して、reduceで合計する。
+      // 一つの配列にした配列をmapで回して、courseNameと同じだったら、coursePriceを取得して、reduceで合計する。
       const sameCoursesPrice = sameCoursesEvents
-        .map((course: any) =>
-          courseNameAndPrices === undefined
-            ? 0
-            : courseNameAndPrices.find(
-                (courseNameAndPrice) => courseNameAndPrice.courseName === course
-              ).coursePrice
-        )
+        .map((course: any) => {
+          if (!courseNameAndPrices || courseNameAndPrices.length === 0) {
+            return 0;
+          }
+          const foundCourse = courseNameAndPrices.find(
+            (courseNameAndPrice) => courseNameAndPrice.courseName === course
+          );
+          return foundCourse ? foundCourse.coursePrice : 0;
+        })
         .reduce((acc, cur) => acc + cur, 0);
-
       //optionも同様にする。
       const sameOptionsEvents = sameCustomerEvents
         .map((event: any) => event.option)
@@ -151,13 +152,15 @@ const SaleForm: React.FC<SaleFormProps> = ({
       }));
 
       const sameOptionsPrice = sameOptionsEvents
-        .map((option: any) =>
-          optionNameAndPrices === undefined
-            ? 0
-            : optionNameAndPrices.find(
-                (optionNameAndPrice) => optionNameAndPrice.optionName === option
-              ).optionPrice
-        )
+        .map((option: any) => {
+          if (!optionNameAndPrices || optionNameAndPrices.length === 0) {
+            return 0;
+          }
+          const foundOption = optionNameAndPrices.find(
+            (optionNameAndPrice) => optionNameAndPrice.optionName === option
+          );
+          return foundOption ? foundOption.optionPrice : 0;
+        })
         .reduce((acc, cur) => acc + cur, 0);
 
       //merchandiseも同様にする。
@@ -174,15 +177,19 @@ const SaleForm: React.FC<SaleFormProps> = ({
       );
 
       const sameMerchandisesPrice = sameMerchandisesEvents
-        .map(
-          (merchandise: any) =>
-            (merchandiseNameAndPrices === undefined
-              ? 0
-              : merchandiseNameAndPrices.find(
-                  (merchandiseNameAndPrice) =>
-                    merchandiseNameAndPrice.merchandiseName === merchandise
-                ).merchandisePrice) || 0
-        )
+        .map((merchandise: any) => {
+          if (
+            !merchandiseNameAndPrices ||
+            merchandiseNameAndPrices.length === 0
+          ) {
+            return 0;
+          }
+          const foundMerchandise = merchandiseNameAndPrices.find(
+            (merchandiseNameAndPrice) =>
+              merchandiseNameAndPrice.merchandiseName === merchandise
+          );
+          return foundMerchandise ? foundMerchandise.merchandisePrice : 0;
+        })
         .reduce((acc, cur) => acc + cur, 0);
 
       const result =
