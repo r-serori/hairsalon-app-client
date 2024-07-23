@@ -6,6 +6,18 @@ import Modal from "@mui/material/Modal";
 import ModalForm from "../form/ModalForm";
 import AttendanceTimesShotForm from "../form/attendances/AttendanceTimesShotForm";
 import RouterButton from "../button/RouterButton";
+import { PermissionsState } from "../../../store/auth/permissionSlice";
+import { UserState } from "../../../store/auth/userSlice";
+import { CourseState } from "../../../store/courses/courseSlice";
+import { OptionState } from "../../../store/options/optionSlice";
+import { MerchandiseState } from "../../../store/merchandises/merchandiseSlice";
+import { HairstyleState } from "../../../store/hairstyles/hairstyleSlice";
+import { AttendanceTimeShotsNodes } from "../../Hooks/interface";
+import { Attendance_timeState } from "../../../store/attendance_times/attendance_timesSlice";
+import { AttendancesNodes } from "../../Hooks/interface";
+import { StockNodes } from "../../Hooks/interface";
+import { Stock_categoryState } from "../../../store/stocks/stock_categories/stock_categorySlice";
+import { CustomerNodes } from "../../Hooks/interface";
 
 const style = {
   position: "absolute" as "absolute",
@@ -39,12 +51,25 @@ const AttendanceStyle = {
 };
 
 interface BasicModalProps {
-  type?: any;
+  type?: string;
   editValue?: any;
-  editNode?: any;
-  NodesProp?: any;
+  editNode?:
+    | UserState[]
+    | CourseState[]
+    | OptionState[]
+    | MerchandiseState[]
+    | HairstyleState[]
+    | AttendanceTimeShotsNodes[]
+    | Attendance_timeState[]
+    | AttendancesNodes[]
+    | StockNodes[]
+    | Stock_categoryState[]
+    | CustomerNodes[]
+    | any;
+
+  NodesProp?: string;
   link: string;
-  role?: string;
+  role?: PermissionsState;
 }
 
 const BasicModal: React.FC<BasicModalProps> = ({
