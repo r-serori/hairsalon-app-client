@@ -48,28 +48,28 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   const [remarks, setRemarks] = useState<string>(node?.remarks || "");
 
   const [courses, setCourses] = useState<string[]>(
-    node && node.course_id !== null
+    node !== null && node.course_id !== null
       ? getCoursesState
           .filter((course) => node.course_id.includes(course.id))
           .map((course) => course.course_name)
       : []
   );
   const [options, setOptions] = useState<string[]>(
-    node && node.option_id !== null
+    node !== null && node.option_id !== null
       ? getOptionsState
           .filter((option) => node.option_id.includes(option.id))
           .map((option) => option.option_name)
       : []
   );
   const [merchandises, setMerchandises] = useState<string[]>(
-    node && node.merchandise_id !== null
+    node !== null && node.merchandise_id !== null
       ? getMerchandisesState
           .filter((merchandise) => node.merchandise_id.includes(merchandise.id))
           .map((merchandise) => merchandise.merchandise_name)
       : []
   );
   const [hairstyles, setHairstyles] = useState<string[]>(
-    node && node.hairstyle_id !== null
+    node !== null && node.hairstyle_id !== null
       ? getHairstylesState
           .filter((hairstyle) => node.hairstyle_id.includes(hairstyle.id))
           .map((hairstyle) => hairstyle.hairstyle_name)
