@@ -34,7 +34,10 @@ export const getUserKey = async (
   }
 };
 
-export const ownerPermission = (role: string, router: NextRouter): boolean => {
+export const ownerPermission = (
+  role: string,
+  router: NextRouter
+): boolean | undefined => {
   if (role === "オーナー") {
     return true;
   } else {
@@ -45,7 +48,7 @@ export const ownerPermission = (role: string, router: NextRouter): boolean => {
 export const managerPermission = (
   role: string,
   router: NextRouter
-): boolean => {
+): boolean | undefined => {
   if (role === "マネージャー" || role === "オーナー") {
     return true;
   } else {
@@ -53,7 +56,10 @@ export const managerPermission = (
   }
 };
 
-export const staffPermission = (role: string, router: NextRouter): boolean => {
+export const staffPermission = (
+  role: string,
+  router: NextRouter
+): boolean | undefined => {
   if (role === "スタッフ" || role === "マネージャー" || role === "オーナー") {
     return true;
   } else {
