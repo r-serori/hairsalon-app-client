@@ -21,13 +21,13 @@ const DailySalesForm: React.FC<DailySalesFormProps> = ({
   }, []);
 
   const router = useRouter();
-  const [date, setDate] = useState<string>(node && node.date ? node.date : "");
+  const [date, setDate] = useState<string>(node?.date || "");
   const [daily_sales, setDaily_sales] = useState<number>(
-    node && node.daily_sales ? node.daily_sales : 0
+    node?.daily_sales || 0
   );
 
   const [dailySalesValidate, setDailySalesValidate] = useState<boolean>(
-    node && node.daily_sales ? true : false
+    node?.daily_sales ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

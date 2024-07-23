@@ -16,10 +16,10 @@ const StockForm: React.FC<StockCategoryFormProps> = ({
   createStockCategory,
   edit,
 }) => {
-  const [category, setCategory] = useState(node ? node.category : "");
+  const [category, setCategory] = useState(node?.category || "");
 
   const [categoryValidate, setCategoryValidate] = useState<boolean>(
-    node && node.category ? true : false
+    node?.category ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +30,7 @@ const StockForm: React.FC<StockCategoryFormProps> = ({
     }
 
     createStockCategory({
-      id: node ? node.id : 0,
+      id: node?.id || 0,
       category: category,
     });
   };

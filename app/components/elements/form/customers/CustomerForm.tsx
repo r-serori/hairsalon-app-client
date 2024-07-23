@@ -38,14 +38,14 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   const getUsersState = useSelector(user);
 
   const [customer_name, setCustomer_Name] = useState<string>(
-    node ? node.customer_name : ""
+    node?.customer_name || ""
   );
 
   const [phone_number, setPhoneNumber] = useState<string>(
-    node ? node.phone_number : ""
+    node?.phone_number || ""
   );
 
-  const [remarks, setRemarks] = useState<string>(node ? node.remarks : "");
+  const [remarks, setRemarks] = useState<string>(node?.remarks || "");
 
   const [courses, setCourses] = useState<string[]>(
     node
@@ -87,7 +87,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
   );
 
   const [customerNameValidate, setCustomerNameValidate] = useState<boolean>(
-    node && node.customer_name ? true : false
+    node ? true : false
   );
   const [usersValidate, setUsersValidate] = useState<boolean>(true);
 
@@ -98,7 +98,7 @@ const CustomerForm: React.FC<CustomerFormProps> = ({
     }
 
     onSubmit({
-      id: node ? node.id : 0,
+      id: node?.id || 0,
       customer_name: customer_name,
       phone_number: phone_number,
       remarks: remarks,

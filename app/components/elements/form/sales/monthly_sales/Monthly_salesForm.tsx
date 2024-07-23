@@ -23,15 +23,13 @@ const MonthlySalesForm: React.FC<MonthlySalesFormProps> = ({
   }, []);
 
   const router = useRouter();
-  const [year_month, setYear_month] = useState<string>(
-    node && node.year_month ? node.year_month : ""
-  );
+  const [year_month, setYear_month] = useState<string>(node?.year_month || "");
   const [monthly_sales, setMonthly_sales] = useState<number>(
-    node && node.monthly_sales ? node.monthly_sales : 0
+    node?.monthly_sales || 0
   );
 
   const [monthlySalesValidate, setMonthlySalesValidate] = useState<boolean>(
-    node && node.monthly_sales ? true : false
+    node?.monthly_sales ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

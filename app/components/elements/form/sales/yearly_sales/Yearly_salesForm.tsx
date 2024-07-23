@@ -21,13 +21,11 @@ const Yearly_salesForm: React.FC<YearlySalesFormProps> = ({
     }
   }, []);
   const router = useRouter();
-  const [year, setYear] = useState(node && node.year ? node.year : "");
-  const [yearly_sales, setYearly_sales] = useState(
-    node && node.yearly_sales ? node.yearly_sales : 0
-  );
+  const [year, setYear] = useState(node?.year || "");
+  const [yearly_sales, setYearly_sales] = useState(node?.yearly_sales || 0);
 
   const [yearlySalesValidate, setYearlySalesValidate] = useState<boolean>(
-    node && node.yearly_sales ? true : false
+    node?.yearly_sales ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,7 +35,7 @@ const Yearly_salesForm: React.FC<YearlySalesFormProps> = ({
       return;
     }
     createYearlySales({
-      id: node.id,
+      id: node?.id || 0,
       year: year,
       yearly_sales: yearly_sales,
     });

@@ -21,28 +21,25 @@ interface AuthRegisterFormProps {
 const AuthRegisterForm: React.FC<AuthRegisterFormProps> = ({
   onSubmitOwner,
 }) => {
-  const [name, setName] = useState<string>("testerOwner");
-  const [email, setEmail] = useState<string>("testerOwner@hairsaron.com");
-  const [phone_number, setPhoneNumber] = useState<string>("08012345678");
-  const [password, setPassword] = useState<string>("Password_123");
-  const [confirmPassword, setConfirmPassword] =
-    useState<string>("Password_123");
-  const [nameValidate, setNameValidate] = useState<boolean>(true);
-  const [emailValidate, setEmailValidate] = useState<boolean>(true);
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone_number, setPhoneNumber] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [nameValidate, setNameValidate] = useState<boolean>(false);
+  const [emailValidate, setEmailValidate] = useState<boolean>(false);
   const [phone_numberValidate, setPhoneNumberValidate] =
-    useState<boolean>(true);
-  const [passwordValidate, setPasswordValidate] = useState<boolean>(true);
+    useState<boolean>(false);
+  const [passwordValidate, setPasswordValidate] = useState<boolean>(false);
   const [confirmPasswordValidate, setConfirmPasswordValidate] =
-    useState<boolean>(true);
-
-  // const [confirmPassword, setConfirmPassword] = useState("");
+    useState<boolean>(false);
 
   const handleSubmitOwner = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (password !== confirmPassword) {
-    //   alert("パスワードが一致しません");
-    //   return;
-    // }
+    if (password !== confirmPassword) {
+      alert("パスワードが一致しません");
+      return;
+    }
 
     if (
       !nameValidate ||

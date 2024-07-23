@@ -16,15 +16,15 @@ const OptionForm: React.FC<OptionFormProps> = ({
   edit,
 }) => {
   const [option_name, setOptionName] = useState<string>(
-    node ? node.option_name : ""
+    node?.option_name || ""
   );
-  const [price, setPrice] = useState<number>(node ? node.price : 0);
+  const [price, setPrice] = useState<number>(node?.price || 0);
 
   const [optionNameValidate, setOptionNameValidate] = useState<boolean>(
-    node && node.option_name ? true : false
+    node?.option_name ? true : false
   );
   const [priceValidate, setPriceValidate] = useState<boolean>(
-    node && node.price ? true : false
+    node?.price ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +33,7 @@ const OptionForm: React.FC<OptionFormProps> = ({
       return;
     }
     createOption({
-      id: node ? node.id : 0,
+      id: node?.id || 0,
       option_name: option_name,
       price: price,
     });
@@ -49,7 +49,7 @@ const OptionForm: React.FC<OptionFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
-            id={node ? node.id : 0}
+            id={node?.id || 0}
             placeholder="オプション名"
             value={option_name}
             onChange={(e) => setOptionName(e.target.value)}
@@ -57,7 +57,7 @@ const OptionForm: React.FC<OptionFormProps> = ({
           />
 
           <BasicNumberField
-            id={node ? node.id : 0}
+            id={node?.id || 0}
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}

@@ -16,14 +16,14 @@ const MerchandiseForm: React.FC<MerchandiseFormProps> = ({
   edit,
 }) => {
   const [merchandise_name, setMerchandiseName] = useState<string>(
-    node ? node.merchandise_name : ""
+    node?.merchandise_name || ""
   );
-  const [price, setPrice] = useState<number>(node ? node.price : 0);
+  const [price, setPrice] = useState<number>(node?.price || 0);
 
   const [merchandiseNameValidate, setMerchandiseNameValidate] =
-    useState<boolean>(node && node.merchandise_name ? true : false);
+    useState<boolean>(node?.merchandise_name ? true : false);
   const [priceValidate, setPriceValidate] = useState<boolean>(
-    node && node.price ? true : false
+    node?.price ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +33,7 @@ const MerchandiseForm: React.FC<MerchandiseFormProps> = ({
       return;
     }
     createMerchandise({
-      id: node ? node.id : 0,
+      id: node?.id || 0,
       merchandise_name: merchandise_name,
       price: price,
     });
@@ -49,7 +49,7 @@ const MerchandiseForm: React.FC<MerchandiseFormProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <BasicTextField
-            id={node ? node.id : 0}
+            id={node?.id || 0}
             placeholder="物販名"
             value={merchandise_name}
             onChange={(e) => setMerchandiseName(e.target.value)}
@@ -59,7 +59,7 @@ const MerchandiseForm: React.FC<MerchandiseFormProps> = ({
           />
 
           <BasicNumberField
-            id={node ? node.id : 0}
+            id={node?.id || 0}
             placeholder="価格"
             value={String(price)}
             onChange={(e) => setPrice(Number(e.target.value))}

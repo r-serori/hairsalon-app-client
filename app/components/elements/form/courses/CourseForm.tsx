@@ -16,15 +16,15 @@ const CourseForm: React.FC<CourseFormProps> = ({
   edit,
 }) => {
   const [course_name, setCourse_name] = useState<string>(
-    node ? node.course_name : ""
+    node?.course_name || ""
   );
-  const [price, setPrice] = useState<number>(node ? node.price : 0);
+  const [price, setPrice] = useState<number>(node?.price || 0);
 
   const [courseNameValidate, setCourseNameValidate] = useState<boolean>(
-    node && node.course_name ? true : false
+    node?.course_name ? true : false
   );
   const [priceValidate, setPriceValidate] = useState<boolean>(
-    node && node.price ? true : false
+    node?.price ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +34,7 @@ const CourseForm: React.FC<CourseFormProps> = ({
     }
 
     createCourse({
-      id: node ? node.id : 0,
+      id: node?.id || 0,
       course_name: course_name,
       price: price,
     });

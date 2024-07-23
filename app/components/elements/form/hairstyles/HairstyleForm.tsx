@@ -17,11 +17,11 @@ const HairstyleForm: React.FC<HairstyleFormProps> = ({
   edit,
 }) => {
   const [hairstyle_name, setHairstyleName] = useState<string>(
-    node ? node.hairstyle_name : ""
+    node?.hairstyle_name || ""
   );
 
   const [hairstyleNameValidate, setHairstyleNameValidate] = useState<boolean>(
-    node && node.hairstyle_name ? true : false
+    node.hairstyle_name ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,7 +31,7 @@ const HairstyleForm: React.FC<HairstyleFormProps> = ({
       return;
     }
     createHairstyle({
-      id: node ? node.id : 0,
+      id: node?.id || 0,
       hairstyle_name: hairstyle_name,
     });
   };

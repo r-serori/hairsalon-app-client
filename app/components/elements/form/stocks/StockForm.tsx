@@ -29,12 +29,12 @@ const StockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
   const [product_price, setProductPrice] = useState<number>(
     node ? node.product_price : 0
   );
-  const [quantity, setQuantity] = useState<number>(node ? node.quantity : 0);
-  const [remarks, setRemark] = useState<string>(node ? node.remarks : "");
-  const [supplier, setSupplier] = useState<string>(node ? node.supplier : "");
-  const [notice, setNotice] = useState<number>(node ? node.notice : 0);
+  const [quantity, setQuantity] = useState<number>(node?.quantity || 0);
+  const [remarks, setRemark] = useState<string>(node?.remarks || "");
+  const [supplier, setSupplier] = useState<string>(node?.supplier || "");
+  const [notice, setNotice] = useState<number>(node?.notice || 0);
   const [stockCategoryIdName, setStockCategoryIdName] = useState<string>(
-    node
+    node?.stock_category_id && stockCategories.length > 0
       ? stockCategories.find(
           (category) => category.id === node.stock_category_id
         )?.category
@@ -42,16 +42,16 @@ const StockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
   );
 
   const [productNameValidate, setProductNameValidate] = useState<boolean>(
-    node && node.product_name ? true : false
+    node?.product_name ? true : false
   );
   const [productPriceValidate, setProductPriceValidate] = useState<boolean>(
-    node && node.product_price ? true : false
+    node?.product_price ? true : false
   );
   const [quantityValidate, setQuantityValidate] = useState<boolean>(
-    node && node.quantity ? true : false
+    node?.quantity ? true : false
   );
   const [noticeValidate, setNoticeValidate] = useState<boolean>(
-    node && node.notice ? true : false
+    node?.notice ? true : false
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

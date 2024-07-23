@@ -18,43 +18,39 @@ interface AuthOwnerFormProps {
 }
 
 const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ node, onSubmit }) => {
-  const [store_name, setStoreName] = useState<string>(
-    node ? node.store_name : ""
-  );
+  const [store_name, setStoreName] = useState<string>(node?.store_name || "");
   const [postal_code, setPostalCode] = useState<string>(
-    node ? node.postal_code : ""
+    node?.postal_code || ""
   );
-  const [prefecture, setPrefecture] = useState<string>(
-    node ? node.prefecture : ""
-  );
-  const [city, setCity] = useState<string>(node ? node.city : "");
+  const [prefecture, setPrefecture] = useState<string>(node?.prefecture || "");
+  const [city, setCity] = useState<string>(node?.city || "");
   const [addressLine1, setAddressLine1] = useState<string>(
-    node ? node.addressLine1 : ""
+    node?.addressLine1 || ""
   );
   const [addressLine2, setAddressLine2] = useState<string>(
-    node && node.addressLine2 ? node.addressLine2 : ""
+    node?.addressLine2 || ""
   );
   const [phone_number, setPhoneNumber] = useState<string>(
-    node ? node.phone_number : ""
+    node?.phone_number || ""
   );
 
   const [storeNameValidate, setStoreNameValidate] = useState<boolean>(
-    node && node.store_name ? true : false
+    node?.store_name ? true : false
   );
   const [postalCodeValidate, setPostalCodeValidate] = useState<boolean>(
-    node && node.postal_code ? true : false
+    node?.postal_code ? true : false
   );
   const [prefectureValidate, setPrefectureValidate] = useState<boolean>(
-    node && node.prefecture ? true : false
+    node?.prefecture ? true : false
   );
   const [cityValidate, setCityValidate] = useState<boolean>(
-    node && node.city ? true : false
+    node?.city ? true : false
   );
   const [addressLine1Validate, setAddressLine1Validate] = useState<boolean>(
-    node && node.addressLine1 ? true : false
+    node?.addressLine1 ? true : false
   );
   const [phoneNumberValidate, setPhoneNumberValidate] = useState<boolean>(
-    node && node.phone_number ? true : false
+    node?.phone_number ? true : false
   );
 
   const router = useRouter();
@@ -94,7 +90,8 @@ const AuthOwnerForm: React.FC<AuthOwnerFormProps> = ({ node, onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userId = getUserId(key);
+
+    const userId = getUserId(String(key));
     if (!userId) {
       router.push("/auth/register");
       return;
