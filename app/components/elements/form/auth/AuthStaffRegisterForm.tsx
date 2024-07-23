@@ -5,6 +5,7 @@ import SingleCheckBox from "../../input/checkbox/SingleCheckbox";
 import EmailField from "../../input/EmailField";
 import BasicNumberField from "../../input/BasicNumberField";
 import PasswordField from "../../input/PasswordField";
+import { RoleState } from "../../../Hooks/interface";
 
 interface AuthStaffRegisterFormProps {
   onSubmitStaff: (formData: {
@@ -24,7 +25,7 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
   const [email, setEmail] = useState<string>("");
   const [phone_number, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [role, setRole] = useState<string>("");
+  const [role, setRole] = useState<RoleState>("スタッフ");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const [nameValidate, setNameValidate] = useState<boolean>(false);
@@ -119,7 +120,7 @@ const AuthStaffRegisterForm: React.FC<AuthStaffRegisterFormProps> = ({
 
           <SingleCheckBox
             value={role}
-            onChange={(newValue) => setRole(newValue)}
+            onChange={(newValue: RoleState) => setRole(newValue)}
             getOptions={["マネージャー", "スタッフ"]}
             onValidationChange={(isValid) => setRoleValidate(isValid)}
           />
