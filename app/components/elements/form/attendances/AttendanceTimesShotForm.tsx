@@ -201,7 +201,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         setPhoto(imageSrc);
       }
     } else if (link === "/attendanceTimeShots") {
-      const imageSrc = webcamRef.current.getScreenshot();
+      const imageSrc = webcamRef.current?.getScreenshot() || null;
       if (imageSrc === null) {
         return;
       } else {
