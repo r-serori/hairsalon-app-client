@@ -2,7 +2,7 @@ import CryptoJS from "crypto-js";
 
 export const getUserId = (key: string): any => {
   try {
-    const userId: string = localStorage.getItem("user_id");
+    const userId: string | null = localStorage.getItem("user_id");
 
     if (userId === null) {
       throw new Error();
