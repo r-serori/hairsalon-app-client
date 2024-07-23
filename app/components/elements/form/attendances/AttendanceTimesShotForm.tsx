@@ -320,28 +320,9 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           const re = renderError(atErrorStatus, router, dispatch);
           if (re === null) throw new Error("更新に失敗しました");
         }
-        // router.push("/attendanceTimeShots");
       }
     } catch (error) {}
   };
-
-  // const pleaseEdit = async () => {
-  //   let formData;
-
-  //   if (link === "/attendanceTimeShots") {
-  //     formData = {
-  //       id: lastAttendanceTime.id,
-  //       end_time: "9999-12-31 23:59:59",
-  //       end_photo_path: "111222",
-  //       user_id: node.user_id,
-  //     };
-
-  //     await dispatch(pleaseEditEndTime(formData) as any);
-  //     resetPhoto();
-  //     setLateTime(false);
-  //     setOpen(false);
-  //   }
-  // };
 
   return (
     <div
@@ -517,19 +498,6 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       ) : (
         ""
       )}
-      {/* 
-      {lateTime && (
-        <div className="flex justify-center items-center mt-4">
-          <BasicAlerts
-            type="warning"
-            message="昨日の退勤時間が登録されていません！編集依頼ボタンを押して、その後出勤ボタンを押してください！"
-            space={1}
-            padding={0.6}
-          />
-
-          <PrimaryButton value="編集依頼" place="big" onChanger={pleaseEdit} />
-        </div>
-      )} */}
     </div>
   );
 };

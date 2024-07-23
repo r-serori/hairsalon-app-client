@@ -12,11 +12,13 @@ interface UserUpdateFormProps {
 }
 
 const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ onSubmit, node }) => {
-  const [name, setName] = useState<string>(node ? node.name : "");
+  const [name, setName] = useState<string>(node && node ? node.name : "");
   const [phone_number, setPhoneNumber] = useState<string>(
-    node ? node.phone_number : ""
+    node && node ? node.phone_number : ""
   );
-  const [role, setRole] = useState<RoleState>(node.role || "スタッフ");
+  const [role, setRole] = useState<RoleState>(
+    (node && node.role) || "スタッフ"
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
