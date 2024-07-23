@@ -194,7 +194,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       link === "/attendanceTimeEnd"
       // && node.end_photo_path
     ) {
-      const imageSrc = webcamRef.current.getScreenshot();
+      const imageSrc = webcamRef.current?.getScreenshot() || null;
       if (imageSrc === null) {
         return;
       } else {
@@ -214,7 +214,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         setShotEdit(true);
       }
     } else {
-      const imageSrc = webcamRef.current.getScreenshot();
+      const imageSrc = webcamRef.current?.getScreenshot() || null;
       if (imageSrc === null) {
         return;
       } else {
