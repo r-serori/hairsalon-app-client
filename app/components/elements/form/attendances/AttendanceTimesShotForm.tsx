@@ -195,18 +195,32 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
       // && node.end_photo_path
     ) {
       const imageSrc = webcamRef.current.getScreenshot();
-      setPhoto(imageSrc);
+      if (imageSrc === null) {
+        return;
+      } else {
+        setPhoto(imageSrc);
+      }
     } else if (link === "/attendanceTimeShots") {
       const imageSrc = webcamRef.current.getScreenshot();
-      setPhoto(imageSrc);
+      if (imageSrc === null) {
+        return;
+      } else {
+        setPhoto(imageSrc);
 
-      setTime(dayjs().utc().tz("Asia/Tokyo"));
-      setShowTime(dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm:ss"));
-      setShotEdit(true);
+        setTime(dayjs().utc().tz("Asia/Tokyo"));
+        setShowTime(
+          dayjs().utc().tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm:ss")
+        );
+        setShotEdit(true);
+      }
     } else {
       const imageSrc = webcamRef.current.getScreenshot();
-      setPhoto(imageSrc);
-      setShotEdit(true);
+      if (imageSrc === null) {
+        return;
+      } else {
+        setPhoto(imageSrc);
+        setShotEdit(true);
+      }
     }
   };
 
