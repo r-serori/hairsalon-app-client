@@ -2,13 +2,14 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { createTheme } from "@mui/material/styles";
+import { PermissionsState } from "../../../../store/auth/permissionSlice";
 
 interface SingleCheckBoxProps {
   value?: string;
   onChange: (newValue: string) => void;
   getOptions: string[];
   nodeId?: string;
-  role?: string;
+  role?: PermissionsState;
   required?: boolean;
   onValidationChange?: (isValid: boolean) => void;
 }
