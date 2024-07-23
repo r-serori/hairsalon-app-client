@@ -3,10 +3,11 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { get } from "http";
 import { createTheme } from "@mui/material/styles";
+import { RoleState } from "../../../Hooks/interface";
 
 interface SingleCheckBoxProps {
   value?: string;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string | RoleState) => void;
   getOptions: string[];
   nodeId?: string;
   role?: string;
