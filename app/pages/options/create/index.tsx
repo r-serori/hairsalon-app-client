@@ -15,7 +15,7 @@ import { renderError } from "../../../store/errorHandler";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../components/Hooks/authSelector";
 
-const optionCreate: React.FC = () => {
+const OptionCreate: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -63,4 +63,4 @@ const optionCreate: React.FC = () => {
   );
 };
 
-export default optionCreate;
+export default OptionCreate;

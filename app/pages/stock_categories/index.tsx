@@ -19,11 +19,10 @@ import { permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import { staffPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
-import { allLogout } from "../../components/Hooks/useMethod";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const stock_categories = () => {
+const Stock_categories = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -118,4 +117,4 @@ const stock_categories = () => {
   );
 };
 
-export default stock_categories;
+export default Stock_categories;

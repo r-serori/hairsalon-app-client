@@ -19,7 +19,7 @@ import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const options: React.FC = () => {
+const Options: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -118,4 +118,4 @@ const options: React.FC = () => {
   );
 };
 
-export default options;
+export default Options;

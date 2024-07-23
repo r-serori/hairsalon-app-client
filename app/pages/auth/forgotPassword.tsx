@@ -13,7 +13,7 @@ import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 import RouterButton from "../../components/elements/button/RouterButton";
 
-const forgotPasswordPage: React.FC = () => {
+const ForgotPasswordPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -66,4 +66,4 @@ const forgotPasswordPage: React.FC = () => {
   );
 };
 
-export default forgotPasswordPage;
+export default ForgotPasswordPage;

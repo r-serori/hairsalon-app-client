@@ -10,7 +10,7 @@ interface MerchandiseFormProps {
   edit?: boolean;
 }
 
-const merchandiseForm: React.FC<MerchandiseFormProps> = ({
+const MerchandiseForm: React.FC<MerchandiseFormProps> = ({
   node,
   createMerchandise,
   edit,
@@ -74,4 +74,4 @@ const merchandiseForm: React.FC<MerchandiseFormProps> = ({
   );
 };
 
-export default merchandiseForm;
+export default MerchandiseForm;

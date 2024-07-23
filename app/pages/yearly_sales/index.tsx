@@ -22,7 +22,7 @@ import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const yearly_sales: React.FC = () => {
+const Yearly_sales: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -111,4 +111,4 @@ const yearly_sales: React.FC = () => {
   );
 };
 
-export default yearly_sales;
+export default Yearly_sales;

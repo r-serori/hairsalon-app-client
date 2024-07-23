@@ -15,7 +15,7 @@ import { AppDispatch } from "../../../redux/store";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../components/Hooks/authSelector";
 
-const courseCreate: React.FC = () => {
+const CourseCreate: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -65,4 +65,4 @@ const courseCreate: React.FC = () => {
   );
 };
 
-export default courseCreate;
+export default CourseCreate;

@@ -15,7 +15,7 @@ import { renderError } from "../../../store/errorHandler";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../components/Hooks/authSelector";
 
-const merchandiseCreate: React.FC = () => {
+const MerchandiseCreate: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -64,4 +64,4 @@ const merchandiseCreate: React.FC = () => {
   );
 };
 
-export default merchandiseCreate;
+export default MerchandiseCreate;

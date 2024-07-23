@@ -24,7 +24,7 @@ import { UserState } from "../../../../store/auth/userSlice";
 import { renderError } from "../../../../store/errorHandler";
 import { AppDispatch } from "../../../../redux/store";
 
-const attenDanceEdit: React.FC = () => {
+const AttenDanceEdit: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -123,4 +123,4 @@ const attenDanceEdit: React.FC = () => {
   );
 };
 
-export default attenDanceEdit;
+export default AttenDanceEdit;

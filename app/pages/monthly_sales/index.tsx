@@ -15,7 +15,7 @@ import {
   monthly_saleError,
   monthly_saleErrorStatus,
 } from "../../components/Hooks/selector";
-import { allLogout, ownerPermission } from "../../components/Hooks/useMethod";
+import { ownerPermission } from "../../components/Hooks/useMethod";
 import _ from "lodash";
 import { permissionStore } from "../../components/Hooks/authSelector";
 import { PermissionsState } from "../../store/auth/permissionSlice";
@@ -23,7 +23,7 @@ import EasyModal from "../../components/elements/modal/easy/EasyModal";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const monthly_sales: React.FC = () => {
+const Monthly_sales: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -148,4 +148,4 @@ const monthly_sales: React.FC = () => {
   );
 };
 
-export default monthly_sales;
+export default Monthly_sales;

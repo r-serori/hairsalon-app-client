@@ -11,7 +11,7 @@ interface HairstyleFormProps {
   edit?: boolean;
 }
 
-const hairstyleForm: React.FC<HairstyleFormProps> = ({
+const HairstyleForm: React.FC<HairstyleFormProps> = ({
   node,
   createHairstyle,
   edit,
@@ -60,4 +60,4 @@ const hairstyleForm: React.FC<HairstyleFormProps> = ({
   );
 };
 
-export default hairstyleForm;
+export default HairstyleForm;

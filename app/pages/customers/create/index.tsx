@@ -15,7 +15,7 @@ import { renderError } from "../../../store/errorHandler";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../components/Hooks/authSelector";
 
-const customersCreate = () => {
+const CustomersCreate = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -69,4 +69,4 @@ const customersCreate = () => {
   );
 };
 
-export default customersCreate;
+export default CustomersCreate;

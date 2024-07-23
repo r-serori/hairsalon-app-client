@@ -14,7 +14,7 @@ interface StockFormProps {
   edit?: boolean;
 }
 
-const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
+const StockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
   const stockCategories: Stock_categoryState[] = useSelector(
     stock_categoriesStore
   );
@@ -155,4 +155,4 @@ const stockForm: React.FC<StockFormProps> = ({ node, createStock, edit }) => {
   );
 };
 
-export default stockForm;
+export default StockForm;

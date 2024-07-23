@@ -22,7 +22,7 @@ import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const hairstyles: React.FC = () => {
+const Hairstyles: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -111,4 +111,4 @@ const hairstyles: React.FC = () => {
   );
 };
 
-export default hairstyles;
+export default Hairstyles;

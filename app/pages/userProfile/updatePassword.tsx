@@ -16,7 +16,7 @@ import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 
-const updatePasswordPage: React.FC = () => {
+const UpdatePasswordPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -83,4 +83,4 @@ const updatePasswordPage: React.FC = () => {
   );
 };
 
-export default updatePasswordPage;
+export default UpdatePasswordPage;

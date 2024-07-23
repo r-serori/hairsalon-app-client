@@ -17,7 +17,7 @@ import { renderError } from "../../../../store/errorHandler";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../../components/Hooks/authSelector";
 
-const yearlySalesEdit: React.FC = () => {
+const YearlySalesEdit: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -79,4 +79,4 @@ const yearlySalesEdit: React.FC = () => {
   );
 };
 
-export default yearlySalesEdit;
+export default YearlySalesEdit;

@@ -24,7 +24,7 @@ import { renderError } from "../../../../store/errorHandler";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../../components/Hooks/authSelector";
 
-const customersEdit: React.FC = () => {
+const CustomersEdit: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -129,4 +129,4 @@ const customersEdit: React.FC = () => {
   );
 };
 
-export default customersEdit;
+export default CustomersEdit;

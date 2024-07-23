@@ -10,7 +10,7 @@ interface OptionFormProps {
   edit?: boolean;
 }
 
-const optionForm: React.FC<OptionFormProps> = ({
+const OptionForm: React.FC<OptionFormProps> = ({
   node,
   createOption,
   edit,
@@ -72,4 +72,4 @@ const optionForm: React.FC<OptionFormProps> = ({
   );
 };
 
-export default optionForm;
+export default OptionForm;

@@ -32,7 +32,7 @@ import { renderError } from "../../../store/errorHandler";
 import { AppDispatch } from "../../../redux/store";
 import { changeMessage, UserState } from "../../../store/auth/userSlice";
 
-const attendanceTimes: React.FC = () => {
+const AttendanceTimes: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -205,4 +205,4 @@ const attendanceTimes: React.FC = () => {
   );
 };
 
-export default attendanceTimes;
+export default AttendanceTimes;

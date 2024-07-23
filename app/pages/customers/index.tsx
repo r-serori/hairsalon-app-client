@@ -42,7 +42,7 @@ import { UserState } from "../../store/auth/userSlice";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const customers: React.FC = () => {
+const Customers: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -316,4 +316,4 @@ const customers: React.FC = () => {
   );
 };
 
-export default customers;
+export default Customers;

@@ -19,7 +19,7 @@ import { renderError } from "../../../../store/errorHandler";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../../components/Hooks/authSelector";
 
-const hairstyleEdit: React.FC = () => {
+const HairstyleEdit: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -76,4 +76,4 @@ const hairstyleEdit: React.FC = () => {
   );
 };
 
-export default hairstyleEdit;
+export default HairstyleEdit;

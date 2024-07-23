@@ -16,7 +16,7 @@ import { renderError } from "../../../../store/errorHandler";
 import { PermissionsState } from "../../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../../components/Hooks/authSelector";
 
-const stockEdit: React.FC = () => {
+const StockEdit: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -67,4 +67,4 @@ const stockEdit: React.FC = () => {
   );
 };
 
-export default stockEdit;
+export default StockEdit;

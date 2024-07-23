@@ -21,7 +21,7 @@ import {
 } from "../components/Hooks/authSelector";
 import { PermissionsState } from "../store/auth/permissionSlice";
 
-const dashboard: React.FC = () => {
+const Dashboard: React.FC = () => {
   const permission: PermissionsState = useSelector(permissionStore);
   const uMessage: string | null = useSelector(userMessage);
   const oMessage: string | null = useSelector(ownerMessage);
@@ -141,4 +141,4 @@ const dashboard: React.FC = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

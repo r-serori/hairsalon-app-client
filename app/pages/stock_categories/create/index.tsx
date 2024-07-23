@@ -15,7 +15,7 @@ import { renderError } from "../../../store/errorHandler";
 import { PermissionsState } from "../../../store/auth/permissionSlice";
 import { permissionStore } from "../../../components/Hooks/authSelector";
 
-const stockCategoryCreate: React.FC = () => {
+const StockCategoryCreate: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const permission: PermissionsState = useSelector(permissionStore);
@@ -64,4 +64,4 @@ const stockCategoryCreate: React.FC = () => {
   );
 };
 
-export default stockCategoryCreate;
+export default StockCategoryCreate;

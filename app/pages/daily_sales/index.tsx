@@ -23,7 +23,7 @@ import EasyModal from "../../components/elements/modal/easy/EasyModal";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const daily_sales: React.FC = () => {
+const Daily_sales: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -156,4 +156,4 @@ const daily_sales: React.FC = () => {
   );
 };
 
-export default daily_sales;
+export default Daily_sales;

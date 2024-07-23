@@ -11,7 +11,7 @@ interface StockCategoryFormProps {
   edit?: boolean;
 }
 
-const stockForm: React.FC<StockCategoryFormProps> = ({
+const StockForm: React.FC<StockCategoryFormProps> = ({
   node,
   createStockCategory,
   edit,
@@ -59,4 +59,4 @@ const stockForm: React.FC<StockCategoryFormProps> = ({
   );
 };
 
-export default stockForm;
+export default StockForm;

@@ -12,7 +12,7 @@ import {
 import { renderError } from "../../../store/errorHandler";
 import { AppDispatch } from "../../../redux/store";
 
-const resetPasswordPage: React.FC = () => {
+const ResetPasswordPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -66,4 +66,4 @@ const resetPasswordPage: React.FC = () => {
   );
 };
 
-export default resetPasswordPage;
+export default ResetPasswordPage;

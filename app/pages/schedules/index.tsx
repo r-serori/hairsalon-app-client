@@ -49,7 +49,7 @@ import { UserState } from "../../store/auth/userSlice";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const schedules: React.FC = () => {
+const Schedules: React.FC = () => {
   dayjs.locale("ja");
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -301,4 +301,4 @@ const schedules: React.FC = () => {
   );
 };
 
-export default schedules;
+export default Schedules;

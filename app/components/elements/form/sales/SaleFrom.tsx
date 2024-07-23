@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import DatePickerValue from "../../input/DatePicker";
-import { RootState } from "../../../../redux/store";
 import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ja";
 import utc from "dayjs/plugin/utc";
@@ -15,7 +14,6 @@ import DeleteButton from "../../button/DeleteButton";
 import {
   changeDailySaleMessage,
   createDaily_sales,
-  PostDailySaleState,
 } from "../../../../store/daily_sales/daily_saleSlice";
 import {
   changeMonthlySaleMessage,
@@ -27,11 +25,8 @@ import {
 } from "../../../../store/yearly_sales/yearly_saleSlice";
 import {
   daily_saleError,
-  daily_saleStatus,
   monthly_saleError,
-  monthly_saleStatus,
   yearly_saleError,
-  yearly_saleStatus,
 } from "../../../Hooks/selector";
 import { CourseState } from "../../../../store/courses/courseSlice";
 import { OptionState } from "../../../../store/options/optionSlice";

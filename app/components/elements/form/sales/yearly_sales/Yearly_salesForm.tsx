@@ -11,7 +11,7 @@ interface YearlySalesFormProps {
   createYearlySales: (formData: Yearly_salesState) => void;
 }
 
-const yearly_salesForm: React.FC<YearlySalesFormProps> = ({
+const Yearly_salesForm: React.FC<YearlySalesFormProps> = ({
   node,
   createYearlySales,
 }) => {
@@ -78,4 +78,4 @@ const yearly_salesForm: React.FC<YearlySalesFormProps> = ({
   );
 };
 
-export default yearly_salesForm;
+export default Yearly_salesForm;

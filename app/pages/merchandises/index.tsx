@@ -16,13 +16,13 @@ import {
   merchandiseErrorStatus,
 } from "../../components/Hooks/selector";
 import { permissionStore } from "../../components/Hooks/authSelector";
-import { allLogout, staffPermission } from "../../components/Hooks/useMethod";
+import { staffPermission } from "../../components/Hooks/useMethod";
 import { PermissionsState } from "../../store/auth/permissionSlice";
 import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const merchandises = () => {
+const Merchandises = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
 
@@ -117,4 +117,4 @@ const merchandises = () => {
   );
 };
 
-export default merchandises;
+export default Merchandises;

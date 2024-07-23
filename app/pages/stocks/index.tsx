@@ -25,7 +25,7 @@ import _ from "lodash";
 import { AppDispatch } from "../../redux/store";
 import { renderError } from "../../store/errorHandler";
 
-const stocks: React.FC = () => {
+const Stocks: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const router: NextRouter = useRouter();
   const [tHeaderItems, setTHeaderItems] = useState<string[]>([]);
@@ -192,4 +192,4 @@ const stocks: React.FC = () => {
   );
 };
 
-export default stocks;
+export default Stocks;
