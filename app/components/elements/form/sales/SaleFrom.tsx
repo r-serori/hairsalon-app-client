@@ -130,14 +130,16 @@ const SaleForm: React.FC<SaleFormProps> = ({
       }));
 
       //一つの配列にした配列をmapで回して、courseNameと同じだったら、coursePriceを取得して、reduceで合計する。
-      const sameCoursesPrice = sameCoursesEvents
-        .map(
-          (course: any) =>
-            courseNameAndPrices.find(
-              (courseNameAndPrice) => courseNameAndPrice.courseName === course
-            ).coursePrice
-        )
-        .reduce((acc, cur) => acc + cur, 0);
+      const sameCoursesPrice =
+        sameCoursesEvents
+          .map(
+            (course: any) =>
+              courseNameAndPrices &&
+              courseNameAndPrices?.find(
+                (courseNameAndPrice) => courseNameAndPrice.courseName === course
+              ).coursePrice
+          )
+          .reduce((acc, cur) => acc + cur, 0) || 0;
 
       //optionも同様にする。
       const sameOptionsEvents = sameCustomerEvents
@@ -149,14 +151,16 @@ const SaleForm: React.FC<SaleFormProps> = ({
         optionPrice: option.price,
       }));
 
-      const sameOptionsPrice = sameOptionsEvents
-        .map(
-          (option: any) =>
-            optionNameAndPrices.find(
-              (optionNameAndPrice) => optionNameAndPrice.optionName === option
-            ).optionPrice
-        )
-        .reduce((acc, cur) => acc + cur, 0);
+      const sameOptionsPrice =
+        sameOptionsEvents
+          .map(
+            (option: any) =>
+              optionNameAndPrices &&
+              optionNameAndPrices?.find(
+                (optionNameAndPrice) => optionNameAndPrice.optionName === option
+              ).optionPrice
+          )
+          .reduce((acc, cur) => acc + cur, 0) || 0;
 
       //merchandiseも同様にする。
 
@@ -171,15 +175,17 @@ const SaleForm: React.FC<SaleFormProps> = ({
         })
       );
 
-      const sameMerchandisesPrice = sameMerchandisesEvents
-        .map(
-          (merchandise: any) =>
-            merchandiseNameAndPrices.find(
-              (merchandiseNameAndPrice) =>
-                merchandiseNameAndPrice.merchandiseName === merchandise
-            ).merchandisePrice
-        )
-        .reduce((acc, cur) => acc + cur, 0);
+      const sameMerchandisesPrice =
+        sameMerchandisesEvents
+          .map(
+            (merchandise: any) =>
+              merchandiseNameAndPrices &&
+              merchandiseNameAndPrices?.find(
+                (merchandiseNameAndPrice) =>
+                  merchandiseNameAndPrice.merchandiseName === merchandise
+              ).merchandisePrice
+          )
+          .reduce((acc, cur) => acc + cur, 0) || 0;
 
       const result =
         sameCoursesPrice + sameOptionsPrice + sameMerchandisesPrice;
