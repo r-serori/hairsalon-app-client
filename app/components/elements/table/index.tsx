@@ -288,12 +288,12 @@ const ComponentTable: React.FC<ComponentTableProps> = ({
                 <Row key={`${index} + ${node.id} `} item={node}>
                   {/* nodeの縦列を数える */}
                   {nodesProps.map((nodesProp) => {
-                    const propName = Object.keys(nodesProp)[0]; //  Object.keysは()内＝nodesProp　のkeyを取得　[0]は一番上のkeyを取得　mapで一つ一つ取得してるから一番上[0]にあるのは一つだけ
+                    const propName: string = Object.keys(nodesProp)[0] || ""; //  Object.keysは()内＝nodesProp　のkeyを取得　[0]は一番上のkeyを取得　mapで一つ一つ取得してるから一番上[0]にあるのは一つだけ
 
-                    const propValue = node[nodesProp[propName]];
+                    const propValue: any = node[nodesProp[propName]] || "";
                     //nodesProp[propName]はnodesPropのvalueを取得しているので、nodeのkeyとpropNameが一致しているものを取得している
 
-                    const propProp = nodesProp[propName];
+                    const propProp: string = nodesProp[propName] || "";
 
                     const imgUrl = process.env.NEXT_PUBLIC_BACKEND_IMG_URL;
 
