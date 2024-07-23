@@ -1,10 +1,10 @@
 import CryptoJS from "crypto-js";
 
-export const getUserId = (key: string): number => {
+export const getUserId = (key: string): any => {
   try {
     const userId: string = localStorage.getItem("user_id");
 
-    if (!userId) throw new Error();
+    if (userId === null) throw new Error();
 
     const bytes = CryptoJS.AES.decrypt(userId, key);
 
