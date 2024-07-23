@@ -77,7 +77,7 @@ const SaleForm: React.FC<SaleFormProps> = ({
   const sumPricer = (updateDate: Dayjs) => {
     if (!timeValidate) return;
     //モーダルでDateTimePickerで選択した日付をdayjsでformat()で形を変更している。
-    let sameDateEvents = [];
+    let sameDateEvents: any = [];
     try {
       if (whatSales === "日次") {
         const updateDateFormat = dayjs(updateDate).format("YYYY-MM-DD");
