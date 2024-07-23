@@ -34,7 +34,7 @@ import {
 import { AppDispatch } from "../../../../redux/store";
 import { renderError } from "../../../../store/errorHandler";
 import { useRouter } from "next/router";
-import { allLogout } from "../../../Hooks/useMethod";
+import Image from "next/image";
 
 interface UserTimesShotFormProps {
   node: any;
@@ -427,7 +427,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
               <div className="text-2xl">{showTime}</div>
             </div>
             <div className="flex justify-center items-center mt-4">
-              <img src={photo} alt="写真がありません" />
+              <Image src={photo} alt="写真がありません" />
             </div>
             <div className="flex justify-between items-center mt-4">
               <span
@@ -459,7 +459,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
           ) : (
             ""
           )}
-          <img
+          <Image
             src={
               !photo
                 ? "https://dummyimage.com/320x240/000/fff&text=未登録"
@@ -500,7 +500,7 @@ const UserTimesShotForm: React.FC<UserTimesShotFormProps> = ({
         >
           <div>
             <div className="flex justify-center items-center mt-4">
-              <img
+              <Image
                 src="https://dummyimage.com/320x240/000/fff&text=編集済み"
                 alt="Dummy Image "
               />
