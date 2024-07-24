@@ -149,8 +149,8 @@ const Stocks: React.FC = () => {
         product_name: stock.product_name,
         product_price: stock.product_price,
         quantity: stock.quantity,
-        remarks: stock.remarks,
-        supplier: stock.supplier,
+        remarks: stock?.remarks || "",
+        supplier: stock?.supplier || "",
         notice: stock.notice,
       };
     }),
