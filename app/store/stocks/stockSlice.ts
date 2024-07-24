@@ -76,7 +76,7 @@ export interface StockState {
   id: number;
   product_name: string;
   product_price: number;
-  quantity: number | null;
+  quantity: number;
   remarks: string | null;
   supplier: string | null; //仕入れ先
   notice: number; //通知
