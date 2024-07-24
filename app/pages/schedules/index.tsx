@@ -1,5 +1,7 @@
 import React from "react";
-import MyCalendar from "../../components/elements/calender/CalendarComponent";
+import MyCalendar, {
+  CalendarEvent,
+} from "../../components/elements/calender/CalendarComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
@@ -247,7 +249,7 @@ const Schedules: React.FC = () => {
         }),
       ]
     : [];
-  const events = schedules.map((schedule) => {
+  const events: CalendarEvent[] = schedules.map((schedule) => {
     if (schedule.customer_id) {
       const customer = nodes?.find(
         (node) => schedule.customer_id === node.id
