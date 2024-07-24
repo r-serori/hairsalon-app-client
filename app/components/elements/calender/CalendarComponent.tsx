@@ -28,16 +28,16 @@ import { ScheduleModalNodes } from "../../Hooks/interface";
 export interface CalendarEvent {
   id: number;
   title: string;
-  phone_number?: string;
-  remarks?: string;
+  phone_number?: string | null;
+  remarks?: string | null;
   start: string;
   end: string;
   allDay: boolean;
-  course?: string[];
-  option?: string[];
-  merchandise?: string[];
-  hairstyle?: string[];
-  names?: string[];
+  course?: string[] | [];
+  option?: string[] | [];
+  merchandise?: string[] | [];
+  hairstyle?: string[] | [];
+  names?: string[] | [];
   customer_id?: number;
   isCustomer: boolean;
 }
