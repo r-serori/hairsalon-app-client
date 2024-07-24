@@ -209,7 +209,7 @@ const initialState: RootState = {
   status: "idle",
   message: null, // メッセージ
   error: {
-    message: null,
+    message: "",
     status: 0,
   }, // エラーメッセージ
 };
