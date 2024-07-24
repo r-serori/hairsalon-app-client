@@ -283,7 +283,7 @@ const Schedules: React.FC = () => {
     } else {
       return {
         id: schedule.id,
-        title: schedule.title,
+        title: schedule?.title || "",
         start: schedule?.start_time || "",
         end: schedule?.end_time || "",
         allDay: schedule?.allDay || false,
