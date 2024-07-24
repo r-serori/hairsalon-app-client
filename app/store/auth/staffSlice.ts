@@ -23,7 +23,7 @@ const initialState: RootState = {
   status: "idle",
   message: null,
   error: {
-    message: null,
+    message: "",
     status: 0,
   }, // エラーメッセージ
 };
@@ -32,7 +32,6 @@ const staffSlice = createSlice({
   name: "staff",
   initialState,
   reducers: {},
-  extraReducers: (builder) => {},
 });
 
 const staffReducer = staffSlice.reducer;
