@@ -29,7 +29,7 @@ const RegisterPage: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
-    const isLogin = localStorage.getItem("isLogin");
+    const isLogin: string | null = localStorage.getItem("isLogin");
     if (isLogin) {
       allLogout(dispatch);
     }
@@ -47,14 +47,16 @@ const RegisterPage: React.FC = () => {
     try {
       const response: any = await dispatch(register(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
-        const userId: number = Number(response.payload.responseUser.id);
+        const userId: number | null = Number(response.payload.responseUser.id);
+
+        if (userId === null) throw new Error();
 
         const userKey: KeyState = await getUserKey(dispatch);
 
-        if (userKey === null) {
-          throw new Error();
-        }
+        if (userKey === null) throw new Error();
+
         const pushUser: boolean = pushUserId(userId, userKey);
+
         if (pushUser) {
           router.push("/auth/emailWait");
         } else {

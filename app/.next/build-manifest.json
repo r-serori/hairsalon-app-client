@@ -22,11 +22,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/auth/emailWait": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/auth/emailWait.js"
-    ],
     "/auth/resetEmailWait": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

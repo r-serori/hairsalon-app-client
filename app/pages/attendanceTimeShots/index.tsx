@@ -56,9 +56,9 @@ const AttendanceTimeShots = () => {
       try {
         staffPermission(permission, router);
 
-        const userCount: string | undefined = localStorage.getItem("userCount");
+        const userCount: string | null = localStorage.getItem("userCount");
         if (
-          userCount === undefined ||
+          userCount === null ||
           (Array.isArray(users) && users.length < Number(userCount))
         ) {
           const response = await getStaffs();

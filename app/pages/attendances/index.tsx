@@ -49,9 +49,9 @@ const Attendances = () => {
       try {
         ownerPermission(permission, router);
 
-        const userCount: string | undefined = localStorage.getItem("userCount");
+        const userCount: string | null = localStorage.getItem("userCount");
         if (
-          (permission === "オーナー" && userCount === undefined) ||
+          (permission === "オーナー" && userCount === null) ||
           (Array.isArray(users) &&
             users.length < Number(userCount) &&
             permission === "オーナー")

@@ -34,7 +34,7 @@ const LoginPage: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem("registerNow", "true");
-    const isLogin = localStorage.getItem("isLogin");
+    const isLogin: string | null = localStorage.getItem("isLogin");
     if (isLogin) {
       allLogout(dispatch);
     }
@@ -45,8 +45,10 @@ const LoginPage: React.FC = () => {
       const response: any = await dispatch(login(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {
         dispatch(isLogin());
-        const userId: number = response.payload.responseUser.id;
-
+        const userId: number | undefined = response.payload.responseUser.id;
+        if (userId === undefined) {
+          throw new Error();
+        }
         const userKey: KeyState = await getUserKey(dispatch);
 
         if (userKey === null) {
@@ -56,9 +58,13 @@ const LoginPage: React.FC = () => {
 
         await dispatch(getPermission() as any);
 
-        if (pushUser && !response.payload.ownerRender) {
+        const ownerRender: boolean | undefined = response.payload.ownerRender;
+
+        if (ownerRender === undefined) throw new Error();
+
+        if (pushUser && !ownerRender) {
           router.push("/dashboard");
-        } else if (pushUser && response.payload.ownerRender) {
+        } else if (pushUser && ownerRender) {
           router.push("/auth/owner");
         }
       } else {
