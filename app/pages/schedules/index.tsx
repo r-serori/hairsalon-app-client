@@ -274,19 +274,19 @@ const Schedules: React.FC = () => {
         merchandise: customer.merchandise,
         hairstyle: customer.hairstyle,
         names: customer.names,
-        start: schedule.start_time,
-        end: schedule.end_time,
-        allDay: schedule.allDay,
+        start: schedule?.start_time || "",
+        end: schedule?.end_time || "",
+        allDay: schedule?.allDay || false,
         isCustomer: true,
-        customer_id: schedule.customer_id,
+        customer_id: schedule?.customer_id || 0,
       };
     } else {
       return {
         id: schedule.id,
         title: schedule.title,
-        start: schedule.start_time,
-        end: schedule.end_time,
-        allDay: schedule.allDay,
+        start: schedule?.start_time || "",
+        end: schedule?.end_time || "",
+        allDay: schedule?.allDay || false,
         isCustomer: false,
       };
     }
