@@ -66,12 +66,12 @@ export interface AttendancesNodes {
 }
 export interface StockNodes {
   id: number;
-  category_name: string;
+  category_name: string | null;
   product_name: string;
   product_price: number;
   quantity: number;
-  remarks: string;
-  supplier: string;
+  remarks: string | null;
+  supplier: string | null;
   notice: number;
 }
 
