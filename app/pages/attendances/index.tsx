@@ -96,9 +96,9 @@ const Attendances = () => {
       ? users.map((user: UserState) => {
           return {
             id: user.id,
-            name: user.name,
-            staff_phone_number: user.phone_number,
-            role: user.role,
+            name: user.name || "",
+            staff_phone_number: user?.phone_number || "",
+            role: user?.role || "スタッフ",
             isAttendance: user.isAttendance,
           };
         })
