@@ -44,41 +44,45 @@ const CustomersEdit: React.FC = () => {
     remarks: "",
   };
 
-  const course_customers: number[] = useSelector(course_customersStore)
-    .filter(
-      (course_customer) =>
-        course_customer.customer_id === parseInt(id as string)
-    )
-    .map((course_customer) => course_customer.course_id);
+  const course_customers: number[] =
+    useSelector(course_customersStore)
+      ?.filter(
+        (course_customer) =>
+          course_customer.customer_id === parseInt(id as string)
+      )
+      ?.map((course_customer) => course_customer.course_id) || [];
 
-  const option_customers: number[] = useSelector(option_customersStore)
-    .filter(
-      (option_customer) =>
-        option_customer.customer_id === parseInt(id as string)
-    )
-    .map((option_customer) => option_customer.option_id);
+  const option_customers: number[] =
+    useSelector(option_customersStore)
+      ?.filter(
+        (option_customer) =>
+          option_customer.customer_id === parseInt(id as string)
+      )
+      ?.map((option_customer) => option_customer.option_id) || [];
 
-  const merchandise_customers: number[] = useSelector(
-    merchandise_customersStore
-  )
-    .filter(
-      (merchandise_customer) =>
-        merchandise_customer.customer_id === parseInt(id as string)
-    )
-    .map((merchandise_customer) => merchandise_customer.merchandise_id);
+  const merchandise_customers: number[] =
+    useSelector(merchandise_customersStore)
+      ?.filter(
+        (merchandise_customer) =>
+          merchandise_customer.customer_id === parseInt(id as string)
+      )
+      ?.map((merchandise_customer) => merchandise_customer.merchandise_id) ||
+    [];
 
-  const hairstyle_customers: number[] = useSelector(hairstyle_customersStore)
-    .filter(
-      (hairstyle_customer) =>
-        hairstyle_customer.customer_id === parseInt(id as string)
-    )
-    .map((hairstyle_customer) => hairstyle_customer.hairstyle_id);
+  const hairstyle_customers: number[] =
+    useSelector(hairstyle_customersStore)
+      ?.filter(
+        (hairstyle_customer) =>
+          hairstyle_customer.customer_id === parseInt(id as string)
+      )
+      ?.map((hairstyle_customer) => hairstyle_customer.hairstyle_id) || [];
 
-  const customer_users: number[] = useSelector(customer_usersStore)
-    .filter(
-      (customer_user) => customer_user.customer_id === parseInt(id as string)
-    )
-    .map((customer_user) => customer_user.user_id);
+  const customer_users: number[] =
+    useSelector(customer_usersStore)
+      ?.filter(
+        (customer_user) => customer_user.customer_id === parseInt(id as string)
+      )
+      ?.map((customer_user) => customer_user.user_id) || [];
 
   const customer = {
     ...getCustomer,

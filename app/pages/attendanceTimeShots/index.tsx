@@ -56,8 +56,11 @@ const AttendanceTimeShots = () => {
       try {
         staffPermission(permission, router);
 
-        const userCount = localStorage.getItem("userCount");
-        if (!userCount || users.length < Number(userCount)) {
+        const userCount: string | undefined = localStorage.getItem("userCount");
+        if (
+          userCount === undefined ||
+          (Array.isArray(users) && users.length < Number(userCount))
+        ) {
           const response = await getStaffs();
           if (response.meta.requestStatus === "rejected") {
             const re = renderError(uErrorStatus, router, dispatch);

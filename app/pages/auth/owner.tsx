@@ -15,7 +15,6 @@ import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
 import { useEffect } from "react";
 import { isLogin } from "../../store/auth/isLoginSlice";
-import { KeyState } from "../../store/auth/keySlice";
 
 const OwnerPage = () => {
   const dispatch: AppDispatch = useDispatch();

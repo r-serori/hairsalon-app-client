@@ -2,8 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/dashboard": "pages/dashboard.js",
-  "/auth/login": "pages/auth/login.js",
-  "/error": "pages/error.js",
-  "/attendances": "pages/attendances.js"
+  "/auth/emailWait": "pages/auth/emailWait.js",
+  "/404": "pages/404.js",
+  "/auth/resetEmailWait": "pages/auth/resetEmailWait.js",
+  "/error": "pages/error.js"
 }

@@ -20,6 +20,7 @@ import { UserState } from "../../store/auth/userSlice";
 import { renderError } from "../../store/errorHandler";
 import { AppDispatch } from "../../redux/store";
 import {
+  AttendancesNodes,
   NodesProps,
   SearchItems,
   THeaderItems,
@@ -48,14 +49,12 @@ const Attendances = () => {
       try {
         ownerPermission(permission, router);
 
-        const userCount: string = localStorage.getItem("userCount");
+        const userCount: string | undefined = localStorage.getItem("userCount");
         if (
-          (permission === "オーナー" && !userCount) ||
           (permission === "オーナー" && userCount === undefined) ||
-          (permission === "オーナー" && userCount === null) ||
-          (permission === "オーナー" && userCount === "") ||
-          (permission === "オーナー" && userCount === "undefined") ||
-          (users.length < Number(userCount) && permission === "オーナー")
+          (Array.isArray(users) &&
+            users.length < Number(userCount) &&
+            permission === "オーナー")
         ) {
           const response = (await getStaffs()) as any;
           if (response.meta.requestStatus === "rejected") {
@@ -92,7 +91,7 @@ const Attendances = () => {
   ];
 
   // nodesにusersをマップして処理
-  const nodes =
+  const nodes: AttendancesNodes[] =
     Array.isArray(users) && users.length > 1
       ? users.map((user: UserState) => {
           return {

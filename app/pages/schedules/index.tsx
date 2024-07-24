@@ -172,55 +172,64 @@ const Schedules: React.FC = () => {
         ...customers.map((customer) => {
           // customerは一回一番下まで行く。その後、次のcustomerに行く。
           // 顧客に関連するコースの情報を取得
-          const customerCourses: number[] = course_customers
-            .filter((course) => course.customer_id === customer.id)
-            .map((course) => course.course_id);
+          const customerCourses: number[] =
+            course_customers
+              ?.filter((course) => course.customer_id === customer.id)
+              ?.map((course) => course.course_id) || [];
 
           //  [1,2,3]
 
-          const courseNames: string[] = courses
-            .filter((course) => customerCourses.includes(course.id))
-            .map((course) => course.course_name);
+          const courseNames: string[] =
+            courses
+              ?.filter((course) => customerCourses.includes(course.id))
+              ?.map((course) => course.course_name) || [];
 
           // 顧客に関連するオプションの情報を取得
-          const customerOptions: number[] = option_customers
-            .filter((option) => option.customer_id === customer.id)
-            .map((option) => option.option_id);
+          const customerOptions: number[] =
+            option_customers
+              ?.filter((option) => option.customer_id === customer.id)
+              ?.map((option) => option.option_id) || [];
 
-          const optionNames: string[] = options
-            .filter((option) => customerOptions.includes(option.id))
-            .map((option) => option.option_name);
+          const optionNames: string[] =
+            options
+              ?.filter((option) => customerOptions.includes(option.id))
+              ?.map((option) => option.option_name) || [];
 
           // 顧客に関連する商品の情報を取得
-          const customerMerchandises: number[] = merchandise_customers
-            .filter((merchandise) => merchandise.customer_id === customer.id)
-            .map((merchandise) => merchandise.merchandise_id);
+          const customerMerchandises: number[] =
+            merchandise_customers
+              ?.filter((merchandise) => merchandise.customer_id === customer.id)
+              ?.map((merchandise) => merchandise.merchandise_id) || [];
 
-          const merchandiseNames: string[] = merchandises
-            .filter((merchandise) =>
-              customerMerchandises.includes(merchandise.id)
-            )
-            .map((merchandise) => merchandise.merchandise_name);
+          const merchandiseNames: string[] =
+            merchandises
+              ?.filter((merchandise) =>
+                customerMerchandises.includes(merchandise.id)
+              )
+              ?.map((merchandise) => merchandise.merchandise_name) || [];
 
           // 顧客に関連する髪型の情報を取得
-          const customerHairstyles: number[] = hairstyle_customers
-            .filter((hairstyle) => hairstyle.customer_id === customer.id)
-            .map((hairstyle) => hairstyle.hairstyle_id);
+          const customerHairstyles: number[] =
+            hairstyle_customers
+              ?.filter((hairstyle) => hairstyle.customer_id === customer.id)
+              ?.map((hairstyle) => hairstyle.hairstyle_id) || [];
 
-          const hairstyleNames: string[] = hairstyles
-            .filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
-            .map((hairstyle) => hairstyle.hairstyle_name);
+          const hairstyleNames: string[] =
+            hairstyles
+              ?.filter((hairstyle) => customerHairstyles.includes(hairstyle.id))
+              ?.map((hairstyle) => hairstyle.hairstyle_name) || [];
 
           // 顧客に関連する担当者の情報を取得
           //user_idを配列にしている
-          const customerUsers: number[] = customer_users
-            .filter((user) => user.customer_id === customer.id)
-            .map((user) => user.user_id);
+          const customerUsers: number[] =
+            customer_users
+              ?.filter((user) => user.customer_id === customer.id)
+              ?.map((user) => user.user_id) || [];
 
           const userNames: string[] = Array.isArray(users)
             ? users
-                .filter((user) => customerUsers.includes(user.id))
-                .map((user) => user.name)
+                ?.filter((user) => customerUsers.includes(user.id))
+                ?.map((user) => user.name) || []
             : [Object(users).name];
 
           // 顧客情報を返す
@@ -240,7 +249,19 @@ const Schedules: React.FC = () => {
     : [];
   const events = schedules.map((schedule) => {
     if (schedule.customer_id) {
-      const customer = nodes.find((node) => schedule.customer_id === node.id);
+      const customer = nodes?.find(
+        (node) => schedule.customer_id === node.id
+      ) || {
+        id: 0,
+        customer_name: "",
+        phone_number: "",
+        remarks: "",
+        course: [],
+        option: [],
+        merchandise: [],
+        hairstyle: [],
+        names: [],
+      };
       return {
         id: schedule.id,
         title: customer.customer_name,

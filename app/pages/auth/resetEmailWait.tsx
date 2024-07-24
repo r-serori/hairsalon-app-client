@@ -1,10 +1,11 @@
 const ResetWaitEmailComponent = () => {
   return (
-    <div>
-      <h2>
+    <div className="flex justify-center items-center text-center mt-24 ">
+      <p className="lg:text-2xl text-lg tracking-widest ">
         あなたのメールアドレスにメールを送信しました！
-        メール内の「パスワードをリセットする」ボタンをクリックしてください！
-      </h2>
+        <br />
+        メール内の、「パスワードをリセットする」ボタンをクリックしてください！
+      </p>
       {/* ユーザーには認証中であることを示すUIなどを表示 */}
     </div>
   );
