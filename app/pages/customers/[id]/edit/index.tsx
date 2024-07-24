@@ -4,6 +4,7 @@ import { useRouter, NextRouter } from "next/router";
 import {
   updateCustomer,
   CustomerOnlyState,
+  CustomerState,
 } from "../../../../store/customers/customerSlice";
 import CustomerForm from "../../../../components/elements/form/customers/CustomerForm";
 import {
@@ -93,17 +94,7 @@ const CustomersEdit: React.FC = () => {
     user_id: customer_users,
   };
 
-  const handleUpdate = async (formData: {
-    id: number;
-    customer_name: string;
-    phone_number: string;
-    remarks: string;
-    course_id: number[];
-    option_id: number[];
-    merchandise_id: number[];
-    hairstyle_id: number[];
-    user_id: number[];
-  }) => {
+  const handleUpdate = async (formData: CustomerState) => {
     try {
       const response = await dispatch(updateCustomer(formData) as any);
 
