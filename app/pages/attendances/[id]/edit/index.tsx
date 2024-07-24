@@ -36,9 +36,13 @@ const AttenDanceEdit: React.FC = () => {
 
   const { id } = router.query; // idを取得
 
-  const editUser: UserState = useSelector(user).find(
+  const editUser: UserState = useSelector(user)?.find(
     (user) => user.id === Number(id)
-  );
+  ) || {
+    id: 0,
+    name: "",
+    isAttendance: false,
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +73,8 @@ const AttenDanceEdit: React.FC = () => {
         if (re === null) throw new Error("更新に失敗しました");
       }
     } catch (error) {
-      console.error(error);
+      allLogout(dispatch);
+      router.push("/auth/login");
     }
   };
 
@@ -90,7 +95,8 @@ const AttenDanceEdit: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error(error);
+      allLogout(dispatch);
+      router.push("/auth/login");
     }
   };
 
