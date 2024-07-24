@@ -128,7 +128,10 @@ const courseSlice = createSlice({
     });
     builder.addCase(getCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createCourse.pending, (state) => {
@@ -148,7 +151,10 @@ const courseSlice = createSlice({
     });
     builder.addCase(createCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateCourse.pending, (state) => {
@@ -172,7 +178,10 @@ const courseSlice = createSlice({
     });
     builder.addCase(updateCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteCourse.pending, (state) => {
@@ -195,7 +204,10 @@ const courseSlice = createSlice({
     });
     builder.addCase(deleteCourse.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {

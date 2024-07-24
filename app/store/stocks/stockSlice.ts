@@ -134,7 +134,10 @@ const stockSlice = createSlice({
     });
     builder.addCase(getStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createStock.pending, (state) => {
@@ -154,7 +157,10 @@ const stockSlice = createSlice({
     });
     builder.addCase(createStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateStock.pending, (state) => {
@@ -178,7 +184,10 @@ const stockSlice = createSlice({
     });
     builder.addCase(updateStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteStock.pending, (state) => {
@@ -200,7 +209,10 @@ const stockSlice = createSlice({
     });
     builder.addCase(deleteStock.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
   },
 });

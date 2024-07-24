@@ -135,7 +135,10 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(getYearly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createYearly_sales.pending, (state, action) => {
@@ -155,7 +158,10 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(createYearly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateYearly_sales.pending, (state, action) => {
@@ -179,7 +185,10 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(updateYearly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteYearly_sales.pending, (state, action) => {
@@ -198,7 +207,10 @@ const yearly_salesSlice = createSlice({
     });
     builder.addCase(deleteYearly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
   },
 });

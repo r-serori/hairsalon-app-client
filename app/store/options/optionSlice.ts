@@ -116,7 +116,10 @@ const optionSlice = createSlice({
         : "オプションの取得に成功しました！";
     });
     builder.addCase(getOption.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "success";
     });
 
@@ -136,7 +139,10 @@ const optionSlice = createSlice({
         : "オプションの登録に成功しました！";
     });
     builder.addCase(createOption.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -160,7 +166,10 @@ const optionSlice = createSlice({
         : "オプション情報を更新しました！";
     });
     builder.addCase(updateOption.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -182,7 +191,10 @@ const optionSlice = createSlice({
         : "オプション情報を削除しました！";
     });
     builder.addCase(deleteOption.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 

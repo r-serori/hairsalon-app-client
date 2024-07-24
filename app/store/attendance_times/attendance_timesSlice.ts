@@ -236,7 +236,10 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(selectGetAttendanceTimes.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(firstGetAttendanceTime.pending, (state) => {
@@ -261,7 +264,10 @@ const attendance_timeSlice = createSlice({
 
     builder.addCase(firstGetAttendanceTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(pleaseEditEndTime.pending, (state) => {
@@ -287,7 +293,10 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(pleaseEditEndTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateStartTime.pending, (state) => {
@@ -314,7 +323,10 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(updateStartTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateEndTime.pending, (state) => {
@@ -339,7 +351,10 @@ const attendance_timeSlice = createSlice({
 
     builder.addCase(updateEndTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createStartTime.pending, (state) => {
@@ -362,7 +377,10 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(createStartTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createEndTime.pending, (state) => {
@@ -389,7 +407,10 @@ const attendance_timeSlice = createSlice({
     });
     builder.addCase(createEndTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteAttendanceTime.pending, (state) => {
@@ -413,7 +434,10 @@ const attendance_timeSlice = createSlice({
 
     builder.addCase(deleteAttendanceTime.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
   },
 });

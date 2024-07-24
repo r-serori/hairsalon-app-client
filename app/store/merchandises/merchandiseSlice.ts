@@ -122,7 +122,10 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(getMerchandise.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createMerchandise.pending, (state, action) => {
@@ -142,7 +145,10 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(createMerchandise.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateMerchandise.pending, (state, action) => {
@@ -166,7 +172,10 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(updateMerchandise.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteMerchandise.pending, (state, action) => {
@@ -188,7 +197,10 @@ const merchandiseSlice = createSlice({
     });
     builder.addCase(deleteMerchandise.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {

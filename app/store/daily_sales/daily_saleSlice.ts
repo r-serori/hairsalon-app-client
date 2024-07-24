@@ -152,7 +152,10 @@ const daily_salesSlice = createSlice({
         : "日次売上の取得に成功しました！";
     });
     builder.addCase(getDaily_sales.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -172,7 +175,10 @@ const daily_salesSlice = createSlice({
         : "日次売上の取得に成功しました！";
     });
     builder.addCase(selectGetDaily_sales.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -192,7 +198,10 @@ const daily_salesSlice = createSlice({
         : "日次売上の作成に成功しました！";
     });
     builder.addCase(createDaily_sales.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -216,7 +225,10 @@ const daily_salesSlice = createSlice({
         : "日次売上の更新に成功しました！";
     });
     builder.addCase(updateDaily_sales.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -238,7 +250,10 @@ const daily_salesSlice = createSlice({
         : "日次売上の削除に成功しました！";
     });
     builder.addCase(deleteDaily_sales.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
   },

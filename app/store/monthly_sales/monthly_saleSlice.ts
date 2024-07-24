@@ -143,7 +143,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(getMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(selectGetMonthly_sales.pending, (state, action) => {
@@ -163,7 +166,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(selectGetMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createMonthly_sales.pending, (state, action) => {
@@ -186,7 +192,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(createMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateMonthly_sales.pending, (state, action) => {
@@ -210,7 +219,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(updateMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteMonthly_sales.pending, (state, action) => {
@@ -232,7 +244,10 @@ const monthly_salesSlice = createSlice({
     });
     builder.addCase(deleteMonthly_sales.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
   },
 });

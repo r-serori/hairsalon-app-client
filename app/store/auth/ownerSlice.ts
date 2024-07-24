@@ -119,7 +119,10 @@ const ownerSlice = createSlice({
     });
     builder.addCase(ownerRegister.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(getOwner.pending, (state) => {
@@ -136,7 +139,10 @@ const ownerSlice = createSlice({
     });
     builder.addCase(getOwner.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateOwner.pending, (state) => {
@@ -156,7 +162,10 @@ const ownerSlice = createSlice({
 
     builder.addCase(updateOwner.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
   },
 });

@@ -325,7 +325,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(login.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
     builder.addCase(register.pending, (state) => {
       state.status = "loading";
@@ -342,7 +345,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(register.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
     builder.addCase(staffRegister.pending, (state) => {
       state.status = "loading";
@@ -362,7 +368,10 @@ const usersSlice = createSlice({
 
     builder.addCase(staffRegister.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(logout.pending, (state) => {
@@ -380,7 +389,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(logout.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     //get系
@@ -400,7 +412,10 @@ const usersSlice = createSlice({
 
     builder.addCase(getUsers.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(showUser.pending, (state) => {
@@ -418,7 +433,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(showUser.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     //update系
@@ -441,7 +459,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(updateUserPermission.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateUser.pending, (state) => {
@@ -460,7 +481,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(updateUser.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     //delete系
@@ -481,7 +505,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(deleteUser.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateUserPassword.pending, (state) => {
@@ -498,7 +525,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(updateUserPassword.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(resetPassword.pending, (state) => {
@@ -517,7 +547,10 @@ const usersSlice = createSlice({
     });
     builder.addCase(resetPassword.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {
@@ -580,7 +613,10 @@ const usersSlice = createSlice({
 
     builder.addCase(forgotPassword.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
   },
 });

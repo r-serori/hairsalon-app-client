@@ -3,6 +3,6 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/auth/resetEmailWait": "pages/auth/resetEmailWait.js",
-  "/error": "pages/error.js",
-  "/auth/emailWait": "pages/auth/emailWait.js"
+  "/auth/emailWait": "pages/auth/emailWait.js",
+  "/error": "pages/error.js"
 }

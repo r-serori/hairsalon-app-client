@@ -132,7 +132,10 @@ const stock_categorySlice = createSlice({
     });
     builder.addCase(getStockCategory.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createStockCategory.pending, (state) => {
@@ -154,7 +157,10 @@ const stock_categorySlice = createSlice({
         : "在庫カテゴリーの作成に成功しました！";
     });
     builder.addCase(createStockCategory.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -178,7 +184,10 @@ const stock_categorySlice = createSlice({
         : "在庫カテゴリーの更新に成功しました！";
     });
     builder.addCase(updateStockCategory.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
 
@@ -201,7 +210,10 @@ const stock_categorySlice = createSlice({
         : "在庫カテゴリーの削除に成功しました！";
     });
     builder.addCase(deleteStockCategory.rejected, (state, action) => {
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
       state.status = "failed";
     });
   },

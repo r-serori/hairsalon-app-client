@@ -126,7 +126,10 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(getHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(createHairstyle.pending, (state) => {
@@ -146,7 +149,10 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(createHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(updateHairstyle.pending, (state) => {
@@ -171,7 +177,10 @@ const hairstyleSlice = createSlice({
 
     builder.addCase(updateHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteHairstyle.pending, (state) => {
@@ -193,7 +202,10 @@ const hairstyleSlice = createSlice({
     });
     builder.addCase(deleteHairstyle.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(getCustomer.fulfilled, (state, action) => {

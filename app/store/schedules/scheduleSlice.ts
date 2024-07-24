@@ -272,7 +272,10 @@ const scheduleSlice = createSlice({
       })
       .addCase(getSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
       })
       .addCase(createSchedule.pending, (state) => {
         state.status = "loading";
@@ -291,7 +294,10 @@ const scheduleSlice = createSlice({
       })
       .addCase(createSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
       })
       .addCase(createCustomerAndSchedule.pending, (state) => {
         state.status = "loading";
@@ -310,7 +316,10 @@ const scheduleSlice = createSlice({
       })
       .addCase(createCustomerAndSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
       })
 
       .addCase(updateSchedule.pending, (state) => {
@@ -337,7 +346,10 @@ const scheduleSlice = createSlice({
       })
       .addCase(updateSchedule.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
       })
       .addCase(updateCustomerAndSchedule.pending, (state) => {
         state.status = "failed";
@@ -362,7 +374,10 @@ const scheduleSlice = createSlice({
           : "スケジュールと顧客情報の更新に成功しました！";
       })
       .addCase(updateCustomerAndSchedule.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
         state.status = "failed";
       })
 
@@ -382,7 +397,10 @@ const scheduleSlice = createSlice({
           : "顧客情報の更新とスケジュールの作成に成功しました！";
       })
       .addCase(updateCustomerAndScheduleCreate.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
         state.status = "failed";
       })
 
@@ -410,7 +428,10 @@ const scheduleSlice = createSlice({
       })
 
       .addCase(createCustomerAndUpdateSchedule.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
         state.status = "failed";
       })
 
@@ -432,7 +453,10 @@ const scheduleSlice = createSlice({
           : "スケジュールの削除に成功しました！";
       })
       .addCase(deleteSchedule.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = action?.payload || {
+          message: "予期しないエラーが発生しました",
+          status: 500,
+        };
         state.status = "failed";
       });
 
@@ -455,7 +479,10 @@ const scheduleSlice = createSlice({
 
     builder.addCase(selectGetSchedules.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.payload;
+      state.error = action?.payload || {
+        message: "予期しないエラーが発生しました",
+        status: 500,
+      };
     });
 
     builder.addCase(deleteCustomer.fulfilled, (state, action) => {
