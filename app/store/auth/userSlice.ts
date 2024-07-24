@@ -594,7 +594,7 @@ const usersSlice = createSlice({
 
     builder.addCase(selectGetAttendanceTimes.fulfilled, (state, action) => {
       state.status = "success";
-      state.users = state.users ? state.users : [action.payload.responseUser];
+      state.users = state?.users || [action.payload.responseUser];
     });
 
     builder.addCase(forgotPassword.pending, (state) => {
