@@ -98,7 +98,6 @@ const CustomersEdit: React.FC = () => {
     customer_name: string;
     phone_number: string;
     remarks: string;
-    new_customer: string;
     course_id: number[];
     option_id: number[];
     merchandise_id: number[];
