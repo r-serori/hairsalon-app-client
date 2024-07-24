@@ -18,9 +18,8 @@ export const getKey = createAsyncThunk<
   }
 });
 
-export interface KeyState {
-  key: string | null;
-}
+export type KeyState = string | null;
+
 export interface GetKeyState {
   roleKey: KeyState;
   message: string;

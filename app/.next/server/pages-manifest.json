@@ -3,7 +3,6 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/auth/emailWait": "pages/auth/emailWait.js",
-  "/404": "pages/404.js",
   "/auth/resetEmailWait": "pages/auth/resetEmailWait.js",
   "/error": "pages/error.js"
 }
