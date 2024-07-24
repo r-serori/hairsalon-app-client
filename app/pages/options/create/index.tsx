@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createOption } from "../../../store/options/optionSlice";
+import { createOption, OptionState } from "../../../store/options/optionSlice";
 import OptionForm from "../../../components/elements/form/options/OptionForm";
 import { useRouter, NextRouter } from "next/router";
 import {
@@ -24,11 +24,7 @@ const OptionCreate: React.FC = () => {
   const oError: string = useSelector(optionError);
   const oErrorStatus: number = useSelector(optionErrorStatus);
 
-  const handleCreate = async (formData: {
-    id: number;
-    option_name: string;
-    price: number;
-  }) => {
+  const handleCreate = async (formData: OptionState) => {
     try {
       const response = await dispatch(createOption(formData) as any);
 

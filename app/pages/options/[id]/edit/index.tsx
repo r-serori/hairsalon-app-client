@@ -1,7 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, NextRouter } from "next/router";
-import { updateOption } from "../../../../store/options/optionSlice";
+import {
+  OptionState,
+  updateOption,
+} from "../../../../store/options/optionSlice";
 import OptionForm from "../../../../components/elements/form/options/OptionForm";
 import {
   optionStatus,
@@ -35,11 +38,7 @@ const OptionEdit: React.FC = () => {
   const oError: string = useSelector(optionError);
   const oErrorStatus: number = useSelector(optionErrorStatus);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    option_name: string;
-    price: number;
-  }) => {
+  const handleUpdate = async (formData: OptionState) => {
     try {
       const response = await dispatch(updateOption(formData) as any);
 

@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createHairstyle } from "../../../store/hairstyles/hairstyleSlice";
+import {
+  createHairstyle,
+  HairstyleState,
+} from "../../../store/hairstyles/hairstyleSlice";
 import HairstyleForm from "../../../components/elements/form/hairstyles/HairstyleForm";
 import { useRouter, NextRouter } from "next/router";
 import RouterButton from "../../../components/elements/button/RouterButton";
@@ -24,10 +27,7 @@ const HairstyleCreate = () => {
   const hError: string = useSelector(hairstyleError);
   const hErrorStatus: number = useSelector(hairstyleErrorStatus);
 
-  const handleCreate = async (formData: {
-    id: number;
-    hairstyle_name: string;
-  }) => {
+  const handleCreate = async (formData: HairstyleState) => {
     try {
       const response = await dispatch(createHairstyle(formData) as any);
 

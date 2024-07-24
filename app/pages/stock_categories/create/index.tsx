@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createStockCategory } from "../../../store/stocks/stock_categories/stock_categorySlice";
+import {
+  createStockCategory,
+  Stock_categoryState,
+} from "../../../store/stocks/stock_categories/stock_categorySlice";
 import StockCategoryForm from "../../../components/elements/form/stocks/stock_categories/StockCategoriesForm";
 import { useRouter, NextRouter } from "next/router";
 import {
@@ -24,7 +27,7 @@ const StockCategoryCreate: React.FC = () => {
   const scError: string = useSelector(stock_categoryError);
   const scErrorStatus: number = useSelector(stock_categoryErrorStatus);
 
-  const handleCreate = async (formData: { id: number; category: string }) => {
+  const handleCreate = async (formData: Stock_categoryState) => {
     try {
       const response = await dispatch(createStockCategory(formData) as any);
 

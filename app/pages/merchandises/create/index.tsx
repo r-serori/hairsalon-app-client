@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createMerchandise } from "../../../store/merchandises/merchandiseSlice";
+import {
+  createMerchandise,
+  MerchandiseState,
+} from "../../../store/merchandises/merchandiseSlice";
 import MerchandiseForm from "../../../components/elements/form/merchandises/MerchandiseForm";
 import { useRouter, NextRouter } from "next/router";
 import {
@@ -24,11 +27,7 @@ const MerchandiseCreate: React.FC = () => {
   const mError: string = useSelector(merchandiseError);
   const mErrorStatus: number = useSelector(merchandiseErrorStatus);
 
-  const handleCreate = async (formData: {
-    id: number;
-    merchandise_name: string;
-    price: number;
-  }) => {
+  const handleCreate = async (formData: MerchandiseState) => {
     try {
       const response = await dispatch(createMerchandise(formData) as any);
 

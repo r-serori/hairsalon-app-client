@@ -36,11 +36,7 @@ const MonthlySalesEdit: React.FC = () => {
   const msError: string = useSelector(monthly_saleError);
   const msErrorStatus: number = useSelector(monthly_saleErrorStatus);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    year_month: string;
-    monthly_sales: number;
-  }) => {
+  const handleUpdate = async (formData: Monthly_salesState) => {
     try {
       const response = await dispatch(updateMonthly_sales(formData) as any);
 

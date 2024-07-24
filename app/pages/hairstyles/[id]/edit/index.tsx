@@ -36,10 +36,7 @@ const HairstyleEdit: React.FC = () => {
   const hError: string = useSelector(hairstyleError);
   const hErrorStatus: number = useSelector(hairstyleErrorStatus);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    hairstyle_name: string;
-  }) => {
+  const handleUpdate = async (formData: HairstyleState) => {
     try {
       const response = await dispatch(updateHairstyle(formData) as any);
 

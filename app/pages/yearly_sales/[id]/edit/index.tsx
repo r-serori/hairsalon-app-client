@@ -36,11 +36,7 @@ const YearlySalesEdit: React.FC = () => {
   const ysError: string | null = useSelector(yearly_saleError);
   const ysErrorStatus: number = useSelector(yearly_saleErrorStatus);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    year: string;
-    yearly_sales: number;
-  }) => {
+  const handleUpdate = async (formData: Yearly_salesState) => {
     try {
       const response = await dispatch(updateYearly_sales(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {

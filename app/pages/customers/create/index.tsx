@@ -1,7 +1,10 @@
 import React from "react";
 import { useRouter, NextRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import { createCustomer } from "../../../store/customers/customerSlice";
+import {
+  createCustomer,
+  CustomerState,
+} from "../../../store/customers/customerSlice";
 import CustomerForm from "../../../components/elements/form/customers/CustomerForm";
 import {
   customerStatus,
@@ -24,17 +27,7 @@ const CustomersCreate = () => {
   const cError: string | null = useSelector(customerError);
   const cErrorStatus: number = useSelector(customerErrorStatus);
 
-  const handleCreate = async (formData: {
-    id: number;
-    customer_name: string;
-    phone_number: string;
-    remarks: string;
-    course_id: number[];
-    option_id: number[];
-    merchandise_id: number[];
-    hairstyle_id: number[];
-    user_id: number[];
-  }) => {
+  const handleCreate = async (formData: CustomerState) => {
     try {
       const response = await dispatch(createCustomer(formData) as any);
       if (response.meta.requestStatus === "fulfilled") {

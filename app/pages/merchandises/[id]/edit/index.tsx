@@ -38,11 +38,7 @@ const MerchandiseEdit: React.FC = () => {
   const mError: string = useSelector(merchandiseError);
   const mErrorStatus: number = useSelector(merchandiseErrorStatus);
 
-  const handleUpdate = async (formData: {
-    id: number;
-    merchandise_name: string;
-    price: number;
-  }) => {
+  const handleUpdate = async (formData: MerchandiseState) => {
     try {
       const response = await dispatch(updateMerchandise(formData) as any);
 
