@@ -6,8 +6,7 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postbuild": "next build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
