@@ -2,7 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/auth/emailWait": "pages/auth/emailWait.js",
+  "/auth/resetEmailWait": "pages/auth/resetEmailWait.js",
   "/error": "pages/error.js",
-  "/auth/resetEmailWait": "pages/auth/resetEmailWait.js"
+  "/auth/emailWait": "pages/auth/emailWait.js"
 }
