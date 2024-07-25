@@ -29,43 +29,41 @@ export default function Header() {
   const permission: PermissionsState = useSelector(permissionStore);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const IsLoggedIn: boolean =
-        localStorage.getItem("isLogin") === "true" ? true : false;
-      // console.log("isLogin", IsLoggedIn);
+    const IsLoggedIn: boolean =
+      localStorage.getItem("isLogin") === "true" ? true : false;
+    // console.log("isLogin", IsLoggedIn);
 
-      // console.log("headerrrrrrrrrrrr  ");
-      const getPermissionData = async () => {
-        try {
-          await dispatch(getPermission() as any);
-        } catch (e) {
-          // console.log("Error", e);
-          localStorage.clear();
-          dispatch(isLogout());
-          router.push("/error?code=401");
-        }
-      };
-
-      const getKey = async () => {
-        try {
-          await getUserKey(dispatch);
-        } catch (e) {
-          // console.log("Error", e);
-          localStorage.clear();
-          dispatch(isLogout());
-          router.push("/error?code=401");
-        }
-      };
-
-      if (permission === null && IsLoggedIn) {
-        getPermissionData();
+    // console.log("headerrrrrrrrrrrr  ");
+    const getPermissionData = async () => {
+      try {
+        await dispatch(getPermission() as any);
+      } catch (e) {
+        // console.log("Error", e);
+        localStorage.clear();
+        dispatch(isLogout());
+        router.push("/error?code=401");
       }
+    };
 
-      // console.log("permission", permission);
-
-      if (key === null && IsLoggedIn) {
-        getKey();
+    const getKey = async () => {
+      try {
+        await getUserKey(dispatch);
+      } catch (e) {
+        // console.log("Error", e);
+        localStorage.clear();
+        dispatch(isLogout());
+        router.push("/error?code=401");
       }
+    };
+
+    if (permission === null && IsLoggedIn) {
+      getPermissionData();
+    }
+
+    // console.log("permission", permission);
+
+    if (key === null && IsLoggedIn) {
+      getKey();
     }
   }, [dispatch, nowLogin]);
 
