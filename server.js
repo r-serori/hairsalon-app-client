@@ -4,7 +4,7 @@ const axios = require('axios');
 const cors = require('cors');
 
 const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev }); // プロジェクトのディレクトリを指定
+const app = next(dev); // プロジェクトのディレクトリを指定
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {

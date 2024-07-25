@@ -14,7 +14,7 @@ export const getCsrfToken = async () => {
       /(?:(?:^|.*;\s*)XSRF-TOKEN\s*=\s*([^;]*).*$)|^.*$/,
       "$1"
     );
-    // console.log("CSRFトークン取得成功:", csrfToken);
+    console.log("CSRFトークン取得成功:", csrfToken);
     axios.defaults.headers.common["X-XSRF-TOKEN"] = csrfToken;
     return csrfToken;
   } catch (error) {
@@ -28,7 +28,7 @@ export const sendRequest = async (
   url: string,
   data?: any
 ): Promise<any> => {
-  // console.log("送信するデータ:", data);
+  console.log("送信するデータ:", data);
   try {
     const response = await axios.request({
       method,
