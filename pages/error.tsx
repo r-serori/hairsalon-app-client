@@ -34,6 +34,7 @@ const ErrorPage = () => {
   const { code } = router.query;
 
   const getMessage = () => {
+    console.log(code);
     if (!code) {
       allLogout(dispatch);
       return "エラーが発生しました。再ログインしてください。";
