@@ -34,6 +34,10 @@ const ErrorPage = () => {
   const { code } = router.query;
 
   const getMessage = () => {
+    if (!code) {
+      allLogout(dispatch);
+      return "エラーが発生しました。再ログインしてください。";
+    }
     switch (Number(code)) {
       case 401:
         dispatch(
