@@ -17,7 +17,10 @@ import { getUserKey, allLogout } from "../../components/Hooks/useMethod";
 import { pushUserId } from "../../components/Hooks/pushLocalStorage";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import { getPermission } from "../../store/auth/permissionSlice";
+import {
+  getPermission,
+  PermissionsState,
+} from "../../store/auth/permissionSlice";
 import ForgotPasswordButton from "../../components/elements/button/ForgotPasswordButton";
 import { renderError } from "../../services/errorHandler";
 import { AppDispatch } from "../../redux/store";
@@ -60,12 +63,14 @@ const LoginPage: React.FC = () => {
 
         const ownerRender: boolean | undefined = response.payload.ownerRender;
 
+        const role: PermissionsState = response.payload.responseUser.role;
+        if (role === null) throw new Error();
         if (ownerRender === undefined) throw new Error();
 
-        if (pushUser && !ownerRender) {
-          router.push("/dashboard");
-        } else if (pushUser && ownerRender) {
+        if (role === "オーナー" && pushUser && ownerRender) {
           router.push("/auth/owner");
+        } else {
+          router.push("/dashboard");
         }
       } else {
         const re = renderError(uErrorStatus, router, dispatch);
