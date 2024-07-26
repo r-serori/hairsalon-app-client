@@ -90,7 +90,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
         error={!passwordRegex.test(value)}
         helperText={
           !passwordRegex.test(value)
-            ? "パスワードには英小文字、英大文字、数字、特殊文字(@$!%*?&_)をそれぞれ少なくとも1つ含む必要があります"
+            ? "パスワードには英小文字、英大文字、数字、特殊文字(@$!%*?&_)をそれぞれ少なくとも1つ含み、8文字以上にする必要があります"
             : ""
         }
         InputProps={{
