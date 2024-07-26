@@ -5,7 +5,7 @@ export const ownerApi = {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/user/ownerRegister`,
+        `/ownerRegister`,
         formData
       )) as any;
       return response;
@@ -16,7 +16,7 @@ export const ownerApi = {
 
   getOwner: async () => {
     try {
-      const response = (await sendRequest("GET", `api/user/getOwner`)) as any;
+      const response = (await sendRequest("GET", `/getOwner`)) as any;
       return response;
     } catch (error) {
       return { error: error };
@@ -27,7 +27,7 @@ export const ownerApi = {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/user/updateOwner`,
+        `/updateOwner`,
         formData
       )) as any;
       return response;

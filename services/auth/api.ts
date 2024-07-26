@@ -43,7 +43,7 @@ export const userApi = {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/user/staffRegister`,
+        `/staffRegister`,
         formData
       )) as any;
       return response;
@@ -65,7 +65,7 @@ export const userApi = {
   //オーナーがスタッフの情報を取得 Gate,OWNER
   getUsers: async () => {
     try {
-      const response = (await sendRequest("GET", `api/user/getUsers`)) as any;
+      const response = (await sendRequest("GET", `/getUsers`)) as any;
       return response;
     } catch (error) {
       return { error: error };
@@ -74,10 +74,7 @@ export const userApi = {
 
   getAttendanceUsers: async () => {
     try {
-      const response = (await sendRequest(
-        "GET",
-        `api/user/getAttendanceUsers`
-      )) as any;
+      const response = (await sendRequest("GET", `/getAttendanceUsers`)) as any;
       return response;
     } catch (error) {
       return { error: error };
@@ -87,7 +84,7 @@ export const userApi = {
   //各スタッフが自分の情報を取得 Gate,ALL
   showUser: async () => {
     try {
-      const response = (await sendRequest("GET", `api/user/showUser`)) as any;
+      const response = (await sendRequest("GET", `/showUser`)) as any;
       return response;
     } catch (error) {
       return { error: error };
@@ -167,7 +164,7 @@ export const userApi = {
     try {
       const response = (await sendRequest(
         "POST",
-        `api/user/updatePermission`,
+        `/updatePermission`,
         formData
       )) as any;
       return response;
@@ -179,7 +176,7 @@ export const userApi = {
   //ownerがstaffを削除するときに使用
   deleteUser: async (id: number) => {
     try {
-      const response = (await sendRequest("POST", `api/user/deleteUser`, {
+      const response = (await sendRequest("POST", `/deleteUser`, {
         id: id,
       })) as any;
       return response;
