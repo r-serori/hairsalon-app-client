@@ -106,6 +106,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
             </InputAdornment>
           ),
         }}
+        autoComplete="on"
       />
     </Box>
   );
