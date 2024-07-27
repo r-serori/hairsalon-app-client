@@ -34,11 +34,11 @@ export const sendRequest = async (
       method,
       url,
       data,
-      // xsrfHeaderName: "X-XSRF-TOKEN", // 追記
+      withXSRFToken: true, // 追記
+      xsrfHeaderName: "X-XSRF-TOKEN", // 追記
       withCredentials: true,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-
         // CSRF トークンが必要な場合に備えて追加します
         "X-XSRF-TOKEN": axios.defaults.headers.common["X-XSRF-TOKEN"],
       },
