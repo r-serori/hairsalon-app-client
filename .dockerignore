@@ -1,0 +1,6 @@
+# ビルドコンテキストから除外するファイルやディレクトリ
+node_modules
+.git
+.gitignore
+Dockerfile
+.next
